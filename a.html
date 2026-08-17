@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aprova Drive - Cronograma Semanal Gamificado</title>
+  <style>
+    /* --- RESET & VARIÁVEIS --- */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    :root {
+      --bg-color: #f4f6f9;
+      --card-bg: #ffffff;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent: #f59e0b;
+      --success: #10b981;
+      --text-dark: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+    }
+
+    /* --- CABEÇALHO GAMIFICADO --- */
+    .hud-card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 20px 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .user-info h2 {
+      font-size: 1.2rem;
+      margin-bottom: 4px;
+    }
+
+    .level-tag {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .stats-group {
+      display: flex;
+      gap: 12px;
+    }
+
+    .stat-badge {
+      background: #fff7ed;
+      color: #ea580c;
+      border: 1px solid #ffedd5;
+      padding: 8px 14px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .stat-badge.xp {
+      background: #f0fdf4;
+      color: #16a34a;
+      border-color: #dcfce7;
+    }
+
+    /* --- FILTRO / NAVEGAÇÃO DE DIAS DA SEMANA --- */
+    .week-nav {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 24px;
+    }
+
+    .day-tab {
+      flex: 1;
+      min-width: 100px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .day-tab .day-name {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .day-tab .day-status {
+      font-size: 0.75rem;
+      margin-top: 4px;
+      font-weight: bold;
+    }
+
+    .day-tab.completed {
+      border-color: var(--success);
+      background: #f0fdf4;
+    }
+
+    .day-tab.completed .day-status {
+      color: var(--success);
+    }
+
+    .day-tab.active {
+      border: 2px solid var(--primary);
+      background: var(--primary-light);
+      transform: translateY(-2px);
+    }
+
+    .day-tab.active .day-name, 
+    .day-tab.active .day-status {
+      color: var(--primary);
+    }
+
+    /* --- PAINEL DE HORÁRIOS E MISSÕES --- */
+    .schedule-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .schedule-header h3 {
+      font-size: 1.2rem;
+    }
+
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .schedule-item {
+      background: var(--card-bg);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: border-color 0.2s;
+    }
+
+    .schedule-item.done {
+      border-left: 6px solid var(--success);
+      opacity: 0.85;
+    }
+
+    .schedule-item.current {
+      border: 2px solid var(--primary);
+      border-left: 6px solid var(--primary);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    }
+
+    .schedule-item.pending {
+      border-left: 6px solid var(--text-muted);
+    }
+
+    .time-box {
+      min-width: 90px;
+      text-align: center;
+      padding-right: 16px;
+      border-right: 1px dashed var(--border);
+    }
+
+    .time-box .time {
+      font-size: 1.1rem;
+      font-weight: bold;
+      color: var(--text-dark);
+    }
+
+    .time-box .duration {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .task-content {
+      flex: 1;
+    }
+
+    .task-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 3px 8px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    .tag-theory { background: #dbeafe; color: #1e40af; }
+    .tag-quiz { background: #fef3c7; color: #92400e; }
+    .tag-review { background: #f3e8ff; color: #6b21a8; }
+
+    .task-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .task-desc {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .task-reward {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .xp-badge {
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--accent);
+      background: #fffbeeb3;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid #fef3c7;
+    }
+
+    .btn-action {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-action:hover {
+      background: var(--primary-hover, #1d4ed8);
+    }
+
+    .check-icon {
+      color: var(--success);
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    /* RESPONSIVIDADE */
+    @media (max-width: 650px) {
+      .schedule-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+      }
+
+      .time-box {
+        border-right: none;
+        border-bottom: 1px dashed var(--border);
+        width: 100%;
+        text-align: left;
+        padding-right: 0;
+        padding-bottom: 8px;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .task-reward {
+        width: 100%;
+        justify-content: space-between;
+        margin-top: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- HUD CABEÇALHO -->
+    <div class="hud-card">
+      <div class="user-info">
+        <h2>📅 Cronograma da Semana</h2>
+        <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
+      </div>
+      <div class="stats-group">
+        <div class="stat-badge">🔥 Offensiva: 5 Dias</div>
+        <div class="stat-badge xp">⚡ Total: 850 XP</div>
+      </div>
+    </div>
+
+    <!-- ABA DOS DIAS DA SEMANA -->
+    <div class="week-nav">
+      <div class="day-tab completed">
+        <div class="day-name">Segunda</div>
+        <div class="day-status">✓ Feito</div>
+      </div>
+      <div class="day-tab active">
+        <div class="day-name">Terça</div>
+        <div class="day-status">• Hoje</div>
+      </div>
+      <div class="day-tab">
+        <div class="day-name">Quarta</div>
+        <div class="day-status">3 Aulas</div>
+      </div>
+      <div class="day-tab">
+        <div class="day-name">Quinta</div>
+        <div class="day-status">2 Aulas</div>
+      </div>
+      <div class="day-tab">
+        <div class="day-name">Sexta</div>
+        <div class="day-status">Simulado</div>
+      </div>
+      <div class="day-tab">
+        <div class="day-name">Sábado</div>
+        <div class="day-status">Revisão</div>
+      </div>
+    </div>
+
+    <!-- LISTA DE HORÁRIOS DO DIA SELECIONADO -->
+    <div class="schedule-header">
+      <h3>Missões de Hoje — Terça-feira</h3>
+      <span style="font-size: 0.85rem; color: var(--text-muted);">Tempo total estimado: 1h 15m</span>
+    </div>
+
+    <div class="schedule-list">
+
+      <!-- ITEM 1: CONCLUÍDO -->
+      <div class="schedule-item done">
+        <div class="time-box">
+          <div class="time">08:00</div>
+          <div class="duration">20 min</div>
+        </div>
+        <div class="task-content">
+          <span class="task-tag tag-theory">Videoaula</span>
+          <div class="task-title">Direção Defensiva: Condições Adversas</div>
+          <div class="task-desc">Chuva, neblina, iluminação e estado da via.</div>
+        </div>
+        <div class="task-reward">
+          <span class="xp-badge">+50 XP</span>
+          <span class="check-icon">✓</span>
+        </div>
+      </div>
+
+      <!-- ITEM 2: EM ANDAMENTO / PRÓXIMO -->
+      <div class="schedule-item current">
+        <div class="time-box">
+          <div class="time">12:30</div>
+          <div class="duration">15 min</div>
+        </div>
+        <div class="task-content">
+          <span class="task-tag tag-quiz">Prática</span>
+          <div class="task-title">Mini-Quiz: 10 Questões de Direção Defensiva</div>
+          <div class="task-desc">Acerte no mínimo 70% para liberar o bônus diário.</div>
+        </div>
+        <div class="task-reward">
+          <span class="xp-badge">+100 XP</span>
+          <button class="btn-action">INICIAR</button>
+        </div>
+      </div>
+
+      <!-- ITEM 3: PENDENTE -->
+      <div class="schedule-item pending">
+        <div class="time-box">
+          <div class="time">19:00</div>
+          <div class="duration">40 min</div>
+        </div>
+        <div class="task-content">
+          <span class="task-tag tag-review">Fixação</span>
+          <div class="task-title">Leitura Guiada & Flashcards de Placas</div>
+          <div class="task-desc">Revisão rápida das placas de Regulamentação e Advertência.</div>
+        </div>
+        <div class="task-reward">
+          <span class="xp-badge">+75 XP</span>
+          <button class="btn-action" style="background: var(--text-muted);">BLOQUEADO</button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</body>
+</html>
