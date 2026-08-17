@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AprovaDrive - Cadastro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="styleCadastro.css">
+</head>
+<body>
+
+    <div class="card">
+
+        <div class="logo">
+            <span class="logo-a">A</span><span class="logo-aprova">prova</span><span class="logo-drive">Drive</span>
+        </div>
+
+        <h1>Crie sua conta</h1>
+        <p class="subtitle">Preencha os dados abaixo para se cadastrar</p>
+
+        <form id="formCadastro">
+
+            <div class="campo">
+                <span class="icone"><i class="fa-solid fa-user"></i></span>
+                <input type="text" placeholder="Nome completo" required>
+            </div>
+
+            <div class="campo">
+                <span class="icone"><i class="fa-solid fa-envelope"></i></span>
+                <input type="email" placeholder="E-mail" required>
+            </div>
+
+            <div class="campo">
+                <span class="icone"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" id="senhaCadastro" placeholder="Senha" required>
+            </div>
+
+            <div class="campo">
+                <span class="icone"><i class="fa-solid fa-lock"></i></span>
+                <input type="password" placeholder="Confirme a senha" required>
+            </div>
+
+            <div class="campo">
+                <span class="icone"><i class="fa-solid fa-calendar"></i></span>
+                <input type="date" required>
+            </div>
+
+            <button type="submit" class="btn-primary">Cadastrar</button>
+
+        </form>
+
+        <p class="rodape-link">
+            Já possui uma conta?
+            <a href="./Login.html">Entrar</a>
+        </p>
+
+    </div>
+
+</body>
+</html>

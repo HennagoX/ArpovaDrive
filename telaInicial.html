@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AprovaDrive - Início</title>
+
+    <!-- ÍCONES -->
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <style>
+        /* =========================
+           CONFIGURAÇÕES
+        ========================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #222;
+        }
+
+        /* =========================
+           MENU LATERAL
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 30px 18px;
+            z-index: 100;
+        }
+
+        /* LOGO */
+
+        .logo {
+            text-align: center;
+            font-size: 31px;
+            font-weight: bold;
+            margin-bottom: 45px;
+        }
+
+        .verde {
+            color: #16a34a;
+        }
+
+        .azul {
+            color: #0d47a1;
+        }
+
+        .amarelo {
+            color: #f4b400;
+        }
+
+        /* MENU */
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px;
+            border-radius: 13px;
+            color: #555;
+            text-decoration: none;
+            font-size: 16px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .menu-item i {
+            width: 22px;
+            text-align: center;
+            font-size: 18px;
+        }
+
+        .menu-item:hover {
+            background: #eef6ff;
+            color: #0d47a1;
+        }
+
+        .menu-item.ativo {
+            background: #e8f2ff;
+            color: #0d47a1;
+            font-weight: bold;
+        }
+
+        /* =========================
+           CONTEÚDO
+        ========================= */
+
+        .main {
+            margin-left: 250px;
+            padding: 35px 45px;
+            min-height: 100vh;
+        }
+
+        /* =========================
+           CABEÇALHO
+        ========================= */
+
+        .topo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .topo h1 {
+            font-size: 31px;
+            margin-bottom: 7px;
+        }
+
+        .topo p {
+            color: #777;
+            font-size: 16px;
+        }
+
+        /* PERFIL */
+
+        .perfil {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+
+        .perfil-nome {
+            text-align: right;
+            font-size: 14px;
+        }
+
+        .perfil-nome strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .perfil-nome span {
+            color: #777;
+            font-size: 12px;
+        }
+
+        .avatar {
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: linear-gradient(
+                135deg,
+                #16a34a,
+                #0d47a1
+            );
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        /* =========================
+           CARD DE PROGRESSO
+        ========================= */
+
+        .progresso {
+            background: linear-gradient(
+                135deg,
+                #0d47a1,
+                #126bc5
+            );
+
+            color: white;
+            border-radius: 22px;
+            padding: 28px 30px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            margin-bottom: 30px;
+
+            box-shadow:
+                0 8px 25px rgba(13, 71, 161, 0.16);
+        }
+
+        .nivel {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .trofeu {
+            width: 65px;
+            height: 65px;
+            background: #f4b400;
+            border-radius: 18px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 28px;
+            flex-shrink: 0;
+        }
+
+        .nivel h2 {
+            font-size: 21px;
+            margin-bottom: 7px;
+        }
+
+        .nivel p {
+            opacity: 0.85;
+            font-size: 14px;
+        }
+
+        .xp {
+            width: 300px;
+        }
+
+        .xp-topo {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .barra {
+            height: 12px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .barra span {
+            display: block;
+            width: 68%;
+            height: 100%;
+            background: #f4b400;
+            border-radius: 20px;
+        }
+
+        /* =========================
+           TÍTULO
+        ========================= */
+
+        .titulo {
+            font-size: 23px;
+            margin-bottom: 18px;
+        }
+
+        /* =========================
+           CARDS DE ACESSO
+        ========================= */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            min-height: 185px;
+            border: 1px solid #e8ebf0;
+            transition: 0.25s;
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .icone-card {
+            width: 56px;
+            height: 56px;
+            border-radius: 15px;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            font-size: 24px;
+            margin-bottom: 18px;
+        }
+
+        .verde-card {
+            background: #e8f5e9;
+            color: #16a34a;
+        }
+
+        .azul-card {
+            background: #e8f0ff;
+            color: #0d47a1;
+        }
+
+        .amarelo-card {
+            background: #fff4d6;
+            color: #d99a00;
+        }
+
+        .roxo-card {
+            background: #f0e9ff;
+            color: #7047c7;
+        }
+
+        .card h3 {
+            font-size: 19px;
+            margin-bottom: 8px;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+            line-height: 1.45;
+        }
+
+        /* =========================
+           PARTE INFERIOR
+        ========================= */
+
+        .inferior {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 20px;
+        }
+
+        /* =========================
+           MISSÃO DO DIA
+        ========================= */
+
+        .missao {
+            background: white;
+            border: 1px solid #e8ebf0;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .titulo-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .titulo-card h2 {
+            font-size: 20px;
+        }
+
+        .ver {
+            color: #0d47a1;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .ver:hover {
+            text-decoration: underline;
+        }
+
+        .tarefa {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+
+            background: #f8fafc;
+            border-radius: 14px;
+
+            padding: 15px;
+            margin-bottom: 10px;
+
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tarefa:hover {
+            background: #f1f5f9;
+            transform: translateX(3px);
+        }
+
+        .check {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            background: #e8f5e9;
+            color: #16a34a;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-shrink: 0;
+        }
+
+        .tarefa strong {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 15px;
+        }
+
+        .tarefa span {
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           DESEMPENHO
+        ========================= */
+
+        .desempenho {
+            background: white;
+            border: 1px solid #e8ebf0;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .desempenho-area {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        /* CÍRCULO */
+
+        .circulo {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+
+            background:
+                conic-gradient(
+                    #16a34a 0deg 248deg,
+                    #e5e7eb 248deg 360deg
+                );
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            flex-shrink: 0;
+        }
+
+        .circulo-interno {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .circulo-interno strong {
+            color: #16a34a;
+            font-size: 26px;
+        }
+
+        .circulo-interno span {
+            color: #777;
+            font-size: 11px;
+        }
+
+        /* ESTATÍSTICAS */
+
+        .estatisticas {
+            display: flex;
+            flex-direction: column;
+            gap: 13px;
+            width: 100%;
+        }
+
+        .estatistica {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .estatistica span {
+            color: #777;
+            font-size: 14px;
+        }
+
+        .estatistica strong {
+            font-size: 14px;
+        }
+
+        /* =========================
+           SEQUÊNCIA
+        ========================= */
+
+        .sequencia {
+            margin-top: 20px;
+            background: #fff7e1;
+            border-radius: 18px;
+            padding: 20px;
+
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .fogo {
+            font-size: 34px;
+        }
+
+        .sequencia h3 {
+            font-size: 17px;
+            margin-bottom: 4px;
+        }
+
+        .sequencia p {
+            color: #777;
+            font-size: 13px;
+        }
+
+        /* =========================
+           RESPONSIVIDADE
+        ========================= */
+
+        @media (max-width: 1200px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .inferior {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .sidebar {
+                width: 75px;
+                padding: 20px 8px;
+            }
+
+            .logo {
+                font-size: 0;
+            }
+
+            .logo .verde {
+                font-size: 30px;
+            }
+
+            .menu-item {
+                justify-content: center;
+                padding: 16px 8px;
+            }
+
+            .menu-item span {
+                display: none;
+            }
+
+            .main {
+                margin-left: 75px;
+                padding: 25px;
+            }
+
+            .progresso {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 25px;
+            }
+
+            .xp {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .sidebar {
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: auto;
+
+                width: 100%;
+                height: 68px;
+
+                padding: 5px;
+
+                border-right: none;
+                border-top: 1px solid #ddd;
+            }
+
+            .logo {
+                display: none;
+            }
+
+            .menu {
+                flex-direction: row;
+                justify-content: space-around;
+                height: 100%;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                gap: 3px;
+                padding: 7px;
+                font-size: 10px;
+            }
+
+            .menu-item span {
+                display: block;
+            }
+
+            .menu-item i {
+                font-size: 18px;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+                padding-bottom: 90px;
+            }
+
+            .topo h1 {
+                font-size: 25px;
+            }
+
+            .perfil {
+                display: none;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .desempenho-area {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .progresso {
+                padding: 22px;
+            }
+
+            .nivel h2 {
+                font-size: 17px;
+            }
+
+            .titulo {
+                font-size: 21px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .main {
+                padding: 15px;
+                padding-bottom: 85px;
+            }
+
+            .topo h1 {
+                font-size: 22px;
+            }
+
+            .nivel {
+                align-items: flex-start;
+            }
+
+            .trofeu {
+                width: 55px;
+                height: 55px;
+                font-size: 23px;
+            }
+
+            .circulo {
+                width: 115px;
+                height: 115px;
+            }
+
+            .circulo-interno {
+                width: 88px;
+                height: 88px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================
+         MENU
+    ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <span class="verde">A</span><span class="azul">prova</span><span class="amarelo">Drive</span>
+        </div>
+
+        <nav class="menu">
+
+            <a href="#" class="menu-item ativo">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Conteúdos</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>Questões</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <span>Simulado</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Cronograma</span>
+            </a>
+
+            <a href="#" class="menu-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Desempenho</span>
+            </a>
+
+        </nav>
+    </aside>
+
+
+    <!-- =========================
+         ÁREA PRINCIPAL
+    ========================= -->
+
+    <main class="main">
+
+        <!-- CABEÇALHO -->
+
+        <header class="topo">
+
+            <div>
+                <h1>Olá, aluno! 👋</h1>
+
+                <p>
+                    Vamos continuar sua preparação para a prova?
+                </p>
+            </div>
+
+            <div class="perfil">
+
+                <div class="perfil-nome">
+                    <strong>Meu perfil</strong>
+                    <span>Aluno</span>
+                </div>
+
+                <div class="avatar">
+                    A
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- =========================
+             NÍVEL / XP
+        ========================= -->
+
+        <section class="progresso">
+
+            <div class="nivel">
+
+                <div class="trofeu">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+
+                <div>
+                    <h2>
+                        Nível 7 — Motorista em Treinamento
+                    </h2>
+
+                    <p>
+                        Continue estudando para subir de nível!
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="xp">
+
+                <div class="xp-topo">
+                    <span>XP</span>
+                    <span>680 / 1000</span>
+                </div>
+
+                <div class="barra">
+                    <span></span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             ACESSO RÁPIDO
+        ========================= -->
+
+        <h2 class="titulo">
+            O que você quer estudar?
+        </h2>
+
+        <section class="cards">
+
+            <div class="card">
+
+                <div class="icone-card verde-card">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <h3>Conteúdos</h3>
+
+                <p>
+                    Aprenda toda a matéria necessária
+                    para sua prova do DETRAN.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icone-card azul-card">
+                    <i class="fa-solid fa-circle-question"></i>
+                </div>
+
+                <h3>Questões</h3>
+
+                <p>
+                    Pratique com questões e veja
+                    onde você precisa melhorar.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icone-card amarelo-card">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+
+                <h3>Simulado</h3>
+
+                <p>
+                    Faça uma prova completa e
+                    teste seu conhecimento.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="icone-card roxo-card">
+                    <i class="fa-solid fa-calendar-days"></i>
+                </div>
+
+                <h3>Cronograma</h3>
+
+                <p>
+                    Acompanhe suas tarefas e
+                    saiba exatamente o que estudar.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             PARTE INFERIOR
+        ========================= -->
+
+        <section class="inferior">
+
+            <!-- MISSÃO -->
+
+            <div class="missao">
+
+                <div class="titulo-card">
+
+                    <h2>🎯 Missão de hoje</h2>
+
+                    <span class="ver">
+                        Ver cronograma
+                    </span>
+
+                </div>
+
+
+                <div class="tarefa">
+
+                    <div class="check">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+
+                    <div>
+                        <strong>Estudar Legislação</strong>
+                        <span>20 minutos</span>
+                    </div>
+
+                </div>
+
+
+                <div class="tarefa">
+
+                    <div class="check">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </div>
+
+                    <div>
+                        <strong>Responder 10 questões</strong>
+                        <span>Legislação de trânsito</span>
+                    </div>
+
+                </div>
+
+
+                <div class="tarefa">
+
+                    <div class="check">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+
+                    <div>
+                        <strong>Fazer um mini simulado</strong>
+                        <span>10 questões</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- DESEMPENHO -->
+
+            <div class="desempenho">
+
+                <div class="titulo-card">
+
+                    <h2>📊 Seu desempenho</h2>
+
+                    <span class="ver">
+                        Ver detalhes
+                    </span>
+
+                </div>
+
+
+                <div class="desempenho-area">
+
+                    <div class="circulo">
+
+                        <div class="circulo-interno">
+
+                            <strong>69%</strong>
+
+                            <span>aproveitamento</span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="estatisticas">
+
+                        <div class="estatistica">
+                            <span>Questões</span>
+                            <strong>124</strong>
+                        </div>
+
+                        <div class="estatistica">
+                            <span>Acertos</span>
+                            <strong>86</strong>
+                        </div>
+
+                        <div class="estatistica">
+                            <span>Simulados</span>
+                            <strong>8</strong>
+                        </div>
+
+                        <div class="estatistica">
+                            <span>XP conquistado</span>
+                            <strong>680 XP</strong>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SEQUÊNCIA
+        ========================= -->
+
+        <div class="sequencia">
+
+            <div class="fogo">
+                🔥
+            </div>
+
+            <div>
+                <h3>5 dias de sequência!</h3>
+
+                <p>
+                    Estude amanhã para manter sua sequência.
+                </p>
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+
+</html>
