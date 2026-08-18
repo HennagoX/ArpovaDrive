@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --primary-blue: #0752a0;
+  --gradient-start: #075da8;
+  --gradient-mid: #087e9d;
+  --gradient-end: #08a783;
+
+  --brand-green: #18a85a;
+  --brand-yellow: #f5b000;
+  --brand-yellow-hover: #e4a400;
+  --google-blue: #4285f4;
+
+  --bg-card: #ffffff;
+  --bg-light: #f4f8fa;
+  --text-dark: #111111;
+  --text-muted: #666666;
+  --text-muted-soft: #777777;
+  --border-input: #dedede;
+  --border-divider: #dddddd;
+  --border-divider-soft: #e0e0e0;
+
+  --font-main: 'Inter', Arial, Helvetica, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-card: 28px;
+
+  --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
+  --shadow-card-strong: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
