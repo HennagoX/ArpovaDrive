@@ -315,27 +315,29 @@
 
     <!-- ABA DOS DIAS DA SEMANA -->
     <div class="week-nav">
-      <div class="day-tab completed">
+      <div class="day-tab" id = "day-tab 1">
         <div class="day-name">Segunda</div>
-        <div class="day-status">✓ Feito</div>
+        <div class="day-status">3 Aulas</div>
+      
       </div>
-      <div class="day-tab active">
+      <div class="day-tab" id = "day-tab 2">
         <div class="day-name">Terça</div>
         <div class="day-status">• Hoje</div>
       </div>
-      <div class="day-tab">
+      <div class="day-tab" id = "day-tab 3">
         <div class="day-name">Quarta</div>
         <div class="day-status">3 Aulas</div>
       </div>
-      <div class="day-tab">
+      <div class="day-tab" id = "day-tab 4">
         <div class="day-name">Quinta</div>
         <div class="day-status">2 Aulas</div>
+        <div id = "Resposta"></div>
       </div>
-      <div class="day-tab">
+      <div class="day-tab" id = "day-tab 5">
         <div class="day-name">Sexta</div>
         <div class="day-status">Simulado</div>
       </div>
-      <div class="day-tab">
+      <div class="day-tab" id = "day-tab 6">
         <div class="day-name">Sábado</div>
         <div class="day-status">Revisão</div>
       </div>
@@ -403,6 +405,16 @@
     </div>
 
   </div>
+<script>
+  const hoje = new Date();
+const numeroDia = hoje.getDay();
+  const dayTab = document.getElementById("day-tab " + numeroDia);
+   
+  
+  dayTab.classList.add("active");
+ 
+  Resposta.innerHTML = "<h3 style = Color: Green>Concluído</h3>"
 
+</script>
 </body>
 </html>
