@@ -1,0 +1,4 @@
+export const TIMING = {
+    REDIRECT_DELAY: 600,
+    REDIRECT_SUCCESS: 1000
+};

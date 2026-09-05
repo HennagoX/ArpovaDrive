@@ -415,16 +415,6 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const hoje = new Date();
-      const numeroDia = hoje.getDay();
-      const targetId = (numeroDia >= 1 && numeroDia <= 6) ? `day-tab-${numeroDia}` : "day-tab-1";
-      const dayTab = document.getElementById(targetId);
-      if (dayTab) {
-        dayTab.classList.add("active");
-      }
-    });
-  </script>
+  <script type="module" src="../js/pages/cronograma.js"></script>
 </body>
 </html>
