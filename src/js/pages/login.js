@@ -17,7 +17,8 @@ ready(() => {
         on(mostrarSenha, 'click', () => {
             const isPassword = senha.type === 'password';
             senha.type = isPassword ? 'text' : 'password';
-            mostrarSenha.textContent = isPassword ? '🙈' : '👁';
+            const icon = qs('.material-symbols-outlined', mostrarSenha) || mostrarSenha;
+            icon.textContent = isPassword ? 'visibility_off' : 'visibility';
         });
     }
 

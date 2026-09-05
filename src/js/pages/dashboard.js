@@ -1,4 +1,4 @@
-import { ready, qs, setText } from '../utils/dom.js';
+import { ready, qs, setText, setHTML } from '../utils/dom.js';
 import { getCurrentUser, logout } from '../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento } from '../services/gamificationService.js';
 import { ROUTES } from '../constants/routes.js';
@@ -6,7 +6,7 @@ import { ROUTES } from '../constants/routes.js';
 ready(() => {
     const user = getCurrentUser();
     if (user && user.nome) {
-        setText('.topo h1', `Olá, ${user.nome}! 👋`);
+        setHTML('.topo h1', `Olá, ${user.nome}! <span class="material-symbols-outlined icone-inline">waving_hand</span>`);
         setText('.perfil-nome strong', user.nome);
     }
 

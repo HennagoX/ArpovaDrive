@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AprovaDrive - Cronograma Semanal Gamificado</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet" href="../css/theme.css">
   <style>
     * {
       margin: 0;
@@ -287,6 +289,12 @@
       font-weight: bold;
     }
 
+    .icone-inline {
+      font-size: 1.15em;
+      vertical-align: middle;
+      margin-right: 4px;
+    }
+
     @media (max-width: 650px) {
       .schedule-item {
         flex-direction: column;
@@ -323,12 +331,12 @@
 
     <div class="hud-card">
       <div class="user-info">
-        <h2>📅 Cronograma da Semana</h2>
+        <h2><span class="material-symbols-outlined icone-inline">calendar_month</span> Cronograma da Semana</h2>
         <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
       </div>
       <div class="stats-group">
-        <div class="stat-badge">🔥 Ofensiva: 5 Dias</div>
-        <div class="stat-badge xp">⚡ Total: 850 XP</div>
+        <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span> Ofensiva: 5 Dias</div>
+        <div class="stat-badge xp"><span class="material-symbols-outlined icone-inline">bolt</span> Total: 850 XP</div>
       </div>
     </div>
 
@@ -377,7 +385,7 @@
         </div>
         <div class="task-reward">
           <span class="xp-badge">+50 XP</span>
-          <span class="check-icon">✓</span>
+          <span class="material-symbols-outlined check-icon">check_circle</span>
         </div>
       </div>
 
