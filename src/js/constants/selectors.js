@@ -20,5 +20,11 @@ export const SELECTORS = {
     DASHBOARD_OFENSIVA: '.sequencia h3',
     CRONOGRAMA_TABS: '.day-tab',
     CRONOGRAMA_TAB_PREFIX: '#day-tab-',
-    CRONOGRAMA_BTN_ACAO: '.btn-action'
+    CRONOGRAMA_BTN_ACAO: '.btn-action',
+    DESEMPENHO_APROVEITAMENTO: '#taxaAproveitamento',
+    DESEMPENHO_CIRCULO: '#circuloAproveitamento',
+    DESEMPENHO_QUESTOES: '#totalQuestoes',
+    DESEMPENHO_ACERTOS: '#totalAcertos',
+    DESEMPENHO_ERROS: '#totalErros',
+    DESEMPENHO_SIMULADOS: '#totalSimulados'
 };
