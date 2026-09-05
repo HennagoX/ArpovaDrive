@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aprova Drive - Cronograma Semanal Gamificado</title>
+  <title>AprovaDrive - Cronograma Semanal Gamificado</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <style>
-    /* --- RESET & VARIÁVEIS --- */
     * {
       margin: 0;
       padding: 0;
@@ -17,6 +17,7 @@
       --bg-color: #f4f6f9;
       --card-bg: #ffffff;
       --primary: #2563eb;
+      --primary-hover: #1d4ed8;
       --primary-light: #eff6ff;
       --accent: #f59e0b;
       --success: #10b981;
@@ -36,7 +37,25 @@
       margin: 0 auto;
     }
 
-    /* --- CABEÇALHO GAMIFICADO --- */
+    .nav-topo {
+      margin-bottom: 20px;
+    }
+
+    .btn-voltar {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .btn-voltar:hover {
+      color: var(--primary-hover);
+    }
+
     .hud-card {
       background: var(--card-bg);
       border-radius: 16px;
@@ -86,7 +105,6 @@
       border-color: #dcfce7;
     }
 
-    /* --- FILTRO / NAVEGAÇÃO DE DIAS DA SEMANA --- */
     .week-nav {
       display: flex;
       gap: 10px;
@@ -140,7 +158,6 @@
       color: var(--primary);
     }
 
-    /* --- PAINEL DE HORÁRIOS E MISSÕES --- */
     .schedule-header {
       display: flex;
       justify-content: space-between;
@@ -261,7 +278,7 @@
     }
 
     .btn-action:hover {
-      background: var(--primary-hover, #1d4ed8);
+      background: var(--primary-hover);
     }
 
     .check-icon {
@@ -270,7 +287,6 @@
       font-weight: bold;
     }
 
-    /* RESPONSIVIDADE */
     @media (max-width: 650px) {
       .schedule-item {
         flex-direction: column;
@@ -298,60 +314,57 @@
   </style>
 </head>
 <body>
-
   <div class="container">
+    <div class="nav-topo">
+      <a href="./telaInicial.html" class="btn-voltar">
+        <i class="fa-solid fa-arrow-left"></i> Voltar ao Painel
+      </a>
+    </div>
 
-    <!-- HUD CABEÇALHO -->
     <div class="hud-card">
       <div class="user-info">
         <h2>📅 Cronograma da Semana</h2>
         <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
       </div>
       <div class="stats-group">
-        <div class="stat-badge">🔥 Offensiva: 5 Dias</div>
+        <div class="stat-badge">🔥 Ofensiva: 5 Dias</div>
         <div class="stat-badge xp">⚡ Total: 850 XP</div>
       </div>
     </div>
 
-    <!-- ABA DOS DIAS DA SEMANA -->
     <div class="week-nav">
-      <div class="day-tab" id = "day-tab 1">
+      <div class="day-tab" id="day-tab-1">
         <div class="day-name">Segunda</div>
         <div class="day-status">3 Aulas</div>
-      
       </div>
-      <div class="day-tab" id = "day-tab 2">
+      <div class="day-tab" id="day-tab-2">
         <div class="day-name">Terça</div>
         <div class="day-status">• Hoje</div>
       </div>
-      <div class="day-tab" id = "day-tab 3">
+      <div class="day-tab" id="day-tab-3">
         <div class="day-name">Quarta</div>
         <div class="day-status">3 Aulas</div>
       </div>
-      <div class="day-tab" id = "day-tab 4">
+      <div class="day-tab" id="day-tab-4">
         <div class="day-name">Quinta</div>
         <div class="day-status">2 Aulas</div>
-        <div id = "Resposta"></div>
       </div>
-      <div class="day-tab" id = "day-tab 5">
+      <div class="day-tab" id="day-tab-5">
         <div class="day-name">Sexta</div>
         <div class="day-status">Simulado</div>
       </div>
-      <div class="day-tab" id = "day-tab 6">
+      <div class="day-tab" id="day-tab-6">
         <div class="day-name">Sábado</div>
         <div class="day-status">Revisão</div>
       </div>
     </div>
 
-    <!-- LISTA DE HORÁRIOS DO DIA SELECIONADO -->
     <div class="schedule-header">
-      <h3>Missões de Hoje — Terça-feira</h3>
+      <h3>Missões de Hoje</h3>
       <span style="font-size: 0.85rem; color: var(--text-muted);">Tempo total estimado: 1h 15m</span>
     </div>
 
     <div class="schedule-list">
-
-      <!-- ITEM 1: CONCLUÍDO -->
       <div class="schedule-item done">
         <div class="time-box">
           <div class="time">08:00</div>
@@ -368,7 +381,6 @@
         </div>
       </div>
 
-      <!-- ITEM 2: EM ANDAMENTO / PRÓXIMO -->
       <div class="schedule-item current">
         <div class="time-box">
           <div class="time">12:30</div>
@@ -385,7 +397,6 @@
         </div>
       </div>
 
-      <!-- ITEM 3: PENDENTE -->
       <div class="schedule-item pending">
         <div class="time-box">
           <div class="time">19:00</div>
@@ -401,20 +412,19 @@
           <button class="btn-action" style="background: var(--text-muted);">BLOQUEADO</button>
         </div>
       </div>
-
     </div>
-
   </div>
-<script>
-  const hoje = new Date();
-const numeroDia = hoje.getDay();
-  const dayTab = document.getElementById("day-tab " + numeroDia);
-   
-  
-  dayTab.classList.add("active");
- 
-  Resposta.innerHTML = "<h3 style = Color: Green>Concluído</h3>"
 
-</script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const hoje = new Date();
+      const numeroDia = hoje.getDay();
+      const targetId = (numeroDia >= 1 && numeroDia <= 6) ? `day-tab-${numeroDia}` : "day-tab-1";
+      const dayTab = document.getElementById(targetId);
+      if (dayTab) {
+        dayTab.classList.add("active");
+      }
+    });
+  </script>
 </body>
 </html>

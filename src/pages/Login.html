@@ -9,9 +9,7 @@
     <link rel="stylesheet" href="../css/styleCadastro.css">
 </head>
 <body>
-
     <div class="card">
-
         <div class="logo">
             <span class="logo-a">A</span><span class="logo-aprova">prova</span><span class="logo-drive">Drive</span>
         </div>
@@ -20,7 +18,6 @@
         <p class="subtitle">Entre na sua conta para continuar</p>
 
         <form id="formLogin">
-
             <div class="campo">
                 <span class="icone"><i class="fa-solid fa-user"></i></span>
                 <input type="text" id="usuario" placeholder="E-mail ou CPF" required>
@@ -37,15 +34,12 @@
                     <input type="checkbox" id="lembrar">
                     <span>Lembrar-me</span>
                 </label>
-
                 <a href="#" class="esqueci" id="esqueci">Esqueci minha senha</a>
             </div>
-  <button type="submit" class="btn-primary"  id = "BotaoLogar" onclick="">Entrar</button>
-               
-       
+
+            <button type="submit" class="btn-primary" id="BotaoLogar">Entrar</button>
 
             <div id="mensagem"></div>
-
         </form>
 
         <div class="ou">
@@ -61,56 +55,8 @@
             Ainda não tem uma conta?
             <a href="./cadastro.html">Cadastre-se</a>
         </p>
-
     </div>
 
-    <script>
-        const senha = document.getElementById("senha");
-        const mostrarSenha = document.getElementById("mostrarSenha");
-
-        mostrarSenha.addEventListener("click", function () {
-            if (senha.type === "password") {
-                senha.type = "text";
-                mostrarSenha.textContent = "🙈";
-            } else {
-                senha.type = "password";
-                mostrarSenha.textContent = "👁";
-            }
-        });
-
-        const formLogin = document.getElementById("formLogin");
-        const mensagem = document.getElementById("mensagem");
-
-        formLogin.addEventListener("submit", function(event) {
-            event.preventDefault();
-
-            const usuario = document.getElementById("usuario").value;
-            const senhaValor = document.getElementById("senha").value;
-
-            if (usuario.trim() === "" || senhaValor.trim() === "") {
-                mensagem.style.display = "block";
-                mensagem.style.background = "#ffe5e5";
-                mensagem.style.color = "#c00000";
-                mensagem.textContent = "Preencha todos os campos.";
-                return;
-            }
-
-            mensagem.style.display = "block";
-            mensagem.style.background = "#e4f8ec";
-            mensagem.style.color = "#16834a";
-            mensagem.textContent = "Dados preenchidos!";
-        });
-
-        document.getElementById("esqueci").addEventListener("click", function(event) {
-            event.preventDefault();
-            alert("Página de recuperação de senha.");
-        });
-
-        document.getElementById("google").addEventListener("click", function() {
-            alert("Aqui será integrada a entrada com Google.");
-        });
-    </script>
-
-<script src="Login.js"></script>
+    <script src="../scripts/Login.js" defer></script>
 </body>
 </html>
