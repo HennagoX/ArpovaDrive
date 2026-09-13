@@ -4,10 +4,12 @@ import { getGamificationData, getTaxaAproveitamento } from '../services/gamifica
 import { ROUTES } from '../constants/routes.js';
 
 ready(() => {
-    const user = getCurrentUser();
-    if (user && user.nome) {
-        setHTML('.topo h1', `Olá, ${user.nome}! <span class="material-symbols-outlined icone-inline">waving_hand</span>`);
-        setText('.perfil-nome strong', user.nome);
+    const user = localStorage.getItem("aprovadrive_auth_user")
+    const userObject = JSON.parse(user);
+    
+    if (userObject && userObject.nome) {
+        setHTML('.topo h1', `Olá, ${userObject.nome}! <span class="material-symbols-outlined icone-inline">waving_hand</span>`);
+        setText('.perfil-nome strong', userObject.nome);
     }
 
     const gamification = getGamificationData();

@@ -60,7 +60,7 @@ ready( () => {
                 }
 
                 setTimeout(() => {
-               //     window.location.href = ROUTES.LOGIN;
+                window.location.href = ROUTES.LOGIN;
                 }, TIMING.REDIRECT_SUCCESS);
             } else if (mensagem) {
                 mensagem.style.display = 'block';
