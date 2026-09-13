@@ -6,6 +6,9 @@ import { TIMING } from '../constants/timing.js';
 import { login } from '../services/authService.js';
 
 ready(() => {
+    if (localStorage.getItem("aprovadrive_auth_user")) {
+         window.location.href = ROUTES.DASHBOARD;
+    }
     const senha = qs(SELECTORS.LOGIN_SENHA);
     const mostrarSenha = qs(SELECTORS.BTN_MOSTRAR_SENHA);
     const formLogin = qs(SELECTORS.FORM_LOGIN);

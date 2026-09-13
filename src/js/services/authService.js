@@ -86,7 +86,7 @@ export async function cadastrar(userData) {
     }
 
     try {
-        const response = await fetch(ENDPOINTS.USUARIOS.CADASTRO, {
+        const response = await fetch(ENDPOINTS.AUTH.CADASTRO, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

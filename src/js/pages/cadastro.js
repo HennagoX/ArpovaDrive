@@ -6,6 +6,9 @@ import { TIMING } from '../constants/timing.js';
 import { cadastrar } from '../services/authService.js';
 
 ready( () => {
+    if (localStorage.getItem("aprovadrive_auth_user")) {
+         window.location.href = ROUTES.DASHBOARD;
+    }
     const formCadastro = qs(SELECTORS.FORM_CADASTRO);
     const mensagem = qs(SELECTORS.MENSAGEM);
 

@@ -13,8 +13,8 @@ export const ROUTES = {
 
 export const ENDPOINTS = {
   AUTH: {
-    LOGIN: `${API_URL}/login`,
-    CADASTRO: `${API_URL}/usuarios`
+    LOGIN: `${API_URL}/auth/login`,
+    CADASTRO: `${API_URL}/auth/register`
   },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,
