@@ -47,7 +47,7 @@ export async function cadastrar(userData) {
     } else {
         try {
 
-            const response = await fetch('http://localhost:3000/usuarios', {
+            const response = await fetch('https://arpovadriveapi.onrender.com/usuarios', {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
