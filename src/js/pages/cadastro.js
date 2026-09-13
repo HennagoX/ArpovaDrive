@@ -5,12 +5,12 @@ import { MESSAGES } from '../constants/messages.js';
 import { TIMING } from '../constants/timing.js';
 import { cadastrar } from '../services/authService.js';
 
-ready(() => {
+ready( () => {
     const formCadastro = qs(SELECTORS.FORM_CADASTRO);
     const mensagem = qs(SELECTORS.MENSAGEM);
 
     if (formCadastro) {
-        on(formCadastro, 'submit', (event) => {
+        on(formCadastro, 'submit', async (event) => {
             event.preventDefault();
 
             const nome = qs(SELECTORS.CADASTRO_NOME)?.value.trim();
@@ -49,7 +49,8 @@ ready(() => {
                 return;
             }
 
-            const result = cadastrar({ nome, email, senha, dataNascimento });
+            const result =  await cadastrar({ nome, email, senha, dataNascimento });
+
             if (result.success) {
                 if (mensagem) {
                     mensagem.style.display = 'block';
@@ -59,7 +60,7 @@ ready(() => {
                 }
 
                 setTimeout(() => {
-                    window.location.href = ROUTES.LOGIN;
+               //     window.location.href = ROUTES.LOGIN;
                 }, TIMING.REDIRECT_SUCCESS);
             } else if (mensagem) {
                 mensagem.style.display = 'block';
