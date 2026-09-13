@@ -9,6 +9,7 @@
 body {
   background-color: var(--bg-light);
   color: var(--text-dark);
+  overflow-x: hidden;
 }
 
 .navbar {
@@ -72,6 +73,7 @@ body {
 .nav-actions {
   display: flex;
   gap: 12px;
+  align-items: center;
 }
 
 .btn-secundario {
@@ -221,7 +223,7 @@ body {
 
 .recursos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
   gap: 25px;
 }
 
@@ -263,7 +265,7 @@ body {
 
 .materias-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
   gap: 15px;
   margin-top: 30px;
 }
@@ -320,20 +322,108 @@ body {
 }
 
 @media (max-width: 768px) {
+  .nav-container {
+    padding: 12px 16px;
+  }
+
+  .logo {
+    font-size: 22px;
+  }
+
+  .nav-actions {
+    gap: 4px;
+  }
+
+  .btn-secundario,
+  .btn-destaque {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
   .nav-links {
     display: none;
+  }
+
+  .hero {
+    padding: 56px 16px 72px;
   }
 
   .hero h1 {
     font-size: 30px;
   }
 
+  .hero p {
+    font-size: 16px;
+  }
+
   .hero-buttons {
     flex-direction: column;
+  }
+
+  .btn-principal,
+  .btn-outline {
+    width: 100%;
+    padding: 14px 20px;
+    font-size: 16px;
+  }
+
+  .metricas {
+    margin-top: -36px;
+    padding: 0 16px;
+  }
+
+  .metricas-grid {
+    padding: 24px 16px;
+  }
+
+  .recursos,
+  .materias,
+  .cta {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .titulo-secao {
+    font-size: 26px;
+  }
+
+  .subtitulo-secao {
+    margin-bottom: 30px;
   }
 
   .metricas-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+}
+
+@media (max-width: 380px) {
+  .nav-container {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .logo {
+    font-size: 19px;
+  }
+
+  .nav-actions {
+    gap: 0;
+  }
+
+  .btn-secundario,
+  .btn-destaque {
+    padding-left: 7px;
+    padding-right: 7px;
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .badge-ia {
+    font-size: 12px;
+    padding: 7px 10px;
   }
 }
