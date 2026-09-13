@@ -1,5 +1,7 @@
 import { STORAGE_KEYS } from '../constants/storage.js';
 import { getLocalItem, setLocalItem, removeLocalItem } from '../utils/storage.js';
+import { ENDPOINTS } from '../constants/routes.js';
+
 
 export function getCurrentUser() {
     return getLocalItem(STORAGE_KEYS.AUTH_USER, null);
@@ -9,21 +11,42 @@ export function isAuthenticated() {
     return getCurrentUser();
 }
 
-export async function login(usuario, senha) {
-    if (!usuario || !senha) return { success: false, error: 'Preencha todos os campos.' };
+export async function login(email, senha) {
+    if (!email || !senha) return { success: false, error: 'Preencha todos os campos.' };
+    
+        
 
-    const users = getLocalItem(STORAGE_KEYS.USER_PROFILE, []);
-    const foundUser = users.find(u => (u.email === usuario || u.usuario === usuario) && u.senha === senha);
+        try{
+    const request = await fetch("http://localhost:3000/login", {
+        method: "POST",
+        headers: {"Content-Type" : "application/json"},
+        body: JSON.stringify({
+            "email" : email,
+            "senha" : senha
+        })
+          }
+        )
+       
+          if (request.status === 429){
+              return { success: false, error: 'Você fez muitas requisições!' };
+        }
 
-    const authData = foundUser || {
-        nome: usuario.split('@')[0] || 'Aluno',
-        email: usuario.includes('@') ? usuario : `${usuario}@aprovadrive.com`,
-        logadoEm: new Date().toISOString()
-    };
+      const data = await request.json();
+        
+      if (request?.ok) {
+      return {success : true};
+      }
+      else
+      {
+       return {success : false, error: "E-mail ou senha incorretos!"};
+      }
 
-    setLocalItem(STORAGE_KEYS.AUTH_USER, authData);
-    return { success: true, user: authData };
-}
+    }
+    catch(error){
+   console.error("Erro ao conectar com a API:", error);
+    return { success: false, error};
+    }
+    }
 
 export async function cadastrar(userData) {
     const { nome, email, senha, dataNascimento } = userData;
@@ -46,8 +69,7 @@ export async function cadastrar(userData) {
         return { success: false, error: 'E-mail já cadastrado.' };
     } else {
         try {
-
-            const response = await fetch('https://arpovadriveapi.onrender.com/usuarios', {
+            const response = await fetch(ENDPOINTS.USUARIOS.CADASTRO, {
                 method: 'POST',
                 headers: {
                     'Content-Type' : 'application/json'
@@ -59,8 +81,9 @@ export async function cadastrar(userData) {
                     data_nascimento : dataNascimento
                 })
             });
-            console.warn(response);
-            
+
+            const data = await response.json();
+            console.log(data);
             if (!response?.ok) {
                      console.log("Já tem")
                 return { success: false, error: "Esse email já está em uso!"};

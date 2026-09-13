@@ -23,7 +23,7 @@ ready(() => {
     }
 
     if (formLogin) {
-        on(formLogin, 'submit', (event) => {
+        on(formLogin, 'submit',async (event) => {
             event.preventDefault();
 
             const usuario = qs(SELECTORS.LOGIN_USUARIO)?.value.trim();
@@ -38,8 +38,8 @@ ready(() => {
                 }
                 return;
             }
+            const result = await login(usuario, senhaValor);
 
-            const result = login(usuario, senhaValor);
             if (result.success) {
                 if (mensagem) {
                     mensagem.style.display = 'block';
@@ -51,6 +51,12 @@ ready(() => {
                 setTimeout(() => {
                     window.location.href = ROUTES.DASHBOARD;
                 }, TIMING.REDIRECT_DELAY);
+            }
+            else{
+                 mensagem.style.display = 'block';
+                    mensagem.style.background = '#ffe5e5';
+                    mensagem.style.color = '#c00000';
+                    mensagem.textContent = MESSAGES.LOGIN_ERRADO;
             }
         });
     }
