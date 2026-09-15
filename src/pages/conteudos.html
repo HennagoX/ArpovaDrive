@@ -8,10 +8,9 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/navbar.css">
 
     <style>
@@ -19,95 +18,24 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Poppins", sans-serif;
+            font-family: var(--font-main);
         }
 
         body {
-            background: #f5f7fb;
-            color: #172033;
+            background: var(--bg-page);
+            color: var(--text-dark);
         }
-
-        /* SIDEBAR */
-
-        .sidebar {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 250px;
-            height: 100vh;
-            background: white;
-            border-right: 1px solid #e5e7eb;
-            padding: 30px 18px;
-            z-index: 100;
-        }
-
-        .logo {
-            font-size: 25px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo .a {
-            color: #16a66a;
-        }
-
-        .logo .prova {
-            color: #2878d7;
-        }
-
-        .logo .drive {
-            color: #f4c430;
-        }
-
-        .menu {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .menu a {
-            text-decoration: none;
-            color: #687386;
-            padding: 13px 15px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 13px;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .menu a:hover {
-            background: #f0f8f5;
-            color: #16a66a;
-        }
-
-        .menu a.active {
-            background: #e8f7f0;
-            color: #16a66a;
-            font-weight: 600;
-        }
-
-        .menu i {
-            width: 20px;
-            text-align: center;
-        }
-
-        /* CONTEÚDO */
 
         .main {
-            margin-left: 245px;
-            padding: 30px 40px;
+            margin-left: var(--navbar-width);
+            padding: var(--content-padding);
         }
-
-        /* TOPO */
 
         .topbar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 28px;
+            margin-bottom: var(--space-lg);
         }
 
         .page-title h1 {
@@ -116,21 +44,21 @@
         }
 
         .page-title p {
-            color: #7b8494;
+            color: var(--text-muted-soft);
             font-size: 14px;
         }
 
         .profile {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--space-sm);
         }
 
         .profile-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: #16a66a;
+            background: var(--brand-green);
             color: white;
             display: flex;
             align-items: center;
@@ -138,17 +66,15 @@
             font-weight: 600;
         }
 
-        /* BANNER */
-
         .welcome {
-            background: linear-gradient(110deg, #168f63, #247bd0);
+            background: linear-gradient(110deg, var(--gradient-end), var(--primary-blue));
             color: white;
-            border-radius: 18px;
-            padding: 28px 32px;
+            border-radius: var(--radius-lg);
+            padding: var(--space-lg) 28px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
+            margin-bottom: var(--space-lg);
             overflow: hidden;
         }
 
@@ -178,13 +104,13 @@
 
         .search {
             background: white;
-            border: 1px solid #e1e5eb;
-            border-radius: 11px;
-            padding: 13px 17px;
+            border: 1px solid var(--border-input);
+            border-radius: var(--radius-md);
+            padding: 11px 14px;
             flex: 1;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: var(--space-sm);
         }
 
         .search i {
@@ -202,28 +128,28 @@
 
         .filters {
             display: flex;
-            gap: 9px;
-            margin-bottom: 28px;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
             flex-wrap: wrap;
         }
 
         .filter {
             border: none;
             background: white;
-            border: 1px solid #e2e6ec;
-            padding: 9px 17px;
-            border-radius: 20px;
+            border: 1px solid var(--border-card);
+            padding: 8px 14px;
+            border-radius: var(--radius-lg);
             cursor: pointer;
-            color: #667084;
+            color: var(--text-muted);
             font-size: 13px;
             transition: .2s;
         }
 
         .filter:hover,
         .filter.active {
-            background: #16a66a;
+            background: var(--brand-green);
             color: white;
-            border-color: #16a66a;
+            border-color: var(--brand-green);
         }
 
         /* TÍTULO */
@@ -232,7 +158,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 17px;
+            margin-bottom: var(--space-md);
         }
 
         .section-title h2 {
@@ -249,14 +175,14 @@
         .ebooks {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
+            gap: var(--space-lg);
         }
 
         .ebook {
             background: white;
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid #e9ecf1;
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            border: 1px solid var(--border-card);
             transition: .25s;
         }
 
@@ -276,13 +202,13 @@
         }
 
         .green {
-            background: #e5f7ef;
-            color: #16a66a;
+            background: var(--brand-green-soft);
+            color: var(--brand-green);
         }
 
         .blue {
-            background: #e7f1fc;
-            color: #2878d7;
+            background: var(--primary-blue-soft);
+            color: var(--primary-blue);
         }
 
         .yellow {
@@ -307,7 +233,7 @@
             padding: 5px 8px;
             border-radius: 5px;
             background: #f1f3f6;
-            color: #687386;
+            color: var(--text-muted);
             margin-bottom: 8px;
         }
 
@@ -341,14 +267,14 @@
 
         .progress-bar {
             height: 100%;
-            background: #16a66a;
+            background: var(--brand-green);
             border-radius: 10px;
         }
 
         .read-btn {
             width: 100%;
             border: none;
-            background: #16a66a;
+            background: var(--brand-green);
             color: white;
             padding: 11px;
             border-radius: 8px;
@@ -423,15 +349,15 @@
                 <i class="fa-solid fa-house"></i>
                 <span>Início</span>
             </a>
-            <a href="#conteudos" class="navbar-item active">
+            <a href="#" class="navbar-item active">
                 <i class="fa-solid fa-book-open"></i>
                 <span>Conteúdos</span>
             </a>
-            <a href="#questoes" class="navbar-item">
+            <a href="./telaInicial.html#questoes" class="navbar-item">
                 <i class="fa-solid fa-circle-question"></i>
                 <span>Questões</span>
             </a>
-            <a href="#simulado" class="navbar-item">
+            <a href="./telaInicial.html#simulado" class="navbar-item">
                 <i class="fa-solid fa-clipboard-check"></i>
                 <span>Simulado</span>
             </a>

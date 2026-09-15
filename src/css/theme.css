@@ -3,25 +3,44 @@
 
 :root {
   --primary-blue: #0752a0;
+  --primary-blue-hover: #064583;
+  --primary-blue-soft: #e8f2ff;
   --gradient-start: #075da8;
   --gradient-mid: #087e9d;
   --gradient-end: #08a783;
 
   --brand-green: #18a85a;
+  --brand-green-hover: #138247;
+  --brand-green-soft: #e8f5e9;
   --brand-yellow: #f5b000;
   --brand-yellow-hover: #e4a400;
   --google-blue: #4285f4;
 
+  --bg-page: #f5f7fb;
   --bg-card: #ffffff;
   --bg-light: #f4f8fa;
   --text-dark: #111111;
+  --text-body: #222222;
   --text-muted: #666666;
   --text-muted-soft: #777777;
+  --text-nav: #555555;
   --border-input: #dedede;
   --border-divider: #dddddd;
   --border-divider-soft: #e0e0e0;
+  --border-card: #e8ebf0;
 
   --font-main: 'Inter', Arial, Helvetica, sans-serif;
+
+  --navbar-width: 250px;
+  --navbar-width-collapsed: 75px;
+  --navbar-height-mobile: 68px;
+  --navbar-padding: 24px 16px;
+  --content-padding: 32px 40px;
+  --space-xs: 6px;
+  --space-sm: 10px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
 
   --radius-sm: 8px;
   --radius-md: 14px;
@@ -30,6 +49,12 @@
 
   --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
   --shadow-card-strong: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+body {
+  background: var(--bg-page);
+  color: var(--text-body);
+  font-family: var(--font-main);
 }
 
 .material-symbols-outlined {
