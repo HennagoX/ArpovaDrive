@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Conteúdos | AprovaDrive</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="../css/navbar.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e5e7eb;
+            padding: 30px 18px;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo .a {
+            color: #16a66a;
+        }
+
+        .logo .prova {
+            color: #2878d7;
+        }
+
+        .logo .drive {
+            color: #f4c430;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .menu a {
+            text-decoration: none;
+            color: #687386;
+            padding: 13px 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 13px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: #f0f8f5;
+            color: #16a66a;
+        }
+
+        .menu a.active {
+            background: #e8f7f0;
+            color: #16a66a;
+            font-weight: 600;
+        }
+
+        .menu i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* CONTEÚDO */
+
+        .main {
+            margin-left: 245px;
+            padding: 30px 40px;
+        }
+
+        /* TOPO */
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .page-title h1 {
+            font-size: 27px;
+            margin-bottom: 5px;
+        }
+
+        .page-title p {
+            color: #7b8494;
+            font-size: 14px;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .profile-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #16a66a;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        /* BANNER */
+
+        .welcome {
+            background: linear-gradient(110deg, #168f63, #247bd0);
+            color: white;
+            border-radius: 18px;
+            padding: 28px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .welcome h2 {
+            font-size: 22px;
+            margin-bottom: 7px;
+        }
+
+        .welcome p {
+            font-size: 14px;
+            opacity: .9;
+        }
+
+        .welcome-icon {
+            font-size: 65px;
+            opacity: .2;
+            margin-right: 30px;
+        }
+
+        /* BUSCA */
+
+        .search-area {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .search {
+            background: white;
+            border: 1px solid #e1e5eb;
+            border-radius: 11px;
+            padding: 13px 17px;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search i {
+            color: #9aa3b2;
+        }
+
+        .search input {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+        }
+
+        /* FILTROS */
+
+        .filters {
+            display: flex;
+            gap: 9px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+
+        .filter {
+            border: none;
+            background: white;
+            border: 1px solid #e2e6ec;
+            padding: 9px 17px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: #667084;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .filter:hover,
+        .filter.active {
+            background: #16a66a;
+            color: white;
+            border-color: #16a66a;
+        }
+
+        /* TÍTULO */
+
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 17px;
+        }
+
+        .section-title h2 {
+            font-size: 19px;
+        }
+
+        .section-title span {
+            font-size: 13px;
+            color: #8992a1;
+        }
+
+        /* CARDS */
+
+        .ebooks {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .ebook {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #e9ecf1;
+            transition: .25s;
+        }
+
+        .ebook:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(20, 35, 60, .08);
+        }
+
+        .ebook-cover {
+            height: 130px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin-bottom: 18px;
+        }
+
+        .green {
+            background: #e5f7ef;
+            color: #16a66a;
+        }
+
+        .blue {
+            background: #e7f1fc;
+            color: #2878d7;
+        }
+
+        .yellow {
+            background: #fff6d9;
+            color: #e0a900;
+        }
+
+        .red {
+            background: #ffe9e7;
+            color: #df554b;
+        }
+
+        .purple {
+            background: #f0eaff;
+            color: #7957d5;
+        }
+
+        .category {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 5px 8px;
+            border-radius: 5px;
+            background: #f1f3f6;
+            color: #687386;
+            margin-bottom: 8px;
+        }
+
+        .ebook h3 {
+            font-size: 16px;
+            margin-bottom: 6px;
+        }
+
+        .ebook p {
+            font-size: 12px;
+            color: #7c8595;
+            line-height: 1.5;
+            min-height: 38px;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin: 16px 0 12px;
+            font-size: 11px;
+            color: #8b94a3;
+        }
+
+        .progress {
+            height: 5px;
+            background: #edf0f3;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #16a66a;
+            border-radius: 10px;
+        }
+
+        .read-btn {
+            width: 100%;
+            border: none;
+            background: #16a66a;
+            color: white;
+            padding: 11px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: .2s;
+        }
+
+        .read-btn:hover {
+            background: #118455;
+        }
+
+        /* RESPONSIVO */
+
+        @media (max-width: 1000px) {
+            .ebooks {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 750px) {
+            .sidebar {
+                width: 70px;
+                padding: 20px 10px;
+            }
+
+            .logo {
+                font-size: 0;
+            }
+
+            .logo .a {
+                font-size: 25px;
+            }
+
+            .menu a {
+                justify-content: center;
+                font-size: 0;
+            }
+
+            .menu i {
+                font-size: 17px;
+            }
+
+            .main {
+                margin-left: 70px;
+                padding: 20px;
+            }
+
+            .ebooks {
+                grid-template-columns: 1fr;
+            }
+
+            .welcome-icon {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- MENU LATERAL -->
+
+    <aside class="navbar">
+        <div class="navbar-logo">
+            <span class="verde">A</span><span class="azul">prova</span><span class="amarelo">Drive</span>
+        </div>
+
+        <nav class="navbar-menu">
+            <a href="./telaInicial.html" class="navbar-item">
+                <i class="fa-solid fa-house"></i>
+                <span>Início</span>
+            </a>
+            <a href="#conteudos" class="navbar-item active">
+                <i class="fa-solid fa-book-open"></i>
+                <span>Conteúdos</span>
+            </a>
+            <a href="#questoes" class="navbar-item">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>Questões</span>
+            </a>
+            <a href="#simulado" class="navbar-item">
+                <i class="fa-solid fa-clipboard-check"></i>
+                <span>Simulado</span>
+            </a>
+            <a href="./cronograma.html" class="navbar-item">
+                <i class="fa-solid fa-calendar-days"></i>
+                <span>Cronograma</span>
+            </a>
+            <a href="./desempenho.html" class="navbar-item">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Desempenho</span>
+            </a>
+        </nav>
+    </aside>
+
+
+
+    <!-- CONTEÚDO PRINCIPAL -->
+
+    <main class="main">
+
+        <div class="topbar">
+
+            <div class="page-title">
+                <h1>Biblioteca de conteúdos</h1>
+                <p>Estude os principais assuntos para sua prova do DETRAN.</p>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">U</div>
+            </div>
+
+        </div>
+
+
+        <!-- BANNER -->
+
+        <section class="welcome">
+
+            <div>
+                <h2>📚 Hora de estudar!</h2>
+                <p>
+                    Acesse seus e-books, avance nos conteúdos
+                    e prepare-se para sua aprovação.
+                </p>
+            </div>
+
+            <div class="welcome-icon">
+                <i class="fa-solid fa-book-open-reader"></i>
+            </div>
+
+        </section>
+
+
+        <!-- BUSCA -->
+
+        <div class="search-area">
+
+            <div class="search">
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input
+                    type="text"
+                    id="search"
+                    placeholder="Buscar por assunto ou e-book..."
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- FILTROS -->
+
+        <div class="filters">
+
+            <button class="filter active" data-category="todos">
+                Todos
+            </button>
+
+            <button class="filter" data-category="legislacao">
+                Legislação
+            </button>
+
+            <button class="filter" data-category="placas">
+                Placas
+            </button>
+
+            <button class="filter" data-category="seguranca">
+                Segurança
+            </button>
+
+            <button class="filter" data-category="saude">
+                Primeiros Socorros
+            </button>
+
+            <button class="filter" data-category="ambiente">
+                Meio Ambiente
+            </button>
+
+        </div>
+
+
+        <!-- E-BOOKS -->
+
+        <div class="section-title">
+            <h2>Todos os conteúdos</h2>
+            <span id="contador">5 conteúdos</span>
+        </div>
+
+
+        <section class="ebooks" id="ebooks">
+
+
+            <!-- CARD 1 -->
+
+            <article class="ebook" data-category="legislacao">
+
+                <div class="ebook-cover green">
+                    <i class="fa-solid fa-scale-balanced"></i>
+                </div>
+
+                <span class="category">
+                    LEGISLAÇÃO
+                </span>
+
+                <h3>Código de Trânsito</h3>
+
+                <p>
+                    Aprenda as principais leis e regras
+                    do Código de Trânsito Brasileiro.
+                </p>
+
+                <div class="info">
+                    <span>
+                        <i class="fa-regular fa-file-lines"></i>
+                        12 capítulos
+                    </span>
+
+                    <span>0%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <button class="read-btn"
+                        onclick="abrirEbook('Código de Trânsito')">
+                    Começar a ler
+                </button>
+
+            </article>
+
+
+            <!-- CARD 2 -->
+
+            <article class="ebook" data-category="placas">
+
+                <div class="ebook-cover blue">
+                    <i class="fa-solid fa-road"></i>
+                </div>
+
+                <span class="category">
+                    SINALIZAÇÃO
+                </span>
+
+                <h3>Placas de Trânsito</h3>
+
+                <p>
+                    Conheça os tipos de placas e aprenda
+                    o significado de cada sinalização.
+                </p>
+
+                <div class="info">
+                    <span>
+                        <i class="fa-regular fa-file-lines"></i>
+                        8 capítulos
+                    </span>
+
+                    <span>25%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 25%"></div>
+                </div>
+
+                <button class="read-btn"
+                        onclick="abrirEbook('Placas de Trânsito')">
+                    Continuar leitura
+                </button>
+
+            </article>
+
+
+            <!-- CARD 3 -->
+
+            <article class="ebook" data-category="seguranca">
+
+                <div class="ebook-cover yellow">
+                    <i class="fa-solid fa-car-burst"></i>
+                </div>
+
+                <span class="category">
+                    SEGURANÇA
+                </span>
+
+                <h3>Direção Defensiva</h3>
+
+                <p>
+                    Aprenda técnicas para prevenir acidentes
+                    e dirigir com mais segurança.
+                </p>
+
+                <div class="info">
+                    <span>
+                        <i class="fa-regular fa-file-lines"></i>
+                        10 capítulos
+                    </span>
+
+                    <span>0%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <button class="read-btn"
+                        onclick="abrirEbook('Direção Defensiva')">
+                    Começar a ler
+                </button>
+
+            </article>
+
+
+            <!-- CARD 4 -->
+
+            <article class="ebook" data-category="saude">
+
+                <div class="ebook-cover red">
+                    <i class="fa-solid fa-kit-medical"></i>
+                </div>
+
+                <span class="category">
+                    PRIMEIROS SOCORROS
+                </span>
+
+                <h3>Primeiros Socorros</h3>
+
+                <p>
+                    Aprenda noções básicas de primeiros
+                    socorros para situações no trânsito.
+                </p>
+
+                <div class="info">
+                    <span>
+                        <i class="fa-regular fa-file-lines"></i>
+                        6 capítulos
+                    </span>
+
+                    <span>0%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <button class="read-btn"
+                        onclick="abrirEbook('Primeiros Socorros')">
+                    Começar a ler
+                </button>
+
+            </article>
+
+
+            <!-- CARD 5 -->
+
+            <article class="ebook" data-category="ambiente">
+
+                <div class="ebook-cover purple">
+                    <i class="fa-solid fa-leaf"></i>
+                </div>
+
+                <span class="category">
+                    MEIO AMBIENTE
+                </span>
+
+                <h3>Meio Ambiente e Cidadania</h3>
+
+                <p>
+                    Entenda sustentabilidade, cidadania
+                    e responsabilidade no trânsito.
+                </p>
+
+                <div class="info">
+                    <span>
+                        <i class="fa-regular fa-file-lines"></i>
+                        7 capítulos
+                    </span>
+
+                    <span>0%</span>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+
+                <button class="read-btn"
+                        onclick="abrirEbook('Meio Ambiente e Cidadania')">
+                    Começar a ler
+                </button>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <script>
+
+        const search = document.getElementById("search");
+        const ebooks = document.querySelectorAll(".ebook");
+        const filters = document.querySelectorAll(".filter");
+        const contador = document.getElementById("contador");
+
+
+        // BUSCA
+
+        search.addEventListener("input", filtrar);
+
+
+        // FILTROS
+
+        filters.forEach(filter => {
+
+            filter.addEventListener("click", () => {
+
+                filters.forEach(f => f.classList.remove("active"));
+
+                filter.classList.add("active");
+
+                filtrar();
+
+            });
+
+        });
+
+
+        function filtrar() {
+
+            const texto = search.value.toLowerCase();
+
+            const categoriaSelecionada =
+                document.querySelector(".filter.active")
+                .dataset.category;
+
+            let quantidade = 0;
+
+
+            ebooks.forEach(ebook => {
+
+                const conteudo =
+                    ebook.innerText.toLowerCase();
+
+                const categoria =
+                    ebook.dataset.category;
+
+
+                const correspondeTexto =
+                    conteudo.includes(texto);
+
+                const correspondeCategoria =
+                    categoriaSelecionada === "todos" ||
+                    categoria === categoriaSelecionada;
+
+
+                if (correspondeTexto && correspondeCategoria) {
+
+                    ebook.style.display = "block";
+
+                    quantidade++;
+
+                } else {
+
+                    ebook.style.display = "none";
+
+                }
+
+            });
+
+
+            contador.textContent =
+                quantidade +
+                (quantidade === 1 ? " conteúdo" : " conteúdos");
+
+        }
+
+
+        // ABRIR E-BOOK
+
+        function abrirEbook(nome) {
+
+            alert(
+                "Abrindo o e-book: " +
+                nome
+            );
+
+            /*
+             * Depois podemos substituir este alert
+             * por:
+             *
+             * window.location.href =
+             * "ebook.html?titulo=" +
+             * encodeURIComponent(nome);
+             */
+
+        }
+
+    </script>
+
+</body>
+</html>
