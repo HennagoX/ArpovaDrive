@@ -11,7 +11,7 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <link rel="stylesheet" href="../css/theme.css">
-    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/utils.css">
 
     <style>
         * {
@@ -29,41 +29,6 @@
         .main {
             margin-left: var(--navbar-width);
             padding: var(--content-padding);
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-lg);
-        }
-
-        .page-title h1 {
-            font-size: 27px;
-            margin-bottom: 5px;
-        }
-
-        .page-title p {
-            color: var(--text-muted-soft);
-            font-size: 14px;
-        }
-
-        .profile {
-            display: flex;
-            align-items: center;
-            gap: var(--space-sm);
-        }
-
-        .profile-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--brand-green);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
         }
 
         .welcome {
@@ -355,7 +320,7 @@
             </a>
             <a href="./telaInicial.html#questoes" class="navbar-item">
                 <i class="fa-solid fa-circle-question"></i>
-                <span>Questões</span>
+                <span>Questões em andamento...</span>
             </a>
             <a href="./telaInicial.html#simulado" class="navbar-item">
                 <i class="fa-solid fa-clipboard-check"></i>
@@ -378,18 +343,20 @@
 
     <main class="main">
 
-        <div class="topbar">
-
-            <div class="page-title">
+        <header class="topo">
+            <div>
                 <h1>Biblioteca de conteúdos</h1>
                 <p>Estude os principais assuntos para sua prova do DETRAN.</p>
             </div>
 
-            <div class="profile">
-                <div class="profile-avatar">U</div>
-            </div>
-
-        </div>
+            <a href="../../index.html" class="perfil" title="Sair / Página Inicial">
+                <div class="perfil-nome">
+                    <strong>Meu perfil</strong>
+                    <span>Sair</span>
+                </div>
+                <div class="avatar">A</div>
+            </a>
+        </header>
 
 
         <!-- BANNER -->

@@ -81,6 +81,85 @@
     margin-left: var(--navbar-width, 250px);
 }
 
+.topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-xl);
+}
+
+.topo h1 {
+    font-size: 31px;
+    margin-bottom: 7px;
+}
+
+.topo p {
+    color: var(--text-muted-soft);
+    font-size: 16px;
+}
+
+.perfil {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: inherit;
+    text-decoration: none;
+}
+
+.perfil-nome {
+    text-align: right;
+    font-size: 14px;
+}
+
+.perfil-nome strong {
+    display: block;
+    margin-bottom: 3px;
+}
+
+.perfil-nome span {
+    color: var(--text-muted-soft);
+    font-size: 12px;
+}
+
+.avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-green), var(--primary-blue));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+}
+
+
+body {
+    background: var(--bg-page);
+    color: var(--text-body);
+    font-family: var(--font-main);
+}
+
 @media (max-width: 900px) {
     .navbar {
         width: var(--navbar-width-collapsed, 75px);
@@ -104,10 +183,7 @@
         display: none;
     }
 
-    .navbar + .main {
-        margin-left: var(--navbar-width-collapsed, 75px);
-    }
-
+    .navbar + .main,
     .navbar-page {
         margin-left: var(--navbar-width-collapsed, 75px);
     }
@@ -149,11 +225,12 @@
         font-size: 18px;
     }
 
-    .navbar + .main {
+    .navbar + .main,
+    .navbar-page {
         margin-left: 0;
     }
 
-    .navbar-page {
-        margin-left: 0;
+    .perfil {
+        display: none;
     }
 }
