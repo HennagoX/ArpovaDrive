@@ -4,7 +4,7 @@ import { ENDPOINTS } from '../constants/routes.js';
 
 const REQUIRED_FIELDS_MESSAGE = 'Preencha todos os campos.';
 const INVALID_CREDENTIALS_MESSAGE = 'E-mail ou senha incorretos.';
-const API_CONNECTION_MESSAGE = 'Não foi possível conectar com a API.';
+const API_CONNECTION_MESSAGE = 'Não foi possível se conectar com o servidor 404';
 
 function getStoredUsers() {
     const storedUsers = getLocalItem(STORAGE_KEYS.USER_PROFILE, []);
