@@ -48,6 +48,7 @@ export async function login(email, senha) {
 
     try {
         const response = await fetch(ENDPOINTS.AUTH.LOGIN, {
+            signal: AbortSignal.timeout(7000),
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: normalizedEmail, senha })
@@ -66,6 +67,9 @@ export async function login(email, senha) {
         return { success: true, user };
     } catch (error) {
         console.error('Erro ao conectar com a API:', error);
+        if (error.name === 'TimeoutError'){
+              console.warn("Demorou muito.");
+        }
         return { success: false, error: API_CONNECTION_MESSAGE };
     }
 }
