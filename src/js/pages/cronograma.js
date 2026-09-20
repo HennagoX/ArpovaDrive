@@ -1,8 +1,8 @@
 import { ready, qs, qsa, on, setText } from '../utils/dom.js';
-import { getDiaSemanaAtual, getNomesDias } from '../services/cronogramaService.js';
+import { getDiaSemanaAtual, getNomesDias, getTarefas} from '../services/cronogramaService.js';
 import { SELECTORS } from '../constants/selectors.js';
 
-ready(() => {
+ready(async () => {
     const diaAtual = getDiaSemanaAtual();
     const nomesDias = getNomesDias();
 
@@ -27,4 +27,5 @@ ready(() => {
             }
         });
     });
+        await getTarefas();
 });

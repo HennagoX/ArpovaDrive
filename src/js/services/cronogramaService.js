@@ -1,3 +1,7 @@
+import { STORAGE_KEYS } from '../constants/storage.js';
+import { getLocalItem, setLocalItem, removeLocalItem } from '../utils/storage.js';
+import { ENDPOINTS } from '../constants/routes.js';
+
 export function getDiaSemanaAtual() {
     const hoje = new Date();
     const dia = hoje.getDay();
@@ -14,3 +18,11 @@ export function getNomesDias() {
         6: 'Sábado'
     };
 }
+export async function getTarefas() {
+   const tarefas = await fetch(ENDPOINTS.TASK.GET_TASKS);
+   const resposta = await tarefas.json()
+   
+   console.log(resposta);
+}
+
+

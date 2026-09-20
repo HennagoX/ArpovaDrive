@@ -2,6 +2,8 @@ const isLocal = window.location.hostname === 'localhost' || window.location.host
 export const API_URL = isLocal 
   ? 'http://localhost:3000' 
   : 'https://arpovadriveapi.onrender.com';
+
+  console.log(API_URL);
 export const ROUTES = {
   HOME: '/index.html',
   LOGIN: '/src/pages/Login.html',
@@ -16,6 +18,9 @@ export const ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_URL}/auth/login`,
     CADASTRO: `${API_URL}/auth/register`
+  },
+  TASK: {
+    GET_TASKS: `${API_URL}/task/tasks`
   },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,
