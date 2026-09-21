@@ -2,7 +2,77 @@ import { STORAGE_KEYS } from '../constants/storage.js';
 import { getLocalItem, setLocalItem, removeLocalItem } from '../utils/storage.js';
 import { ENDPOINTS, API_URL } from '../constants/routes.js';
 
+export const MOCK_STORAGE_KEY = 'aprovadrive_mock_dia';
+
+/**
+ * Obtém o dia simulado (mock) ativo no sistema, caso exista.
+ * Pode ser definido via query param na URL (?simularDia=quarta) ou salvo no storage.
+ * @returns {string|null}
+ */
+export function getMockDia() {
+    try {
+        if (typeof window !== 'undefined' && window.location) {
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlMock = urlParams.get('simularDia') || urlParams.get('mockDay') || urlParams.get('dia');
+            if (urlMock) {
+                const normalized = urlMock.toLowerCase().trim();
+                setLocalItem(MOCK_STORAGE_KEY, normalized);
+                return normalized;
+            }
+        }
+    } catch {
+        // Fallback para storage
+    }
+
+    const stored = getLocalItem(MOCK_STORAGE_KEY, null);
+    if (stored && stored !== 'auto' && stored !== 'real') {
+        return String(stored).toLowerCase().trim();
+    }
+
+    return null;
+}
+
+/**
+ * Define ou limpa o dia simulado (mock).
+ * @param {string|null} dia - Nome do dia ('quarta', 'terca', etc) ou 'auto' para voltar ao tempo real
+ */
+export function setMockDia(dia) {
+    if (!dia || dia === 'auto' || dia === 'real') {
+        removeLocalItem(MOCK_STORAGE_KEY);
+    } else {
+        setLocalItem(MOCK_STORAGE_KEY, String(dia).toLowerCase().trim());
+    }
+}
+
 export function getDiaSemanaAtual() {
+    const mock = getMockDia();
+    if (mock) {
+        const mapa = {
+            segunda: 1,
+            'segunda-feira': 1,
+            '1': 1,
+            terca: 2,
+            terça: 2,
+            'terca-feira': 2,
+            '2': 2,
+            quarta: 3,
+            'quarta-feira': 3,
+            '3': 3,
+            quinta: 4,
+            'quinta-feira': 4,
+            '4': 4,
+            sexta: 5,
+            'sexta-feira': 5,
+            '5': 5,
+            sabado: 6,
+            sábado: 6,
+            '6': 6
+        };
+        if (mapa[mock] !== undefined) {
+            return mapa[mock];
+        }
+    }
+
     const hoje = new Date();
     const dia = hoje.getDay();
     return (dia >= 1 && dia <= 6) ? dia : 1;
@@ -46,11 +116,14 @@ export function getNumeroDia(chaveDia) {
 export async function getTarefas(userId) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const mockDia = getMockDia();
+    const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
 
     try {
-        const response = await fetch(`${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}`, {
+        const response = await fetch(`${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`, {
             headers: {
-                'Accept': 'application/json'
+                'Accept': 'application/json',
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
             }
         });
 
@@ -136,6 +209,7 @@ function getFallbackPayload(usuario) {
 export async function iniciarTarefa(taskId, userId) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.INICIAR ? ENDPOINTS.TASK.INICIAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/iniciar`;
 
@@ -143,11 +217,13 @@ export async function iniciarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
             id_usuario: usuarioId,
-            taskId
+            taskId,
+            simularDia: mockDia || undefined
         })
     });
 
@@ -164,18 +240,10 @@ export async function iniciarTarefa(taskId, userId) {
     return data;
 }
 
-/**
- * Envia requisição para concluir uma tarefa.
- * A validação de negócio é realizada exclusivamente na API.
- * 
- * @param {string} taskId - Identificador único da tarefa
- * @param {string} [userId] - Identificador do usuário (opcional)
- * @param {Object} [options] - Opções adicionais (ex: force)
- * @returns {Promise<Object>} Resposta da API com payload atualizado e XP ganho
- */
 export async function concluirTarefa(taskId, userId, options = {}) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.CONCLUIR ? ENDPOINTS.TASK.CONCLUIR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/concluir`;
 
@@ -183,11 +251,13 @@ export async function concluirTarefa(taskId, userId, options = {}) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
             id_usuario: usuarioId,
             taskId,
+            simularDia: mockDia || undefined,
             force: Boolean(options.force)
         })
     });
@@ -205,17 +275,10 @@ export async function concluirTarefa(taskId, userId, options = {}) {
     return data;
 }
 
-/**
- * Envia requisição para pausar uma tarefa em andamento.
- * A validação é realizada na API.
- * 
- * @param {string} taskId 
- * @param {string} [userId] 
- * @returns {Promise<Object>}
- */
 export async function pausarTarefa(taskId, userId) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.PAUSAR ? ENDPOINTS.TASK.PAUSAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/pausar`;
 
@@ -223,11 +286,13 @@ export async function pausarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
             id_usuario: usuarioId,
-            taskId
+            taskId,
+            simularDia: mockDia || undefined
         })
     });
 
@@ -244,16 +309,10 @@ export async function pausarTarefa(taskId, userId) {
     return data;
 }
 
-/**
- * Envia requisição para reiniciar uma tarefa.
- * 
- * @param {string} taskId 
- * @param {string} [userId] 
- * @returns {Promise<Object>}
- */
 export async function reiniciarTarefa(taskId, userId) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.REINICIAR ? ENDPOINTS.TASK.REINICIAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/reiniciar`;
 
@@ -261,11 +320,13 @@ export async function reiniciarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
             id_usuario: usuarioId,
-            taskId
+            taskId,
+            simularDia: mockDia || undefined
         })
     });
 

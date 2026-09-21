@@ -5,14 +5,16 @@ import {
     getTarefas,
     getChaveDia,
     iniciarTarefa,
-    concluirTarefa
+    concluirTarefa,
+    getMockDia,
+    setMockDia
 } from '../services/cronogramaService.js';
 import { addXp, getGamificationData } from '../services/gamificationService.js';
 import { SELECTORS } from '../constants/selectors.js';
 import { createTaskCard } from '../components/taskCard.js';
 
 ready(async () => {
-    const diaAtual = getDiaSemanaAtual();
+    let diaAtual = getDiaSemanaAtual();
     const nomesDias = getNomesDias();
 
     // Atualiza badges do HUD com dados locais de gamificação
@@ -29,18 +31,20 @@ ready(async () => {
         }
     }
 
-    // 2. Ativação inicial da aba do dia da semana
-    const diaTabAtivo = qs(`${SELECTORS.CRONOGRAMA_TAB_PREFIX}${diaAtual}`);
-    if (diaTabAtivo) {
+    // 2. Ativação da aba do dia da semana
+    function ativarAba(diaNum) {
         qsa(SELECTORS.CRONOGRAMA_TABS).forEach(t => t.classList.remove('active'));
-        diaTabAtivo.classList.add('active');
+        const diaTabAlvo = qs(`${SELECTORS.CRONOGRAMA_TAB_PREFIX}${diaNum}`);
+        if (diaTabAlvo) {
+            diaTabAlvo.classList.add('active');
+        }
+        const nomeDia = nomesDias[diaNum] || 'Hoje';
+        setText('.schedule-header h3', `Missões de ${nomeDia}`);
+        mudarVisibilidadeDia(diaNum);
     }
 
-    const nomeDiaAtual = nomesDias[diaAtual] || 'Hoje';
-    setText('.schedule-header h3', `Missões de ${nomeDiaAtual}`);
-
-    // Define a visibilidade inicial para o dia atual
-    mudarVisibilidadeDia(diaAtual);
+    // Define a visibilidade inicial
+    ativarAba(diaAtual);
 
     // 3. Event listeners das abas - alterna apenas a visibilidade
     const tabs = qsa(SELECTORS.CRONOGRAMA_TABS);
@@ -56,25 +60,78 @@ ready(async () => {
                 if (nomeDia) {
                     setText('.schedule-header h3', `Missões de ${nomeDia}`);
                 }
-                // Muda apenas a visibilidade da div selecionada
                 mudarVisibilidadeDia(diaNum);
             }
         });
     });
 
-    // 4. Consumo da API e renderização dos cards nas 6 divs
+    // 4. Configuração da Barra de Simulação (Mock de Dia)
+    configurarBarraSimulacao();
+
+    // 5. Consumo da API e renderização dos cards nas 6 divs
     try {
         const payload = await getTarefas();
         if (payload) {
+            diaAtual = payload.diaSemanaAtual || diaAtual;
             renderizarTarefasNasDivs(payload);
             consumirTaskAtual(payload.taskAtual, payload.diaConcluido);
             atualizarAbas(payload, diaAtual);
+            ativarAba(diaAtual);
             if (payload.usuario) {
                 atualizarHud(payload.usuario);
             }
         }
     } catch (error) {
         console.error('Erro ao processar tarefas do cronograma:', error);
+    }
+
+    function configurarBarraSimulacao() {
+        const mockAtivo = getMockDia();
+        qsa('.btn-sim').forEach((btn) => {
+            const simVal = btn.dataset.sim;
+            if ((!mockAtivo && simVal === 'auto') || (mockAtivo && mockAtivo === simVal)) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+
+            on(btn, 'click', async () => {
+                const targetSim = btn.dataset.sim;
+                setMockDia(targetSim);
+
+                qsa('.btn-sim').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                try {
+                    btn.disabled = true;
+                    btn.textContent = 'Carregando...';
+
+                    const newPayload = await getTarefas();
+                    if (newPayload) {
+                        diaAtual = newPayload.diaSemanaAtual || getDiaSemanaAtual();
+                        renderizarTarefasNasDivs(newPayload);
+                        consumirTaskAtual(newPayload.taskAtual, newPayload.diaConcluido);
+                        atualizarAbas(newPayload, diaAtual);
+                        ativarAba(diaAtual);
+
+                        if (newPayload.usuario) {
+                            atualizarHud(newPayload.usuario);
+                        }
+
+                        const nomeSim = nomesDias[diaAtual] || targetSim;
+                        const msgSim = targetSim === 'auto' 
+                            ? 'Simulação desativada: Retornou ao dia real do sistema.' 
+                            : `Modo Mock: Hoje agora é simulado como ${nomeSim}!`;
+                        mostrarNotificacao(msgSim, 'info');
+                    }
+                } catch (err) {
+                    mostrarNotificacao(err.message, 'erro');
+                } finally {
+                    btn.disabled = false;
+                    btn.textContent = targetSim === 'auto' ? 'Hoje (Real)' : nomesDias[getNumeroDia(targetSim)] || targetSim;
+                }
+            });
+        });
     }
 
     /**

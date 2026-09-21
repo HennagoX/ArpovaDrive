@@ -93,12 +93,66 @@ body {
   border-color: #dcfce7;
 }
 
+.simulation-hud {
+  background: var(--bg-card);
+  border: 1px dashed #cbd5e1;
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-top: -12px;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.simulation-hud .sim-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #475569;
+  font-size: 0.85rem;
+}
+
+.simulation-hud .sim-buttons {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.btn-sim {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  padding: 5px 12px;
+  border-radius: 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-main);
+  transition: all 0.2s ease;
+}
+
+.btn-sim:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.btn-sim.active {
+  background: var(--primary-blue);
+  color: #ffffff;
+  border-color: var(--primary-blue);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.3);
+}
+
 .week-nav {
   display: flex;
   gap: var(--space-sm);
   overflow-x: auto;
   padding: 12px 6px;
-  margin-top: -22px;
+  margin-top: 0;
   margin-bottom: var(--space-lg);
 }
 
