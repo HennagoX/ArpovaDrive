@@ -20,7 +20,11 @@ export const ENDPOINTS = {
     CADASTRO: `${API_URL}/auth/register`
   },
   TASK: {
-    GET_TASKS: `${API_URL}/task/tasks`
+    GET_TASKS: `${API_URL}/task/tasks?id=`,
+    INICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/iniciar`,
+    CONCLUIR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/concluir`,
+    PAUSAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/pausar`,
+    REINICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/reiniciar`
   },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,

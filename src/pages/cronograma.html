@@ -1,350 +1,18 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AprovaDrive - Cronograma Semanal Gamificado</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/utils.css">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-    }
-
-    :root {
-      --bg-color: #f4f6f9;
-      --card-bg: #ffffff;
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --primary-light: #eff6ff;
-      --accent: #f59e0b;
-      --success: #10b981;
-      --text-dark: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-    }
-
-    body {
-      background-color: var(--bg-color);
-      color: var(--text-dark);
-      padding: 20px;
-      margin-left: 250px;
-    }
-
-    .container {
-      max-width: 950px;
-      margin: 0 auto;
-    }
-
-    .nav-topo {
-      margin-bottom: 20px;
-    }
-
-    .btn-voltar {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      color: var(--primary);
-      font-weight: 600;
-      font-size: 0.95rem;
-      transition: color 0.2s;
-    }
-
-    .btn-voltar:hover {
-      color: var(--primary-hover);
-    }
-
-    .hud-card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 24px 24px 36px;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      border: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .user-info h2 {
-      font-size: 1.2rem;
-      margin-bottom: 4px;
-    }
-
-    .level-tag {
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 0.85rem;
-      font-weight: 600;
-    }
-
-    .stats-group {
-      display: flex;
-      gap: 12px;
-    }
-
-    .stat-badge {
-      background: #fff7ed;
-      color: #ea580c;
-      border: 1px solid #ffedd5;
-      padding: 8px 14px;
-      border-radius: 10px;
-      font-weight: bold;
-      font-size: 0.9rem;
-    }
-
-    .stat-badge.xp {
-      background: #f0fdf4;
-      color: #16a34a;
-      border-color: #dcfce7;
-    }
-
-    .week-nav {
-      display: flex;
-      gap: 12px;
-      overflow-x: auto;
-      padding: 12px 6px;
-      margin-top: -22px;
-      margin-bottom: 24px;
-      position: relative;
-      z-index: 2;
-    }
-
-    .day-tab {
-      flex: 1;
-      min-width: 105px;
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 12px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .day-tab:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
-    }
-
-    .day-tab .day-name {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-
-    .day-tab .day-status {
-      font-size: 0.75rem;
-      margin-top: 4px;
-      font-weight: bold;
-    }
-
-    .day-tab.completed {
-      border-color: var(--success);
-      background: #f0fdf4;
-    }
-
-    .day-tab.completed .day-status {
-      color: var(--success);
-    }
-
-    .day-tab.active {
-      border: 2px solid var(--primary);
-      background: var(--primary-light);
-      transform: translateY(-4px);
-      box-shadow: 0 8px 18px rgba(37, 99, 235, 0.18);
-    }
-
-    .day-tab.active .day-name, 
-    .day-tab.active .day-status {
-      color: var(--primary);
-    }
-
-    .schedule-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
-    }
-
-    .schedule-header h3 {
-      font-size: 1.2rem;
-    }
-
-    .schedule-list {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .schedule-item {
-      background: var(--card-bg);
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      padding: 20px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-    }
-
-    .schedule-item:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-    }
-
-    .schedule-item.done {
-      border-left: 6px solid var(--success);
-      opacity: 0.85;
-    }
-
-    .schedule-item.current {
-      border: 2px solid var(--primary);
-      border-left: 6px solid var(--primary);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
-    }
-
-    .schedule-item.pending {
-      border-left: 6px solid var(--text-muted);
-    }
-
-    .time-box {
-      min-width: 90px;
-      text-align: center;
-      padding-right: 16px;
-      border-right: 1px dashed var(--border);
-    }
-
-    .time-box .time {
-      font-size: 1.1rem;
-      font-weight: bold;
-      color: var(--text-dark);
-    }
-
-    .time-box .duration {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 2px;
-    }
-
-    .task-content {
-      flex: 1;
-    }
-
-    .task-tag {
-      display: inline-block;
-      font-size: 0.75rem;
-      font-weight: bold;
-      padding: 3px 8px;
-      border-radius: 6px;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .tag-theory { background: #dbeafe; color: #1e40af; }
-    .tag-quiz { background: #fef3c7; color: #92400e; }
-    .tag-review { background: #f3e8ff; color: #6b21a8; }
-
-    .task-title {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .task-desc {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .task-reward {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .xp-badge {
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: var(--accent);
-      background: #fffbeeb3;
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1px solid #fef3c7;
-    }
-
-    .btn-action {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-weight: bold;
-      font-size: 0.85rem;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn-action:hover {
-      background: var(--primary-hover);
-    }
-
-    .check-icon {
-      color: var(--success);
-      font-size: 1.5rem;
-      font-weight: bold;
-    }
-
-    .icone-inline {
-      font-size: 1.15em;
-      vertical-align: middle;
-      margin-right: 4px;
-    }
-
-    @media (max-width: 650px) {
-      body {
-        margin-left: 0;
-        padding-bottom: 88px;
-      }
-
-      .schedule-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-      }
-
-      .time-box {
-        border-right: none;
-        border-bottom: 1px dashed var(--border);
-        width: 100%;
-        text-align: left;
-        padding-right: 0;
-        padding-bottom: 8px;
-        display: flex;
-        justify-content: space-between;
-      }
-
-      .task-reward {
-        width: 100%;
-        justify-content: space-between;
-        margin-top: 8px;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="../css/cronograma.css">
 </head>
+
 <body class="navbar-page">
   <aside class="navbar">
     <div class="navbar-logo">
@@ -352,59 +20,44 @@
     </div>
 
     <nav class="navbar-menu">
-      <a href="./telaInicial.html" class="navbar-item">
-        <i class="fa-solid fa-house"></i>
-        <span>Início</span>
-      </a>
-      <a href="./conteudos.html" class="navbar-item">
-        <i class="fa-solid fa-book-open"></i>
-        <span>Conteúdos</span>
-      </a>
-      <a href="./telaInicial.html#questoes" class="navbar-item">
-        <i class="fa-solid fa-circle-question"></i>
-        <span>Questões</span>
-      </a>
-      <a href="./telaInicial.html#simulado" class="navbar-item">
-        <i class="fa-solid fa-clipboard-check"></i>
-        <span>Simulado</span>
-      </a>
-      <a href="#" class="navbar-item active">
-        <i class="fa-solid fa-calendar-days"></i>
-        <span>Cronograma</span>
-      </a>
-      <a href="./desempenho.html" class="navbar-item">
-        <i class="fa-solid fa-chart-line"></i>
-        <span>Desempenho</span>
-      </a>
+      <a href="./telaInicial.html" class="navbar-item"><i class="fa-solid fa-house"></i><span>Início</span></a>
+      <a href="./conteudos.html" class="navbar-item"><i class="fa-solid fa-book-open"></i><span>Conteúdos</span></a>
+      <a href="./telaInicial.html#questoes" class="navbar-item"><i
+          class="fa-solid fa-circle-question"></i><span>Questões</span></a>
+      <a href="./telaInicial.html#simulado" class="navbar-item"><i
+          class="fa-solid fa-clipboard-check"></i><span>Simulado</span></a>
+      <a href="#" class="navbar-item active"><i class="fa-solid fa-calendar-days"></i><span>Cronograma</span></a>
+      <a href="./desempenho.html" class="navbar-item"><i class="fa-solid fa-chart-line"></i><span>Desempenho</span></a>
     </nav>
   </aside>
 
-  <div class="container">
+  <main class="container">
     <div class="nav-topo">
       <a href="./telaInicial.html" class="btn-voltar">
         <i class="fa-solid fa-arrow-left"></i> Voltar ao Painel
       </a>
     </div>
 
-    <div class="hud-card">
+    <header class="hud-card">
       <div class="user-info">
         <h2><span class="material-symbols-outlined icone-inline">calendar_month</span> Cronograma da Semana</h2>
         <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
       </div>
       <div class="stats-group">
-        <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span> Ofensiva: 5 Dias</div>
+        <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span>
+          Ofensiva: 5 Dias</div>
         <div class="stat-badge xp"><span class="material-symbols-outlined icone-inline">bolt</span> Total: 850 XP</div>
       </div>
-    </div>
+    </header>
 
-    <div class="week-nav">
+    <nav class="week-nav">
       <div class="day-tab" id="day-tab-1">
         <div class="day-name">Segunda</div>
         <div class="day-status">3 Aulas</div>
       </div>
       <div class="day-tab" id="day-tab-2">
         <div class="day-name">Terça</div>
-        <div class="day-status">• Hoje</div>
+        <div class="day-status">3 Aulas</div>
       </div>
       <div class="day-tab" id="day-tab-3">
         <div class="day-name">Quarta</div>
@@ -412,74 +65,46 @@
       </div>
       <div class="day-tab" id="day-tab-4">
         <div class="day-name">Quinta</div>
-        <div class="day-status">2 Aulas</div>
+        <div class="day-status">3 Aulas</div>
       </div>
       <div class="day-tab" id="day-tab-5">
         <div class="day-name">Sexta</div>
-        <div class="day-status">Simulado</div>
+        <div class="day-status">3 Aulas</div>
       </div>
       <div class="day-tab" id="day-tab-6">
         <div class="day-name">Sábado</div>
-        <div class="day-status">Revisão</div>
+        <div class="day-status">3 Aulas</div>
       </div>
+    </nav>
+
+    <!-- Banner destacando a tarefa atual do usuário -->
+    <div id="task-atual-banner" class="current-task-banner" style="display: none;">
+      <div class="banner-info">
+        <span class="material-symbols-outlined icone-inline">play_circle</span>
+        <span class="banner-tag">Missão Atual</span>
+        <span id="task-atual-titulo">Carregando...</span>
+      </div>
+      <div id="task-atual-xp" class="xp-badge">+0 XP</div>
     </div>
 
     <div class="schedule-header">
-      <h3>Missões de Hoje</h3>
-      <span style="font-size: 0.85rem; color: var(--text-muted);">Tempo total estimado: 1h 15m</span>
+      <h3>Missões do Dia</h3>
+      <span id="tempo-estimado-dia">Tempo total estimado: 1h 15m</span>
     </div>
 
-    <div class="schedule-list">
-      <div class="schedule-item done">
-        <div class="time-box">
-          <div class="time">08:00</div>
-          <div class="duration">20 min</div>
-        </div>
-        <div class="task-content">
-          <span class="task-tag tag-theory">Videoaula</span>
-          <div class="task-title">Direção Defensiva: Condições Adversas</div>
-          <div class="task-desc">Chuva, neblina, iluminação e estado da via.</div>
-        </div>
-        <div class="task-reward">
-          <span class="xp-badge">+50 XP</span>
-          <span class="material-symbols-outlined check-icon">check_circle</span>
-        </div>
-      </div>
-
-      <div class="schedule-item current">
-        <div class="time-box">
-          <div class="time">12:30</div>
-          <div class="duration">15 min</div>
-        </div>
-        <div class="task-content">
-          <span class="task-tag tag-quiz">Prática</span>
-          <div class="task-title">Mini-Quiz: 10 Questões de Direção Defensiva</div>
-          <div class="task-desc">Acerte no mínimo 70% para liberar o bônus diário.</div>
-        </div>
-        <div class="task-reward">
-          <span class="xp-badge">+100 XP</span>
-          <button class="btn-action">INICIAR</button>
-        </div>
-      </div>
-
-      <div class="schedule-item pending">
-        <div class="time-box">
-          <div class="time">19:00</div>
-          <div class="duration">40 min</div>
-        </div>
-        <div class="task-content">
-          <span class="task-tag tag-review">Fixação</span>
-          <div class="task-title">Leitura Guiada & Flashcards de Placas</div>
-          <div class="task-desc">Revisão rápida das placas de Regulamentação e Advertência.</div>
-        </div>
-        <div class="task-reward">
-          <span class="xp-badge">+75 XP</span>
-          <button class="btn-action" style="background: var(--text-muted);">BLOQUEADO</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <section class="schedule-list" id="schedule-days-container">
+      <!-- 6 divs: Uma para cada dia da semana (1: Segunda a 6: Sábado) -->
+      <!-- O script altera APENAS a visibilidade entre elas conforme o dia -->
+      <div id="day-tasks-1" class="day-tasks-container" data-day="1"></div>
+      <div id="day-tasks-2" class="day-tasks-container" data-day="2"></div>
+      <div id="day-tasks-3" class="day-tasks-container" data-day="3"></div>
+      <div id="day-tasks-4" class="day-tasks-container" data-day="4"></div>
+      <div id="day-tasks-5" class="day-tasks-container" data-day="5"></div>
+      <div id="day-tasks-6" class="day-tasks-container" data-day="6"></div>
+    </section>
+  </main>
 
   <script type="module" src="../js/pages/cronograma.js"></script>
 </body>
+
 </html>
