@@ -530,3 +530,146 @@ body {
   background: #dc2626;
   border-left: 5px solid #7f1d1d;
 }
+
+/* ==========================================================================
+   Barra de Seleção de Usuário Ativo
+   ========================================================================== */
+.user-selector-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 10px 16px;
+  margin-bottom: var(--space-md);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.user-selector-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+.user-selector-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.select-user-dropdown {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-input);
+  background: var(--bg-page);
+  color: var(--text-dark);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.select-user-dropdown:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px var(--primary-blue-soft);
+}
+
+.user-id-badge {
+  font-family: monospace;
+  font-size: 0.78rem;
+  background: var(--bg-page);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-card);
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Estados de Carregamento e Erro
+   ========================================================================== */
+.cronograma-state-card {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-card);
+  padding: 40px 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  box-shadow: var(--shadow-card);
+  margin-top: 10px;
+  width: 100%;
+}
+
+.loading-spinner {
+  width: 44px;
+  height: 44px;
+  border: 4px solid var(--primary-blue-soft);
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 0.85s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.state-text h4 {
+  font-size: 1.15rem;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+
+.state-text p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.error-state {
+  border-color: #fecaca;
+  background: #fef2f2;
+}
+
+.error-state .state-icon {
+  font-size: 2.5rem;
+  color: #dc2626;
+}
+
+.error-state h4 {
+  color: #991b1b;
+}
+
+.error-state p {
+  color: #7f1d1d;
+}
+
+.btn-retry {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--primary-blue);
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.btn-retry:hover {
+  background: var(--primary-blue-hover);
+  transform: translateY(-1px);
+}

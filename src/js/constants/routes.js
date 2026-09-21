@@ -1,9 +1,15 @@
-const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+const isLocal = typeof window !== 'undefined' && (
+  window.location.hostname === 'localhost' || 
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname === '' ||
+  window.location.hostname === '0.0.0.0' ||
+  window.location.protocol === 'file:'
+);
+
 export const API_URL = isLocal 
   ? 'http://localhost:3000' 
   : 'https://arpovadriveapi.onrender.com';
 
-  console.log(API_URL);
 export const ROUTES = {
   HOME: '/index.html',
   LOGIN: '/src/pages/Login.html',
@@ -13,7 +19,6 @@ export const ROUTES = {
   DESEMPENHO: '/src/pages/desempenho.html'
 };
 
-
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_URL}/auth/login`,
@@ -21,6 +26,7 @@ export const ENDPOINTS = {
   },
   TASK: {
     GET_TASKS: `${API_URL}/task/tasks?id=`,
+    USUARIOS: `${API_URL}/task/usuarios`,
     INICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/iniciar`,
     CONCLUIR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/concluir`,
     PAUSAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/pausar`,

@@ -4,10 +4,14 @@ import {
     getNomesDias,
     getTarefas,
     getChaveDia,
+    getNumeroDia,
     iniciarTarefa,
     concluirTarefa,
     getMockDia,
-    setMockDia
+    setMockDia,
+    getUsuarioAtivoId,
+    setUsuarioAtivoId,
+    getUsuariosCadastrados
 } from '../services/cronogramaService.js';
 import { addXp, getGamificationData } from '../services/gamificationService.js';
 import { SELECTORS } from '../constants/selectors.js';
@@ -17,21 +21,46 @@ ready(async () => {
     let diaAtual = getDiaSemanaAtual();
     const nomesDias = getNomesDias();
 
-    // Atualiza badges do HUD com dados locais de gamificação
+    // Atualiza badges do HUD inicialmente
     atualizarHud();
 
-    // 1. Alternância de visibilidade entre as 6 divs dos dias da semana
+    // 1. Configura abas dos dias da semana
+    configurarAbas();
+
+    // 2. Configura a barra de simulação (Mock de Dia)
+    configurarBarraSimulacao();
+
+    // 3. Configura o seletor de usuário cadastrado no banco PostgreSQL
+    await configurarSeletorUsuarios();
+
+    // 4. Configura botão de tentar novamente (em caso de erro)
+    const btnRetry = qs('#btn-tentar-novamente');
+    if (btnRetry) {
+        on(btnRetry, 'click', async () => {
+            await carregarCronograma(getUsuarioAtivoId());
+        });
+    }
+
+    // 5. Carrega o cronograma do usuário ativo
+    await carregarCronograma(getUsuarioAtivoId());
+
+    /**
+     * Alterna visibilidade entre as 6 divs dos dias da semana.
+     * @param {number} diaNum 
+     */
     function mudarVisibilidadeDia(diaNum) {
         for (let d = 1; d <= 6; d++) {
             const divDia = qs(`#day-tasks-${d}`);
             if (divDia) {
-                // Muda APENAS a visibilidade da div correspondente
                 divDia.style.display = (d === Number(diaNum)) ? 'flex' : 'none';
             }
         }
     }
 
-    // 2. Ativação da aba do dia da semana
+    /**
+     * Ativa a aba visualmente e exibe a div de tarefas correspondente.
+     * @param {number} diaNum 
+     */
     function ativarAba(diaNum) {
         qsa(SELECTORS.CRONOGRAMA_TABS).forEach(t => t.classList.remove('active'));
         const diaTabAlvo = qs(`${SELECTORS.CRONOGRAMA_TAB_PREFIX}${diaNum}`);
@@ -43,48 +72,76 @@ ready(async () => {
         mudarVisibilidadeDia(diaNum);
     }
 
-    // Define a visibilidade inicial
-    ativarAba(diaAtual);
+    /**
+     * Event listeners de alternância entre as abas da semana.
+     */
+    function configurarAbas() {
+        const tabs = qsa(SELECTORS.CRONOGRAMA_TABS);
+        tabs.forEach(tab => {
+            on(tab, 'click', () => {
+                tabs.forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
 
-    // 3. Event listeners das abas - alterna apenas a visibilidade
-    const tabs = qsa(SELECTORS.CRONOGRAMA_TABS);
-    tabs.forEach(tab => {
-        on(tab, 'click', () => {
-            tabs.forEach(t => t.classList.remove('active'));
-            tab.classList.add('active');
-
-            const idMatch = tab.id.match(/\d+$/);
-            if (idMatch) {
-                const diaNum = parseInt(idMatch[0], 10);
-                const nomeDia = nomesDias[diaNum];
-                if (nomeDia) {
-                    setText('.schedule-header h3', `Missões de ${nomeDia}`);
+                const idMatch = tab.id.match(/\d+$/);
+                if (idMatch) {
+                    const diaNum = parseInt(idMatch[0], 10);
+                    const nomeDia = nomesDias[diaNum];
+                    if (nomeDia) {
+                        setText('.schedule-header h3', `Missões de ${nomeDia}`);
+                    }
+                    mudarVisibilidadeDia(diaNum);
                 }
-                mudarVisibilidadeDia(diaNum);
-            }
+            });
         });
-    });
-
-    // 4. Configuração da Barra de Simulação (Mock de Dia)
-    configurarBarraSimulacao();
-
-    // 5. Consumo da API e renderização dos cards nas 6 divs
-    try {
-        const payload = await getTarefas();
-        if (payload) {
-            diaAtual = payload.diaSemanaAtual || diaAtual;
-            renderizarTarefasNasDivs(payload);
-            consumirTaskAtual(payload.taskAtual, payload.diaConcluido);
-            atualizarAbas(payload, diaAtual);
-            ativarAba(diaAtual);
-            if (payload.usuario) {
-                atualizarHud(payload.usuario);
-            }
-        }
-    } catch (error) {
-        console.error('Erro ao processar tarefas do cronograma:', error);
     }
 
+    /**
+     * Popula e gerencia o seletor de usuários cadastrados no banco.
+     */
+    async function configurarSeletorUsuarios() {
+        const selectEl = qs('#select-usuario-ativo');
+        const badgeEl = qs('#user-active-id-badge');
+        if (!selectEl) return;
+
+        try {
+            const usuarios = await getUsuariosCadastrados();
+            const currentUserId = getUsuarioAtivoId();
+
+            selectEl.innerHTML = '';
+            usuarios.forEach((u) => {
+                const opt = document.createElement('option');
+                opt.value = u.id_usuario;
+                opt.textContent = `${u.nome} (${u.email || u.exp + ' XP'})`;
+                if (u.id_usuario === currentUserId) {
+                    opt.selected = true;
+                }
+                selectEl.appendChild(opt);
+            });
+
+            if (badgeEl) {
+                badgeEl.textContent = `ID: ${currentUserId.substring(0, 8)}...`;
+                badgeEl.title = currentUserId;
+            }
+
+            on(selectEl, 'change', async (e) => {
+                const novoId = e.target.value;
+                setUsuarioAtivoId(novoId);
+                if (badgeEl) {
+                    badgeEl.textContent = `ID: ${novoId.substring(0, 8)}...`;
+                    badgeEl.title = novoId;
+                }
+                const nomeUsuario = selectEl.options[selectEl.selectedIndex]?.textContent?.split(' ')[0] || 'Usuário';
+                mostrarNotificacao(`Carregando cronograma de ${nomeUsuario}...`, 'info');
+                await carregarCronograma(novoId);
+            });
+        } catch (err) {
+            console.warn('Falha ao configurar dropdown de usuários:', err);
+        }
+    }
+
+    /**
+     * Configura a barra de mock/simulação de dias.
+     */
     function configurarBarraSimulacao() {
         const mockAtivo = getMockDia();
         qsa('.btn-sim').forEach((btn) => {
@@ -104,39 +161,85 @@ ready(async () => {
 
                 try {
                     btn.disabled = true;
-                    btn.textContent = 'Carregando...';
+                    await carregarCronograma(getUsuarioAtivoId());
 
-                    const newPayload = await getTarefas();
-                    if (newPayload) {
-                        diaAtual = newPayload.diaSemanaAtual || getDiaSemanaAtual();
-                        renderizarTarefasNasDivs(newPayload);
-                        consumirTaskAtual(newPayload.taskAtual, newPayload.diaConcluido);
-                        atualizarAbas(newPayload, diaAtual);
-                        ativarAba(diaAtual);
-
-                        if (newPayload.usuario) {
-                            atualizarHud(newPayload.usuario);
-                        }
-
-                        const nomeSim = nomesDias[diaAtual] || targetSim;
-                        const msgSim = targetSim === 'auto' 
-                            ? 'Simulação desativada: Retornou ao dia real do sistema.' 
-                            : `Modo Mock: Hoje agora é simulado como ${nomeSim}!`;
-                        mostrarNotificacao(msgSim, 'info');
-                    }
+                    const nomeSim = nomesDias[diaAtual] || targetSim;
+                    const msgSim = targetSim === 'auto'
+                        ? 'Simulação desativada: Retornou ao dia real do sistema.'
+                        : `Modo Mock: Hoje agora é simulado como ${nomeSim}!`;
+                    mostrarNotificacao(msgSim, 'info');
                 } catch (err) {
                     mostrarNotificacao(err.message, 'erro');
                 } finally {
                     btn.disabled = false;
-                    btn.textContent = targetSim === 'auto' ? 'Hoje (Real)' : nomesDias[getNumeroDia(targetSim)] || targetSim;
                 }
             });
         });
     }
 
     /**
-     * Renderiza os cards de tarefas nas 6 divs (uma para cada dia da semana).
-     * O clique no botão envia diretamente a requisição para a API sem validação local.
+     * Realiza a requisição das tarefas à API, exibindo estados explícitos de loading e erro.
+     * @param {string} [userId] 
+     */
+    async function carregarCronograma(userId) {
+        const loadingEl = qs('#cronograma-loading');
+        const errorEl = qs('#cronograma-error');
+        const banner = qs('#task-atual-banner');
+
+        // Estado visual de carregamento ativo
+        if (loadingEl) loadingEl.style.display = 'flex';
+        if (errorEl) errorEl.style.display = 'none';
+        if (banner) banner.style.display = 'none';
+
+        // Esconde temporariamente as divs dos dias durante a requisição
+        for (let d = 1; d <= 6; d++) {
+            const div = qs(`#day-tasks-${d}`);
+            if (div) div.style.display = 'none';
+        }
+
+        try {
+            const targetUser = userId || getUsuarioAtivoId();
+            const payload = await getTarefas(targetUser);
+
+            if (!payload || !payload.dias) {
+                throw new Error('Nenhuma missão encontrada para esta semana.');
+            }
+
+            // Sucesso na requisição: esconde loading e renderiza
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (errorEl) errorEl.style.display = 'none';
+
+            diaAtual = payload.diaSemanaAtual || diaAtual;
+            renderizarTarefasNasDivs(payload);
+            consumirTaskAtual(payload.taskAtual, payload.diaConcluido);
+            atualizarAbas(payload, diaAtual);
+            ativarAba(diaAtual);
+
+            if (payload.usuario) {
+                atualizarHud(payload.usuario);
+                const badgeEl = qs('#user-active-id-badge');
+                if (badgeEl && payload.usuario.id_usuario) {
+                    badgeEl.textContent = `ID: ${payload.usuario.id_usuario.substring(0, 8)}...`;
+                    badgeEl.title = payload.usuario.id_usuario;
+                }
+            }
+        } catch (error) {
+            console.error('Erro ao carregar cronograma:', error);
+
+            // Esconde loading e exibe mensagem de erro explícita com retry
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (banner) banner.style.display = 'none';
+            if (errorEl) {
+                errorEl.style.display = 'flex';
+                setText('#cronograma-error-desc', error.message || 'Erro ao conectar à API AprovaDrive.');
+            }
+
+            mostrarNotificacao(error.message || 'Falha ao requisitar tarefas.', 'erro');
+        }
+    }
+
+    /**
+     * Renderiza os cards de tarefas nas 6 divs da semana.
      * @param {Object} payload 
      */
     function renderizarTarefasNasDivs(payload) {
@@ -162,7 +265,7 @@ ready(async () => {
                         ...tarefa,
                         sort: tarefa.sort || (index + 1)
                     }, {
-                        // Ao clicar no botão (INICIAR ou BLOQUEADO), envia requisição diretamente à API
+                        // Ao clicar no botão (INICIAR ou BLOQUEADO)
                         onStart: async (taskIniciada, btnEl) => {
                             const originalHtml = btnEl ? btnEl.innerHTML : 'INICIAR';
                             try {
@@ -171,16 +274,14 @@ ready(async () => {
                                     btnEl.textContent = 'Iniciando...';
                                 }
 
-                                const result = await iniciarTarefa(taskIniciada.id);
+                                const result = await iniciarTarefa(taskIniciada.id, getUsuarioAtivoId());
 
-                                // Se a API aprovou, atualiza a interface com o novo estado
-                                const updatedPayload = result.payload || await getTarefas();
+                                const updatedPayload = result.payload || await getTarefas(getUsuarioAtivoId());
                                 renderizarTarefasNasDivs(updatedPayload);
                                 consumirTaskAtual(updatedPayload.taskAtual, updatedPayload.diaConcluido);
                                 atualizarAbas(updatedPayload, diaAtual);
                                 mostrarNotificacao(result.message || `Missão "${taskIniciada.titulo}" iniciada! Bons estudos!`, 'sucesso');
                             } catch (error) {
-                                // A validação da API retornou erro (ex: tarefa de outro dia ou anterior pendente)
                                 mostrarNotificacao(error.message, 'erro');
                                 if (btnEl) {
                                     btnEl.disabled = false;
@@ -189,7 +290,7 @@ ready(async () => {
                             }
                         },
 
-                        // Ao clicar no botão CONCLUIR, envia requisição diretamente à API
+                        // Ao clicar no botão CONCLUIR
                         onComplete: async (taskConcluida, btnEl) => {
                             const originalHtml = btnEl ? btnEl.innerHTML : 'CONCLUIR';
                             try {
@@ -198,24 +299,23 @@ ready(async () => {
                                     btnEl.textContent = 'Concluindo...';
                                 }
 
-                                const result = await concluirTarefa(taskConcluida.id);
+                                const result = await concluirTarefa(taskConcluida.id, getUsuarioAtivoId());
 
-                                // Se a API aprovou a conclusão, adiciona o XP ganho
                                 if (result.xp_reward) {
                                     addXp(result.xp_reward);
                                     atualizarHud();
                                 }
 
-                                const updatedPayload = result.payload || await getTarefas();
+                                const updatedPayload = result.payload || await getTarefas(getUsuarioAtivoId());
                                 renderizarTarefasNasDivs(updatedPayload);
                                 consumirTaskAtual(updatedPayload.taskAtual, updatedPayload.diaConcluido);
                                 atualizarAbas(updatedPayload, diaAtual);
+
                                 if (updatedPayload.usuario) {
                                     atualizarHud(updatedPayload.usuario);
                                 }
                                 mostrarNotificacao(result.message || `Missão "${taskConcluida.titulo}" concluída! +${result.xp_reward || 30} XP!`, 'sucesso');
                             } catch (error) {
-                                // A validação da API retornou erro
                                 mostrarNotificacao(error.message, 'erro');
                                 if (btnEl) {
                                     btnEl.disabled = false;
@@ -234,7 +334,7 @@ ready(async () => {
     }
 
     /**
-     * Consome os dados da task atual e atualiza a interface de destaque.
+     * Consome os dados da task atual e atualiza o banner de destaque.
      * @param {Object|null} taskAtual 
      * @param {boolean} diaConcluido
      */
@@ -276,7 +376,7 @@ ready(async () => {
     }
 
     /**
-     * Atualiza as legendas de cada aba com o status das aulas.
+     * Atualiza as legendas de cada aba com o status das missões.
      * @param {Object} payload 
      * @param {number} diaAtualNum 
      */
@@ -352,5 +452,3 @@ ready(async () => {
         }, 3500);
     }
 });
-
-

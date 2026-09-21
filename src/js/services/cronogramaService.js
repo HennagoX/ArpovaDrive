@@ -106,96 +106,107 @@ export function getNumeroDia(chaveDia) {
     return entry ? parseInt(entry[0], 10) : 1;
 }
 
+export const ACTIVE_USER_KEY = 'aprovadrive_active_user_id';
+export const DEFAULT_USER_ID = '0b0c0d89-2cea-48ad-9988-928337357643'; // Henrique (Cadastrado)
+
+/**
+ * Obtém o ID do usuário ativo no sistema.
+ * Prioriza o argumento passado, depois o storage de usuário ativo, depois auth_user, e por fim o padrão Henrique.
+ * @param {string} [userId]
+ * @returns {string}
+ */
+export function getUsuarioAtivoId(userId) {
+    if (userId && typeof userId === 'string' && userId.trim()) {
+        return userId.trim();
+    }
+
+    const storedId = getLocalItem(ACTIVE_USER_KEY, null);
+    if (storedId && typeof storedId === 'string' && storedId.trim()) {
+        return storedId.trim();
+    }
+
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+    if (authId && typeof authId === 'string' && authId.trim()) {
+        setLocalItem(ACTIVE_USER_KEY, authId.trim());
+        return authId.trim();
+    }
+
+    // Default garantido cadastrado no banco PostgreSQL (Henrique)
+    setLocalItem(ACTIVE_USER_KEY, DEFAULT_USER_ID);
+    return DEFAULT_USER_ID;
+}
+
+/**
+ * Define o usuário ativo selecionado no sistema.
+ * @param {string} userId
+ */
+export function setUsuarioAtivoId(userId) {
+    if (userId && typeof userId === 'string') {
+        setLocalItem(ACTIVE_USER_KEY, userId.trim());
+    }
+}
+
+/**
+ * Consulta a lista de usuários cadastrados no banco de dados através da API.
+ * @returns {Promise<Array>}
+ */
+export async function getUsuariosCadastrados() {
+    try {
+        const response = await fetch(ENDPOINTS.TASK.USUARIOS, {
+            headers: { 'Accept': 'application/json' }
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        return data.usuarios || [];
+    } catch (err) {
+        console.warn('Aviso ao buscar usuários cadastrados via API:', err.message);
+        return [
+            { id_usuario: '0b0c0d89-2cea-48ad-9988-928337357643', nome: 'Henrique', email: 'Henrique@gmail.com', exp: 690 },
+            { id_usuario: 'e57b1624-39af-4ef1-b909-2dec1253981b', nome: 'Ronaldo', email: 'Ronaldo@gmail.com', exp: 0 },
+            { id_usuario: 'f00af674-40eb-411b-bfe6-304b6781d8c4', nome: 'Joao', email: 'Joao@gmail.com', exp: 225 },
+            { id_usuario: '23edb2bb-da1a-4391-93cb-9f5eaddcfaae', nome: 'Carlos', email: 'Carlos@gmail.com', exp: 50 }
+        ];
+    }
+}
+
 /**
  * Busca o payload de tarefas do usuário selecionado na API AprovaDrive.
- * Padrão: Service Layer
+ * Lança erro caso a API recuse a requisição (ex: usuário não cadastrado).
  * 
- * @param {string} [userId] - Identificador ou nome do usuário (opcional, fallback para o usuário autenticado)
+ * @param {string} [userId] - Identificador único do usuário
  * @returns {Promise<Object>} Payload contendo taskAtual, dias da semana e tarefas
  */
 export async function getTarefas(userId) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();
     const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
 
-    try {
-        const response = await fetch(`${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`, {
-            headers: {
-                'Accept': 'application/json',
-                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error(`Falha na requisição: status ${response.status}`);
+    const url = `${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`;
+    
+    const response = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-User-Id': usuarioId,
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         }
+    });
 
-        const data = await response.json();
-        if (data) {
-            setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
-            return data;
-        }
-    } catch (error) {
-        console.warn('Aviso ao consultar API de tarefas, utilizando dados estruturados locais:', error.message);
+    const data = await response.json().catch(() => null);
+
+    if (!response.ok) {
+        const errorMsg = data?.error || `Erro ${response.status} ao carregar tarefas da semana.`;
+        throw new Error(errorMsg);
     }
 
-    // Fallback estruturado caso a API esteja temporariamente indisponível
-    const cached = getLocalItem(STORAGE_KEYS.CRONOGRAMA, null);
-    if (cached && cached.dias) {
-        return cached;
+    if (data) {
+        setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
+        return data;
     }
 
-    return getFallbackPayload(usuarioId);
-}
-
-function getFallbackPayload(usuario) {
-    const diaAtualNum = getDiaSemanaAtual();
-    const diaAtualChave = getChaveDia(diaAtualNum);
-
-    const fallbackDias = {
-        segunda: [
-            { id: '1', titulo: 'Estudar capítulo 1 do Código de Trânsito', descricao: 'Leia o capítulo 1 do Código de Trânsito e anote os conceitos principais.', xp_reward: 50, status: 'done', concluida: true, sort: 1 },
-            { id: '2', titulo: 'Mini-Quiz: 10 Questões de Direção Defensiva', descricao: 'Acerte no mínimo 70% para liberar o bônus diário de XP.', xp_reward: 100, status: 'current', sort: 2 },
-            { id: '3', titulo: 'Leitura Guiada & Flashcards de Placas', descricao: 'Revisão rápida das placas de Regulamentação e Advertência.', xp_reward: 75, status: 'pending', sort: 3 }
-        ],
-        terca: [
-            { id: '4', titulo: 'Estudar capítulo 2 do Código de Trânsito', descricao: 'Revise o capítulo 2 com foco nas normas gerais de circulação e conduta.', xp_reward: 40, status: 'pending', sort: 1 },
-            { id: '5', titulo: 'Prática de Placas de Sinalização', descricao: 'Fixação das placas de advertência e indicação.', xp_reward: 60, status: 'pending', sort: 2 },
-            { id: '6', titulo: 'Simulado Rápido de Legislação', descricao: '15 questões cronometradas sobre regras de trânsito.', xp_reward: 80, status: 'pending', sort: 3 }
-        ],
-        quarta: [
-            { id: '7', titulo: 'Estudar Direção Defensiva - Parte 1', descricao: 'Princípios básicos e como evitar colisões com outros veículos.', xp_reward: 50, status: 'pending', sort: 1 },
-            { id: '8', titulo: 'Condições Adversas de Tráfego e Tempo', descricao: 'Chuva, neblina, noite e estado de conservação da via.', xp_reward: 50, status: 'pending', sort: 2 },
-            { id: '9', titulo: 'Quiz de Fixação de Direção Defensiva', descricao: '10 perguntas práticas de situações reais de trânsito.', xp_reward: 70, status: 'pending', sort: 3 }
-        ],
-        quinta: [
-            { id: '10', titulo: 'Primeiros Socorros no Trânsito', descricao: 'Atendimento inicial a acidentados e sinalização do local.', xp_reward: 45, status: 'pending', sort: 1 },
-            { id: '11', titulo: 'Procedimentos de Emergência e Telefones Úteis', descricao: 'Quando e como acionar SAMU, Bombeiros e Polícia Rodoviária.', xp_reward: 45, status: 'pending', sort: 2 },
-            { id: '12', titulo: 'Revisão com Flashcards de Primeiros Socorros', descricao: 'Exercícios mnemônicos sobre sinais vitais e procedimentos.', xp_reward: 60, status: 'pending', sort: 3 }
-        ],
-        sexta: [
-            { id: '13', titulo: 'Meio Ambiente e Convívio Social no Trânsito', descricao: 'Emissão de poluentes, poluição sonora e direitos do pedestre.', xp_reward: 40, status: 'pending', sort: 1 },
-            { id: '14', titulo: 'Mecânica Básica para Habilitação', descricao: 'Componentes essenciais do veículo e manutenção preventiva.', xp_reward: 50, status: 'pending', sort: 2 },
-            { id: '15', titulo: 'Simulado Geral Integrado', descricao: 'Prova de 30 questões nos moldes oficiais do DETRAN.', xp_reward: 120, status: 'pending', sort: 3 }
-        ],
-        sabado: [
-            { id: '16', titulo: 'Revisão dos Erros da Semana', descricao: 'Reanálise de todas as questões erradas nos simulados anteriores.', xp_reward: 80, status: 'pending', sort: 1 },
-            { id: '17', titulo: 'Maratona de Questões Desafiadoras', descricao: 'Bateria de 20 questões com maior índice de reprovação.', xp_reward: 100, status: 'pending', sort: 2 },
-            { id: '18', titulo: 'Desafio Semanal de Fixação Rápida', descricao: 'Conquiste o bônus de XP e mantenha sua ofensiva de estudos ativa!', xp_reward: 150, status: 'pending', sort: 3 }
-        ]
-    };
-
-    const taskAtual = fallbackDias[diaAtualChave]?.[1] || fallbackDias[diaAtualChave]?.[0] || fallbackDias.segunda[1];
-
-    return {
-        usuario,
-        diaAtual: diaAtualChave,
-        diaSemanaAtual: diaAtualNum,
-        taskAtual: { ...taskAtual, status: 'current' },
-        tarefasDoDia: fallbackDias[diaAtualChave] || [],
-        dias: fallbackDias
-    };
+    throw new Error('Nenhum dado retornado pela API.');
 }
 
 /**
@@ -207,8 +218,7 @@ function getFallbackPayload(usuario) {
  * @returns {Promise<Object>} Resposta da API com payload atualizado
  */
 export async function iniciarTarefa(taskId, userId) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.INICIAR ? ENDPOINTS.TASK.INICIAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/iniciar`;
@@ -218,6 +228,7 @@ export async function iniciarTarefa(taskId, userId) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'X-User-Id': usuarioId,
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -241,8 +252,7 @@ export async function iniciarTarefa(taskId, userId) {
 }
 
 export async function concluirTarefa(taskId, userId, options = {}) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.CONCLUIR ? ENDPOINTS.TASK.CONCLUIR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/concluir`;
@@ -252,6 +262,7 @@ export async function concluirTarefa(taskId, userId, options = {}) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'X-User-Id': usuarioId,
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -276,8 +287,7 @@ export async function concluirTarefa(taskId, userId, options = {}) {
 }
 
 export async function pausarTarefa(taskId, userId) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.PAUSAR ? ENDPOINTS.TASK.PAUSAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/pausar`;
@@ -287,6 +297,7 @@ export async function pausarTarefa(taskId, userId) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'X-User-Id': usuarioId,
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -310,8 +321,7 @@ export async function pausarTarefa(taskId, userId) {
 }
 
 export async function reiniciarTarefa(taskId, userId) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const usuarioId = userId || authUser?.id || authUser?.id_usuario || authUser?.nome || 'Henrique';
+    const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();
 
     const url = ENDPOINTS.TASK.REINICIAR ? ENDPOINTS.TASK.REINICIAR(taskId) : `${API_URL}/task/${encodeURIComponent(taskId)}/reiniciar`;
@@ -321,6 +331,7 @@ export async function reiniciarTarefa(taskId, userId) {
         headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'X-User-Id': usuarioId,
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
