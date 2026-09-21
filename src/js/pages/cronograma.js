@@ -15,7 +15,9 @@ import {
     verificarPermissaoAdmin
 } from '../services/cronogramaService.js';
 import { addXp, getGamificationData } from '../services/gamificationService.js';
+import { logout } from '../services/authService.js';
 import { SELECTORS } from '../constants/selectors.js';
+import { ROUTES } from '../constants/routes.js';
 import { createTaskCard } from '../components/taskCard.js';
 
 ready(async () => {
@@ -28,7 +30,17 @@ ready(async () => {
     // 1. Configura abas dos dias da semana
     configurarAbas();
 
-    // 2. Verifica se o usuário ativo é o Administrador
+    // 2. Configura botões de logout / sair (remove tudo do localStorage)
+    const logoutElements = qsa('#btn-logout, #nav-logout, .btn-sair');
+    logoutElements.forEach((btn) => {
+        on(btn, 'click', (e) => {
+            e.preventDefault();
+            logout();
+            window.location.href = ROUTES.HOME;
+        });
+    });
+
+    // 3. Verifica se o usuário ativo é o Administrador
     const activeUserId = getUsuarioAtivoId();
     const isAdmin = await verificarPermissaoAdmin(activeUserId);
 
@@ -51,7 +63,7 @@ ready(async () => {
         setMockDia('auto');
     }
 
-    // 3. Configura botão de tentar novamente (em caso de erro)
+    // 4. Configura botão de tentar novamente (em caso de erro)
     const btnRetry = qs('#btn-tentar-novamente');
     if (btnRetry) {
         on(btnRetry, 'click', async () => {
@@ -59,7 +71,7 @@ ready(async () => {
         });
     }
 
-    // 4. Carrega o cronograma do usuário ativo
+    // 5. Carrega o cronograma do usuário ativo
     await carregarCronograma(getUsuarioAtivoId());
 
     /**

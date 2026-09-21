@@ -26,6 +26,31 @@ body {
 
 .nav-topo {
   margin-bottom: var(--space-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-sair {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fee2e2;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-sair:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+  transform: translateY(-1px);
 }
 
 .btn-voltar {

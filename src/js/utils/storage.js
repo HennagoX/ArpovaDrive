@@ -25,3 +25,20 @@ export function removeLocalItem(key) {
         return false;
     }
 }
+
+/**
+ * Remove todos os dados do localStorage e sessionStorage.
+ * Garante que nenhum resquício de sessão, tarefas, XP ou perfil permaneça salvo.
+ */
+export function clearAllLocalStorage() {
+    try {
+        localStorage.clear();
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.clear();
+        }
+        return true;
+    } catch (err) {
+        console.warn('Falha ao limpar armazenamento local:', err);
+        return false;
+    }
+}

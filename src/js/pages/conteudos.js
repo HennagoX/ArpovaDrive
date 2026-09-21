@@ -1,5 +1,6 @@
-import { ready, setText, qsa } from "../utils/dom.js";
+import { ready, setText, qsa, qs } from "../utils/dom.js";
 import { getCurrentUser, logout } from '../services/authService.js';
+import { ROUTES } from '../constants/routes.js';
 
 ready(() => {
     const user = getCurrentUser();
@@ -7,6 +8,15 @@ ready(() => {
     if (user && user.nome) {
         setText('.topo h1', `Desempenho de ${user.nome}`);
         setText('.perfil-nome strong', user.nome);
+    }
+
+    const perfilBtn = qs('.perfil');
+    if (perfilBtn) {
+        perfilBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            logout();
+            window.location.href = ROUTES.HOME;
+        });
     }
     const search = document.getElementById("search");
     const ebooks = document.querySelectorAll(".ebook");

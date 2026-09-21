@@ -1,5 +1,5 @@
 import { STORAGE_KEYS } from '../constants/storage.js';
-import { getLocalItem, setLocalItem, removeLocalItem } from '../utils/storage.js';
+import { getLocalItem, setLocalItem, removeLocalItem, clearAllLocalStorage } from '../utils/storage.js';
 import { ENDPOINTS } from '../constants/routes.js';
 
 const REQUIRED_FIELDS_MESSAGE = 'Preencha todos os campos.';
@@ -120,6 +120,9 @@ export async function cadastrar(userData) {
     return { success: true, user: newUser };
 }
 
+/**
+ * Desloga o usuário e remove todos os dados e preferências do localStorage e sessionStorage.
+ */
 export function logout() {
-    removeLocalItem(STORAGE_KEYS.AUTH_USER);
+    clearAllLocalStorage();
 }
