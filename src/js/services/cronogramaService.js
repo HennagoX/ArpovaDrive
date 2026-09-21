@@ -148,13 +148,47 @@ export function setUsuarioAtivoId(userId) {
 }
 
 /**
+ * Verifica junto à API se o usuário informado possui permissões de Administrador.
+ * @param {string} [userId]
+ * @returns {Promise<boolean>}
+ */
+export async function verificarPermissaoAdmin(userId) {
+    const usuarioId = getUsuarioAtivoId(userId);
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+
+    if (authUser && (authUser.id === usuarioId || authUser.id_usuario === usuarioId) && (authUser.is_admin || authUser.isAdmin)) {
+        return true;
+    }
+
+    try {
+        const response = await fetch(`${ENDPOINTS.TASK.ADMIN_CHECK}?id=${encodeURIComponent(usuarioId)}`, {
+            headers: {
+                'Accept': 'application/json',
+                'X-User-Id': usuarioId
+            }
+        });
+        if (!response.ok) return false;
+        const data = await response.json();
+        return Boolean(data.isAdmin);
+    } catch {
+        return false;
+    }
+}
+
+/**
  * Consulta a lista de usuários cadastrados no banco de dados através da API.
+ * RESTRITO: Apenas executado com sucesso se o usuário for o Administrador.
+ * @param {string} [adminId]
  * @returns {Promise<Array>}
  */
-export async function getUsuariosCadastrados() {
+export async function getUsuariosCadastrados(adminId) {
+    const requester = getUsuarioAtivoId(adminId);
     try {
         const response = await fetch(ENDPOINTS.TASK.USUARIOS, {
-            headers: { 'Accept': 'application/json' }
+            headers: { 
+                'Accept': 'application/json',
+                'X-User-Id': requester
+            }
         });
         if (!response.ok) {
             throw new Error(`HTTP ${response.status}`);
@@ -163,13 +197,25 @@ export async function getUsuariosCadastrados() {
         return data.usuarios || [];
     } catch (err) {
         console.warn('Aviso ao buscar usuários cadastrados via API:', err.message);
-        return [
-            { id_usuario: '0b0c0d89-2cea-48ad-9988-928337357643', nome: 'Henrique', email: 'Henrique@gmail.com', exp: 690 },
-            { id_usuario: 'e57b1624-39af-4ef1-b909-2dec1253981b', nome: 'Ronaldo', email: 'Ronaldo@gmail.com', exp: 0 },
-            { id_usuario: 'f00af674-40eb-411b-bfe6-304b6781d8c4', nome: 'Joao', email: 'Joao@gmail.com', exp: 225 },
-            { id_usuario: '23edb2bb-da1a-4391-93cb-9f5eaddcfaae', nome: 'Carlos', email: 'Carlos@gmail.com', exp: 50 }
-        ];
+        return [];
     }
+}
+
+function getAuthHeaders(targetUserId) {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+    const isAdm = Boolean(authUser?.is_admin || authUser?.isAdmin);
+    const headers = {
+        'Accept': 'application/json',
+        'X-User-Id': targetUserId
+    };
+    if (authId) {
+        headers['X-Requester-Id'] = authId;
+    }
+    if (isAdm && authId) {
+        headers['X-Admin-Id'] = authId;
+    }
+    return headers;
 }
 
 /**
@@ -188,8 +234,7 @@ export async function getTarefas(userId) {
     
     const response = await fetch(url, {
         headers: {
-            'Accept': 'application/json',
-            'X-User-Id': usuarioId,
+            ...getAuthHeaders(usuarioId),
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         }
     });
@@ -227,8 +272,7 @@ export async function iniciarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-User-Id': usuarioId,
+            ...getAuthHeaders(usuarioId),
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -261,8 +305,7 @@ export async function concluirTarefa(taskId, userId, options = {}) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-User-Id': usuarioId,
+            ...getAuthHeaders(usuarioId),
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -296,8 +339,7 @@ export async function pausarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-User-Id': usuarioId,
+            ...getAuthHeaders(usuarioId),
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({
@@ -330,8 +372,7 @@ export async function reiniciarTarefa(taskId, userId) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-User-Id': usuarioId,
+            ...getAuthHeaders(usuarioId),
             ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
         },
         body: JSON.stringify({

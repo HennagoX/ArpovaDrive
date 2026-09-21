@@ -47,14 +47,17 @@
         <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span>
           Ofensiva: 5 Dias</div>
         <div class="stat-badge xp"><span class="material-symbols-outlined icone-inline">bolt</span> Total: 850 XP</div>
+        <div id="admin-indicator-badge" class="stat-badge admin" style="display: none;">
+          <span class="material-symbols-outlined icone-inline">shield_person</span> Admin
+        </div>
       </div>
     </header>
 
-    <!-- Seleção de Usuário Cadastrado no Banco PostgreSQL -->
-    <div class="user-selector-bar" id="user-selector-bar">
+    <!-- Seleção de Usuário Cadastrado no Banco PostgreSQL (Visível apenas para Administrador) -->
+    <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
       <div class="user-selector-label">
-        <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">account_circle</span>
-        <strong>Usuário no Banco:</strong>
+        <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">admin_panel_settings</span>
+        <strong>Painel Admin - Selecionar Aluno:</strong>
       </div>
       <div class="user-selector-controls">
         <select id="select-usuario-ativo" class="select-user-dropdown" title="Selecione um usuário cadastrado no banco PostgreSQL">
@@ -64,8 +67,8 @@
       </div>
     </div>
 
-    <!-- Barra de Simulação / Mock de Dia (Permite testar qualquer dia da semana) -->
-    <div class="simulation-hud" id="simulation-hud">
+    <!-- Barra de Simulação / Mock de Dia (Visível apenas para Administrador) -->
+    <div class="simulation-hud" id="simulation-hud" style="display: none;">
       <div class="sim-label">
         <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">science</span>
         <strong>Simular Dia:</strong>

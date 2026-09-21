@@ -11,7 +11,8 @@ import {
     setMockDia,
     getUsuarioAtivoId,
     setUsuarioAtivoId,
-    getUsuariosCadastrados
+    getUsuariosCadastrados,
+    verificarPermissaoAdmin
 } from '../services/cronogramaService.js';
 import { addXp, getGamificationData } from '../services/gamificationService.js';
 import { SELECTORS } from '../constants/selectors.js';
@@ -27,13 +28,30 @@ ready(async () => {
     // 1. Configura abas dos dias da semana
     configurarAbas();
 
-    // 2. Configura a barra de simulação (Mock de Dia)
-    configurarBarraSimulacao();
+    // 2. Verifica se o usuário ativo é o Administrador
+    const activeUserId = getUsuarioAtivoId();
+    const isAdmin = await verificarPermissaoAdmin(activeUserId);
 
-    // 3. Configura o seletor de usuário cadastrado no banco PostgreSQL
-    await configurarSeletorUsuarios();
+    const adminBadge = qs('#admin-indicator-badge');
+    const userSelectorBar = qs('#user-selector-bar');
+    const simulationHud = qs('#simulation-hud');
 
-    // 4. Configura botão de tentar novamente (em caso de erro)
+    if (isAdmin) {
+        if (adminBadge) adminBadge.style.display = 'inline-flex';
+        if (userSelectorBar) userSelectorBar.style.display = 'flex';
+        if (simulationHud) simulationHud.style.display = 'flex';
+
+        // Configura ferramentas exclusivas do Administrador
+        configurarBarraSimulacao();
+        await configurarSeletorUsuarios();
+    } else {
+        if (adminBadge) adminBadge.style.display = 'none';
+        if (userSelectorBar) userSelectorBar.style.display = 'none';
+        if (simulationHud) simulationHud.style.display = 'none';
+        setMockDia('auto');
+    }
+
+    // 3. Configura botão de tentar novamente (em caso de erro)
     const btnRetry = qs('#btn-tentar-novamente');
     if (btnRetry) {
         on(btnRetry, 'click', async () => {
@@ -41,7 +59,7 @@ ready(async () => {
         });
     }
 
-    // 5. Carrega o cronograma do usuário ativo
+    // 4. Carrega o cronograma do usuário ativo
     await carregarCronograma(getUsuarioAtivoId());
 
     /**

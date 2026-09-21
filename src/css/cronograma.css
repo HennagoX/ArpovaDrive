@@ -93,6 +93,15 @@ body {
   border-color: #dcfce7;
 }
 
+.stat-badge.admin {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .simulation-hud {
   background: var(--bg-card);
   border: 1px dashed #cbd5e1;

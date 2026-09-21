@@ -27,6 +27,7 @@ export const ENDPOINTS = {
   TASK: {
     GET_TASKS: `${API_URL}/task/tasks?id=`,
     USUARIOS: `${API_URL}/task/usuarios`,
+    ADMIN_CHECK: `${API_URL}/task/admin-check`,
     INICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/iniciar`,
     CONCLUIR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/concluir`,
     PAUSAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/pausar`,
