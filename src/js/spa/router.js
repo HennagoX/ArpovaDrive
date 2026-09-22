@@ -100,9 +100,9 @@ class SpaRouter {
         this.currentRoute = routeName;
         this.currentParams = params;
 
-        // Controle da sidebar no modo foco para a tela de módulos
+        // Controle da sidebar no modo foco para telas de módulos
         if (typeof document !== 'undefined' && document.body) {
-            if (routeName === 'modulos') {
+            if (routeName === 'modulos' || routeName === 'questoes-modulos') {
                 document.body.classList.add('no-sidebar');
             } else {
                 document.body.classList.remove('no-sidebar');
@@ -149,8 +149,14 @@ class SpaRouter {
         if (routeName === 'modulos' && params.conteudoId) {
             return `#modulo=${encodeURIComponent(params.conteudoId)}`;
         }
+        if (routeName === 'questoes-modulos' && params.materiaId) {
+            return `#questoes-materia=${encodeURIComponent(params.materiaId)}`;
+        }
         if (routeName === 'conteudos') {
             return '#conteudos';
+        }
+        if (routeName === 'questoes') {
+            return '#questoes';
         }
         if (routeName === 'cronograma') {
             return '#cronograma';
@@ -167,7 +173,7 @@ class SpaRouter {
     resolveCurrentUrl(pushState = false) {
         const hash = window.location.hash || '';
 
-        // Rota de módulo específico
+        // Rota de módulo específico de estudos
         const moduloMatch = hash.match(/#modulo=([^&]+)/);
         if (moduloMatch && moduloMatch[1]) {
             const conteudoId = decodeURIComponent(moduloMatch[1]);
@@ -175,9 +181,23 @@ class SpaRouter {
             return;
         }
 
+        // Rota de baterias de questões de matéria específica
+        const questoesMatch = hash.match(/#questoes-materia=([^&]+)/);
+        if (questoesMatch && questoesMatch[1]) {
+            const materiaId = decodeURIComponent(questoesMatch[1]);
+            this.navigateTo('questoes-modulos', { materiaId }, pushState);
+            return;
+        }
+
         // Rota de conteúdos
         if (hash === '#conteudos' || hash.startsWith('#conteudos')) {
             this.navigateTo('conteudos', {}, pushState);
+            return;
+        }
+
+        // Rota do hub de questões
+        if (hash === '#questoes' || hash.startsWith('#questoes')) {
+            this.navigateTo('questoes', {}, pushState);
             return;
         }
 

@@ -14,6 +14,8 @@ import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.j
 import { initModulosView, abrirModulos } from '../spa/views/modulosView.js';
 import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
 import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
+import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
+import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
 
 ready(() => {
     // 1. Registra as visões modulares no SPA Router
@@ -49,6 +51,30 @@ ready(() => {
         }
     });
 
+    router.register('questoes', {
+        viewSelector: '#view-questoes',
+        navKey: 'questoes',
+        onEnter: () => {
+            renderQuestoes();
+        }
+    });
+
+    router.register('questoes-modulos', {
+        viewSelector: '#view-questoes-modulos',
+        navKey: 'questoes', // Mantém Questões destacado no menu lateral
+        onEnter: (params) => {
+            document.body.classList.add('no-sidebar');
+            if (params && params.materiaId) {
+                abrirQuestoesModulos(params.materiaId);
+            } else {
+                router.navigateTo('questoes');
+            }
+        },
+        onLeave: () => {
+            document.body.classList.remove('no-sidebar');
+        }
+    });
+
     router.register('cronograma', {
         viewSelector: '#view-cronograma',
         navKey: 'cronograma',
@@ -69,6 +95,8 @@ ready(() => {
     initDashboardView(router);
     initConteudosView(router);
     initModulosView(router);
+    initQuestoesView(router);
+    initQuestoesModulosView(router);
     initCronogramaView(router);
     initDesempenhoView(router);
 

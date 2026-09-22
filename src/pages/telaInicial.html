@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/conteudos.css">
     <link rel="stylesheet" href="../css/cronograma.css">
     <link rel="stylesheet" href="../css/desempenho.css">
+    <link rel="stylesheet" href="../css/questoes.css">
     <style>
         * {
             margin: 0;
@@ -603,7 +604,7 @@
                 <i class="fa-solid fa-book-open"></i>
                 <span>Conteúdos</span>
             </a>
-            <a href="#questoes" class="navbar-item">
+            <a href="#questoes" class="navbar-item" data-nav="questoes">
                 <i class="fa-solid fa-circle-question"></i>
                 <span>Questões</span>
             </a>
@@ -677,7 +678,7 @@
                     <p>Aprenda toda a matéria necessária para sua prova do DETRAN.</p>
                 </a>
 
-                <a href="#" class="card" id="questoes">
+                <a href="#questoes" class="card" id="questoes" data-nav="questoes">
                     <div class="icone-card azul-card">
                         <i class="fa-solid fa-circle-question"></i>
                     </div>
@@ -1419,6 +1420,228 @@
                     </div>
                 </aside>
             </div>
+        </section>
+
+        <!-- ==========================================
+             SUB-TELA 6: BANCO DE QUESTÕES / HUB (SPA)
+             ========================================== -->
+        <section id="view-questoes" class="spa-view" style="display: none;">
+
+            <!-- BANNER DE BOAS-VINDAS -->
+            <div class="welcome-questoes">
+                <div>
+                    <h2>Banco de Questões por Matéria</h2>
+                    <p>
+                        Pratique com questões simuladas do DETRAN baseadas nos módulos que você já estudou.
+                        Baterias de exercícios são liberadas a cada 3 módulos concluídos!
+                    </p>
+                </div>
+                <div class="welcome-questoes-icon">
+                    <i class="fa-solid fa-circle-question"></i>
+                </div>
+            </div>
+
+            <!-- BARRA DE BUSCA E FILTROS -->
+            <div class="search-area">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-questoes" placeholder="Buscar disciplina ou assunto de questões...">
+                </div>
+
+                <div class="filter-btn">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+            </div>
+
+            <!-- FILTROS POR CATEGORIA -->
+            <div class="categories">
+                <button class="filter filter-questoes active" data-category="todos">Todos</button>
+                <button class="filter filter-questoes" data-category="legislacao">Legislação</button>
+                <button class="filter filter-questoes" data-category="placas">Sinalização</button>
+                <button class="filter filter-questoes" data-category="seguranca">Segurança</button>
+                <button class="filter filter-questoes" data-category="saude">Primeiros Socorros</button>
+                <button class="filter filter-questoes" data-category="ambiente">Meio Ambiente</button>
+            </div>
+
+            <!-- CONTADOR -->
+            <div class="results-info">
+                <span id="contador-questoes">5 disciplinas</span>
+            </div>
+
+            <!-- GRID DE MATÉRIAS DE QUESTÕES -->
+            <section class="ebooks" id="questoes-grid">
+
+                <!-- CARD 1: Código de Trânsito -->
+                <article class="ebook questoes-subject-card" data-category="legislacao" data-id="CodigoTransito">
+                    <div class="ebook-cover green">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <span class="category">LEGISLAÇÃO</span>
+                    <h3>Código de Trânsito</h3>
+                    <p>Questões sobre normas de circulação, infrações, penalidades e processo de habilitação.</p>
+                    <div class="info">
+                        <span><i class="fa-solid fa-list-check"></i> 4 baterias • 75 questões</span>
+                        <span class="card-questoes-badge"><i class="fa-solid fa-unlock"></i> 1 liberada</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 25%;"></div>
+                    </div>
+                    <button class="read-btn btn-praticar-questoes" data-id="CodigoTransito">
+                        <i class="fa-solid fa-circle-play"></i> Praticar Questões
+                    </button>
+                </article>
+
+                <!-- CARD 2: Placas de Trânsito -->
+                <article class="ebook questoes-subject-card" data-category="placas" data-id="PlacaTransito">
+                    <div class="ebook-cover blue">
+                        <i class="fa-solid fa-road"></i>
+                    </div>
+                    <span class="category">SINALIZAÇÃO</span>
+                    <h3>Placas de Trânsito</h3>
+                    <p>Questões sobre sinalização vertical, horizontal, semafórica e gestos de agentes.</p>
+                    <div class="info">
+                        <span><i class="fa-solid fa-list-check"></i> 2 baterias • 30 questões</span>
+                        <span class="card-questoes-badge"><i class="fa-solid fa-unlock"></i> 1 liberada</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 50%;"></div>
+                    </div>
+                    <button class="read-btn btn-praticar-questoes" data-id="PlacaTransito">
+                        <i class="fa-solid fa-circle-play"></i> Praticar Questões
+                    </button>
+                </article>
+
+                <!-- CARD 3: Direção Defensiva -->
+                <article class="ebook questoes-subject-card" data-category="seguranca" data-id="DirecaoOfensiva">
+                    <div class="ebook-cover yellow">
+                        <i class="fa-solid fa-car-burst"></i>
+                    </div>
+                    <span class="category">SEGURANÇA</span>
+                    <h3>Direção Defensiva</h3>
+                    <p>Questões sobre prevenção de acidentes, condições adversas e distâncias seguras de parada.</p>
+                    <div class="info">
+                        <span><i class="fa-solid fa-list-check"></i> 2 baterias • 30 questões</span>
+                        <span class="card-questoes-badge"><i class="fa-solid fa-unlock"></i> 1 liberada</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 50%;"></div>
+                    </div>
+                    <button class="read-btn btn-praticar-questoes" data-id="DirecaoOfensiva">
+                        <i class="fa-solid fa-circle-play"></i> Praticar Questões
+                    </button>
+                </article>
+
+                <!-- CARD 4: Primeiros Socorros -->
+                <article class="ebook questoes-subject-card" data-category="saude" data-id="PrimeirosSocorros">
+                    <div class="ebook-cover red">
+                        <i class="fa-solid fa-kit-medical"></i>
+                    </div>
+                    <span class="category">PRIMEIROS SOCORROS</span>
+                    <h3>Primeiros Socorros</h3>
+                    <p>Questões sobre condutas de emergência, sinalização de sinistros e auxílio a vítimas.</p>
+                    <div class="info">
+                        <span><i class="fa-solid fa-list-check"></i> 2 baterias • 30 questões</span>
+                        <span class="card-questoes-badge"><i class="fa-solid fa-unlock"></i> 1 liberada</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 50%;"></div>
+                    </div>
+                    <button class="read-btn btn-praticar-questoes" data-id="PrimeirosSocorros">
+                        <i class="fa-solid fa-circle-play"></i> Praticar Questões
+                    </button>
+                </article>
+
+                <!-- CARD 5: Meio Ambiente e Cidadania -->
+                <article class="ebook questoes-subject-card" data-category="ambiente" data-id="MeioAmbiente">
+                    <div class="ebook-cover purple">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+                    <span class="category">MEIO AMBIENTE</span>
+                    <h3>Meio Ambiente e Cidadania</h3>
+                    <p>Questões sobre emissão de gases, poluição sonora, cidadania e convívio harmonioso nas vias.</p>
+                    <div class="info">
+                        <span><i class="fa-solid fa-list-check"></i> 2 baterias • 30 questões</span>
+                        <span class="card-questoes-badge"><i class="fa-solid fa-unlock"></i> 1 liberada</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 50%;"></div>
+                    </div>
+                    <button class="read-btn btn-praticar-questoes" data-id="MeioAmbiente">
+                        <i class="fa-solid fa-circle-play"></i> Praticar Questões
+                    </button>
+                </article>
+
+            </section>
+
+        </section>
+
+        <!-- ==========================================
+             SUB-TELA 7: BATERIAS DE QUESTÕES DA MATÉRIA (SPA)
+             ========================================== -->
+        <section id="view-questoes-modulos" class="spa-view modulos-theme-green" style="display: none;">
+
+            <!-- NAVEGAÇÃO DE TOPO COM BOTÃO VOLTAR -->
+            <div class="modulos-nav-topo">
+                <button type="button" class="btn-voltar-modulos" id="btn-voltar-hub-questoes">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar para Questões
+                </button>
+
+                <div class="modulos-breadcrumb">
+                    <span class="breadcrumb-root" id="breadcrumb-questoes-root-btn">Questões</span>
+                    <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current" id="questoes-breadcrumb-title">Código de Trânsito</span>
+                </div>
+            </div>
+
+            <!-- HERO CARD DA MATÉRIA SELECIONADA -->
+            <div class="modulo-hero-card" id="questoes-modulo-hero-card">
+                <div class="hero-cover green" id="questoes-hero-cover">
+                    <i class="fa-solid fa-scale-balanced" id="questoes-hero-icon"></i>
+                </div>
+
+                <div class="hero-info">
+                    <span class="category" id="questoes-hero-category">LEGISLAÇÃO</span>
+                    <h2 id="questoes-hero-title">Questões: Código de Trânsito</h2>
+                    <p id="questoes-hero-desc">
+                        Baterias de questões simuladas desbloqueadas sequencialmente a cada 3 módulos de estudo concluídos.
+                    </p>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat-badge highlight">
+                            <i class="fa-solid fa-unlock"></i>
+                            <span id="questoes-hero-liberadas">1 Bateria Liberada</span>
+                        </div>
+                        <div class="hero-stat-badge">
+                            <i class="fa-solid fa-lock"></i>
+                            <span id="questoes-hero-bloqueadas">3 Baterias Bloqueadas</span>
+                        </div>
+                        <div class="hero-progress-wrapper">
+                            <div class="hero-progress-label">
+                                <span>Progresso dos Simulados</span>
+                                <span id="questoes-hero-progress-pct">25%</span>
+                            </div>
+                            <div class="hero-progress-bar">
+                                <div class="hero-progress-fill" id="questoes-hero-progress-fill" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TÍTULO DA LISTAGEM DE BATERIAS -->
+            <div class="modulos-section-header">
+                <div>
+                    <h3>Baterias de Questões</h3>
+                    <p>Resolva as baterias de questões liberadas ao fim de cada 3 módulos estudados.</p>
+                </div>
+                <span id="questoes-contador-badge" class="hero-stat-badge">4 baterias</span>
+            </div>
+
+            <!-- CONTAINER DE INJEÇÃO DOS CARDS DE BATERIA -->
+            <div class="modules-list" id="questoes-modules-list">
+                <!-- Injetado dinamicamente via createQuestionModuleCard -->
+            </div>
+
         </section>
 
         <!-- CONTAINER FLUTUANTE DE FEEDBACK (TOAST) -->

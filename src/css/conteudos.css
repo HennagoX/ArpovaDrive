@@ -318,7 +318,9 @@ body {
    ========================================== */
 
 #view-modulos,
+#view-questoes-modulos,
 #view-modulos.modulos-theme-green,
+#view-questoes-modulos.modulos-theme-green,
 .modulos-theme-green {
     --theme-color: #16a34a;
     --theme-color-hover: #15803d;
@@ -330,6 +332,7 @@ body {
 }
 
 #view-modulos.modulos-theme-blue,
+#view-questoes-modulos.modulos-theme-blue,
 .modulos-theme-blue {
     --theme-color: #0752a0;
     --theme-color-hover: #064583;
@@ -341,6 +344,7 @@ body {
 }
 
 #view-modulos.modulos-theme-yellow,
+#view-questoes-modulos.modulos-theme-yellow,
 .modulos-theme-yellow {
     --theme-color: #d97706;
     --theme-color-hover: #b45309;
@@ -352,6 +356,7 @@ body {
 }
 
 #view-modulos.modulos-theme-red,
+#view-questoes-modulos.modulos-theme-red,
 .modulos-theme-red {
     --theme-color: #dc2626;
     --theme-color-hover: #b91c1c;
@@ -363,6 +368,7 @@ body {
 }
 
 #view-modulos.modulos-theme-purple,
+#view-questoes-modulos.modulos-theme-purple,
 .modulos-theme-purple {
     --theme-color: #7c3aed;
     --theme-color-hover: #6d28d9;

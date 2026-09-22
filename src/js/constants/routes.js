@@ -15,7 +15,8 @@ export const ROUTES = {
   CADASTRO: '/src/pages/cadastro.html',
   DASHBOARD: '/src/pages/telaInicial.html',
   CRONOGRAMA: '/src/pages/cronograma.html',
-  DESEMPENHO: '/src/pages/desempenho.html'
+  DESEMPENHO: '/src/pages/desempenho.html',
+  QUESTOES: '/src/pages/questoes.html'
 };
 
 export const ENDPOINTS = {
