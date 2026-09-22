@@ -81,7 +81,7 @@ export async function renderDashboard() {
                 const headerHtml = `
                     <div class="titulo-card">
                         <h2><span class="material-symbols-outlined icone-inline">target</span> Missão de hoje</h2>
-                        <a href="./cronograma.html" class="ver">Ver cronograma</a>
+                        <a href="#cronograma" class="ver" data-nav="cronograma">Ver cronograma</a>
                     </div>
                 `;
 
@@ -106,7 +106,7 @@ export async function renderDashboard() {
                             : '';
 
                     return `
-                        <div class="tarefa" onclick="window.location.href='./cronograma.html'">
+                        <div class="tarefa" style="cursor: pointer;" data-nav="cronograma">
                             <div class="check" style="${iconStyle}">
                                 ${icon}
                             </div>

@@ -14,9 +14,12 @@ body {
   background-color: var(--bg-page);
   color: var(--text-body);
   font-family: var(--font-main);
+  min-height: 100vh;
+}
+
+body.cronograma-standalone {
   padding: var(--content-padding, 32px 40px);
   margin-left: var(--navbar-width, 250px);
-  min-height: 100vh;
 }
 
 .container {

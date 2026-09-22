@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/utils.css">
     <link rel="stylesheet" href="../css/conteudos.css">
+    <link rel="stylesheet" href="../css/cronograma.css">
     <style>
         * {
             margin: 0;
@@ -609,7 +610,7 @@
                 <i class="fa-solid fa-clipboard-check"></i>
                 <span>Simulado</span>
             </a>
-            <a href="./cronograma.html" class="navbar-item">
+            <a href="#cronograma" class="navbar-item" data-nav="cronograma">
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Cronograma</span>
             </a>
@@ -691,7 +692,7 @@
                     <p>Faça uma prova completa e teste seu conhecimento.</p>
                 </a>
 
-                <a href="./cronograma.html" class="card">
+                <a href="#cronograma" class="card" id="card-cronograma" data-nav="cronograma">
                     <div class="icone-card roxo-card">
                         <i class="fa-solid fa-calendar-days"></i>
                     </div>
@@ -704,7 +705,7 @@
                 <div class="missao">
                     <div class="titulo-card">
                         <h2><span class="material-symbols-outlined icone-inline">target</span> Missão de hoje</h2>
-                        <a href="./cronograma.html" class="ver">Ver cronograma</a>
+                        <a href="#cronograma" class="ver" data-nav="cronograma">Ver cronograma</a>
                     </div>
 
                     <div class="tarefa">
@@ -1061,6 +1062,136 @@
                 <!-- Injetado dinamicamente via createModuleCard -->
             </div>
 
+        </section>
+
+        <!-- ==========================================
+             SUB-TELA 4: CRONOGRAMA DA SEMANA (SPA)
+             ========================================== -->
+        <section id="view-cronograma" class="spa-view container" style="display: none;">
+            <div class="nav-topo">
+                <a href="#inicio" class="btn-voltar" id="btn-voltar-painel-cronograma" data-nav="inicio">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao Painel
+                </a>
+            </div>
+
+            <header class="hud-card">
+                <div class="user-info">
+                    <h2><span class="material-symbols-outlined icone-inline">calendar_month</span> Cronograma da Semana</h2>
+                    <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
+                </div>
+                <div class="stats-group">
+                    <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span>
+                        Ofensiva: 5 Dias</div>
+                    <div class="stat-badge xp"><span class="material-symbols-outlined icone-inline">bolt</span> Total: 850 XP</div>
+                    <div id="admin-indicator-badge" class="stat-badge admin" style="display: none;">
+                        <span class="material-symbols-outlined icone-inline">shield_person</span> Admin
+                    </div>
+                </div>
+            </header>
+
+            <!-- Seleção de Usuário (Visível apenas para Administrador) -->
+            <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
+                <div class="user-selector-label">
+                    <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">admin_panel_settings</span>
+                    <strong>Painel Admin - Selecionar Aluno:</strong>
+                </div>
+                <div class="user-selector-controls">
+                    <select id="select-usuario-ativo" class="select-user-dropdown" title="Selecione um usuário">
+                        <option value="0b0c0d89-2cea-48ad-9988-928337357643">Henrique (Henrique@gmail.com)</option>
+                    </select>
+                    <span id="user-active-id-badge" class="user-id-badge">ID: 0b0c0d89...</span>
+                </div>
+            </div>
+
+            <!-- Barra de Simulação / Mock de Dia (Visível apenas para Administrador) -->
+            <div class="simulation-hud" id="simulation-hud" style="display: none;">
+                <div class="sim-label">
+                    <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">science</span>
+                    <strong>Simular Dia:</strong>
+                </div>
+                <div class="sim-buttons">
+                    <button type="button" class="btn-sim active" data-sim="auto">Hoje (Real)</button>
+                    <button type="button" class="btn-sim" data-sim="segunda">Segunda</button>
+                    <button type="button" class="btn-sim" data-sim="terca">Terça</button>
+                    <button type="button" class="btn-sim" data-sim="quarta">Quarta</button>
+                    <button type="button" class="btn-sim" data-sim="quinta">Quinta</button>
+                    <button type="button" class="btn-sim" data-sim="sexta">Sexta</button>
+                    <button type="button" class="btn-sim" data-sim="sabado">Sábado</button>
+                </div>
+            </div>
+
+            <nav class="week-nav">
+                <div class="day-tab" id="day-tab-1">
+                    <div class="day-name">Segunda</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-2">
+                    <div class="day-name">Terça</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-3">
+                    <div class="day-name">Quarta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-4">
+                    <div class="day-name">Quinta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-5">
+                    <div class="day-name">Sexta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-6">
+                    <div class="day-name">Sábado</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+            </nav>
+
+            <!-- Banner destacando a tarefa atual do usuário -->
+            <div id="task-atual-banner" class="current-task-banner" style="display: none;">
+                <div class="banner-info">
+                    <span class="material-symbols-outlined icone-inline">play_circle</span>
+                    <span class="banner-tag">Missão Atual</span>
+                    <span id="task-atual-titulo">Nenhuma missão ativa</span>
+                </div>
+                <div id="task-atual-xp" class="xp-badge">+0 XP</div>
+            </div>
+
+            <div class="schedule-header">
+                <h3>Missões do Dia</h3>
+                <span id="tempo-estimado-dia">Tempo total estimado: 1h 15m</span>
+            </div>
+
+            <section class="schedule-list" id="schedule-days-container">
+                <!-- Feedback de Carregamento Explícito (Clean e amigável) -->
+                <div id="cronograma-loading" class="cronograma-state-card loading-state">
+                    <div class="loading-spinner"></div>
+                    <div class="state-text">
+                        <h4>Carregando suas missões...</h4>
+                        <p>Preparando seu cronograma e metas de estudo da semana</p>
+                    </div>
+                </div>
+
+                <!-- Feedback de Erro com Ação de Tentar Novamente -->
+                <div id="cronograma-error" class="cronograma-state-card error-state" style="display: none;">
+                    <span class="material-symbols-outlined state-icon">event_busy</span>
+                    <div class="state-text">
+                        <h4 id="cronograma-error-title">Não foi possível carregar as missões</h4>
+                        <p id="cronograma-error-desc">Não conseguimos buscar suas missões no momento. Tente novamente.</p>
+                    </div>
+                    <button type="button" id="btn-tentar-novamente" class="btn-retry">
+                        <span class="material-symbols-outlined icone-inline">refresh</span> Tentar Novamente
+                    </button>
+                </div>
+
+                <!-- 6 divs: Uma para cada dia da semana (1: Segunda a 6: Sábado) -->
+                <div id="day-tasks-1" class="day-tasks-container" data-day="1" style="display: none;"></div>
+                <div id="day-tasks-2" class="day-tasks-container" data-day="2" style="display: none;"></div>
+                <div id="day-tasks-3" class="day-tasks-container" data-day="3" style="display: none;"></div>
+                <div id="day-tasks-4" class="day-tasks-container" data-day="4" style="display: none;"></div>
+                <div id="day-tasks-5" class="day-tasks-container" data-day="5" style="display: none;"></div>
+                <div id="day-tasks-6" class="day-tasks-container" data-day="6" style="display: none;"></div>
+            </section>
         </section>
 
         <!-- CONTAINER FLUTUANTE DE FEEDBACK (TOAST) -->

@@ -12,6 +12,7 @@ import { router } from '../spa/router.js';
 import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.js';
 import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.js';
 import { initModulosView, abrirModulos } from '../spa/views/modulosView.js';
+import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
 
 ready(() => {
     // 1. Registra as visões modulares no SPA Router
@@ -43,10 +44,19 @@ ready(() => {
         }
     });
 
+    router.register('cronograma', {
+        viewSelector: '#view-cronograma',
+        navKey: 'cronograma',
+        onEnter: () => {
+            renderCronograma();
+        }
+    });
+
     // 2. Inicializa controladores de cada visão modular
     initDashboardView(router);
     initConteudosView(router);
     initModulosView(router);
+    initCronogramaView(router);
 
     // 3. Inicia o router (interpreta hash atual e configura popstate)
     router.init();

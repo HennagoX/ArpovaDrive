@@ -218,40 +218,135 @@ function getAuthHeaders(targetUserId) {
     return headers;
 }
 
+export const SESSION_CRONOGRAMA_KEY = 'aprovadrive_session_cronograma';
+
+/**
+ * Obtém o cronograma cacheado na sessão para o usuário ativo.
+ */
+export function getCachedTarefas(userId) {
+    try {
+        const usuarioId = getUsuarioAtivoId(userId);
+        const mockDia = getMockDia() || 'real';
+        const key = `${SESSION_CRONOGRAMA_KEY}_${usuarioId}_${mockDia}`;
+        const raw = sessionStorage.getItem(key);
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (parsed && parsed.dias) {
+                return parsed;
+            }
+        }
+    } catch {
+        // Fallback
+    }
+    return null;
+}
+
+/**
+ * Salva o payload de tarefas na sessão.
+ */
+export function setCachedTarefas(userId, data) {
+    try {
+        const usuarioId = getUsuarioAtivoId(userId);
+        const mockDia = getMockDia() || 'real';
+        const key = `${SESSION_CRONOGRAMA_KEY}_${usuarioId}_${mockDia}`;
+        sessionStorage.setItem(key, JSON.stringify(data));
+    } catch {
+        // Fallback
+    }
+}
+
+/**
+ * Limpa o cache de tarefas da sessão
+ */
+export function clearCachedTarefas(userId) {
+    try {
+        if (userId) {
+            const mockDia = getMockDia() || 'real';
+            sessionStorage.removeItem(`${SESSION_CRONOGRAMA_KEY}_${userId}_${mockDia}`);
+        } else {
+            Object.keys(sessionStorage).forEach(k => {
+                if (k.startsWith(SESSION_CRONOGRAMA_KEY)) {
+                    sessionStorage.removeItem(k);
+                }
+            });
+        }
+    } catch {
+        // Fallback
+    }
+}
+
+/**
+ * Higieniza mensagens de erro para não expor termos técnicos de banco (ex: PostgreSQL) ao aluno.
+ */
+function sanitizeErrorMessage(msg) {
+    if (!msg || typeof msg !== 'string') {
+        return 'Não foi possível carregar as missões no momento. Tente novamente.';
+    }
+    const lower = msg.toLowerCase();
+    if (
+        lower.includes('postgre') ||
+        lower.includes('sql') ||
+        lower.includes('database') ||
+        lower.includes('banco') ||
+        lower.includes('connection') ||
+        lower.includes('timeout') ||
+        lower.includes('econnrefused') ||
+        lower.includes('failed to fetch') ||
+        lower.includes('internal server')
+    ) {
+        return 'O servidor está preparando suas missões. Por favor, tente novamente em instantes.';
+    }
+    return msg;
+}
+
 /**
  * Busca o payload de tarefas do usuário selecionado na API AprovaDrive.
- * Lança erro caso a API recuse a requisição (ex: usuário não cadastrado).
+ * Utiliza cache na sessão (sessionStorage) para não reconsultar a API desnecessariamente.
  * 
  * @param {string} [userId] - Identificador único do usuário
+ * @param {boolean} [forceRefresh=false] - Forçar nova requisição à API
  * @returns {Promise<Object>} Payload contendo taskAtual, dias da semana e tarefas
  */
-export async function getTarefas(userId) {
+export async function getTarefas(userId, forceRefresh = false) {
     const usuarioId = getUsuarioAtivoId(userId);
+
+    // 1. Utiliza cache da sessão para carregamento instantâneo se disponível
+    if (!forceRefresh) {
+        const cached = getCachedTarefas(usuarioId);
+        if (cached) {
+            return cached;
+        }
+    }
+
     const mockDia = getMockDia();
     const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
-
     const url = `${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`;
     
-    const response = await fetch(url, {
-        headers: {
-            ...getAuthHeaders(usuarioId),
-            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+    try {
+        const response = await fetch(url, {
+            headers: {
+                ...getAuthHeaders(usuarioId),
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+            }
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+            const errorMsg = sanitizeErrorMessage(data?.error || `Erro ao carregar tarefas da semana.`);
+            throw new Error(errorMsg);
         }
-    });
 
-    const data = await response.json().catch(() => null);
+        if (data && data.dias) {
+            setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
+            setCachedTarefas(usuarioId, data);
+            return data;
+        }
 
-    if (!response.ok) {
-        const errorMsg = data?.error || `Erro ${response.status} ao carregar tarefas da semana.`;
-        throw new Error(errorMsg);
+        throw new Error('Nenhuma missão encontrada para esta semana.');
+    } catch (err) {
+        throw new Error(sanitizeErrorMessage(err.message));
     }
-
-    if (data) {
-        setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
-        return data;
-    }
-
-    throw new Error('Nenhum dado retornado pela API.');
 }
 
 /**
@@ -290,6 +385,7 @@ export async function iniciarTarefa(taskId, userId) {
 
     if (data.payload) {
         setLocalItem(STORAGE_KEYS.CRONOGRAMA, data.payload);
+        setCachedTarefas(usuarioId, data.payload);
     }
 
     return data;
@@ -324,6 +420,7 @@ export async function concluirTarefa(taskId, userId, options = {}) {
 
     if (data.payload) {
         setLocalItem(STORAGE_KEYS.CRONOGRAMA, data.payload);
+        setCachedTarefas(usuarioId, data.payload);
     }
 
     return data;

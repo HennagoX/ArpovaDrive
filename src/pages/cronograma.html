@@ -11,6 +11,10 @@
   <link rel="stylesheet" href="../css/theme.css">
   <link rel="stylesheet" href="../css/utils.css">
   <link rel="stylesheet" href="../css/cronograma.css">
+  <script>
+    // Redireciona para o SPA unificado em telaInicial.html mantendo a rota
+    window.location.replace('./telaInicial.html#cronograma');
+  </script>
 </head>
 
 <body class="navbar-page">
@@ -136,17 +140,17 @@
       <div id="cronograma-loading" class="cronograma-state-card loading-state">
         <div class="loading-spinner"></div>
         <div class="state-text">
-          <h4>Requisitando missões da semana...</h4>
-          <p>Conectando à API e consultando o banco de dados PostgreSQL</p>
+          <h4>Carregando suas missões...</h4>
+          <p>Preparando seu cronograma e metas de estudo da semana</p>
         </div>
       </div>
 
       <!-- Feedback de Erro com Ação de Tentar Novamente -->
       <div id="cronograma-error" class="cronograma-state-card error-state" style="display: none;">
-        <span class="material-symbols-outlined state-icon">error</span>
+        <span class="material-symbols-outlined state-icon">event_busy</span>
         <div class="state-text">
           <h4 id="cronograma-error-title">Não foi possível carregar as missões</h4>
-          <p id="cronograma-error-desc">Ocorreu um problema ao conectar com o servidor.</p>
+          <p id="cronograma-error-desc">Não conseguimos buscar suas missões no momento. Tente novamente.</p>
         </div>
         <button type="button" id="btn-tentar-novamente" class="btn-retry">
           <span class="material-symbols-outlined icone-inline">refresh</span> Tentar Novamente
