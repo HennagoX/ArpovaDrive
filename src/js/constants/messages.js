@@ -6,5 +6,7 @@ export const MESSAGES = {
     CADASTRO_SUCESSO: 'Cadastro realizado com sucesso! Redirecionando...',
     ESQUECI_SENHA_INFO: 'Página de recuperação de senha.',
     GOOGLE_INFO: 'Aqui será integrada a entrada com Google.',
-    LOGIN_ERRADO: 'E-mail ou senha incorretos.'
+    LOGIN_ERRADO: 'E-mail ou senha incorretos.',
+    MODULO_BLOQUEADO: 'Conclua o módulo anterior para desbloquear este módulo!',
+    MODULO_EM_BREVE: 'Módulo em desenvolvimento. A leitura estará disponível em breve!'
 };
