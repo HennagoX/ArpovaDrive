@@ -118,3 +118,5 @@ html/sw.js
 .DS_Store
 
 GAMIFICACAO.md
+.vercel
+.env*

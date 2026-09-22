@@ -6,9 +6,8 @@ const isLocal = typeof window !== 'undefined' && (
   window.location.protocol === 'file:'
 );
 
-export const API_URL = isLocal 
-  ? 'http://localhost:3000' 
-  : 'https://arpovadriveapi.onrender.com';
+export const API_URL = 
+   'https://arpova-drive-api.vercel.app';
 
 export const ROUTES = {
   HOME: '/index.html',
