@@ -3,6 +3,22 @@ import { MESSAGES } from '../constants/messages.js';
 export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o módulo anterior para desbloquear este módulo!';
 
 /**
+ * Resolve o caminho relativo do arquivo PDF com base no contexto da página.
+ * @param {string} filename - Nome do arquivo PDF em assets/PDFs
+ * @returns {string} Caminho URL-encoded para o PDF
+ */
+export function resolvePdfUrl(filename) {
+    if (!filename) return null;
+    const encoded = encodeURI(filename);
+    if (typeof window !== 'undefined' && window.location && window.location.pathname) {
+        if (window.location.pathname.includes('/src/pages/') || window.location.pathname.includes('/pages/')) {
+            return `../../assets/PDFs/${encoded}`;
+        }
+    }
+    return `../../assets/PDFs/${encoded}`;
+}
+
+/**
  * Base de dados mockada dos conteúdos e seus respectivos módulos
  * para a plataforma AprovaDrive.
  */
@@ -16,45 +32,125 @@ export const CONTEUDOS_DATA = {
         cor: 'green',
         icone: 'fa-solid fa-scale-balanced',
         descricao: 'Aprenda as principais leis, normas de circulação, infrações e direitos estabelecidos pelo Código de Trânsito Brasileiro (CTB).',
-        totalCapitulos: 12,
+        totalCapitulos: 10,
         modulos: [
             {
                 id: 'ctb-mod-1',
                 numero: 1,
-                titulo: 'Introdução ao CTB e Sistema Nacional de Trânsito',
-                descricao: 'Conheça os órgãos normativos e executivos do SNT, os princípios da segurança viária e as diretrizes básicas da legislação brasileira.',
+                titulo: 'Conhecendo o Trânsito',
+                descricao: 'Conceitos fundamentais de trânsito, vias públicas, circulação segura e o papel do cidadão nas vias brasileiras.',
                 duracao: '20 min',
                 topicos: 4,
+                pdfNome: 'Conhecendo_o_trânsito.pdf',
+                pdfUrl: resolvePdfUrl('Conhecendo_o_trânsito.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'ctb-mod-2',
                 numero: 2,
-                titulo: 'Normas Gerais de Circulação e Conduta',
-                descricao: 'Regras essenciais de preferência de passagem, ultrapassagem segura, velocidade em diferentes vias, uso de faróis e regras de parada.',
-                duracao: '35 min',
-                topicos: 6,
+                titulo: 'Sistema Nacional de Trânsito',
+                descricao: 'Estrutura, composição e competências dos órgãos normativos e executivos do SNT (CONTRAN, DETRAN, PRF e JARI).',
+                duracao: '25 min',
+                topicos: 5,
+                pdfNome: 'AprovaDrive_Modulo_02_Sistema_Nacional_de_Transito.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_02_Sistema_Nacional_de_Transito.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'ctb-mod-3',
                 numero: 3,
-                titulo: 'Infrações, Penalidades e Medidas Administrativas',
-                descricao: 'Classificação das infrações em leves, médias, graves e gravíssimas, pontuação acumulada na CNH, suspensão do direito de dirigir e retenção veicular.',
+                titulo: 'Habilitação e Condutor',
+                descricao: 'Processo de formação do condutor, categorias de CNH (A, B, C, D e E), Permissão Para Dirigir (PPD) e renovação.',
                 duracao: '30 min',
                 topicos: 5,
+                pdfNome: 'AprovaDrive_Modulo_03_Habilitacao_e_Condutor.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_03_Habilitacao_e_Condutor.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'ctb-mod-4',
                 numero: 4,
-                titulo: 'Habilitação, Crimes de Trânsito e Recursos',
-                descricao: 'Processo completo de primeira habilitação, renovação, crimes culposos e dolosos previstos no CTB e prazos de defesa na JARI.',
-                duracao: '40 min',
+                titulo: 'Regras de Circulação e Conduta',
+                descricao: 'Normas gerais de circulação, preferências em cruzamentos e rotatórias, limites de velocidade, uso de luzes e ultrapassagens.',
+                duracao: '35 min',
+                topicos: 6,
+                pdfNome: 'AprovaDrive_Modulo_04_Regras_de_Circulacao_e_Conduta.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_04_Regras_de_Circulacao_e_Conduta.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-5',
+                numero: 5,
+                titulo: 'Infrações de Trânsito',
+                descricao: 'Classificação das infrações (leves, médias, graves e gravíssimas), sistema de pontuação e fatores multiplicadores.',
+                duracao: '30 min',
                 topicos: 5,
+                pdfNome: 'AprovaDrive_Modulo_05_Infracoes_de_Transito.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_05_Infracoes_de_Transito.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-6',
+                numero: 6,
+                titulo: 'Penalidades e Medidas Administrativas',
+                descricao: 'Diferença entre penalidades aplicadas pela autoridade e medidas administrativas adotadas pelo agente (retenção, remoção e recolhimento).',
+                duracao: '30 min',
+                topicos: 5,
+                pdfNome: 'AprovaDrive_Modulo_06_Penalidades_e_Medidas_Administrativas.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_06_Penalidades_e_Medidas_Administrativas.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-7',
+                numero: 7,
+                titulo: 'Crimes de Trânsito',
+                descricao: 'Infrações penais previstas no CTB: embriaguez ao volante, racha/pegas, homicídio e lesão corporal culposa, e penas aplicáveis.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'AprovaDrive_Modulo_07_Crimes_de_Transito.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_07_Crimes_de_Transito.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-8',
+                numero: 8,
+                titulo: 'Parada, Estacionamento e Imobilização',
+                descricao: 'Diferenças legais e operacionais entre parar e estacionar, proibições de estacionamento e normas para carga e descarga.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'AprovaDrive_Modulo_08_Parada_Estacionamento_e_Imobilizacao.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_08_Parada_Estacionamento_e_Imobilizacao.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-9',
+                numero: 9,
+                titulo: 'Responsabilidades e Segurança no Trânsito',
+                descricao: 'Responsabilidade objetiva do poder público, deveres dos condutores, segurança dos pedestres e vulneráveis e convívio harmônico.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'AprovaDrive_Modulo_09_Responsabilidades_e_Seguranca_no_Transito.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_09_Responsabilidades_e_Seguranca_no_Transito.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'ctb-mod-10',
+                numero: 10,
+                titulo: 'Revisão Geral',
+                descricao: 'Síntese completa de todos os módulos de legislação, questões comentadas e checklist final preparatório para a prova teórica do DETRAN.',
+                duracao: '45 min',
+                topicos: 6,
+                pdfNome: 'AprovaDrive_Modulo_10_Revisao_Geral.pdf',
+                pdfUrl: resolvePdfUrl('AprovaDrive_Modulo_10_Revisao_Geral.pdf'),
                 status: 'locked',
                 bloqueado: true
             }
@@ -315,10 +411,12 @@ export function getModulosByConteudoId(id) {
     const total = conteudo.modulos.length;
     return conteudo.modulos.map((modulo, index) => {
         // Regra solicitada:
-        // "só deixa tudo livre e só o último bloqueado já com a mensagem que provavelmente vamos usar quando tentar ler ele tbm..."
+        // "continua com o último bloqueado pra simular ta... mas os pdfs que vão abrir são esses mesmo... o décimo no caso fica bloqueado o botão"
         const isLast = index === total - 1;
+        const pdfUrl = modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome) : (modulo.pdfUrl || null);
         return {
             ...modulo,
+            pdfUrl,
             status: isLast ? 'locked' : 'available',
             bloqueado: isLast
         };

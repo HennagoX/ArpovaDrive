@@ -66,6 +66,12 @@ export function createModuleCard(modulo, options = {}) {
                 <i class="fa-solid fa-lock icone-inline"></i> Bloqueado
             </button>
         `;
+    } else if (modulo.pdfUrl) {
+        actionButtonHtml = `
+            <a href="${modulo.pdfUrl}" target="_blank" rel="noopener noreferrer" class="btn-action btn-ler" title="Abrir material em PDF do módulo">
+                <i class="fa-solid fa-file-pdf icone-inline"></i> Ler Módulo
+            </a>
+        `;
     } else {
         actionButtonHtml = `
             <button type="button" class="btn-action btn-ler" title="Iniciar leitura deste módulo">
@@ -73,6 +79,10 @@ export function createModuleCard(modulo, options = {}) {
             </button>
         `;
     }
+
+    const pdfBadgeHtml = modulo.pdfNome
+        ? `<span class="module-meta-item" style="color: #ef4444; font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> PDF</span>`
+        : '';
 
     card.innerHTML = `
         <div class="module-index-box">
@@ -85,6 +95,7 @@ export function createModuleCard(modulo, options = {}) {
                 <span class="module-tag">Módulo ${numeroFormatado}</span>
                 <span class="module-meta-item"><i class="fa-regular fa-clock"></i> ${escapeHtml(duracao)}</span>
                 <span class="module-meta-item"><i class="fa-regular fa-file-lines"></i> ${escapeHtml(topicos)}</span>
+                ${pdfBadgeHtml}
             </div>
             <h4 class="module-title">${escapeHtml(modulo.titulo || 'Módulo sem título')}</h4>
             <p class="module-desc">${escapeHtml(modulo.descricao || 'Sem descrição para este módulo.')}</p>
@@ -128,6 +139,18 @@ export function createModuleCard(modulo, options = {}) {
                 }
             });
         }
+
+        // Permite clicar em qualquer parte do card liberado para abrir o material
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', (event) => {
+            if (event.target.closest('.btn-ler')) return;
+            if (modulo.pdfUrl) {
+                window.open(modulo.pdfUrl, '_blank', 'noopener,noreferrer');
+            }
+            if (typeof options.onRead === 'function') {
+                options.onRead(modulo, card);
+            }
+        });
     }
 
     return card;

@@ -104,11 +104,19 @@ export function abrirModulos(conteudoId) {
         modulos.forEach((modulo) => {
             const card = createModuleCard(modulo, {
                 onRead: (mod) => {
-                    showToast(
-                        `Módulo ${mod.numero}: "${mod.titulo}". A leitura estará disponível em breve!`,
-                        'info',
-                        'fa-solid fa-book-open'
-                    );
+                    if (mod.pdfUrl) {
+                        showToast(
+                            `Abrindo Módulo ${mod.numero}: "${mod.titulo}" em nova aba...`,
+                            'info',
+                            'fa-solid fa-file-pdf'
+                        );
+                    } else {
+                        showToast(
+                            `Módulo ${mod.numero}: "${mod.titulo}". A leitura estará disponível em breve!`,
+                            'info',
+                            'fa-solid fa-book-open'
+                        );
+                    }
                 },
                 onLockedClick: () => {
                     showToast(
