@@ -78,6 +78,15 @@ export function abrirModulos(conteudoId) {
     // Atualiza Breadcrumb
     if (breadcrumbTitle) setText(breadcrumbTitle, conteudo.titulo);
 
+    // Atualiza o tema visual da tela de módulos com base na cor do conteúdo
+    const viewModulos = qs("#view-modulos");
+    if (viewModulos) {
+        const themeClasses = Array.from(viewModulos.classList).filter(c => c.startsWith('modulos-theme-'));
+        themeClasses.forEach(c => viewModulos.classList.remove(c));
+        const temaCor = conteudo.cor || 'green';
+        viewModulos.classList.add(`modulos-theme-${temaCor}`);
+    }
+
     // Atualiza o Hero Card do conteúdo
     if (heroCover) {
         heroCover.className = `hero-cover ${conteudo.cor || 'green'}`;

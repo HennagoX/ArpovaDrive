@@ -314,7 +314,64 @@ body {
 /* ==========================================
    SUB-TELA DE MÓDULOS (SPA)
    Design System Harmonizado com o AprovaDrive
+   Temas Dinâmicos por Conteúdo
    ========================================== */
+
+#view-modulos,
+#view-modulos.modulos-theme-green,
+.modulos-theme-green {
+    --theme-color: #16a34a;
+    --theme-color-hover: #15803d;
+    --theme-color-soft: #e8f5e9;
+    --theme-color-badge: #e8f8ee;
+    --theme-color-border: #c8e6c9;
+    --theme-btn-text: #ffffff;
+    --theme-shadow: rgba(22, 163, 74, 0.25);
+}
+
+#view-modulos.modulos-theme-blue,
+.modulos-theme-blue {
+    --theme-color: #0752a0;
+    --theme-color-hover: #064583;
+    --theme-color-soft: #e8f2ff;
+    --theme-color-badge: #eff6ff;
+    --theme-color-border: #bfdbfe;
+    --theme-btn-text: #ffffff;
+    --theme-shadow: rgba(7, 82, 160, 0.25);
+}
+
+#view-modulos.modulos-theme-yellow,
+.modulos-theme-yellow {
+    --theme-color: #d97706;
+    --theme-color-hover: #b45309;
+    --theme-color-soft: #fff6d9;
+    --theme-color-badge: #fffbe8;
+    --theme-color-border: #fde68a;
+    --theme-btn-text: #ffffff;
+    --theme-shadow: rgba(217, 119, 6, 0.25);
+}
+
+#view-modulos.modulos-theme-red,
+.modulos-theme-red {
+    --theme-color: #dc2626;
+    --theme-color-hover: #b91c1c;
+    --theme-color-soft: #fee2e2;
+    --theme-color-badge: #fef2f2;
+    --theme-color-border: #fecaca;
+    --theme-btn-text: #ffffff;
+    --theme-shadow: rgba(220, 38, 38, 0.25);
+}
+
+#view-modulos.modulos-theme-purple,
+.modulos-theme-purple {
+    --theme-color: #7c3aed;
+    --theme-color-hover: #6d28d9;
+    --theme-color-soft: #f3e8ff;
+    --theme-color-badge: #f5f3ff;
+    --theme-color-border: #ddd6fe;
+    --theme-btn-text: #ffffff;
+    --theme-shadow: rgba(124, 58, 237, 0.25);
+}
 
 /* MODO FOCO: SEM SIDEBAR NA TELA DE MÓDULOS */
 body.no-sidebar .navbar,
@@ -376,9 +433,9 @@ body.no-sidebar .main {
 }
 
 .btn-voltar-modulos:hover {
-    background: #e8f2ff;
-    border-color: #bfdbfe;
-    color: #0752a0;
+    background: var(--theme-color-soft, #e8f2ff);
+    border-color: var(--theme-color-border, #bfdbfe);
+    color: var(--theme-color, #0752a0);
     transform: translateX(-3px);
 }
 
@@ -407,7 +464,7 @@ body.no-sidebar .main {
 }
 
 .modulos-breadcrumb .breadcrumb-root:hover {
-    color: #16a34a;
+    color: var(--theme-color, #16a34a);
     text-decoration: underline;
 }
 
@@ -483,8 +540,8 @@ body.no-sidebar .main {
     font-weight: 700;
     padding: 4px 10px;
     border-radius: 6px;
-    background: #e8f0ff;
-    color: #0d47a1;
+    background: var(--theme-color-soft, #e8f0ff);
+    color: var(--theme-color, #0d47a1);
     margin-bottom: 6px;
     display: inline-block;
     letter-spacing: 0.5px;
@@ -526,9 +583,9 @@ body.no-sidebar .main {
 }
 
 .hero-stat-badge.highlight {
-    background: #e8f8ee;
-    color: #16a34a;
-    border-color: #c8e6c9;
+    background: var(--theme-color-badge, #e8f8ee);
+    color: var(--theme-color, #16a34a);
+    border-color: var(--theme-color-border, #c8e6c9);
 }
 
 .hero-progress-wrapper {
@@ -555,7 +612,7 @@ body.no-sidebar .main {
 
 .hero-progress-fill {
     height: 100%;
-    background: #16a34a;
+    background: var(--theme-color, #16a34a);
     border-radius: 20px;
     transition: width 0.4s ease;
 }
@@ -603,7 +660,7 @@ body.no-sidebar .main {
 }
 
 .module-card.available {
-    border-left: 5px solid #16a34a;
+    border-left: 5px solid var(--theme-color, #16a34a);
 }
 
 .module-card.available:hover {
@@ -613,7 +670,7 @@ body.no-sidebar .main {
 }
 
 .module-card.done {
-    border-left: 5px solid #16a34a;
+    border-left: 5px solid var(--theme-color, #16a34a);
     background: #fafdfb;
 }
 
@@ -645,13 +702,13 @@ body.no-sidebar .main {
 }
 
 .module-card.available .module-index-box {
-    background: #e8f5e9;
-    color: #16a34a;
+    background: var(--theme-color-soft, #e8f5e9);
+    color: var(--theme-color, #16a34a);
 }
 
 .module-card.done .module-index-box {
-    background: #e8f5e9;
-    color: #16a34a;
+    background: var(--theme-color-soft, #e8f5e9);
+    color: var(--theme-color, #16a34a);
 }
 
 .module-card.locked .module-index-box {
@@ -686,9 +743,15 @@ body.no-sidebar .main {
     text-transform: uppercase;
     padding: 3px 8px;
     border-radius: 6px;
-    background: #e8f0ff;
-    color: #0d47a1;
+    background: #f1f5f9;
+    color: #64748b;
     letter-spacing: 0.5px;
+}
+
+.module-card.available .module-tag,
+.module-card.done .module-tag {
+    background: var(--theme-color-soft, #e8f0ff);
+    color: var(--theme-color, #0d47a1);
 }
 
 .module-meta-item {
@@ -747,8 +810,8 @@ body.no-sidebar .main {
 }
 
 .badge-available {
-    background: #e8f8ee;
-    color: #16a34a;
+    background: var(--theme-color-badge, #e8f8ee);
+    color: var(--theme-color, #16a34a);
 }
 
 .badge-locked {
@@ -758,8 +821,8 @@ body.no-sidebar .main {
 }
 
 .badge-done {
-    background: #e8f8ee;
-    color: #16a34a;
+    background: var(--theme-color-badge, #e8f8ee);
+    color: var(--theme-color, #16a34a);
 }
 
 /* BOTÕES DE AÇÃO */
@@ -780,14 +843,14 @@ body.no-sidebar .main {
 }
 
 .module-action-area .btn-ler {
-    background: #16a34a;
-    color: white;
-    box-shadow: 0 2px 6px rgba(22, 163, 74, 0.2);
+    background: var(--theme-color, #16a34a);
+    color: var(--theme-btn-text, white);
+    box-shadow: 0 2px 6px var(--theme-shadow, rgba(22, 163, 74, 0.2));
 }
 
 .module-action-area .btn-ler:hover {
-    background: #15803d;
-    box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    background: var(--theme-color-hover, #15803d);
+    box-shadow: 0 4px 12px var(--theme-shadow, rgba(22, 163, 74, 0.3));
     transform: translateY(-1px);
 }
 
