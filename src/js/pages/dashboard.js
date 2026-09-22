@@ -13,6 +13,7 @@ import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.j
 import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.js';
 import { initModulosView, abrirModulos } from '../spa/views/modulosView.js';
 import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
+import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
 
 ready(() => {
     // 1. Registra as visões modulares no SPA Router
@@ -52,11 +53,20 @@ ready(() => {
         }
     });
 
+    router.register('desempenho', {
+        viewSelector: '#view-desempenho',
+        navKey: 'desempenho',
+        onEnter: () => {
+            renderDesempenho();
+        }
+    });
+
     // 2. Inicializa controladores de cada visão modular
     initDashboardView(router);
     initConteudosView(router);
     initModulosView(router);
     initCronogramaView(router);
+    initDesempenhoView(router);
 
     // 3. Inicia o router (interpreta hash atual e configura popstate)
     router.init();

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../css/utils.css">
     <link rel="stylesheet" href="../css/conteudos.css">
     <link rel="stylesheet" href="../css/cronograma.css">
+    <link rel="stylesheet" href="../css/desempenho.css">
     <style>
         * {
             margin: 0;
@@ -614,7 +615,7 @@
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Cronograma</span>
             </a>
-            <a href="./desempenho.html" class="navbar-item">
+            <a href="#desempenho" class="navbar-item" data-nav="desempenho">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Desempenho</span>
             </a>
@@ -739,10 +740,10 @@
                     </div>
                 </div>
 
-                <div class="desempenho" id="desempenho">
+                <div class="desempenho" id="card-desempenho-resumo">
                     <div class="titulo-card">
                         <h2><span class="material-symbols-outlined icone-inline">bar_chart</span> Seu desempenho</h2>
-                        <a href="./desempenho.html" class="ver">Ver detalhes</a>
+                        <a href="#desempenho" class="ver" data-nav="desempenho">Ver detalhes</a>
                     </div>
 
                     <div class="desempenho-area">
@@ -1192,6 +1193,232 @@
                 <div id="day-tasks-5" class="day-tasks-container" data-day="5" style="display: none;"></div>
                 <div id="day-tasks-6" class="day-tasks-container" data-day="6" style="display: none;"></div>
             </section>
+        </section>
+
+        <!-- ==========================================
+             SUB-TELA 5: DESEMPENHO
+             ========================================== -->
+        <section id="view-desempenho" class="spa-view" style="display: none;">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-verde">
+                        <span class="material-symbols-outlined">trending_up</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Aproveitamento</span>
+                        <strong id="taxaAproveitamento">69%</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-azul">
+                        <span class="material-symbols-outlined">assignment</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Questões Totais</span>
+                        <strong id="totalQuestoes">124</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-verde">
+                        <span class="material-symbols-outlined">check_circle</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Acertos</span>
+                        <strong id="totalAcertos">86</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-vermelho">
+                        <span class="material-symbols-outlined">cancel</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Erros</span>
+                        <strong id="totalErros">38</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-amarelo">
+                        <span class="material-symbols-outlined">verified</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Simulados</span>
+                        <strong id="totalSimulados">8</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conteudo-grid">
+                <section class="painel-card">
+                    <h2 class="secao-titulo">
+                        <span class="material-symbols-outlined">pie_chart</span>
+                        Desempenho por Matéria
+                    </h2>
+
+                    <div class="circulo-destaque">
+                        <div class="circulo-grafico" id="circuloAproveitamento" style="background: conic-gradient(var(--brand-green, #16a34a) 0deg 248deg, #e5e7eb 248deg 360deg);">
+                            <div class="circulo-centro">
+                                <strong id="circuloTaxa">69%</strong>
+                                <span id="circuloStatusLabel">Médio</span>
+                            </div>
+                        </div>
+                        <div class="circulo-detalhe">
+                            <h3>Status Geral de Prontidão</h3>
+                            <p id="circuloStatusDesc">Você atingiu a pontuação mínima para aprovação (70%), mas recomendamos reforçar matérias críticas para ter mais segurança.</p>
+                        </div>
+                    </div>
+
+                    <div class="materias-lista">
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-scale-balanced"></i> Legislação de Trânsito
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-excelente">Excelente</span>
+                                    <strong>82%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-excelente" style="width: 82%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-diamond-turn-right"></i> Placas e Sinalização
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-excelente">Excelente</span>
+                                    <strong>88%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-excelente" style="width: 88%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-shield-halved"></i> Direção Defensiva
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-bom">Bom</span>
+                                    <strong>75%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-bom" style="width: 75%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-leaf"></i> Meio Ambiente e Cidadania
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-bom">Bom</span>
+                                    <strong>70%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-bom" style="width: 70%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-kit-medical"></i> Primeiros Socorros
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-atencao">Atenção</span>
+                                    <strong>60%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-atencao" style="width: 60%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="materia-linha">
+                            <div class="materia-linha-topo">
+                                <span class="materia-nome">
+                                    <i class="fa-solid fa-gears"></i> Mecânica Básica
+                                </span>
+                                <div class="materia-stats">
+                                    <span class="badge-status badge-revisao">Revisão</span>
+                                    <strong>45%</strong>
+                                </div>
+                            </div>
+                            <div class="barra-progresso">
+                                <div class="barra-progresso-fill fill-revisao" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <aside>
+                    <div class="ia-card">
+                        <div class="ia-header">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                            Diagnóstico do Tutor IA
+                        </div>
+                        <p>Detectamos que seu índice em <strong>Mecânica Básica</strong> (45%) e <strong>Primeiros Socorros</strong> (60%) pode comprometer seu resultado na prova oficial. Sugerimos priorizar essas matérias no seu cronograma.</p>
+                        <a href="#cronograma" class="ia-botao" data-nav="cronograma">
+                            <span class="material-symbols-outlined">calendar_month</span> Ajustar Cronograma
+                        </a>
+                    </div>
+
+                    <div class="painel-card">
+                        <h2 class="secao-titulo">
+                            <span class="material-symbols-outlined">history</span>
+                            Últimos Simulados
+                        </h2>
+
+                        <div class="simulados-lista">
+                            <div class="simulado-item">
+                                <div class="simulado-info">
+                                    <strong>Simulado Geral #8</strong>
+                                    <span>Hoje às 14:30 • 35 min</span>
+                                </div>
+                                <div class="simulado-resultado">
+                                    <span class="simulado-nota nota-aprovado">24 / 30</span>
+                                    <span class="badge-status badge-excelente">Aprovado</span>
+                                </div>
+                            </div>
+
+                            <div class="simulado-item">
+                                <div class="simulado-info">
+                                    <strong>Simulado Geral #7</strong>
+                                    <span>Ontem às 19:15 • 42 min</span>
+                                </div>
+                                <div class="simulado-resultado">
+                                    <span class="simulado-nota nota-aprovado">22 / 30</span>
+                                    <span class="badge-status badge-excelente">Aprovado</span>
+                                </div>
+                            </div>
+
+                            <div class="simulado-item">
+                                <div class="simulado-info">
+                                    <strong>Simulado Geral #6</strong>
+                                    <span>02 de Março • 48 min</span>
+                                </div>
+                                <div class="simulado-resultado">
+                                    <span class="simulado-nota nota-reprovado">19 / 30</span>
+                                    <span class="badge-status badge-revisao">Reprovado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+            </div>
         </section>
 
         <!-- CONTAINER FLUTUANTE DE FEEDBACK (TOAST) -->

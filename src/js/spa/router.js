@@ -146,6 +146,9 @@ class SpaRouter {
         if (routeName === 'cronograma') {
             return '#cronograma';
         }
+        if (routeName === 'desempenho') {
+            return '#desempenho';
+        }
         return '#inicio';
     }
 
@@ -172,6 +175,12 @@ class SpaRouter {
         // Rota de cronograma
         if (hash === '#cronograma' || hash.startsWith('#cronograma')) {
             this.navigateTo('cronograma', {}, pushState);
+            return;
+        }
+
+        // Rota de desempenho
+        if (hash === '#desempenho' || hash.startsWith('#desempenho')) {
+            this.navigateTo('desempenho', {}, pushState);
             return;
         }
 
