@@ -13,6 +13,11 @@
     <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/utils.css">
     <link rel="stylesheet" href="../css/conteudos.css">
+    <script>
+        // Redireciona para o SPA unificado em telaInicial.html mantendo a rota
+        const hash = window.location.hash || '#conteudos';
+        window.location.replace('./telaInicial.html' + hash);
+    </script>
 </head>
 
 <body>

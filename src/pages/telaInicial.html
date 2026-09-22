@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/utils.css">
+    <link rel="stylesheet" href="../css/conteudos.css">
     <style>
         * {
             margin: 0;
@@ -592,11 +593,11 @@
         </div>
 
         <nav class="navbar-menu">
-            <a href="#" class="navbar-item active">
+            <a href="#inicio" class="navbar-item active" data-nav="inicio">
                 <i class="fa-solid fa-house"></i>
                 <span>Início</span>
             </a>
-            <a href="./conteudos.html" class="navbar-item">
+            <a href="#conteudos" class="navbar-item" data-nav="conteudos">
                 <i class="fa-solid fa-book-open"></i>
                 <span>Conteúdos</span>
             </a>
@@ -623,8 +624,8 @@
     <main class="main">
         <header class="topo">
             <div>
-                <h1>Olá, aluno! <span class="material-symbols-outlined icone-inline">waving_hand</span></h1>
-                <p>Vamos continuar sua preparação para a prova?</p>
+                <h1 id="inicio-saudacao">Olá, aluno! <span class="material-symbols-outlined icone-inline">waving_hand</span></h1>
+                <p id="inicio-subtitulo">Vamos continuar sua preparação para a prova?</p>
             </div>
 
             <a href="../../index.html" class="perfil" title="Sair / Página Inicial">
@@ -636,146 +637,434 @@
             </a>
         </header>
 
-        <section class="progresso">
-            <div class="nivel">
-                <div class="trofeu">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <div>
-                    <h2>Nível 7 — Motorista em Treinamento</h2>
-                    <p>Continue estudando para subir de nível!</p>
-                </div>
-            </div>
-
-            <div class="xp">
-                <div class="xp-topo">
-                    <span>XP</span>
-                    <span>680 / 1000</span>
-                </div>
-                <div class="barra">
-                    <span></span>
-                </div>
-            </div>
-        </section>
-
-        <h2 class="titulo">O que você quer estudar?</h2>
-
-        <section class="cards">
-        <a href="./conteudos.html" class="card">
-                <div class="icone-card verde-card">
-                     <i class="fa-solid fa-book-open"></i>
-                </div>
-    
-                <h3>Conteúdos</h3>
-                <p>Aprenda toda a matéria necessária para sua prova do DETRAN.</p>
-            </a>
-
-            <a href="#" class="card" id="questoes">
-                <div class="icone-card azul-card">
-                    <i class="fa-solid fa-circle-question"></i>
-                </div>
-                <h3>Questões</h3>
-                <p>Pratique com questões e veja onde você precisa melhorar.</p>
-            </a>
-
-            <a href="#" class="card" id="simulado">
-                <div class="icone-card amarelo-card">
-                    <i class="fa-solid fa-clipboard-check"></i>
-                </div>
-                <h3>Simulado</h3>
-                <p>Faça uma prova completa e teste seu conhecimento.</p>
-            </a>
-
-            <a href="./cronograma.html" class="card">
-                <div class="icone-card roxo-card">
-                    <i class="fa-solid fa-calendar-days"></i>
-                </div>
-                <h3>Cronograma</h3>
-                <p>Acompanhe suas tarefas e saiba exatamente o que estudar.</p>
-            </a>
-        </section>
-
-        <section class="inferior">
-            <div class="missao">
-                <div class="titulo-card">
-                    <h2><span class="material-symbols-outlined icone-inline">target</span> Missão de hoje</h2>
-                    <a href="./cronograma.html" class="ver">Ver cronograma</a>
-                </div>
-
-                <div class="tarefa">
-                    <div class="check">
-                        <i class="fa-solid fa-check"></i>
+        <!-- ==========================================
+             SUB-TELA 1: INÍCIO (DASHBOARD)
+             ========================================== -->
+        <section id="view-inicio" class="spa-view">
+            <section class="progresso">
+                <div class="nivel">
+                    <div class="trofeu">
+                        <i class="fa-solid fa-trophy"></i>
                     </div>
                     <div>
-                        <strong>Estudar Legislação</strong>
-                        <span>20 minutos</span>
+                        <h2>Nível 7 — Motorista em Treinamento</h2>
+                        <p>Continue estudando para subir de nível!</p>
                     </div>
                 </div>
 
-                <div class="tarefa">
-                    <div class="check">
+                <div class="xp">
+                    <div class="xp-topo">
+                        <span>XP</span>
+                        <span>680 / 1000</span>
+                    </div>
+                    <div class="barra">
+                        <span></span>
+                    </div>
+                </div>
+            </section>
+
+            <h2 class="titulo">O que você quer estudar?</h2>
+
+            <section class="cards">
+                <a href="#conteudos" class="card" id="card-conteudos" data-nav="conteudos">
+                    <div class="icone-card verde-card">
+                         <i class="fa-solid fa-book-open"></i>
+                    </div>
+        
+                    <h3>Conteúdos</h3>
+                    <p>Aprenda toda a matéria necessária para sua prova do DETRAN.</p>
+                </a>
+
+                <a href="#" class="card" id="questoes">
+                    <div class="icone-card azul-card">
                         <i class="fa-solid fa-circle-question"></i>
                     </div>
-                    <div>
-                        <strong>Responder 10 questões</strong>
-                        <span>Legislação de trânsito</span>
-                    </div>
-                </div>
+                    <h3>Questões</h3>
+                    <p>Pratique com questões e veja onde você precisa melhorar.</p>
+                </a>
 
-                <div class="tarefa">
-                    <div class="check">
+                <a href="#" class="card" id="simulado">
+                    <div class="icone-card amarelo-card">
                         <i class="fa-solid fa-clipboard-check"></i>
                     </div>
-                    <div>
-                        <strong>Fazer um mini simulado</strong>
-                        <span>10 questões</span>
+                    <h3>Simulado</h3>
+                    <p>Faça uma prova completa e teste seu conhecimento.</p>
+                </a>
+
+                <a href="./cronograma.html" class="card">
+                    <div class="icone-card roxo-card">
+                        <i class="fa-solid fa-calendar-days"></i>
+                    </div>
+                    <h3>Cronograma</h3>
+                    <p>Acompanhe suas tarefas e saiba exatamente o que estudar.</p>
+                </a>
+            </section>
+
+            <section class="inferior">
+                <div class="missao">
+                    <div class="titulo-card">
+                        <h2><span class="material-symbols-outlined icone-inline">target</span> Missão de hoje</h2>
+                        <a href="./cronograma.html" class="ver">Ver cronograma</a>
+                    </div>
+
+                    <div class="tarefa">
+                        <div class="check">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <strong>Estudar Legislação</strong>
+                            <span>20 minutos</span>
+                        </div>
+                    </div>
+
+                    <div class="tarefa">
+                        <div class="check">
+                            <i class="fa-solid fa-circle-question"></i>
+                        </div>
+                        <div>
+                            <strong>Responder 10 questões</strong>
+                            <span>Legislação de trânsito</span>
+                        </div>
+                    </div>
+
+                    <div class="tarefa">
+                        <div class="check">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                        </div>
+                        <div>
+                            <strong>Fazer um mini simulado</strong>
+                            <span>10 questões</span>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="desempenho" id="desempenho">
-                <div class="titulo-card">
-                    <h2><span class="material-symbols-outlined icone-inline">bar_chart</span> Seu desempenho</h2>
-                    <a href="./desempenho.html" class="ver">Ver detalhes</a>
+                <div class="desempenho" id="desempenho">
+                    <div class="titulo-card">
+                        <h2><span class="material-symbols-outlined icone-inline">bar_chart</span> Seu desempenho</h2>
+                        <a href="./desempenho.html" class="ver">Ver detalhes</a>
+                    </div>
+
+                    <div class="desempenho-area">
+                        <div class="circulo">
+                            <div class="circulo-interno">
+                                <strong>69%</strong>
+                                <span>aproveitamento</span>
+                            </div>
+                        </div>
+
+                        <div class="estatisticas">
+                            <div class="estatistica">
+                                <span>Questões</span>
+                                <strong>124</strong>
+                            </div>
+                            <div class="estatistica">
+                                <span>Acertos</span>
+                                <strong>86</strong>
+                            </div>
+                            <div class="estatistica">
+                                <span>Simulados</span>
+                                <strong>8</strong>
+                            </div>
+                            <div class="estatistica">
+                                <span>XP conquistado</span>
+                                <strong>680 XP</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+            </section>
 
-                <div class="desempenho-area">
-                    <div class="circulo">
-                        <div class="circulo-interno">
-                            <strong>69%</strong>
-                            <span>aproveitamento</span>
-                        </div>
-                    </div>
-
-                    <div class="estatisticas">
-                        <div class="estatistica">
-                            <span>Questões</span>
-                            <strong>124</strong>
-                        </div>
-                        <div class="estatistica">
-                            <span>Acertos</span>
-                            <strong>86</strong>
-                        </div>
-                        <div class="estatistica">
-                            <span>Simulados</span>
-                            <strong>8</strong>
-                        </div>
-                        <div class="estatistica">
-                            <span>XP conquistado</span>
-                            <strong>680 XP</strong>
-                        </div>
-                    </div>
+            <div class="sequencia">
+                <div class="fogo"><span class="material-symbols-outlined fogo-icon">local_fire_department</span></div>
+                <div>
+                    <h3>5 dias de sequência!</h3>
+                    <p>Estude amanhã para manter sua sequência.</p>
                 </div>
             </div>
         </section>
 
-        <div class="sequencia">
-            <div class="fogo"><span class="material-symbols-outlined fogo-icon">local_fire_department</span></div>
-            <div>
-                <h3>5 dias de sequência!</h3>
-                <p>Estude amanhã para manter sua sequência.</p>
+        <!-- ==========================================
+             SUB-TELA 2: CONTEÚDOS (E-BOOKS)
+             ========================================== -->
+        <section id="view-conteudos" class="spa-view" style="display: none;">
+
+            <!-- BANNER BOAS-VINDAS -->
+            <section class="welcome">
+                <div>
+                    <h2>📚 Hora de estudar!</h2>
+                    <p>
+                        Acesse seus e-books, avance nos conteúdos
+                        e prepare-se para sua aprovação.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+            </section>
+
+            <!-- BUSCA -->
+            <div class="search-area">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search" placeholder="Buscar por assunto ou e-book...">
+                </div>
             </div>
-        </div>
+
+            <!-- FILTROS POR CATEGORIA -->
+            <div class="filters">
+                <button class="filter active" data-category="todos">Todos</button>
+                <button class="filter" data-category="legislacao">Legislação</button>
+                <button class="filter" data-category="placas">Placas</button>
+                <button class="filter" data-category="seguranca">Segurança</button>
+                <button class="filter" data-category="saude">Primeiros Socorros</button>
+                <button class="filter" data-category="ambiente">Meio Ambiente</button>
+            </div>
+
+            <!-- TÍTULO DA SEÇÃO -->
+            <div class="section-title">
+                <h2>Todos os conteúdos</h2>
+                <span id="contador">5 conteúdos</span>
+            </div>
+
+            <!-- GRID DE E-BOOKS -->
+            <section class="ebooks" id="ebooks">
+
+                <!-- CARD 1: Código de Trânsito -->
+                <article class="ebook" data-category="legislacao" data-id="CodigoTransito">
+                    <div class="ebook-cover green">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+
+                    <span class="category">LEGISLAÇÃO</span>
+
+                    <h3>Código de Trânsito</h3>
+
+                    <p>
+                        Aprenda as principais leis e regras
+                        do Código de Trânsito Brasileiro.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            4 módulos
+                        </span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+
+                    <button name="CodigoTransito" class="read-btn" data-id="CodigoTransito">
+                        <i class="fa-solid fa-book-open"></i> Começar a ler
+                    </button>
+                </article>
+
+                <!-- CARD 2: Placas de Trânsito -->
+                <article class="ebook" data-category="placas" data-id="PlacaTransito">
+                    <div class="ebook-cover blue">
+                        <i class="fa-solid fa-road"></i>
+                    </div>
+
+                    <span class="category">SINALIZAÇÃO</span>
+
+                    <h3>Placas de Trânsito</h3>
+
+                    <p>
+                        Conheça os tipos de placas e aprenda
+                        o significado de cada sinalização.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            4 módulos
+                        </span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+
+                    <button name="PlacaTransito" class="read-btn" data-id="PlacaTransito">
+                        <i class="fa-solid fa-book-open"></i> Continuar leitura
+                    </button>
+                </article>
+
+                <!-- CARD 3: Direção Defensiva -->
+                <article class="ebook" data-category="seguranca" data-id="DirecaoOfensiva">
+                    <div class="ebook-cover yellow">
+                        <i class="fa-solid fa-car-burst"></i>
+                    </div>
+
+                    <span class="category">SEGURANÇA</span>
+
+                    <h3>Direção Defensiva</h3>
+
+                    <p>
+                        Aprenda técnicas para prevenir acidentes
+                        e dirigir com mais segurança.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            4 módulos
+                        </span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+
+                    <button name="DirecaoOfensiva" class="read-btn" data-id="DirecaoOfensiva">
+                        <i class="fa-solid fa-book-open"></i> Começar a ler
+                    </button>
+                </article>
+
+                <!-- CARD 4: Primeiros Socorros -->
+                <article class="ebook" data-category="saude" data-id="PrimeirosSocorros">
+                    <div class="ebook-cover red">
+                        <i class="fa-solid fa-kit-medical"></i>
+                    </div>
+
+                    <span class="category">PRIMEIROS SOCORROS</span>
+
+                    <h3>Primeiros Socorros</h3>
+
+                    <p>
+                        Aprenda noções básicas de primeiros
+                        socorros para situações no trânsito.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            4 módulos
+                        </span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+
+                    <button name="PrimeirosSocorros" class="read-btn" data-id="PrimeirosSocorros">
+                        <i class="fa-solid fa-book-open"></i> Começar a ler
+                    </button>
+                </article>
+
+                <!-- CARD 5: Meio Ambiente e Cidadania -->
+                <article class="ebook" data-category="ambiente" data-id="MeioAmbiente">
+                    <div class="ebook-cover purple">
+                        <i class="fa-solid fa-leaf"></i>
+                    </div>
+
+                    <span class="category">MEIO AMBIENTE</span>
+
+                    <h3>Meio Ambiente e Cidadania</h3>
+
+                    <p>
+                        Entenda sustentabilidade, cidadania
+                        e responsabilidade no trânsito.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            4 módulos
+                        </span>
+                        <span>75%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 75%"></div>
+                    </div>
+
+                    <button name="MeioAmbiente" class="read-btn" data-id="MeioAmbiente">
+                        <i class="fa-solid fa-book-open"></i> Começar a ler
+                    </button>
+                </article>
+
+            </section>
+
+        </section>
+
+        <!-- ==========================================
+             SUB-TELA 3: MÓDULOS DO CONTEÚDO (SPA)
+             ========================================== -->
+        <section id="view-modulos" class="spa-view" style="display: none;">
+
+            <!-- NAVEGAÇÃO DE TOPO COM BOTÃO VOLTAR -->
+            <div class="modulos-nav-topo">
+                <button type="button" class="btn-voltar-modulos" id="btn-voltar-conteudos">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar para conteúdos
+                </button>
+
+                <div class="modulos-breadcrumb">
+                    <span class="breadcrumb-root" id="breadcrumb-root-btn">Conteúdos</span>
+                    <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current" id="modulos-breadcrumb-title">Código de Trânsito</span>
+                </div>
+            </div>
+
+            <!-- HERO CARD DO CONTEÚDO SELECIONADO -->
+            <div class="modulo-hero-card" id="modulo-hero-card">
+                <div class="hero-cover green" id="modulo-hero-cover">
+                    <i class="fa-solid fa-scale-balanced" id="modulo-hero-icon"></i>
+                </div>
+
+                <div class="hero-info">
+                    <span class="category" id="modulo-hero-category">LEGISLAÇÃO</span>
+                    <h2 id="modulo-hero-title">Código de Trânsito</h2>
+                    <p id="modulo-hero-desc">
+                        Aprenda as principais leis, normas de circulação, infrações e direitos estabelecidos pelo Código de Trânsito Brasileiro (CTB).
+                    </p>
+
+                    <div class="hero-stats">
+                        <div class="hero-stat-badge highlight">
+                            <i class="fa-solid fa-unlock"></i>
+                            <span id="modulo-hero-liberados">3 Módulos Liberados</span>
+                        </div>
+                        <div class="hero-stat-badge">
+                            <i class="fa-solid fa-lock"></i>
+                            <span id="modulo-hero-bloqueados">1 Módulo Bloqueado</span>
+                        </div>
+                        <div class="hero-progress-wrapper">
+                            <div class="hero-progress-label">
+                                <span>Progresso da Trilha</span>
+                                <span id="modulo-hero-progress-pct">75%</span>
+                            </div>
+                            <div class="hero-progress-bar">
+                                <div class="hero-progress-fill" id="modulo-hero-progress-fill" style="width: 75%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TÍTULO DA LISTAGEM DE MÓDULOS -->
+            <div class="modulos-section-header">
+                <div>
+                    <h3>Módulos de Aprendizagem</h3>
+                    <p>Avance na leitura dos módulos sequencialmente para desbloquear novas lições.</p>
+                </div>
+                <span id="modulos-contador-badge" class="hero-stat-badge">4 módulos</span>
+            </div>
+
+            <!-- CONTAINER DE INJEÇÃO DOS CARDS REUTILIZÁVEIS -->
+            <div class="modules-list" id="modules-list">
+                <!-- Injetado dinamicamente via createModuleCard -->
+            </div>
+
+        </section>
+
+        <!-- CONTAINER FLUTUANTE DE FEEDBACK (TOAST) -->
+        <div id="toast-container" class="toast-container" aria-live="polite"></div>
     </main>
 
     <script type="module" src="../js/pages/dashboard.js"></script>
