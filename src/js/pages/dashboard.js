@@ -37,11 +37,15 @@ ready(() => {
         viewSelector: '#view-modulos',
         navKey: 'conteudos', // Mantém Conteúdos destacado no menu lateral
         onEnter: (params) => {
+            document.body.classList.add('no-sidebar');
             if (params && params.conteudoId) {
                 abrirModulos(params.conteudoId);
             } else {
                 router.navigateTo('conteudos');
             }
+        },
+        onLeave: () => {
+            document.body.classList.remove('no-sidebar');
         }
     });
 

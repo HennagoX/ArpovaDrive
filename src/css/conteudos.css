@@ -316,6 +316,40 @@ body {
    Design System Harmonizado com o AprovaDrive
    ========================================== */
 
+/* MODO FOCO: SEM SIDEBAR NA TELA DE MÓDULOS */
+body.no-sidebar .navbar,
+body.no-sidebar aside.navbar,
+body.no-sidebar .sidebar {
+    display: none !important;
+}
+
+body.no-sidebar .topo {
+    display: none !important;
+}
+
+body.no-sidebar .main {
+    margin-left: 0 !important;
+    padding: 32px 40px !important;
+    max-width: 1150px;
+    margin: 0 auto !important;
+    width: 100% !important;
+    min-height: 100vh;
+    transition: all 0.2s ease;
+}
+
+@media (max-width: 900px) {
+    body.no-sidebar .main {
+        padding: 24px 20px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    body.no-sidebar .main {
+        padding: 16px 14px !important;
+        padding-bottom: 40px !important;
+    }
+}
+
 .modulos-nav-topo {
     margin-bottom: 22px;
     display: flex;

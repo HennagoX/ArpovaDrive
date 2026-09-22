@@ -100,6 +100,15 @@ class SpaRouter {
         this.currentRoute = routeName;
         this.currentParams = params;
 
+        // Controle da sidebar no modo foco para a tela de módulos
+        if (typeof document !== 'undefined' && document.body) {
+            if (routeName === 'modulos') {
+                document.body.classList.add('no-sidebar');
+            } else {
+                document.body.classList.remove('no-sidebar');
+            }
+        }
+
         // Atualiza marcação ativa no menu lateral
         this.updateNavHighlight(route.navKey);
 

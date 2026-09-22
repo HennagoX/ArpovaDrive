@@ -140,6 +140,7 @@ ready(() => {
         }
 
         // Alterna visibilidade entre as sub-telas SPA
+        document.body.classList.add('no-sidebar');
         if (viewConteudos) viewConteudos.style.display = 'none';
         if (viewModulos) {
             viewModulos.style.display = 'block';
@@ -165,6 +166,7 @@ ready(() => {
      * @param {boolean} pushState 
      */
     function voltarParaConteudos(pushState = true) {
+        document.body.classList.remove('no-sidebar');
         if (viewModulos) viewModulos.style.display = 'none';
         if (viewConteudos) {
             viewConteudos.style.display = 'block';

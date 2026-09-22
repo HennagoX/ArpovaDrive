@@ -43,6 +43,10 @@ export function initModulosView(router) {
 export function abrirModulos(conteudoId) {
     if (!conteudoId) return;
 
+    if (typeof document !== 'undefined' && document.body) {
+        document.body.classList.add('no-sidebar');
+    }
+
     const conteudo = getConteudoById(conteudoId);
     if (!conteudo) {
         console.warn(`[ModulosView] Conteúdo "${conteudoId}" não encontrado.`);
