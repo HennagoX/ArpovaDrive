@@ -81,13 +81,12 @@ export function createModuleCard(modulo, options = {}) {
     }
 
     const pdfBadgeHtml = modulo.pdfNome
-        ? `<span class="module-meta-item" style="color: #ef4444; font-weight: 700;"><i class="fa-solid fa-file-pdf"></i> PDF</span>`
+        ? `<span class="module-meta-pdf"><i class="fa-solid fa-file-pdf"></i> Material PDF</span>`
         : '';
 
     card.innerHTML = `
         <div class="module-index-box">
             <span class="module-number">${numeroFormatado}</span>
-            <div class="module-status-icon">${statusIconHtml}</div>
         </div>
 
         <div class="module-content">
