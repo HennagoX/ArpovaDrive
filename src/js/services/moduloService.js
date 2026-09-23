@@ -15,6 +15,8 @@ const inFlightRequests = new Map();
 const lastFetchTimestamps = new Map();
 const CACHE_TTL_MS = 25000; // 25 segundos de validade para evitar requisições repetidas a cada clique
 
+export const MAX_MODULO = 10;
+
 /**
  * Obtém o identificador de usuário para as requisições de módulos
  * @param {string} [userId]
@@ -45,23 +47,24 @@ export function getModuloStorageKey(contentId, userId) {
 /**
  * Obtém de forma síncrona e instantânea (0ms) o progresso do módulo a partir do localStorage.
  * Permite renderização imediata da tela sem aguardar requisições de rede.
+ * Limita o progresso ao máximo de 10 módulos.
  * 
  * @param {string} contentId - Identificador do conteúdo (ex: 'CodigoTransito')
  * @param {string} [userId] - Identificador do usuário
- * @returns {number} Número do módulo atual (mínimo 1)
+ * @returns {number} Número do módulo atual (entre 1 e 10)
  */
 export function getModuloAtualCached(contentId, userId) {
     if (!contentId) return 1;
     const storageKey = getModuloStorageKey(contentId, userId);
     const cached = getLocalItem(storageKey, null);
     if (cached !== null && !isNaN(Number(cached))) {
-        return Math.max(1, Number(cached));
+        return Math.min(MAX_MODULO, Math.max(1, Number(cached)));
     }
     return 1;
 }
 
 /**
- * Atualiza o progresso do módulo diretamente no localStorage
+ * Atualiza o progresso do módulo diretamente no localStorage, respeitando o limite de 10 módulos.
  * @param {string} contentId 
  * @param {number} moduloNumero 
  * @param {string} [userId] 
@@ -69,7 +72,7 @@ export function getModuloAtualCached(contentId, userId) {
 export function setModuloAtualCached(contentId, moduloNumero, userId) {
     if (!contentId) return;
     const storageKey = getModuloStorageKey(contentId, userId);
-    const num = Math.max(1, Number(moduloNumero || 1));
+    const num = Math.min(MAX_MODULO, Math.max(1, Number(moduloNumero || 1)));
     setLocalItem(storageKey, num);
     lastFetchTimestamps.set(storageKey, Date.now());
 }
@@ -123,7 +126,7 @@ export async function getModuloAtual(contentId, userId, options = {}) {
 
             if (response.ok) {
                 const data = await response.json();
-                const moduloAtual = Math.max(1, Number(data.modulo_atual || 1));
+                const moduloAtual = Math.min(MAX_MODULO, Math.max(1, Number(data.modulo_atual || 1)));
                 const mudou = moduloAtual !== cachedValue;
 
                 setLocalItem(storageKey, moduloAtual);
@@ -158,6 +161,7 @@ export async function getModuloAtual(contentId, userId, options = {}) {
 /**
  * Avança o usuário para o próximo módulo (+1) chamando a rota POST /modulo/next da API.
  * Atualiza o localStorage imediatamente para garantir consistência visual em toda a aplicação.
+ * Limita a contagem ao teto de 10 módulos.
  * 
  * @param {string} contentId - Identificador do conteúdo (ex: 'CodigoTransito')
  * @param {string} [userId] - Identificador do usuário
@@ -171,7 +175,7 @@ export async function avancarModulo(contentId, userId) {
     const activeUserId = getModuloUserId(userId);
     const storageKey = getModuloStorageKey(contentId, activeUserId);
     const cachedAtual = getModuloAtualCached(contentId, activeUserId);
-    const proximoEsperado = cachedAtual + 1;
+    const proximoEsperado = Math.min(MAX_MODULO, cachedAtual + 1);
 
     // Atualização otimista imediata no localStorage
     setLocalItem(storageKey, proximoEsperado);
@@ -200,7 +204,7 @@ export async function avancarModulo(contentId, userId) {
             throw new Error(errorMsg);
         }
 
-        const moduloAtual = Math.max(proximoEsperado, Number(data.modulo_atual || proximoEsperado));
+        const moduloAtual = Math.min(MAX_MODULO, Math.max(proximoEsperado, Number(data.modulo_atual || proximoEsperado)));
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
 

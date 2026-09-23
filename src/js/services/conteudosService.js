@@ -505,7 +505,7 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
         let bloqueado = false;
 
         if (moduloAtual !== null && moduloAtual !== undefined) {
-            const nivelAtual = Math.max(1, Number(moduloAtual));
+            const nivelAtual = Math.min(10, Math.max(1, Number(moduloAtual)));
             if (num < nivelAtual) {
                 status = 'done';
                 bloqueado = false;

@@ -106,7 +106,7 @@ export function initModulosView(router) {
 
                 // Chamada à rota do backend (POST /modulo/next) para persistir o progresso
                 const resultado = await avancarModulo(activeConteudoId);
-                const proxModuloNum = Number(resultado.modulo_atual || numModuloAtual + 1);
+                const proxModuloNum = Math.min(10, Number(resultado.modulo_atual || Math.min(10, numModuloAtual + 1)));
 
                 // Atualiza cirurgicamente o DOM dos módulos imediatamente
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
