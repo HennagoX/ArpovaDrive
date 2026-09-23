@@ -7,11 +7,11 @@ export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o mó
  * @param {string} filename - Nome do arquivo PDF em assets/PDFs
  * @returns {string} Caminho URL-encoded para o PDF
  */
-export function resolvePdfUrl(filename) {
+export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
     let path = filename;
     if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/')) {
-        path = `modulo1/${filename}`;
+        path = `${folder}/${filename}`;
     }
     const encoded = encodeURI(path);
     if (typeof window !== 'undefined' && window.location && window.location.pathname) {
@@ -169,6 +169,7 @@ export const CONTEUDOS_DATA = {
         categoriaKey: 'placas',
         cor: 'blue',
         icone: 'fa-solid fa-road',
+        pdfFolder: 'modulo2',
         descricao: 'Domine a sinalização vertical, horizontal, semafórica e gestos de agentes para trafegar com segurança e acertar tudo na prova.',
         totalCapitulos: 10,
         modulos: [
@@ -179,7 +180,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Conceitos gerais, hierarquia da sinalização, finalidades e princípios estabelecidos pelo CTB.',
                 duracao: '15 min',
                 topicos: 4,
-                pdfNome: 'Modulo 01 - Introducao a Sinalizacao.pdf',
+                pdfNome: 'modulo2/Modulo 01 - Introducao a Sinalizacao.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 01 - Introducao a Sinalizacao.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -191,7 +192,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Classificação da sinalização fixada em suportes verticais: regulamentação, advertência e indicação.',
                 duracao: '20 min',
                 topicos: 5,
-                pdfNome: 'Modulo 02 - Sinalizacao Vertical.pdf',
+                pdfNome: 'modulo2/Modulo 02 - Sinalizacao Vertical.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 02 - Sinalizacao Vertical.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -203,7 +204,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Placas vermelhas e redondas de obrigações, restrições e proibições de cumprimento obrigatório.',
                 duracao: '25 min',
                 topicos: 6,
-                pdfNome: 'Modulo 03 - Placas de Regulamentacao.pdf',
+                pdfNome: 'modulo2/Modulo 03 - Placas de Regulamentacao.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 03 - Placas de Regulamentacao.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -215,7 +216,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Placas amarelas de atenção prévia a perigos potenciais, curvas, aclives e estreitamentos na pista.',
                 duracao: '25 min',
                 topicos: 5,
-                pdfNome: 'Modulo 04 - Placas de Advertencia.pdf',
+                pdfNome: 'modulo2/Modulo 04 - Placas de Advertencia.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 04 - Placas de Advertencia.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -227,7 +228,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Sinalização de identificação de rodovias, destinos, distâncias, serviços auxiliares e atrativos turísticos.',
                 duracao: '20 min',
                 topicos: 4,
-                pdfNome: 'Modulo 05 - Placas de Indicacao.pdf',
+                pdfNome: 'modulo2/Modulo 05 - Placas de Indicacao.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 05 - Placas de Indicacao.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -239,7 +240,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Marcas viárias pintadas no pavimento: faixas contínuas, seccionadas, faixas de pedestre e marcas de canalização.',
                 duracao: '25 min',
                 topicos: 5,
-                pdfNome: 'Modulo 06 - Sinalizacao Horizontal.pdf',
+                pdfNome: 'modulo2/Modulo 06 - Sinalizacao Horizontal.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 06 - Sinalizacao Horizontal.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -251,7 +252,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Sinalização semafórica para veículos e pedestres, fases, tempos de verde, amarelo e vermelho.',
                 duracao: '20 min',
                 topicos: 4,
-                pdfNome: 'Modulo 07 - Semaforos.pdf',
+                pdfNome: 'modulo2/Modulo 07 - Semaforos.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 07 - Semaforos.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -263,7 +264,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Comandos gestuais e ordens emitidas pela autoridade de trânsito que prevalecem sobre as demais regras.',
                 duracao: '20 min',
                 topicos: 4,
-                pdfNome: 'Modulo 08 - Sinais dos Agentes de Transito.pdf',
+                pdfNome: 'modulo2/Modulo 08 - Sinais dos Agentes de Transito.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 08 - Sinais dos Agentes de Transito.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -275,7 +276,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Silvos de apito do agente, dispositivos auxiliares de segurança, barreiras e sinalização temporária de obras.',
                 duracao: '20 min',
                 topicos: 4,
-                pdfNome: 'Modulo 09 - Sinais Sonoros e Outros Sinais.pdf',
+                pdfNome: 'modulo2/Modulo 09 - Sinais Sonoros e Outros Sinais.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 09 - Sinais Sonoros e Outros Sinais.pdf'),
                 status: 'available',
                 bloqueado: false
@@ -287,7 +288,7 @@ export const CONTEUDOS_DATA = {
                 descricao: 'Guia comparativo definitivo das placas mais cobradas e com maiores taxas de pegadinhas nas provas teóricas.',
                 duracao: '30 min',
                 topicos: 6,
-                pdfNome: 'Modulo 10 - Como Nao Confundir as Placas.pdf',
+                pdfNome: 'modulo2/Modulo 10 - Como Nao Confundir as Placas.pdf',
                 pdfUrl: resolvePdfUrl('modulo2/Modulo 10 - Como Nao Confundir as Placas.pdf'),
                 status: 'locked',
                 bloqueado: true
@@ -493,11 +494,12 @@ export function getModulosByConteudoId(id) {
     }
 
     const total = conteudo.modulos.length;
+    const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : 'modulo1');
     return conteudo.modulos.map((modulo, index) => {
         // Regra solicitada:
         // "continua com o último bloqueado pra simular ta... mas os pdfs que vão abrir são esses mesmo... o décimo no caso fica bloqueado o botão"
         const isLast = index === total - 1;
-        const pdfUrl = modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome) : (modulo.pdfUrl || null);
+        const pdfUrl = modulo.pdfUrl || (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null);
         return {
             ...modulo,
             pdfUrl,
