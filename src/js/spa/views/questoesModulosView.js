@@ -81,11 +81,17 @@ export function abrirQuestoesModulos(materiaId) {
     if (breadcrumbTitle) setText(breadcrumbTitle, materia.titulo);
 
     // Atualiza tema visual dinâmico com base na cor da matéria
+    const temaCor = materia.cor || 'green';
     if (viewQuestoesModulos) {
         const themeClasses = Array.from(viewQuestoesModulos.classList).filter(c => c.startsWith('modulos-theme-'));
         themeClasses.forEach(c => viewQuestoesModulos.classList.remove(c));
-        const temaCor = materia.cor || 'green';
         viewQuestoesModulos.classList.add(`modulos-theme-${temaCor}`);
+    }
+    const modal = qs("#modal-avancar-modulo");
+    if (modal) {
+        const themeClasses = Array.from(modal.classList).filter(c => c.startsWith('modulos-theme-'));
+        themeClasses.forEach(c => modal.classList.remove(c));
+        modal.classList.add(`modulos-theme-${temaCor}`);
     }
 
     // Atualiza Hero Card

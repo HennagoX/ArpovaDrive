@@ -220,6 +220,19 @@ export function initModulosView(router) {
 }
 
 /**
+ * Aplica a classe de cor temática ao modal global (#modal-avancar-modulo)
+ * @param {string} temaCor - Nome da cor ('green', 'blue', 'yellow', 'red', 'purple')
+ */
+export function aplicarTemaModal(temaCor = 'green') {
+    const modal = qs("#modal-avancar-modulo");
+    if (modal) {
+        const themeClasses = Array.from(modal.classList).filter(c => c.startsWith('modulos-theme-'));
+        themeClasses.forEach(c => modal.classList.remove(c));
+        modal.classList.add(`modulos-theme-${temaCor}`);
+    }
+}
+
+/**
  * Atualiza e renderiza os módulos do conteúdo selecionado integrando com o banco de dados
  * @param {string} conteudoId 
  */
@@ -272,13 +285,14 @@ export async function abrirModulos(conteudoId) {
     if (breadcrumbTitle) setText(breadcrumbTitle, conteudo.titulo);
 
     // Atualiza o tema visual da tela de módulos com base na cor do conteúdo
+    const temaCor = conteudo.cor || 'green';
     const viewModulos = qs("#view-modulos");
     if (viewModulos) {
         const themeClasses = Array.from(viewModulos.classList).filter(c => c.startsWith('modulos-theme-'));
         themeClasses.forEach(c => viewModulos.classList.remove(c));
-        const temaCor = conteudo.cor || 'green';
         viewModulos.classList.add(`modulos-theme-${temaCor}`);
     }
+    aplicarTemaModal(temaCor);
 
     // Atualiza o Hero Card do conteúdo
     if (heroCover) {
@@ -367,13 +381,14 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     }
 
     // Configura os elementos da tela de visualização
+    const temaCor = conteudo.cor || 'green';
     const viewLeitura = qs("#view-leitura-pdf");
     if (viewLeitura) {
         const themeClasses = Array.from(viewLeitura.classList).filter(c => c.startsWith('modulos-theme-'));
         themeClasses.forEach(c => viewLeitura.classList.remove(c));
-        const temaCor = conteudo.cor || 'green';
         viewLeitura.classList.add(`modulos-theme-${temaCor}`);
     }
+    aplicarTemaModal(temaCor);
 
     // Atualiza cabeçalhos e breadcrumb da leitura
     const breadcrumbRoot = qs("#breadcrumb-leitura-modulo-root");
@@ -431,6 +446,8 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
 export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, proximoModulo) {
     const modal = qs("#modal-avancar-modulo");
     if (!modal) return;
+
+    aplicarTemaModal(conteudo?.cor || 'green');
 
     proximoModuloPendente = proximoModulo || null;
 
