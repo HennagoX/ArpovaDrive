@@ -10,7 +10,7 @@ export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o mó
 export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
     let path = filename;
-    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/')) {
+    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo4/')) {
         path = `${folder}/${filename}`;
     }
     const encoded = encodeURI(path);
@@ -358,46 +358,127 @@ export const CONTEUDOS_DATA = {
         categoriaKey: 'saude',
         cor: 'red',
         icone: 'fa-solid fa-kit-medical',
+        pdfFolder: 'modulo4',
         descricao: 'Orientações práticas de atendimento emergencial para prestar auxílio seguro em sinistros de trânsito sem se colocar em risco.',
-        totalCapitulos: 6,
+        totalCapitulos: 10,
         modulos: [
             {
                 id: 'soc-mod-1',
                 numero: 1,
-                titulo: 'Segurança no Local e Acionamento de Socorro Especializado',
-                descricao: 'Primeiras providências: isolar e sinalizar o local do acidente com triângulo, prevenir novos choques e acionar SAMU (192) e Resgate (193).',
+                titulo: 'Introdução aos Primeiros Socorros',
+                descricao: 'Conceitos essenciais, dever legal de auxílio (art. 176 do CTB), limites de atuação do cidadão e postura segura sem agravamento de danos.',
                 duracao: '20 min',
                 topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_01_Introducao_aos_Primeiros_Socorros.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_01_Introducao_aos_Primeiros_Socorros.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'soc-mod-2',
                 numero: 2,
-                titulo: 'Avaliação Primária e Respiração da Vítima',
-                descricao: 'Verificação rápida de responsividade, respiração e orientações sobre imobilização provisória da região cervical.',
-                duracao: '25 min',
+                titulo: 'Ao Presenciar um Acidente',
+                descricao: 'Sequência geral de procedimentos: manter a calma, identificação de perigos imediatos, sinalização sem riscos e acionamento dos canais oficiais.',
+                duracao: '20 min',
                 topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_02_Ao_Presenciar_um_Acidente.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_02_Ao_Presenciar_um_Acidente.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'soc-mod-3',
                 numero: 3,
-                titulo: 'Controle de Hemorragias e Cuidados Iniciais',
-                descricao: 'Identificação e controle de sangramentos externos através de compressão direta com pano limpo, evitando infecções.',
+                titulo: 'Segurança da Cena',
+                descricao: 'Avaliação do entorno viário, checklist visual de riscos secundários (combustível, fios caídos, tráfego ativo) e proteção do local.',
                 duracao: '20 min',
-                topicos: 3,
+                topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_03_Seguranca_da_Cena.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_03_Seguranca_da_Cena.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'soc-mod-4',
                 numero: 4,
-                titulo: 'Ações Fatais: O que NUNCA fazer em um Acidente',
-                descricao: 'Ações proibidas que podem agravar o estado da vítima: nunca retirar o capacete de motociclista e não movimentar a coluna.',
+                titulo: 'Acione os Serviços de Emergência',
+                descricao: 'Canais oficiais de socorro (SAMU 192, Bombeiros 193, PM 190, PRF 191), triagem correta e transmissão precisa de dados ao atendente.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_04_Servicos_de_Emergencia.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_04_Servicos_de_Emergencia.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-5',
+                numero: 5,
+                titulo: 'Avaliação Inicial da Vítima',
+                descricao: 'Verificação de responsividade, respiração e consciência; comunicação clara com a vítima e orientações para não realizar manobras invasivas.',
+                duracao: '25 min',
+                topicos: 5,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_05_Avaliacao_Inicial_da_Vitima.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_05_Avaliacao_Inicial_da_Vitima.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-6',
+                numero: 6,
+                titulo: 'Vítimas Inconscientes',
+                descricao: 'Cuidados específicos com ausência de resposta, proteção da coluna cervical, riscos de movimentação indevida e manutenção da vigilância.',
                 duracao: '25 min',
                 topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_06_Vitimas_Inconscientes.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_06_Vitimas_Inconscientes.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-7',
+                numero: 7,
+                titulo: 'Sangramentos e Ferimentos',
+                descricao: 'Identificação de hemorragias externas, uso de barreiras de proteção, cuidados essenciais e condutas terminantemente proibidas.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_07_Sangramentos_e_Ferimentos.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_07_Sangramentos_e_Ferimentos.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-8',
+                numero: 8,
+                titulo: 'Fraturas, Traumas e Lesões',
+                descricao: 'Reconhecimento de sinais de fraturas e traumas em cabeça, pescoço e membros, e a regra de ouro de nunca retirar o capacete.',
+                duracao: '25 min',
+                topicos: 5,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_08_Fraturas_Traumas_e_Lesoes.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_08_Fraturas_Traumas_e_Lesoes.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-9',
+                numero: 9,
+                titulo: 'Queimaduras e Incêndios',
+                descricao: 'Proteção individual em cenários com fogo, fumaça ou líquidos aquecidos, acionamento do 193 e condutas preventivas contra novas vítimas.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_09_Queimaduras_e_Incendios.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_09_Queimaduras_e_Incendios.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'soc-mod-10',
+                numero: 10,
+                titulo: 'Choque Elétrico e Outros Riscos',
+                descricao: 'Precauções com cabos caídos e veículos energizados, produtos perigosos, cargas instáveis e acionamento de resgate especializado.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo4/AprovaDrive_Modulo_10_Choque_Eletrico_e_Outros_Riscos.pdf',
+                pdfUrl: resolvePdfUrl('modulo4/AprovaDrive_Modulo_10_Choque_Eletrico_e_Outros_Riscos.pdf'),
                 status: 'locked',
                 bloqueado: true
             }
@@ -496,7 +577,7 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
     }
 
     const total = conteudo.modulos.length;
-    const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : 'modulo1');
+    const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : (id === 'PrimeirosSocorros' ? 'modulo4' : 'modulo1'));
     return conteudo.modulos.map((modulo, index) => {
         const num = Number(modulo.numero || (index + 1));
         const pdfUrl = modulo.pdfUrl || (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null);
