@@ -100,14 +100,15 @@ class SpaRouter {
         this.currentRoute = routeName;
         this.currentParams = params;
 
-        // Controle da sidebar no modo foco para telas de módulos
+        // Controle da sidebar no modo foco para telas de módulos e leitura de PDF
         if (typeof document !== 'undefined' && document.body) {
-            if (routeName === 'modulos' || routeName === 'questoes-modulos') {
+            if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf') {
                 document.body.classList.add('no-sidebar');
             } else {
                 document.body.classList.remove('no-sidebar');
             }
         }
+
 
         // Atualiza marcação ativa no menu lateral
         this.updateNavHighlight(route.navKey);
@@ -146,6 +147,9 @@ class SpaRouter {
      * Monta o hash da URL para a rota e parâmetros
      */
     buildHash(routeName, params = {}) {
+        if (routeName === 'leitura-pdf' && params.conteudoId && params.moduloNumero) {
+            return `#leitura=${encodeURIComponent(params.conteudoId)}&modulo=${encodeURIComponent(params.moduloNumero)}`;
+        }
         if (routeName === 'modulos' && params.conteudoId) {
             return `#modulo=${encodeURIComponent(params.conteudoId)}`;
         }
@@ -173,6 +177,15 @@ class SpaRouter {
     resolveCurrentUrl(pushState = false) {
         const hash = window.location.hash || '';
 
+        // Rota de leitura de PDF do módulo
+        const leituraMatch = hash.match(/#leitura=([^&]+)&modulo=([^&]+)/);
+        if (leituraMatch && leituraMatch[1] && leituraMatch[2]) {
+            const conteudoId = decodeURIComponent(leituraMatch[1]);
+            const moduloNumero = Number(decodeURIComponent(leituraMatch[2]));
+            this.navigateTo('leitura-pdf', { conteudoId, moduloNumero }, pushState);
+            return;
+        }
+
         // Rota de módulo específico de estudos
         const moduloMatch = hash.match(/#modulo=([^&]+)/);
         if (moduloMatch && moduloMatch[1]) {
@@ -180,6 +193,7 @@ class SpaRouter {
             this.navigateTo('modulos', { conteudoId }, pushState);
             return;
         }
+
 
         // Rota de baterias de questões de matéria específica
         const questoesMatch = hash.match(/#questoes-materia=([^&]+)/);

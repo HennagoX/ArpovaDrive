@@ -481,13 +481,15 @@ export function getConteudoById(id) {
 
 /**
  * Retorna os módulos de um conteúdo pelo ID.
- * Garante a regra de negócio do frontend:
- * - Todos os módulos anteriores livres (unlocked).
- * - O último módulo sempre bloqueado (locked).
+ * Se informado moduloAtual, sincroniza com o banco de dados da API:
+ * - Módulos com número < moduloAtual ficam com status 'done' (concluídos) e liberados.
+ * - Módulo com número == moduloAtual fica com status 'available' (liberado para estudo).
+ * - Módulos com número > moduloAtual ficam com status 'locked' (bloqueados).
  * @param {string} id
+ * @param {number|null} [moduloAtual=null]
  * @returns {Array<Object>}
  */
-export function getModulosByConteudoId(id) {
+export function getModulosByConteudoId(id, moduloAtual = null) {
     const conteudo = getConteudoById(id);
     if (!conteudo || !Array.isArray(conteudo.modulos)) {
         return [];
@@ -496,15 +498,36 @@ export function getModulosByConteudoId(id) {
     const total = conteudo.modulos.length;
     const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : 'modulo1');
     return conteudo.modulos.map((modulo, index) => {
-        // Regra solicitada:
-        // "continua com o último bloqueado pra simular ta... mas os pdfs que vão abrir são esses mesmo... o décimo no caso fica bloqueado o botão"
-        const isLast = index === total - 1;
+        const num = Number(modulo.numero || (index + 1));
         const pdfUrl = modulo.pdfUrl || (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null);
+
+        let status = 'available';
+        let bloqueado = false;
+
+        if (moduloAtual !== null && moduloAtual !== undefined) {
+            const nivelAtual = Math.max(1, Number(moduloAtual));
+            if (num < nivelAtual) {
+                status = 'done';
+                bloqueado = false;
+            } else if (num === nivelAtual) {
+                status = 'available';
+                bloqueado = false;
+            } else {
+                status = 'locked';
+                bloqueado = true;
+            }
+        } else {
+            const isLast = index === total - 1;
+            status = isLast ? 'locked' : 'available';
+            bloqueado = isLast;
+        }
+
         return {
             ...modulo,
             pdfUrl,
-            status: isLast ? 'locked' : 'available',
-            bloqueado: isLast
+            status,
+            bloqueado
         };
     });
 }
+

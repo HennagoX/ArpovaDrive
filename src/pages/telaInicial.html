@@ -1067,6 +1067,86 @@
         </section>
 
         <!-- ==========================================
+             SUB-TELA 3.5: LEITURA DE PDF DO MÓDULO (SPA)
+             ========================================== -->
+        <section id="view-leitura-pdf" class="spa-view modulos-theme-green" style="display: none;">
+
+            <!-- NAVEGAÇÃO DE TOPO -->
+            <div class="leitura-nav-topo">
+                <div class="leitura-nav-left">
+                    <button type="button" class="btn-voltar-modulos" id="btn-voltar-leitura-modulos">
+                        <i class="fa-solid fa-arrow-left"></i> Voltar aos Módulos
+                    </button>
+
+                    <div class="modulos-breadcrumb">
+                        <span class="breadcrumb-root" id="breadcrumb-leitura-conteudos">Conteúdos</span>
+                        <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                        <span class="breadcrumb-root" id="breadcrumb-leitura-modulo-root">Código de Trânsito</span>
+                        <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                        <span class="breadcrumb-current" id="breadcrumb-leitura-modulo-atual">Módulo 01</span>
+                    </div>
+                </div>
+
+                <div class="leitura-nav-right">
+                    <a id="btn-abrir-pdf-nova-aba" href="#" target="_blank" rel="noopener noreferrer" class="btn-pdf-external" title="Abrir PDF em nova aba">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir em nova aba
+                    </a>
+                    <button type="button" class="btn-avancar-modulo-topo" id="btn-avancar-modulo-topo" title="Concluir leitura e desbloquear o próximo módulo">
+                        <i class="fa-solid fa-forward-step"></i> Avançar Módulo
+                    </button>
+                </div>
+            </div>
+
+            <!-- CABEÇALHO DO LEITOR DE PDF -->
+            <div class="leitura-header-card">
+                <div class="leitura-header-icon" id="leitura-header-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <div class="leitura-header-info">
+                    <div class="leitura-header-meta">
+                        <span class="leitura-badge-modulo" id="leitura-modulo-numero-badge">Módulo 01</span>
+                        <span class="leitura-meta-item" id="leitura-modulo-duracao"><i class="fa-regular fa-clock"></i> 20 min</span>
+                        <span class="leitura-meta-item" id="leitura-modulo-topicos"><i class="fa-regular fa-file-lines"></i> 4 tópicos</span>
+                    </div>
+                    <h2 class="leitura-titulo" id="leitura-modulo-titulo">Conhecendo o Trânsito</h2>
+                    <p class="leitura-descricao" id="leitura-modulo-desc">Conceitos fundamentais de trânsito, vias públicas, circulação segura e o papel do cidadão nas vias brasileiras.</p>
+                </div>
+            </div>
+
+            <!-- CONTAINER DO PDF EMBARCADO -->
+            <div class="leitura-pdf-container">
+                <iframe id="leitura-pdf-frame" class="leitura-pdf-frame" src="" title="Material de Estudo em PDF"></iframe>
+            </div>
+
+            <!-- MODAL SIMPLES: AVANÇAR PARA O PRÓXIMO MÓDULO -->
+            <div id="modal-avancar-modulo" class="modal-modulo-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-modulo-titulo">
+                <div class="modal-modulo-card">
+                    <button type="button" class="modal-modulo-close" id="btn-fechar-modal-modulo" aria-label="Fechar modal">&times;</button>
+                    
+                    <div class="modal-modulo-icon-circle">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+
+                    <span class="modal-modulo-tag" id="modal-modulo-tag">Módulo 01</span>
+                    <h3 class="modal-modulo-titulo" id="modal-modulo-titulo">Avançar para o próximo módulo?</h3>
+                    <p class="modal-modulo-descricao" id="modal-modulo-descricao">
+                        Você iniciou a leitura deste módulo. Deseja registrar a conclusão e desbloquear o próximo módulo agora?
+                    </p>
+
+                    <div class="modal-modulo-actions">
+                        <button type="button" class="btn-modal-avancar" id="btn-modal-confirmar-avanco">
+                            <i class="fa-solid fa-forward-step"></i> Avançar para o próximo módulo
+                        </button>
+                        <button type="button" class="btn-modal-continuar" id="btn-modal-continuar-leitura">
+                            <i class="fa-regular fa-eye"></i> Continuar lendo este módulo
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ==========================================
              SUB-TELA 4: CRONOGRAMA DA SEMANA (SPA)
              ========================================== -->
         <section id="view-cronograma" class="spa-view container" style="display: none;">

@@ -68,9 +68,9 @@ export function createModuleCard(modulo, options = {}) {
         `;
     } else if (modulo.pdfUrl) {
         actionButtonHtml = `
-            <a href="${modulo.pdfUrl}" target="_blank" rel="noopener noreferrer" class="btn-action btn-ler" title="Abrir material em PDF do módulo">
+            <button type="button" class="btn-action btn-ler" title="Abrir material em PDF do módulo">
                 <i class="fa-solid fa-file-pdf icone-inline"></i> Ler Módulo
-            </a>
+            </button>
         `;
     } else {
         actionButtonHtml = `
@@ -79,6 +79,7 @@ export function createModuleCard(modulo, options = {}) {
             </button>
         `;
     }
+
 
     const pdfBadgeHtml = modulo.pdfNome
         ? `<span class="module-meta-pdf"><i class="fa-solid fa-file-pdf"></i> Material PDF</span>`
@@ -143,14 +144,12 @@ export function createModuleCard(modulo, options = {}) {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (event) => {
             if (event.target.closest('.btn-ler')) return;
-            if (modulo.pdfUrl) {
-                window.open(modulo.pdfUrl, '_blank', 'noopener,noreferrer');
-            }
             if (typeof options.onRead === 'function') {
                 options.onRead(modulo, card);
             }
         });
     }
+
 
     return card;
 }

@@ -1,8 +1,11 @@
 /**
- * Módulo de Visão: Módulos do Conteúdo Selecionado (SPA)
+ * Módulo de Visão: Módulos do Conteúdo Selecionado e Leitura de PDF (SPA)
  * 
- * Gerencia a renderização dos cards reutilizáveis de módulos de um conteúdo,
- * feedbacks de bloqueio e retorno para a biblioteca.
+ * Gerencia:
+ * - A listagem e renderização dos cards de módulos do conteúdo selecionado
+ * - A sincronização do progresso atual com o backend (PostgreSQL)
+ * - A abertura da tela de leitura embarcada de PDFs
+ * - O modal de confirmação e chamada à API para avançar para o próximo módulo (+1)
  */
 
 import { qs, setText } from '../../utils/dom.js';
@@ -11,15 +14,25 @@ import {
     getModulosByConteudoId,
     LOCKED_MODULE_MESSAGE
 } from '../../services/conteudosService.js';
+import { getModuloAtual, avancarModulo } from '../../services/moduloService.js';
 import { createModuleCard } from '../../components/moduleCard.js';
 
 let initialized = false;
 let toastTimeout = null;
+let routerRef = null;
+let activeConteudoId = null;
+let activeModulo = null;
 
+/**
+ * Inicializa ouvintes de eventos da tela de módulos e do leitor de PDF
+ * @param {Object} router - Instância do SPA Router
+ */
 export function initModulosView(router) {
+    routerRef = router;
     if (initialized) return;
     initialized = true;
 
+    // 1. Navegação de retorno da tela de lista de módulos
     const btnVoltar = qs("#btn-voltar-conteudos");
     const breadcrumbRoot = qs("#breadcrumb-root-btn");
 
@@ -34,14 +47,126 @@ export function initModulosView(router) {
             router.navigateTo("conteudos");
         });
     }
+
+    // 2. Navegação de retorno da tela de leitura de PDF
+    const btnVoltarLeitura = qs("#btn-voltar-leitura-modulos");
+    const breadcrumbLeituraConteudos = qs("#breadcrumb-leitura-conteudos");
+    const breadcrumbLeituraModuloRoot = qs("#breadcrumb-leitura-modulo-root");
+
+    if (btnVoltarLeitura && router) {
+        btnVoltarLeitura.addEventListener("click", () => {
+            if (activeConteudoId) {
+                router.navigateTo("modulos", { conteudoId: activeConteudoId });
+            } else {
+                router.navigateTo("conteudos");
+            }
+        });
+    }
+
+    if (breadcrumbLeituraConteudos && router) {
+        breadcrumbLeituraConteudos.addEventListener("click", () => {
+            router.navigateTo("conteudos");
+        });
+    }
+
+    if (breadcrumbLeituraModuloRoot && router) {
+        breadcrumbLeituraModuloRoot.addEventListener("click", () => {
+            if (activeConteudoId) {
+                router.navigateTo("modulos", { conteudoId: activeConteudoId });
+            } else {
+                router.navigateTo("conteudos");
+            }
+        });
+    }
+
+    // 3. Botão do topo para abrir/reabrir modal de avanço na tela de leitura
+    const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
+    if (btnAvancarTopo) {
+        btnAvancarTopo.addEventListener("click", () => {
+            if (activeConteudoId && activeModulo) {
+                const conteudo = getConteudoById(activeConteudoId);
+                abrirModalAvancar(conteudo, activeModulo);
+            }
+        });
+    }
+
+    // 4. Ações da Modal de Avanço de Módulo
+    const btnFecharModal = qs("#btn-fechar-modal-modulo");
+    const btnContinuarLendo = qs("#btn-modal-continuar-leitura");
+    const modalOverlay = qs("#modal-avancar-modulo");
+    const btnConfirmarAvanco = qs("#btn-modal-confirmar-avanco");
+
+    if (btnFecharModal) {
+        btnFecharModal.addEventListener("click", fecharModalAvancar);
+    }
+
+    if (btnContinuarLendo) {
+        btnContinuarLendo.addEventListener("click", fecharModalAvancar);
+    }
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) {
+                fecharModalAvancar();
+            }
+        });
+    }
+
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalOverlay && modalOverlay.style.display !== "none") {
+            fecharModalAvancar();
+        }
+    });
+
+    // 5. Botão que chama a rota no backend para adicionar +1 no módulo atual
+    if (btnConfirmarAvanco) {
+        btnConfirmarAvanco.addEventListener("click", async () => {
+            if (!activeConteudoId) {
+                showToast("Conteúdo não identificado para avançar.", "locked");
+                return;
+            }
+
+            const originalHtml = btnConfirmarAvanco.innerHTML;
+            try {
+                btnConfirmarAvanco.disabled = true;
+                btnConfirmarAvanco.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando módulo...';
+
+                // Chamada à rota do backend (POST /modulo/next)
+                const resultado = await avancarModulo(activeConteudoId);
+
+                fecharModalAvancar();
+
+                const proxModuloNum = resultado.modulo_atual;
+                showToast(
+                    `Parabéns! Módulo concluído com sucesso. Você avançou para o Módulo ${proxModuloNum}! +${resultado.xp_ganha || 25} XP`,
+                    'success',
+                    'fa-solid fa-circle-check'
+                );
+
+                // Retorna para a tela de módulos já com o novo módulo desbloqueado
+                if (router) {
+                    router.navigateTo("modulos", { conteudoId: activeConteudoId });
+                } else {
+                    abrirModulos(activeConteudoId);
+                }
+            } catch (err) {
+                console.error("[ModulosView] Erro ao avançar módulo:", err);
+                showToast(err.message || "Erro ao avançar para o próximo módulo.", "locked", "fa-solid fa-triangle-exclamation");
+            } finally {
+                btnConfirmarAvanco.disabled = false;
+                btnConfirmarAvanco.innerHTML = originalHtml;
+            }
+        });
+    }
 }
 
 /**
- * Atualiza e renderiza os módulos do conteúdo selecionado
+ * Atualiza e renderiza os módulos do conteúdo selecionado integrando com o banco de dados
  * @param {string} conteudoId 
  */
-export function abrirModulos(conteudoId) {
+export async function abrirModulos(conteudoId) {
     if (!conteudoId) return;
+    activeConteudoId = conteudoId;
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');
@@ -53,7 +178,16 @@ export function abrirModulos(conteudoId) {
         return;
     }
 
-    const modulos = getModulosByConteudoId(conteudoId);
+    // Consulta o progresso atual do módulo no backend
+    let moduloAtual = 1;
+    try {
+        const progresso = await getModuloAtual(conteudoId);
+        moduloAtual = Math.max(1, Number(progresso.modulo_atual || 1));
+    } catch (err) {
+        console.warn('[ModulosView] Fallback de progresso local:', err.message);
+    }
+
+    const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
 
     // Atualiza cabeçalho global
     const titleEl = qs('#inicio-saudacao');
@@ -98,11 +232,11 @@ export function abrirModulos(conteudoId) {
     if (heroTitle) setText(heroTitle, conteudo.titulo);
     if (heroDesc) setText(heroDesc, conteudo.descricao);
 
-    // Estatísticas dos módulos
+    // Estatísticas dos módulos sincronizadas com o banco
     const total = modulos.length;
     const bloqueados = modulos.filter(m => m.bloqueado).length;
     const liberados = total - bloqueados;
-    const pctProgresso = total > 0 ? Math.round((liberados / total) * 100) : 0;
+    const pctProgresso = total > 0 ? Math.min(100, Math.round((liberados / total) * 100)) : 0;
 
     if (heroLiberados) setText(heroLiberados, `${liberados} ${liberados === 1 ? 'Módulo Liberado' : 'Módulos Liberados'}`);
     if (heroBloqueados) setText(heroBloqueados, `${bloqueados} ${bloqueados === 1 ? 'Módulo Bloqueado' : 'Módulos Bloqueados'}`);
@@ -110,26 +244,14 @@ export function abrirModulos(conteudoId) {
     if (heroProgressFill) heroProgressFill.style.width = `${pctProgresso}%`;
     if (modulosContadorBadge) setText(modulosContadorBadge, `${total} ${total === 1 ? 'módulo' : 'módulos'}`);
 
-    // Renderiza cards reutilizáveis
+    // Renderiza cards reutilizáveis com integração para a tela de leitura de PDF
     if (modulesListContainer) {
         modulesListContainer.innerHTML = '';
 
         modulos.forEach((modulo) => {
             const card = createModuleCard(modulo, {
                 onRead: (mod) => {
-                    if (mod.pdfUrl) {
-                        showToast(
-                            `Abrindo Módulo ${mod.numero}: "${mod.titulo}" em nova aba...`,
-                            'info',
-                            'fa-solid fa-file-pdf'
-                        );
-                    } else {
-                        showToast(
-                            `Módulo ${mod.numero}: "${mod.titulo}". A leitura estará disponível em breve!`,
-                            'info',
-                            'fa-solid fa-book-open'
-                        );
-                    }
+                    abrirLeituraPdf(conteudoId, mod);
                 },
                 onLockedClick: () => {
                     showToast(
@@ -144,6 +266,136 @@ export function abrirModulos(conteudoId) {
                 modulesListContainer.appendChild(card);
             }
         });
+    }
+}
+
+/**
+ * Abre a tela de leitura do PDF do módulo e exibe o modal para avançar para o próximo módulo.
+ * @param {string} conteudoId 
+ * @param {Object|number} moduloOrNumero 
+ */
+export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
+    if (!conteudoId) return;
+    activeConteudoId = conteudoId;
+
+    const conteudo = getConteudoById(conteudoId);
+    if (!conteudo) return;
+
+    // Resolve o módulo
+    let modulo = null;
+    if (typeof moduloOrNumero === 'object' && moduloOrNumero !== null) {
+        modulo = moduloOrNumero;
+    } else {
+        const modulos = getModulosByConteudoId(conteudoId);
+        const num = Number(moduloOrNumero || 1);
+        modulo = modulos.find(m => Number(m.numero) === num) || modulos[0];
+    }
+
+    if (!modulo) return;
+    activeModulo = modulo;
+
+    if (typeof document !== 'undefined' && document.body) {
+        document.body.classList.add('no-sidebar');
+    }
+
+    // Se o router estiver disponível, navega para a rota de leitura de PDF
+    if (routerRef && routerRef.currentRoute !== 'leitura-pdf') {
+        routerRef.navigateTo('leitura-pdf', {
+            conteudoId,
+            moduloNumero: modulo.numero,
+            modulo
+        });
+    }
+
+    // Configura os elementos da tela de visualização
+    const viewLeitura = qs("#view-leitura-pdf");
+    if (viewLeitura) {
+        const themeClasses = Array.from(viewLeitura.classList).filter(c => c.startsWith('modulos-theme-'));
+        themeClasses.forEach(c => viewLeitura.classList.remove(c));
+        const temaCor = conteudo.cor || 'green';
+        viewLeitura.classList.add(`modulos-theme-${temaCor}`);
+    }
+
+    // Atualiza cabeçalhos e breadcrumb da leitura
+    const breadcrumbRoot = qs("#breadcrumb-leitura-modulo-root");
+    const breadcrumbAtual = qs("#breadcrumb-leitura-modulo-atual");
+    const badgeNumero = qs("#leitura-modulo-numero-badge");
+    const duracaoEl = qs("#leitura-modulo-duracao");
+    const topicosEl = qs("#leitura-modulo-topicos");
+    const tituloEl = qs("#leitura-modulo-titulo");
+    const descEl = qs("#leitura-modulo-desc");
+    const headerIcon = qs("#leitura-header-icon i");
+    const btnExternal = qs("#btn-abrir-pdf-nova-aba");
+    const iframePdf = qs("#leitura-pdf-frame");
+
+    const numeroFormatado = String(modulo.numero || 1).padStart(2, '0');
+
+    if (breadcrumbRoot) setText(breadcrumbRoot, conteudo.titulo);
+    if (breadcrumbAtual) setText(breadcrumbAtual, `Módulo ${numeroFormatado}`);
+    if (badgeNumero) setText(badgeNumero, `Módulo ${numeroFormatado}`);
+    if (tituloEl) setText(tituloEl, modulo.titulo || `Módulo ${numeroFormatado}`);
+    if (descEl) setText(descEl, modulo.descricao || 'Material oficial para estudo.');
+
+    if (duracaoEl) {
+        duracaoEl.innerHTML = `<i class="fa-regular fa-clock"></i> ${modulo.duracao || '20 min'}`;
+    }
+    if (topicosEl) {
+        const topicosText = modulo.topicos ? `${modulo.topicos} tópicos` : 'Aulas práticas';
+        topicosEl.innerHTML = `<i class="fa-regular fa-file-lines"></i> ${topicosText}`;
+    }
+    if (headerIcon) {
+        headerIcon.className = conteudo.icone || 'fa-solid fa-file-pdf';
+    }
+
+    // Carrega o PDF no iframe e no botão externo
+    const pdfUrl = modulo.pdfUrl || '';
+    if (btnExternal) {
+        btnExternal.href = pdfUrl || '#';
+        btnExternal.style.display = pdfUrl ? 'inline-flex' : 'none';
+    }
+
+    if (iframePdf) {
+        iframePdf.src = pdfUrl;
+    }
+
+    // Conforme solicitado: assim que abrir o PDF, abre a modal simples de avançar módulo
+    abrirModalAvancar(conteudo, modulo);
+}
+
+/**
+ * Abre a modal simples com a opção de avançar para o próximo módulo
+ * @param {Object} conteudo 
+ * @param {Object} modulo 
+ */
+export function abrirModalAvancar(conteudo, modulo) {
+    const modal = qs("#modal-avancar-modulo");
+    if (!modal) return;
+
+    const tag = qs("#modal-modulo-tag");
+    const titulo = qs("#modal-modulo-titulo");
+    const desc = qs("#modal-modulo-descricao");
+
+    const numeroFormatado = String(modulo?.numero || 1).padStart(2, '0');
+
+    if (tag) setText(tag, `Módulo ${numeroFormatado}`);
+    if (titulo) setText(titulo, `Avançar para o próximo módulo?`);
+    if (desc) {
+        desc.innerHTML = `
+            Você abriu o material do <strong>Módulo ${numeroFormatado}: "${modulo?.titulo || 'Conteúdo'}"</strong>.
+            Ao avançar, o sistema registrará seu progresso em <strong>${conteudo?.titulo || 'estudos'}</strong>, concederá <strong>+25 XP</strong> e liberará o próximo módulo na sua trilha!
+        `;
+    }
+
+    modal.style.display = 'flex';
+}
+
+/**
+ * Fecha a modal de avanço de módulo
+ */
+export function fecharModalAvancar() {
+    const modal = qs("#modal-avancar-modulo");
+    if (modal) {
+        modal.style.display = 'none';
     }
 }
 
@@ -184,7 +436,7 @@ export function showToast(mensagem, tipo = 'info', iconeClass = 'fa-solid fa-cir
         toast.style.opacity = '0';
         toast.style.transform = 'translateY(10px)';
         setTimeout(() => toast.remove(), 300);
-    }, 3800);
+    }, 4000);
 }
 
 function escapeToast(str) {
