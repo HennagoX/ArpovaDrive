@@ -1513,6 +1513,12 @@ body.modal-modulo-open {
     box-shadow: 0 6px 18px rgba(22, 163, 74, 0.2);
 }
 
+.modal-modulo-icon-circle.questoes-unlocked {
+    background: linear-gradient(135deg, #e0f2fe, #bae6fd);
+    color: #0284c7;
+    box-shadow: 0 6px 18px rgba(2, 132, 199, 0.25);
+}
+
 .modal-modulo-tag {
     display: inline-block;
     padding: 4px 12px;
@@ -1572,6 +1578,18 @@ body.modal-modulo-open {
 
 .btn-modal-avancar:active {
     transform: translateY(0);
+}
+
+.btn-modal-questoes,
+.btn-modal-avancar.btn-modal-questoes {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35);
+}
+
+.btn-modal-questoes:hover,
+.btn-modal-avancar.btn-modal-questoes:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.45);
 }
 
 .btn-modal-continuar {

@@ -303,3 +303,39 @@ export function isBateriaDesbloqueada(bateria, modulosConcluidosCount = 3) {
     const necessarios = bateria.modulosNecessarios || (bateria.numero * MODULOS_INTERVALO_DESBLOQUEIO);
     return modulosConcluidosCount >= necessarios;
 }
+
+/**
+ * Verifica se a conclusão de um determinado módulo desbloqueia uma nova bateria de questões.
+ * A cada 3 módulos concluídos (3, 6, 9, etc.) ou no fechamento do conteúdo, uma nova bateria é liberada.
+ * 
+ * @param {string} materiaId - Identificador do conteúdo/matéria
+ * @param {number} moduloNumero - Número do módulo concluído
+ * @returns {Object|null} Objeto da bateria liberada ou null
+ */
+export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {
+    if (!materiaId || !moduloNumero) return null;
+    const num = Number(moduloNumero);
+    const materia = getMateriaQuestoesById(materiaId);
+    const baterias = materia && Array.isArray(materia.baterias) ? materia.baterias : [];
+
+    // Busca se existe uma bateria configurada exatamente para esse número de módulos
+    const bateriaExata = baterias.find(b => Number(b.modulosNecessarios) === num);
+    if (bateriaExata) {
+        return bateriaExata;
+    }
+
+    // Regra padrão: a cada 3 módulos (3, 6, 9...)
+    if (num % MODULOS_INTERVALO_DESBLOQUEIO === 0) {
+        const indice = Math.floor(num / MODULOS_INTERVALO_DESBLOQUEIO);
+        const bateriaIndex = baterias[indice - 1];
+        if (bateriaIndex) return bateriaIndex;
+        return {
+            numero: indice,
+            titulo: `Bateria ${String(indice).padStart(2, '0')}`,
+            modulosNecessarios: num
+        };
+    }
+
+    return null;
+}
+

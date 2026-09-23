@@ -15,6 +15,7 @@ import {
     LOCKED_MODULE_MESSAGE
 } from '../../services/conteudosService.js';
 import { getModuloAtual, avancarModulo } from '../../services/moduloService.js';
+import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
 import { createModuleCard } from '../../components/moduleCard.js';
 
 let initialized = false;
@@ -22,6 +23,7 @@ let toastTimeout = null;
 let routerRef = null;
 let activeConteudoId = null;
 let activeModulo = null;
+let proximoModuloPendente = null;
 
 /**
  * Inicializa ouvintes de eventos da tela de módulos e do leitor de PDF
@@ -82,13 +84,65 @@ export function initModulosView(router) {
         });
     }
 
-    // 3. Botão do topo para abrir/reabrir modal de avanço na tela de leitura
+    // 3. Botão do topo para avançar módulo na tela de leitura
     const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
     if (btnAvancarTopo) {
-        btnAvancarTopo.addEventListener("click", () => {
-            if (activeConteudoId && activeModulo) {
-                const conteudo = getConteudoById(activeConteudoId);
-                abrirModalAvancar(conteudo, activeModulo);
+        btnAvancarTopo.addEventListener("click", async () => {
+            if (!activeConteudoId || !activeModulo) return;
+
+            const numModuloAtual = Number(activeModulo.numero || 1);
+            const conteudo = getConteudoById(activeConteudoId);
+            const modulos = getModulosByConteudoId(activeConteudoId);
+
+            const originalHtml = btnAvancarTopo.innerHTML;
+            try {
+                btnAvancarTopo.disabled = true;
+                btnAvancarTopo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando...';
+
+                // Chamada à rota do backend (POST /modulo/next) para persistir o progresso
+                const resultado = await avancarModulo(activeConteudoId);
+                const proxModuloNum = Number(resultado.modulo_atual || numModuloAtual + 1);
+
+                // Localiza o próximo módulo na lista do conteúdo
+                const proxModulo = modulos.find(m => Number(m.numero) === proxModuloNum)
+                    || modulos.find(m => Number(m.numero) === numModuloAtual + 1);
+
+                // Verifica se a conclusão DESTE módulo libera uma nova bateria de questões (a cada 3 módulos)
+                const bateriaLiberada = checkBateriaLiberadaPorModulo(activeConteudoId, numModuloAtual);
+
+                if (bateriaLiberada) {
+                    showToast(
+                        `Parabéns! Módulo ${String(numModuloAtual).padStart(2, '0')} concluído! +${resultado.xp_ganha || 25} XP`,
+                        'success',
+                        'fa-solid fa-circle-check'
+                    );
+
+                    // Salva próximo módulo pendente caso o aluno decida continuar a leitura
+                    proximoModuloPendente = proxModulo || null;
+
+                    // Abre o modal avisando sobre a bateria de questões liberada
+                    abrirModalQuestoesLiberadas(conteudo, activeModulo, bateriaLiberada, proxModulo);
+                } else {
+                    // Módulo intermediário: NÃO libera questões, avança direto sem modal
+                    showToast(
+                        `Parabéns! Módulo concluído. Você avançou para o Módulo ${String(proxModuloNum).padStart(2, '0')}! +${resultado.xp_ganha || 25} XP`,
+                        'success',
+                        'fa-solid fa-circle-check'
+                    );
+
+                    if (proxModulo) {
+                        abrirLeituraPdf(activeConteudoId, proxModulo);
+                    } else {
+                        showToast(`Você concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!`, 'success');
+                        router.navigateTo("modulos", { conteudoId: activeConteudoId });
+                    }
+                }
+            } catch (err) {
+                console.error("[ModulosView] Erro ao avançar módulo:", err);
+                showToast(err.message || "Erro ao avançar para o próximo módulo.", "locked", "fa-solid fa-triangle-exclamation");
+            } finally {
+                btnAvancarTopo.disabled = false;
+                btnAvancarTopo.innerHTML = originalHtml;
             }
         });
     }
@@ -101,24 +155,35 @@ export function initModulosView(router) {
         });
     }
 
-    // 4. Ações da Modal de Avanço de Módulo
+    // 4. Ações da Modal de Questões Liberadas
     const btnFecharModal = qs("#btn-fechar-modal-modulo");
     const btnContinuarLendo = qs("#btn-modal-continuar-leitura");
     const modalOverlay = qs("#modal-avancar-modulo");
-    const btnConfirmarAvanco = qs("#btn-modal-confirmar-avanco");
+    const btnIrQuestoes = qs("#btn-modal-confirmar-avanco");
+
+    const fecharECarregarProximo = () => {
+        fecharModalAvancar();
+        if (proximoModuloPendente) {
+            const nextMod = proximoModuloPendente;
+            proximoModuloPendente = null;
+            abrirLeituraPdf(activeConteudoId, nextMod);
+        } else if (activeConteudoId && router) {
+            router.navigateTo("modulos", { conteudoId: activeConteudoId });
+        }
+    };
 
     if (btnFecharModal) {
-        btnFecharModal.addEventListener("click", fecharModalAvancar);
+        btnFecharModal.addEventListener("click", fecharECarregarProximo);
     }
 
     if (btnContinuarLendo) {
-        btnContinuarLendo.addEventListener("click", fecharModalAvancar);
+        btnContinuarLendo.addEventListener("click", fecharECarregarProximo);
     }
 
     if (modalOverlay) {
         modalOverlay.addEventListener("click", (e) => {
             if (e.target === modalOverlay) {
-                fecharModalAvancar();
+                fecharECarregarProximo();
             }
         });
     }
@@ -127,7 +192,7 @@ export function initModulosView(router) {
         if (e.key === "Escape") {
             const modalEl = qs("#modal-avancar-modulo");
             if (modalEl && modalEl.style.display !== "none") {
-                fecharModalAvancar();
+                fecharECarregarProximo();
                 return;
             }
             const viewLeitura = qs("#view-leitura-pdf");
@@ -137,43 +202,18 @@ export function initModulosView(router) {
         }
     });
 
-    // 5. Botão que chama a rota no backend para adicionar +1 no módulo atual
-    if (btnConfirmarAvanco) {
-        btnConfirmarAvanco.addEventListener("click", async () => {
-            if (!activeConteudoId) {
-                showToast("Conteúdo não identificado para avançar.", "locked");
-                return;
-            }
+    // 5. Botão que vai para a tela de módulos/baterias de questões da matéria
+    if (btnIrQuestoes) {
+        btnIrQuestoes.addEventListener("click", () => {
+            const materiaId = activeConteudoId;
+            proximoModuloPendente = null;
+            fecharModalAvancar();
+            toggleFullscreenReader(false);
 
-            const originalHtml = btnConfirmarAvanco.innerHTML;
-            try {
-                btnConfirmarAvanco.disabled = true;
-                btnConfirmarAvanco.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando módulo...';
-
-                // Chamada à rota do backend (POST /modulo/next)
-                const resultado = await avancarModulo(activeConteudoId);
-
-                fecharModalAvancar();
-
-                const proxModuloNum = resultado.modulo_atual;
-                showToast(
-                    `Parabéns! Módulo concluído com sucesso. Você avançou para o Módulo ${proxModuloNum}! +${resultado.xp_ganha || 25} XP`,
-                    'success',
-                    'fa-solid fa-circle-check'
-                );
-
-                // Retorna para a tela de módulos já com o novo módulo desbloqueado
-                if (router) {
-                    router.navigateTo("modulos", { conteudoId: activeConteudoId });
-                } else {
-                    abrirModulos(activeConteudoId);
-                }
-            } catch (err) {
-                console.error("[ModulosView] Erro ao avançar módulo:", err);
-                showToast(err.message || "Erro ao avançar para o próximo módulo.", "locked", "fa-solid fa-triangle-exclamation");
-            } finally {
-                btnConfirmarAvanco.disabled = false;
-                btnConfirmarAvanco.innerHTML = originalHtml;
+            if (materiaId && router) {
+                router.navigateTo("questoes-modulos", { materiaId });
+            } else if (router) {
+                router.navigateTo("questoes");
             }
         });
     }
@@ -377,38 +417,68 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         iframePdf.src = pdfUrl;
     }
 
-    // Conforme solicitado: assim que abrir o PDF, abre a modal simples de avançar módulo
-    abrirModalAvancar(conteudo, modulo);
 }
 
 /**
- * Abre a modal simples com a opção de avançar para o próximo módulo
- * @param {Object} conteudo 
- * @param {Object} modulo 
+ * Abre a modal anunciando que uma nova bateria de questões foi liberada
+ * e oferece a opção de ir para as baterias de questões ou continuar a leitura.
+ * 
+ * @param {Object} conteudo - Dados do conteúdo/matéria
+ * @param {Object} moduloConcluido - Módulo concluído
+ * @param {Object} bateria - Bateria desbloqueada
+ * @param {Object} [proximoModulo] - Próximo módulo a ser lido se continuar
  */
-export function abrirModalAvancar(conteudo, modulo) {
+export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, proximoModulo) {
     const modal = qs("#modal-avancar-modulo");
     if (!modal) return;
+
+    proximoModuloPendente = proximoModulo || null;
 
     const tag = qs("#modal-modulo-tag");
     const titulo = qs("#modal-modulo-titulo");
     const desc = qs("#modal-modulo-descricao");
+    const btnQuestoes = qs("#btn-modal-confirmar-avanco");
+    const btnContinuar = qs("#btn-modal-continuar-leitura");
 
-    const numeroFormatado = String(modulo?.numero || 1).padStart(2, '0');
+    const batNum = bateria?.numero || Math.ceil(Number(moduloConcluido?.numero || 3) / 3);
+    const batTitulo = bateria?.titulo || `Bateria ${String(batNum).padStart(2, '0')}`;
+    const numModuloStr = String(moduloConcluido?.numero || 1).padStart(2, '0');
 
-    if (tag) setText(tag, `Módulo ${numeroFormatado}`);
-    if (titulo) setText(titulo, `Avançar para o próximo módulo?`);
+    if (tag) setText(tag, `Bateria ${String(batNum).padStart(2, '0')} Liberada!`);
+    if (titulo) setText(titulo, `Hora de Praticar com Questões!`);
     if (desc) {
         desc.innerHTML = `
-            Você abriu o material do <strong>Módulo ${numeroFormatado}: "${modulo?.titulo || 'Conteúdo'}"</strong>.
-            Ao avançar, o sistema registrará seu progresso em <strong>${conteudo?.titulo || 'estudos'}</strong>, concederá <strong>+25 XP</strong> e liberará o próximo módulo na sua trilha!
+            Parabéns! Você concluiu o <strong>Módulo ${numModuloStr}</strong> de <strong>${conteudo?.titulo || 'estudos'}</strong>!
+            <br><br>
+            A cada 3 módulos concluídos, uma nova bateria de questões simuladas é liberada. A <strong>${batTitulo}</strong> já está disponível na área de Questões para testar seus conhecimentos. Deseja praticar agora?
         `;
+    }
+
+    if (btnQuestoes) {
+        btnQuestoes.innerHTML = `<i class="fa-solid fa-list-check"></i> Ir para as Questões`;
+    }
+
+    if (btnContinuar) {
+        if (proximoModulo) {
+            const numProx = String(proximoModulo.numero).padStart(2, '0');
+            btnContinuar.innerHTML = `<i class="fa-solid fa-book-open"></i> Continuar lendo (Módulo ${numProx})`;
+        } else {
+            btnContinuar.innerHTML = `<i class="fa-solid fa-list"></i> Voltar aos Módulos`;
+        }
     }
 
     modal.style.display = 'flex';
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('modal-modulo-open');
     }
+}
+
+/**
+ * Função compatível com chamadas legadas
+ */
+export function abrirModalAvancar(conteudo, modulo) {
+    const bat = checkBateriaLiberadaPorModulo(conteudo?.id || activeConteudoId, modulo?.numero || 3);
+    abrirModalQuestoesLiberadas(conteudo, modulo, bat || { numero: 1 }, null);
 }
 
 /**

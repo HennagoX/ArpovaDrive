@@ -1798,27 +1798,27 @@
         <div id="toast-container" class="toast-container" aria-live="polite"></div>
     </main>
 
-    <!-- MODAL GLOBAL: AVANÇAR PARA O PRÓXIMO MÓDULO (CENTRALIZADO NA TELA) -->
+    <!-- MODAL GLOBAL: NOVA BATERIA DE QUESTÕES LIBERADA (CENTRALIZADO NA TELA) -->
     <div id="modal-avancar-modulo" class="modal-modulo-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-modulo-titulo">
         <div class="modal-modulo-card">
             <button type="button" class="modal-modulo-close" id="btn-fechar-modal-modulo" aria-label="Fechar modal">&times;</button>
             
-            <div class="modal-modulo-icon-circle">
-                <i class="fa-solid fa-circle-check"></i>
+            <div class="modal-modulo-icon-circle questoes-unlocked" id="modal-modulo-icon-circle">
+                <i class="fa-solid fa-list-check" id="modal-modulo-icone"></i>
             </div>
 
-            <span class="modal-modulo-tag" id="modal-modulo-tag">Módulo 01</span>
-            <h3 class="modal-modulo-titulo" id="modal-modulo-titulo">Avançar para o próximo módulo?</h3>
+            <span class="modal-modulo-tag" id="modal-modulo-tag">Bateria de Questões Liberada!</span>
+            <h3 class="modal-modulo-titulo" id="modal-modulo-titulo">Hora de Praticar com Questões!</h3>
             <p class="modal-modulo-descricao" id="modal-modulo-descricao">
-                Você iniciou a leitura deste módulo. Deseja registrar a conclusão e desbloquear o próximo módulo agora?
+                Você concluiu mais uma etapa de estudos! Uma nova bateria de questões simuladas foi liberada para testar seus conhecimentos. Deseja praticar agora?
             </p>
 
             <div class="modal-modulo-actions">
-                <button type="button" class="btn-modal-avancar" id="btn-modal-confirmar-avanco">
-                    <i class="fa-solid fa-forward-step"></i> Avançar para o próximo módulo
+                <button type="button" class="btn-modal-avancar btn-modal-questoes" id="btn-modal-confirmar-avanco">
+                    <i class="fa-solid fa-list-check"></i> Ir para as Questões
                 </button>
                 <button type="button" class="btn-modal-continuar" id="btn-modal-continuar-leitura">
-                    <i class="fa-regular fa-eye"></i> Continuar lendo este módulo
+                    <i class="fa-solid fa-book-open"></i> Continuar lendo os módulos
                 </button>
             </div>
         </div>
