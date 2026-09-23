@@ -175,6 +175,19 @@ export async function avancarModulo(contentId, userId) {
     const activeUserId = getModuloUserId(userId);
     const storageKey = getModuloStorageKey(contentId, activeUserId);
     const cachedAtual = getModuloAtualCached(contentId, activeUserId);
+
+    // Se já estiver no 10º módulo, não avança e não concede mais XP
+    if (cachedAtual >= MAX_MODULO) {
+        return {
+            success: true,
+            conteudo: contentId,
+            modulo_atual: MAX_MODULO,
+            modulo_anterior: MAX_MODULO,
+            xp_ganha: 0,
+            message: `Você já concluiu todos os ${MAX_MODULO} módulos de ${contentId}.`
+        };
+    }
+
     const proximoEsperado = Math.min(MAX_MODULO, cachedAtual + 1);
 
     // Atualização otimista imediata no localStorage
@@ -205,6 +218,7 @@ export async function avancarModulo(contentId, userId) {
         }
 
         const moduloAtual = Math.min(MAX_MODULO, Math.max(proximoEsperado, Number(data.modulo_atual || proximoEsperado)));
+        const xpGanha = typeof data?.xp_ganha === 'number' ? data.xp_ganha : (moduloAtual > cachedAtual ? 25 : 0);
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
 
@@ -213,7 +227,7 @@ export async function avancarModulo(contentId, userId) {
             conteudo: data.conteudo || contentId,
             modulo_atual: moduloAtual,
             modulo_anterior: data.modulo_anterior || cachedAtual,
-            xp_ganha: data.xp_ganha || 25,
+            xp_ganha: xpGanha,
             message: data.message || `Avançou para o Módulo ${moduloAtual} com sucesso!`
         };
     } catch (err) {
@@ -224,7 +238,7 @@ export async function avancarModulo(contentId, userId) {
             conteudo: contentId,
             modulo_atual: proximoEsperado,
             modulo_anterior: cachedAtual,
-            xp_ganha: 25,
+            xp_ganha: proximoEsperado > cachedAtual ? 25 : 0,
             message: `Avançou para o Módulo ${proximoEsperado}!`
         };
     }

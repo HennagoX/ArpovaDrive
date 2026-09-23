@@ -18,7 +18,8 @@ import {
     getModuloAtual,
     getModuloAtualCached,
     setModuloAtualCached,
-    avancarModulo
+    avancarModulo,
+    MAX_MODULO
 } from '../../services/moduloService.js';
 import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
 import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
@@ -98,6 +99,14 @@ export function initModulosView(router) {
             const numModuloAtual = Number(activeModulo.numero || 1);
             const conteudo = getConteudoById(activeConteudoId);
             const modulos = getModulosByConteudoId(activeConteudoId);
+            const totalModulos = modulos.length || MAX_MODULO;
+
+            // Se já está no 10º módulo ou no último módulo do conteúdo, encerra e esconde o botão
+            if (numModuloAtual >= MAX_MODULO || numModuloAtual >= totalModulos) {
+                showToast(`Você já concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!`, 'info');
+                btnAvancarTopo.style.display = 'none';
+                return;
+            }
 
             const originalHtml = btnAvancarTopo.innerHTML;
             try {
@@ -106,21 +115,26 @@ export function initModulosView(router) {
 
                 // Chamada à rota do backend (POST /modulo/next) para persistir o progresso
                 const resultado = await avancarModulo(activeConteudoId);
-                const proxModuloNum = Math.min(10, Number(resultado.modulo_atual || Math.min(10, numModuloAtual + 1)));
+                const proxModuloNum = Math.min(MAX_MODULO, Number(resultado.modulo_atual || Math.min(MAX_MODULO, numModuloAtual + 1)));
 
                 // Atualiza cirurgicamente o DOM dos módulos imediatamente
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
 
-                // Localiza o próximo módulo na lista do conteúdo
-                const proxModulo = modulos.find(m => Number(m.numero) === proxModuloNum)
-                    || modulos.find(m => Number(m.numero) === numModuloAtual + 1);
+                // Localiza o próximo módulo na lista do conteúdo se não ultrapassar o limite
+                const proximoNumero = numModuloAtual + 1;
+                const proxModulo = (proximoNumero <= MAX_MODULO && proximoNumero <= totalModulos)
+                    ? (modulos.find(m => Number(m.numero) === proximoNumero) || modulos.find(m => Number(m.numero) === proxModuloNum))
+                    : null;
 
                 // Verifica se a conclusão DESTE módulo libera uma nova bateria de questões (a cada 3 módulos)
                 const bateriaLiberada = checkBateriaLiberadaPorModulo(activeConteudoId, numModuloAtual);
 
+                const xpGanha = Number(resultado.xp_ganha || 0);
+                const xpTexto = xpGanha > 0 ? ` +${xpGanha} XP` : '';
+
                 if (bateriaLiberada) {
                     showToast(
-                        `Parabéns! Módulo ${String(numModuloAtual).padStart(2, '0')} concluído! +${resultado.xp_ganha || 25} XP`,
+                        `Parabéns! Módulo ${String(numModuloAtual).padStart(2, '0')} concluído!${xpTexto}`,
                         'success',
                         'fa-solid fa-circle-check'
                     );
@@ -132,16 +146,16 @@ export function initModulosView(router) {
                     abrirModalQuestoesLiberadas(conteudo, activeModulo, bateriaLiberada, proxModulo);
                 } else {
                     // Módulo intermediário: NÃO libera questões, avança direto sem modal
-                    showToast(
-                        `Parabéns! Módulo concluído. Você avançou para o Módulo ${String(proxModuloNum).padStart(2, '0')}! +${resultado.xp_ganha || 25} XP`,
-                        'success',
-                        'fa-solid fa-circle-check'
-                    );
-
                     if (proxModulo) {
+                        showToast(
+                            `Parabéns! Módulo concluído. Você avançou para o Módulo ${String(proxModulo.numero).padStart(2, '0')}!${xpTexto}`,
+                            'success',
+                            'fa-solid fa-circle-check'
+                        );
                         abrirLeituraPdf(activeConteudoId, proxModulo);
                     } else {
-                        showToast(`Você concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!`, 'success');
+                        showToast(`Você concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!${xpTexto}`, 'success');
+                        btnAvancarTopo.style.display = 'none';
                         router.navigateTo("modulos", { conteudoId: activeConteudoId });
                     }
                 }
@@ -171,11 +185,12 @@ export function initModulosView(router) {
 
     const fecharECarregarProximo = () => {
         fecharModalAvancar();
-        if (proximoModuloPendente) {
+        if (proximoModuloPendente && Number(proximoModuloPendente.numero) <= MAX_MODULO) {
             const nextMod = proximoModuloPendente;
             proximoModuloPendente = null;
             abrirLeituraPdf(activeConteudoId, nextMod);
         } else if (activeConteudoId && router) {
+            proximoModuloPendente = null;
             router.navigateTo("modulos", { conteudoId: activeConteudoId });
         }
     };
@@ -425,6 +440,17 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     }
     aplicarTemaModal(temaCor);
 
+    // Oculta o botão de avançar módulo no topo caso seja o 10º módulo ou o último módulo da matéria
+    const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
+    const modulosConteudo = getModulosByConteudoId(conteudoId);
+    const totalModulos = modulosConteudo.length || MAX_MODULO;
+    const numModuloAtual = Number(modulo.numero || 1);
+    const isUltimoModulo = numModuloAtual >= MAX_MODULO || numModuloAtual >= totalModulos;
+
+    if (btnAvancarTopo) {
+        btnAvancarTopo.style.display = isUltimoModulo ? 'none' : 'inline-flex';
+    }
+
     // Atualiza cabeçalhos e breadcrumb da leitura
     const breadcrumbRoot = qs("#breadcrumb-leitura-modulo-root");
     const breadcrumbAtual = qs("#breadcrumb-leitura-modulo-atual");
@@ -511,7 +537,7 @@ export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, 
     }
 
     if (btnContinuar) {
-        if (proximoModulo) {
+        if (proximoModulo && Number(proximoModulo.numero) <= MAX_MODULO) {
             const numProx = String(proximoModulo.numero).padStart(2, '0');
             btnContinuar.innerHTML = `<i class="fa-solid fa-book-open"></i> Continuar lendo (Módulo ${numProx})`;
         } else {
