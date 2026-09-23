@@ -40,6 +40,10 @@ export const ENDPOINTS = {
   CRONOGRAMA: {
     LISTAR: `${API_URL}/cronograma`,
     CRIAR: `${API_URL}/cronograma`
+  },
+  MODULO: {
+    GET: (contentId, userId) => `${API_URL}/modulo?contentId=${encodeURIComponent(contentId || '')}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
+    NEXT: `${API_URL}/modulo/next`
   }
-  
 };
+
