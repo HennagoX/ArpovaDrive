@@ -172,8 +172,8 @@ ready(() => {
             }
         }
 
-        // Rola suavemente para o topo do conteúdo
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Rola para o topo do conteúdo
+        window.scrollTo(0, 0);
     }
 
     /**
@@ -197,7 +197,7 @@ ready(() => {
             history.pushState({ view: 'conteudos' }, '', window.location.pathname);
         }
 
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo(0, 0);
     }
 
     // Vincula cliques para voltar
