@@ -11,7 +11,7 @@ import { ready } from '../utils/dom.js';
 import { router } from '../spa/router.js';
 import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.js';
 import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.js';
-import { initModulosView, abrirModulos, abrirLeituraPdf } from '../spa/views/modulosView.js';
+import { initModulosView, abrirModulos, abrirLeituraPdf, fecharModalAvancar, toggleFullscreenReader } from '../spa/views/modulosView.js';
 
 import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
 import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
@@ -49,6 +49,7 @@ ready(() => {
         },
         onLeave: () => {
             document.body.classList.remove('no-sidebar');
+            fecharModalAvancar();
         }
     });
 
@@ -57,6 +58,7 @@ ready(() => {
         navKey: 'conteudos',
         onEnter: (params) => {
             document.body.classList.add('no-sidebar');
+            document.body.classList.add('leitura-pdf-active');
             if (params && params.conteudoId) {
                 abrirLeituraPdf(params.conteudoId, params.modulo || params.moduloNumero);
             } else {
@@ -65,6 +67,9 @@ ready(() => {
         },
         onLeave: () => {
             document.body.classList.remove('no-sidebar');
+            document.body.classList.remove('leitura-pdf-active');
+            toggleFullscreenReader(false);
+            fecharModalAvancar();
         }
     });
 

@@ -55,6 +55,7 @@ export function initModulosView(router) {
 
     if (btnVoltarLeitura && router) {
         btnVoltarLeitura.addEventListener("click", () => {
+            toggleFullscreenReader(false);
             if (activeConteudoId) {
                 router.navigateTo("modulos", { conteudoId: activeConteudoId });
             } else {
@@ -65,12 +66,14 @@ export function initModulosView(router) {
 
     if (breadcrumbLeituraConteudos && router) {
         breadcrumbLeituraConteudos.addEventListener("click", () => {
+            toggleFullscreenReader(false);
             router.navigateTo("conteudos");
         });
     }
 
     if (breadcrumbLeituraModuloRoot && router) {
         breadcrumbLeituraModuloRoot.addEventListener("click", () => {
+            toggleFullscreenReader(false);
             if (activeConteudoId) {
                 router.navigateTo("modulos", { conteudoId: activeConteudoId });
             } else {
@@ -87,6 +90,14 @@ export function initModulosView(router) {
                 const conteudo = getConteudoById(activeConteudoId);
                 abrirModalAvancar(conteudo, activeModulo);
             }
+        });
+    }
+
+    // 3.5. Botão para alternar modo tela cheia / expandido do visualizador
+    const btnExpandPdf = qs("#btn-toggle-expand-pdf");
+    if (btnExpandPdf) {
+        btnExpandPdf.addEventListener("click", () => {
+            toggleFullscreenReader();
         });
     }
 
@@ -113,8 +124,16 @@ export function initModulosView(router) {
     }
 
     document.addEventListener("keydown", (e) => {
-        if (e.key === "Escape" && modalOverlay && modalOverlay.style.display !== "none") {
-            fecharModalAvancar();
+        if (e.key === "Escape") {
+            const modalEl = qs("#modal-avancar-modulo");
+            if (modalEl && modalEl.style.display !== "none") {
+                fecharModalAvancar();
+                return;
+            }
+            const viewLeitura = qs("#view-leitura-pdf");
+            if (viewLeitura && viewLeitura.classList.contains("is-fullscreen-reader")) {
+                toggleFullscreenReader(false);
+            }
         }
     });
 
@@ -387,6 +406,9 @@ export function abrirModalAvancar(conteudo, modulo) {
     }
 
     modal.style.display = 'flex';
+    if (typeof document !== 'undefined' && document.body) {
+        document.body.classList.add('modal-modulo-open');
+    }
 }
 
 /**
@@ -396,6 +418,45 @@ export function fecharModalAvancar() {
     const modal = qs("#modal-avancar-modulo");
     if (modal) {
         modal.style.display = 'none';
+    }
+    if (typeof document !== 'undefined' && document.body) {
+        document.body.classList.remove('modal-modulo-open');
+    }
+}
+
+/**
+ * Alterna modo expandido / tela cheia do visualizador de PDF
+ * @param {boolean} [forceState]
+ */
+export function toggleFullscreenReader(forceState) {
+    const viewLeitura = qs("#view-leitura-pdf");
+    const btnExpandPdf = qs("#btn-toggle-expand-pdf");
+    if (!viewLeitura) return;
+
+    const shouldExpand = typeof forceState === 'boolean'
+        ? forceState
+        : !viewLeitura.classList.contains("is-fullscreen-reader");
+
+    if (shouldExpand) {
+        viewLeitura.classList.add("is-fullscreen-reader");
+        if (typeof document !== 'undefined' && document.body) {
+            document.body.classList.add("pdf-fullscreen-active");
+        }
+        if (btnExpandPdf) {
+            btnExpandPdf.innerHTML = '<i class="fa-solid fa-compress"></i> <span class="btn-expand-text">Reduzir</span>';
+            btnExpandPdf.title = "Sair do modo tela cheia (Esc)";
+            btnExpandPdf.classList.add("active");
+        }
+    } else {
+        viewLeitura.classList.remove("is-fullscreen-reader");
+        if (typeof document !== 'undefined' && document.body) {
+            document.body.classList.remove("pdf-fullscreen-active");
+        }
+        if (btnExpandPdf) {
+            btnExpandPdf.innerHTML = '<i class="fa-solid fa-expand"></i> <span class="btn-expand-text">Expandir</span>';
+            btnExpandPdf.title = "Alternar modo tela cheia / expandido";
+            btnExpandPdf.classList.remove("active");
+        }
     }
 }
 
