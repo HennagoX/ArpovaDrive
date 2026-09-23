@@ -107,16 +107,86 @@ export function createModuleCard(modulo, options = {}) {
         </div>
     `;
 
-    // Vincula eventos
+    // Vincula eventos ao card
+    bindCardEvents(card, modulo, options);
+
+    return card;
+}
+
+/**
+ * Atualiza cirurgicamente um card existente sem recriar nós do DOM.
+ * @param {HTMLElement} card - Elemento do card existente
+ * @param {Object} modulo - Dados atualizados do módulo
+ * @param {Object} [options] - Opções de callbacks (onRead, onLockedClick)
+ */
+export function updateModuleCard(card, modulo, options = {}) {
+    if (!card || !modulo) return;
+
+    const isLocked = Boolean(modulo.bloqueado || modulo.status === 'locked');
+    const isDone = Boolean(modulo.status === 'done');
+    const statusClass = isLocked ? 'locked' : (isDone ? 'done' : 'available');
+
+    // Se o estado já estiver perfeitamente alinhado, não toca no DOM
+    if (card.classList.contains(statusClass) && !card.classList.contains(isLocked ? 'available' : 'locked')) {
+        return;
+    }
+
+    card.classList.remove('locked', 'available', 'done');
+    card.classList.add(statusClass);
+
+    // Atualiza a área de ação (badge e botão)
+    const actionArea = card.querySelector('.module-action-area');
+    if (actionArea) {
+        let statusBadgeHtml = '';
+        if (isDone) {
+            statusBadgeHtml = '<span class="module-badge badge-done"><i class="fa-solid fa-check"></i> Concluído</span>';
+        } else if (isLocked) {
+            statusBadgeHtml = '<span class="module-badge badge-locked"><i class="fa-solid fa-lock"></i> Bloqueado</span>';
+        } else {
+            statusBadgeHtml = '<span class="module-badge badge-available"><i class="fa-solid fa-unlock"></i> Liberado</span>';
+        }
+
+        let actionButtonHtml = '';
+        if (isLocked) {
+            actionButtonHtml = `
+                <button type="button" class="btn-action btn-bloqueado" title="Módulo bloqueado. Conclua o anterior para desbloquear.">
+                    <i class="fa-solid fa-lock icone-inline"></i> Bloqueado
+                </button>
+            `;
+        } else if (modulo.pdfUrl) {
+            actionButtonHtml = `
+                <button type="button" class="btn-action btn-ler" title="Abrir material em PDF do módulo">
+                    <i class="fa-solid fa-file-pdf icone-inline"></i> Ler Módulo
+                </button>
+            `;
+        } else {
+            actionButtonHtml = `
+                <button type="button" class="btn-action btn-ler" title="Iniciar leitura deste módulo">
+                    <i class="fa-solid fa-book-open icone-inline"></i> Ler Módulo
+                </button>
+            `;
+        }
+
+        actionArea.innerHTML = `${statusBadgeHtml}${actionButtonHtml}`;
+    }
+
+    // Re-vincula eventos para o novo estado
+    bindCardEvents(card, modulo, options);
+}
+
+/**
+ * Vincula ouvintes de eventos ao card de acordo com o estado de bloqueio
+ */
+function bindCardEvents(card, modulo, options = {}) {
+    const isLocked = Boolean(modulo.bloqueado || modulo.status === 'locked');
+
     if (isLocked) {
+        card.style.cursor = 'default';
         const triggerLocked = (event) => {
             if (event) event.stopPropagation();
-
-            // Adiciona classe de tremor para feedback visual imediato
             card.classList.remove('shake');
-            void card.offsetWidth; // Força reflow do navegador
+            void card.offsetWidth;
             card.classList.add('shake');
-
             if (typeof options.onLockedClick === 'function') {
                 options.onLockedClick(modulo, card);
             }
@@ -124,34 +194,32 @@ export function createModuleCard(modulo, options = {}) {
 
         const btnBloqueado = card.querySelector('.btn-bloqueado');
         if (btnBloqueado) {
-            btnBloqueado.addEventListener('click', triggerLocked);
+            btnBloqueado.onclick = triggerLocked;
         }
-
-        // Permite clicar em qualquer lugar do card bloqueado para receber o feedback
-        card.addEventListener('click', triggerLocked);
+        card.onclick = triggerLocked;
     } else {
+        card.style.cursor = 'pointer';
+        const triggerRead = (event) => {
+            if (event) event.stopPropagation();
+            if (typeof options.onRead === 'function') {
+                options.onRead(modulo, card);
+            }
+        };
+
         const btnLer = card.querySelector('.btn-ler');
         if (btnLer) {
-            btnLer.addEventListener('click', (event) => {
+            btnLer.onclick = (event) => {
                 event.stopPropagation();
                 if (typeof options.onRead === 'function') {
                     options.onRead(modulo, btnLer);
                 }
-            });
+            };
         }
-
-        // Permite clicar em qualquer parte do card liberado para abrir o material
-        card.style.cursor = 'pointer';
-        card.addEventListener('click', (event) => {
+        card.onclick = (event) => {
             if (event.target.closest('.btn-ler')) return;
-            if (typeof options.onRead === 'function') {
-                options.onRead(modulo, card);
-            }
-        });
+            triggerRead(event);
+        };
     }
-
-
-    return card;
 }
 
 /**

@@ -1,4 +1,6 @@
 import { MESSAGES } from '../constants/messages.js';
+import { ENDPOINTS } from '../constants/routes.js';
+import { getModuloUserId } from './moduloService.js';
 
 export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!';
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
@@ -338,4 +340,59 @@ export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {
 
     return null;
 }
+
+/**
+ * Consulta o total de questões concluídas e acertos do usuário na API
+ * @param {string} [materia] 
+ * @param {string} [userId] 
+ * @returns {Promise<{success: boolean, acertos: any}>}
+ */
+export async function fetchQuestoesConcluidas(materia, userId) {
+    const activeUserId = getModuloUserId(userId);
+    try {
+        const url = ENDPOINTS.QUESTOES.CONCLUIDAS(activeUserId, materia);
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            }
+        });
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch (err) {
+        console.warn('[QuestoesService] Erro ao consultar questões concluídas:', err.message);
+    }
+    return { success: false, acertos: null };
+}
+
+/**
+ * Envia a resposta de uma questão para validação na API
+ * @param {Object} dadosResposta - { questao, num, resposta, materia }
+ * @param {string} [userId]
+ * @returns {Promise<{success: boolean, correto?: boolean, message?: string}>}
+ */
+export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
+    const activeUserId = getModuloUserId(userId);
+    try {
+        const response = await fetch(ENDPOINTS.QUESTOES.CHECK_ACERTO, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            },
+            body: JSON.stringify({
+                ...dadosResposta,
+                userId: activeUserId,
+                id_usuario: activeUserId
+            })
+        });
+        return await response.json();
+    } catch (err) {
+        console.warn('[QuestoesService] Erro ao checar acerto via API:', err.message);
+        return { success: false, message: err.message };
+    }
+}
+
 

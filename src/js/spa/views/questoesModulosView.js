@@ -117,32 +117,36 @@ export function abrirQuestoesModulos(materiaId) {
     if (heroProgressFill) heroProgressFill.style.width = `${pctProgresso}%`;
     if (contadorBadge) setText(contadorBadge, `${total} ${total === 1 ? 'bateria' : 'baterias'}`);
 
-    // Renderiza cards reutilizáveis de baterias de questões
+    // Renderiza cards reutilizáveis de baterias de questões (Differential / sem resetar à toa)
     if (modulesListContainer) {
-        modulesListContainer.innerHTML = '';
+        const isSameMateria = modulesListContainer.dataset.materiaId === materiaId && modulesListContainer.children.length > 0;
+        if (!isSameMateria) {
+            modulesListContainer.dataset.materiaId = materiaId;
+            modulesListContainer.innerHTML = '';
 
-        baterias.forEach((bateria) => {
-            const card = createQuestionModuleCard(bateria, {
-                onStart: (bat) => {
-                    showToast(
-                        `Iniciando ${bat.titulo} (${bat.questoesCount} questões). A tela interativa de resolução de questões será conectada em breve!`,
-                        'info',
-                        'fa-solid fa-circle-play'
-                    );
-                },
-                onLockedClick: (bat) => {
-                    showToast(
-                        bat.motivoBloqueio || LOCKED_QUESTION_MESSAGE,
-                        'locked',
-                        'fa-solid fa-lock'
-                    );
+            baterias.forEach((bateria) => {
+                const card = createQuestionModuleCard(bateria, {
+                    onStart: (bat) => {
+                        showToast(
+                            `Iniciando ${bat.titulo} (${bat.questoesCount} questões). A tela interativa de resolução de questões será conectada em breve!`,
+                            'info',
+                            'fa-solid fa-circle-play'
+                        );
+                    },
+                    onLockedClick: (bat) => {
+                        showToast(
+                            bat.motivoBloqueio || LOCKED_QUESTION_MESSAGE,
+                            'locked',
+                            'fa-solid fa-lock'
+                        );
+                    }
+                });
+
+                if (card) {
+                    modulesListContainer.appendChild(card);
                 }
             });
-
-            if (card) {
-                modulesListContainer.appendChild(card);
-            }
-        });
+        }
     }
 }
 

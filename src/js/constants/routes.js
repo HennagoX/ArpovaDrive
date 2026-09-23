@@ -6,8 +6,9 @@ const isLocal = typeof window !== 'undefined' && (
   window.location.protocol === 'file:'
 );
 
-export const API_URL = 
-   'https://arpova-drive-api.vercel.app';
+export const API_URL = isLocal 
+  ? 'http://localhost:3001' 
+  : 'https://arpova-drive-api.vercel.app';
 
 export const ROUTES = {
   HOME: '/index.html',
@@ -31,7 +32,8 @@ export const ENDPOINTS = {
     INICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/iniciar`,
     CONCLUIR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/concluir`,
     PAUSAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/pausar`,
-    REINICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/reiniciar`
+    REINICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/reiniciar`,
+    RESET_SCHEDULE: `${API_URL}/task/reset-schedule`
   },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,
@@ -42,8 +44,15 @@ export const ENDPOINTS = {
     CRIAR: `${API_URL}/cronograma`
   },
   MODULO: {
-    GET: (contentId, userId) => `${API_URL}/modulo?contentId=${encodeURIComponent(contentId || '')}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
+    GET: (contentId, userId) => `${API_URL}/modulo/${encodeURIComponent(contentId || '')}${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`,
+    GET_QUERY: (contentId, userId) => `${API_URL}/modulo?contentId=${encodeURIComponent(contentId || '')}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
     NEXT: `${API_URL}/modulo/next`
+  },
+  QUESTOES: {
+    CONCLUIDAS: (userId, materia) => `${API_URL}/questoes/concluidas?userId=${encodeURIComponent(userId || '')}${materia ? `&materia=${encodeURIComponent(materia)}` : ''}`,
+    CHECK_ACERTO: `${API_URL}/questoes/checkAcerto`,
+    CHECK_QUESTAO: `${API_URL}/questoes/checkQuestao`,
+    CONCLUIR_QUESTAO: `${API_URL}/questoes/concluirQuestao`
   }
 };
 

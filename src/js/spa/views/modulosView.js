@@ -14,9 +14,14 @@ import {
     getModulosByConteudoId,
     LOCKED_MODULE_MESSAGE
 } from '../../services/conteudosService.js';
-import { getModuloAtual, avancarModulo } from '../../services/moduloService.js';
+import {
+    getModuloAtual,
+    getModuloAtualCached,
+    setModuloAtualCached,
+    avancarModulo
+} from '../../services/moduloService.js';
 import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
-import { createModuleCard } from '../../components/moduleCard.js';
+import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -102,6 +107,9 @@ export function initModulosView(router) {
                 // Chamada à rota do backend (POST /modulo/next) para persistir o progresso
                 const resultado = await avancarModulo(activeConteudoId);
                 const proxModuloNum = Number(resultado.modulo_atual || numModuloAtual + 1);
+
+                // Atualiza cirurgicamente o DOM dos módulos imediatamente
+                atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
 
                 // Localiza o próximo módulo na lista do conteúdo
                 const proxModulo = modulos.find(m => Number(m.numero) === proxModuloNum)
@@ -233,10 +241,56 @@ export function aplicarTemaModal(temaCor = 'green') {
 }
 
 /**
- * Atualiza e renderiza os módulos do conteúdo selecionado integrando com o banco de dados
+ * Atualiza cirurgicamente apenas os cards cujo estado mudou e os contadores do Hero,
+ * sem resetar ou reconstruir a lista do DOM.
+ * @param {string} conteudoId 
+ * @param {number} moduloAtual 
+ */
+export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
+    if (!conteudoId) return;
+    const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
+    const modulesListContainer = qs("#modules-list");
+
+    // Estatísticas dos módulos sincronizadas
+    const total = modulos.length;
+    const bloqueados = modulos.filter(m => m.bloqueado).length;
+    const liberados = total - bloqueados;
+    const pctProgresso = total > 0 ? Math.min(100, Math.round((liberados / total) * 100)) : 0;
+
+    const heroLiberados = qs("#modulo-hero-liberados");
+    const heroBloqueados = qs("#modulo-hero-bloqueados");
+    const heroProgressPct = qs("#modulo-hero-progress-pct");
+    const heroProgressFill = qs("#modulo-hero-progress-fill");
+    const modulosContadorBadge = qs("#modulos-contador-badge");
+
+    if (heroLiberados) setText(heroLiberados, `${liberados} ${liberados === 1 ? 'Módulo Liberado' : 'Módulos Liberados'}`);
+    if (heroBloqueados) setText(heroBloqueados, `${bloqueados} ${bloqueados === 1 ? 'Módulo Bloqueado' : 'Módulos Bloqueados'}`);
+    if (heroProgressPct) setText(heroProgressPct, `${pctProgresso}%`);
+    if (heroProgressFill) heroProgressFill.style.width = `${pctProgresso}%`;
+    if (modulosContadorBadge) setText(modulosContadorBadge, `${total} ${total === 1 ? 'módulo' : 'módulos'}`);
+
+    if (modulesListContainer) {
+        const cards = Array.from(modulesListContainer.children);
+        cards.forEach(card => {
+            const num = Number(card.dataset.moduleNumber);
+            const mod = modulos.find(m => Number(m.numero) === num);
+            if (mod) {
+                updateModuleCard(card, mod, {
+                    onRead: (m) => abrirLeituraPdf(conteudoId, m),
+                    onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock')
+                });
+            }
+        });
+    }
+}
+
+/**
+ * Atualiza e renderiza os módulos do conteúdo selecionado integrando com o banco de dados.
+ * Utiliza o localStorage para renderização imediata (0ms) e atualização diferencial no DOM.
+ * 
  * @param {string} conteudoId 
  */
-export async function abrirModulos(conteudoId) {
+export function abrirModulos(conteudoId) {
     if (!conteudoId) return;
     activeConteudoId = conteudoId;
 
@@ -250,41 +304,20 @@ export async function abrirModulos(conteudoId) {
         return;
     }
 
-    // Consulta o progresso atual do módulo no backend
-    let moduloAtual = 1;
-    try {
-        const progresso = await getModuloAtual(conteudoId);
-        moduloAtual = Math.max(1, Number(progresso.modulo_atual || 1));
-    } catch (err) {
-        console.warn('[ModulosView] Fallback de progresso local:', err.message);
-    }
-
+    // 1. Obtém o progresso imediatamente do localStorage (0ms de latência)
+    const moduloAtual = getModuloAtualCached(conteudoId);
     const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
 
-    // Atualiza cabeçalho global
+    // 2. Atualiza cabeçalho global
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, conteudo.titulo);
     if (subtitleEl) setText(subtitleEl, `Trilha de estudos de ${conteudo.titulo}`);
 
-    // Elementos do DOM
-    const heroCover = qs("#modulo-hero-cover");
-    const heroIcon = qs("#modulo-hero-icon");
-    const heroCategory = qs("#modulo-hero-category");
-    const heroTitle = qs("#modulo-hero-title");
-    const heroDesc = qs("#modulo-hero-desc");
-    const heroLiberados = qs("#modulo-hero-liberados");
-    const heroBloqueados = qs("#modulo-hero-bloqueados");
-    const heroProgressPct = qs("#modulo-hero-progress-pct");
-    const heroProgressFill = qs("#modulo-hero-progress-fill");
-    const modulosContadorBadge = qs("#modulos-contador-badge");
     const breadcrumbTitle = qs("#modulos-breadcrumb-title");
-    const modulesListContainer = qs("#modules-list");
-
-    // Atualiza Breadcrumb
     if (breadcrumbTitle) setText(breadcrumbTitle, conteudo.titulo);
 
-    // Atualiza o tema visual da tela de módulos com base na cor do conteúdo
+    // 3. Atualiza o tema visual da tela de módulos com base na cor do conteúdo
     const temaCor = conteudo.cor || 'green';
     const viewModulos = qs("#view-modulos");
     if (viewModulos) {
@@ -294,52 +327,54 @@ export async function abrirModulos(conteudoId) {
     }
     aplicarTemaModal(temaCor);
 
-    // Atualiza o Hero Card do conteúdo
-    if (heroCover) {
-        heroCover.className = `hero-cover ${conteudo.cor || 'green'}`;
-    }
-    if (heroIcon) {
-        heroIcon.className = conteudo.icone || 'fa-solid fa-book-open';
-    }
+    // 4. Atualiza o Hero Card do conteúdo
+    const heroCover = qs("#modulo-hero-cover");
+    const heroIcon = qs("#modulo-hero-icon");
+    const heroCategory = qs("#modulo-hero-category");
+    const heroTitle = qs("#modulo-hero-title");
+    const heroDesc = qs("#modulo-hero-desc");
+    if (heroCover) heroCover.className = `hero-cover ${conteudo.cor || 'green'}`;
+    if (heroIcon) heroIcon.className = conteudo.icone || 'fa-solid fa-book-open';
     if (heroCategory) setText(heroCategory, conteudo.categoria);
     if (heroTitle) setText(heroTitle, conteudo.titulo);
     if (heroDesc) setText(heroDesc, conteudo.descricao);
 
-    // Estatísticas dos módulos sincronizadas com o banco
-    const total = modulos.length;
-    const bloqueados = modulos.filter(m => m.bloqueado).length;
-    const liberados = total - bloqueados;
-    const pctProgresso = total > 0 ? Math.min(100, Math.round((liberados / total) * 100)) : 0;
+    // 5. Renderização diferencial (só muda o que realmente mudou, sem resetar todo o DOM)
+    const modulesListContainer = qs("#modules-list");
+    const isSameConteudo = modulesListContainer &&
+        modulesListContainer.dataset.conteudoId === conteudoId &&
+        modulesListContainer.children.length > 0;
 
-    if (heroLiberados) setText(heroLiberados, `${liberados} ${liberados === 1 ? 'Módulo Liberado' : 'Módulos Liberados'}`);
-    if (heroBloqueados) setText(heroBloqueados, `${bloqueados} ${bloqueados === 1 ? 'Módulo Bloqueado' : 'Módulos Bloqueados'}`);
-    if (heroProgressPct) setText(heroProgressPct, `${pctProgresso}%`);
-    if (heroProgressFill) heroProgressFill.style.width = `${pctProgresso}%`;
-    if (modulosContadorBadge) setText(modulosContadorBadge, `${total} ${total === 1 ? 'módulo' : 'módulos'}`);
-
-    // Renderiza cards reutilizáveis com integração para a tela de leitura de PDF
-    if (modulesListContainer) {
+    if (isSameConteudo) {
+        // Já renderizado para esta matéria: atualiza cirurgicamente cards e hero
+        atualizarCardsModuloUI(conteudoId, moduloAtual);
+    } else if (modulesListContainer) {
+        // Primeira carga ou troca de matéria: renderiza com base no localStorage instantâneo
+        modulesListContainer.dataset.conteudoId = conteudoId;
         modulesListContainer.innerHTML = '';
 
         modulos.forEach((modulo) => {
             const card = createModuleCard(modulo, {
-                onRead: (mod) => {
-                    abrirLeituraPdf(conteudoId, mod);
-                },
-                onLockedClick: () => {
-                    showToast(
-                        LOCKED_MODULE_MESSAGE,
-                        'locked',
-                        'fa-solid fa-lock'
-                    );
-                }
+                onRead: (mod) => abrirLeituraPdf(conteudoId, mod),
+                onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock')
             });
-
             if (card) {
                 modulesListContainer.appendChild(card);
             }
         });
+
+        atualizarCardsModuloUI(conteudoId, moduloAtual);
     }
+
+    // 6. Sincronização em segundo plano não bloqueante (SWR)
+    getModuloAtual(conteudoId).then((progresso) => {
+        if (progresso && progresso.mudou && activeConteudoId === conteudoId) {
+            const novoNum = Math.max(1, Number(progresso.modulo_atual || 1));
+            atualizarCardsModuloUI(conteudoId, novoNum);
+        }
+    }).catch((err) => {
+        console.warn('[ModulosView] Sincronização em segundo plano:', err.message);
+    });
 }
 
 /**
