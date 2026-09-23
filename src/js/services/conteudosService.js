@@ -9,7 +9,11 @@ export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o mó
  */
 export function resolvePdfUrl(filename) {
     if (!filename) return null;
-    const encoded = encodeURI(filename);
+    let path = filename;
+    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/')) {
+        path = `modulo1/${filename}`;
+    }
+    const encoded = encodeURI(path);
     if (typeof window !== 'undefined' && window.location && window.location.pathname) {
         if (window.location.pathname.includes('/src/pages/') || window.location.pathname.includes('/pages/')) {
             return `../../assets/PDFs/${encoded}`;
@@ -166,45 +170,125 @@ export const CONTEUDOS_DATA = {
         cor: 'blue',
         icone: 'fa-solid fa-road',
         descricao: 'Domine a sinalização vertical, horizontal, semafórica e gestos de agentes para trafegar com segurança e acertar tudo na prova.',
-        totalCapitulos: 8,
+        totalCapitulos: 10,
         modulos: [
             {
                 id: 'plc-mod-1',
                 numero: 1,
-                titulo: 'Placas de Regulamentação (Vermelhas)',
-                descricao: 'Aprenda as placas imperativas que impõem proibições, restrições e obrigações indispensáveis com penalidade direta por descumprimento.',
-                duracao: '20 min',
-                topicos: 5,
+                titulo: 'Introdução à Sinalização',
+                descricao: 'Conceitos gerais, hierarquia da sinalização, finalidades e princípios estabelecidos pelo CTB.',
+                duracao: '15 min',
+                topicos: 4,
+                pdfNome: 'Modulo 01 - Introducao a Sinalizacao.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 01 - Introducao a Sinalizacao.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'plc-mod-2',
                 numero: 2,
-                titulo: 'Placas de Advertência (Amarelas)',
-                descricao: 'Identifique os alertas prévios sobre riscos na pista, como curvas perigosas, aclives, estreitamentos de pista e cruzamentos.',
-                duracao: '25 min',
-                topicos: 4,
+                titulo: 'Sinalização Vertical',
+                descricao: 'Classificação da sinalização fixada em suportes verticais: regulamentação, advertência e indicação.',
+                duracao: '20 min',
+                topicos: 5,
+                pdfNome: 'Modulo 02 - Sinalizacao Vertical.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 02 - Sinalizacao Vertical.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'plc-mod-3',
                 numero: 3,
-                titulo: 'Placas de Indicação, Educativas e Serviços Auxiliares',
-                descricao: 'Sinalização azul e verde de identificação de rotas, distâncias, cidades, atrativos turísticos e locais de serviços como hospitais e postos.',
-                duracao: '20 min',
-                topicos: 4,
+                titulo: 'Placas de Regulamentação',
+                descricao: 'Placas vermelhas e redondas de obrigações, restrições e proibições de cumprimento obrigatório.',
+                duracao: '25 min',
+                topicos: 6,
+                pdfNome: 'Modulo 03 - Placas de Regulamentacao.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 03 - Placas de Regulamentacao.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'plc-mod-4',
                 numero: 4,
-                titulo: 'Sinalização Horizontal, Luminosa e Gestual',
-                descricao: 'Significado das faixas contínuas, seccionadas, faixas amarelas e brancas no asfalto, tempos dos semáforos e gestos universais de agentes.',
-                duracao: '30 min',
+                titulo: 'Placas de Advertência',
+                descricao: 'Placas amarelas de atenção prévia a perigos potenciais, curvas, aclives e estreitamentos na pista.',
+                duracao: '25 min',
                 topicos: 5,
+                pdfNome: 'Modulo 04 - Placas de Advertencia.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 04 - Placas de Advertencia.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-5',
+                numero: 5,
+                titulo: 'Placas de Indicação',
+                descricao: 'Sinalização de identificação de rodovias, destinos, distâncias, serviços auxiliares e atrativos turísticos.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'Modulo 05 - Placas de Indicacao.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 05 - Placas de Indicacao.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-6',
+                numero: 6,
+                titulo: 'Sinalização Horizontal',
+                descricao: 'Marcas viárias pintadas no pavimento: faixas contínuas, seccionadas, faixas de pedestre e marcas de canalização.',
+                duracao: '25 min',
+                topicos: 5,
+                pdfNome: 'Modulo 06 - Sinalizacao Horizontal.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 06 - Sinalizacao Horizontal.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-7',
+                numero: 7,
+                titulo: 'Semáforos e Controle Luminoso',
+                descricao: 'Sinalização semafórica para veículos e pedestres, fases, tempos de verde, amarelo e vermelho.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'Modulo 07 - Semaforos.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 07 - Semaforos.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-8',
+                numero: 8,
+                titulo: 'Sinais dos Agentes de Trânsito',
+                descricao: 'Comandos gestuais e ordens emitidas pela autoridade de trânsito que prevalecem sobre as demais regras.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'Modulo 08 - Sinais dos Agentes de Transito.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 08 - Sinais dos Agentes de Transito.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-9',
+                numero: 9,
+                titulo: 'Sinais Sonoros e Outros Sinais',
+                descricao: 'Silvos de apito do agente, dispositivos auxiliares de segurança, barreiras e sinalização temporária de obras.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'Modulo 09 - Sinais Sonoros e Outros Sinais.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 09 - Sinais Sonoros e Outros Sinais.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'plc-mod-10',
+                numero: 10,
+                titulo: 'Como Não Confundir as Placas',
+                descricao: 'Guia comparativo definitivo das placas mais cobradas e com maiores taxas de pegadinhas nas provas teóricas.',
+                duracao: '30 min',
+                topicos: 6,
+                pdfNome: 'Modulo 10 - Como Nao Confundir as Placas.pdf',
+                pdfUrl: resolvePdfUrl('modulo2/Modulo 10 - Como Nao Confundir as Placas.pdf'),
                 status: 'locked',
                 bloqueado: true
             }

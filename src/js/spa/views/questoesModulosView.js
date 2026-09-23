@@ -90,7 +90,7 @@ export function abrirQuestoesModulos(materiaId) {
 
     // Atualiza Hero Card
     if (heroCover) {
-        heroCover.className = `hero-cover ${materia.cor || 'green'}`;
+        heroCover.className = `questoes-emblem ${materia.cor || 'green'}`;
     }
     if (heroIcon) {
         heroIcon.className = materia.icone || 'fa-solid fa-circle-question';

@@ -4,7 +4,7 @@ export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
 
 /**
- * Base de dados mockada das matérias de questões e suas respectivas baterias de exercícios.
+ * Base de dados das matérias de questões e suas baterias de simulados.
  * 
  * Regra de Negócio:
  * - As baterias de questões são liberadas sequencialmente a cada 3 módulos de estudo concluídos.
@@ -28,7 +28,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'ctb-bat-1',
                 numero: 1,
                 titulo: 'Bateria 1: Fundamentos e Legislação Inicial',
-                descricao: 'Questões essenciais referentes aos Módulos 01 a 03 (Conhecendo o Trânsito, SNT e Processo de Habilitação).',
+                descricao: 'Questões essenciais referentes aos Módulos 01 a 03.',
+                topicos: ['Conceitos de Trânsito', 'SNT e Órgãos', 'Habilitação e CNH'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -40,33 +41,36 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'ctb-bat-2',
                 numero: 2,
                 titulo: 'Bateria 2: Circulação, Infrações e Penalidades',
-                descricao: 'Questões práticas referentes aos Módulos 04 a 06 (Regras de Circulação, Infrações e Penalidades/Medidas Administrativas).',
+                descricao: 'Questões práticas referentes aos Módulos 04 a 06.',
+                topicos: ['Normas de Circulação', 'Infrações e Pontos', 'Penalidades Administrativas'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 04 a 06',
                 modulosNecessarios: 6,
                 status: 'locked',
                 bloqueado: true,
-                motivoBloqueio: 'Conclua até o Módulo 6 de Código de Trânsito para desbloquear este simulado!'
+                motivoBloqueio: 'Conclua até o Módulo 6 de Código de Trânsito para desbloquear esta bateria!'
             },
             {
                 id: 'ctb-bat-3',
                 numero: 3,
                 titulo: 'Bateria 3: Crimes e Segurança Viária',
-                descricao: 'Questões sobre Processo Administrativo, Crimes de Trânsito e Segurança Viária (Módulos 07 a 09).',
+                descricao: 'Questões sobre Processo Administrativo, Crimes de Trânsito e Segurança Viária.',
+                topicos: ['Processo Administrativo', 'Crimes de Trânsito', 'Segurança nas Vias'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 07 a 09',
                 modulosNecessarios: 9,
                 status: 'locked',
                 bloqueado: true,
-                motivoBloqueio: 'Conclua até o Módulo 9 de Código de Trânsito para desbloquear este simulado!'
+                motivoBloqueio: 'Conclua até o Módulo 9 de Código de Trânsito para desbloquear esta bateria!'
             },
             {
                 id: 'ctb-bat-4',
                 numero: 4,
                 titulo: 'Simulado Final: Prova Completa de Legislação',
-                descricao: 'Simulado intensivo de 30 questões englobando todos os 10 módulos de legislação no formato oficial do DETRAN.',
+                descricao: 'Simulado completo de 30 questões englobando todos os 10 módulos nos padrões da prova teórica.',
+                topicos: ['Revisão Geral CTB', 'Questões Oficiais DETRAN', 'Checklist de Aprovação'],
                 questoesCount: 30,
                 duracao: '35 min',
                 modulosReferencia: 'Todos os Módulos (01 a 10)',
@@ -94,7 +98,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'plc-bat-1',
                 numero: 1,
                 titulo: 'Bateria 1: Placas Verticais e Sinalização',
-                descricao: 'Questões sobre Placas de Regulamentação (vermelhas), Advertência (amarelas) e Indicação/Serviços (Módulos 01 a 03).',
+                descricao: 'Questões sobre Placas de Regulamentação (vermelhas), Advertência (amarelas) e Indicação/Serviços.',
+                topicos: ['Regulamentação', 'Advertência', 'Indicação e Serviços'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -106,10 +111,11 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'plc-bat-2',
                 numero: 2,
                 titulo: 'Bateria 2: Marcas Viárias, Semáforos e Gestos',
-                descricao: 'Questões sobre sinalização horizontal, faixas contínuas, ciclos semafóricos e gestos universais de trânsito (Módulo 04).',
+                descricao: 'Questões sobre sinalização horizontal, faixas contínuas, ciclos semafóricos e gestos de trânsito.',
+                topicos: ['Faixas e Marcas no Solo', 'Sinalização Semafórica', 'Gestos de Agentes e Condutores'],
                 questoesCount: 15,
                 duracao: '20 min',
-                modulosReferencia: 'Módulos 04',
+                modulosReferencia: 'Módulo 04',
                 modulosNecessarios: 4,
                 status: 'locked',
                 bloqueado: true,
@@ -134,7 +140,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'dir-bat-1',
                 numero: 1,
                 titulo: 'Bateria 1: Fundamentos e Condições Adversas',
-                descricao: 'Questões sobre os 5 elementos da direção defensiva, cálculo de frenagem e situações sob chuva, neblina e noite (Módulos 01 a 03).',
+                descricao: 'Questões sobre os 5 pilares defensivos, cálculo de frenagem e situações sob chuva, neblina e ofuscamento.',
+                topicos: ['5 Pilares Defensivos', 'Condições Adversas (Chuva/Luz)', 'Cálculo de Frenagem e Parada'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -146,7 +153,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'dir-bat-2',
                 numero: 2,
                 titulo: 'Bateria 2: Prevenção de Colisões e Emergências',
-                descricao: 'Questões sobre manobras evasivas, pontos cegos do veículo, cruzamentos perigosos e distâncias seguras de seguimento (Módulo 04).',
+                descricao: 'Questões sobre manobras evasivas, pontos cegos do veículo, cruzamentos e distâncias seguras de seguimento.',
+                topicos: ['Prevenção de Colisões', 'Pontos Cegos', 'Manobras Evasivas'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulo 04',
@@ -174,7 +182,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'soc-bat-1',
                 numero: 1,
                 titulo: 'Bateria 1: Sinalização, Avaliação e Cuidados',
-                descricao: 'Questões sobre isolamento do local, acionamento do SAMU/Resgate, verificação da respiração e controle de hemorragias (Módulos 01 a 03).',
+                descricao: 'Questões sobre sinalização com triângulo, acionamento do SAMU/Resgate, respiração e hemorragias.',
+                topicos: ['Sinalização do Local', 'Acionamento 192 e 193', 'Verificação de Respiração e Pulso'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -186,7 +195,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'soc-bat-2',
                 numero: 2,
                 titulo: 'Bateria 2: Ações Críticas e Condutas Proibidas',
-                descricao: 'Questões cruciais sobre condutas que nunca devem ser tomadas com motociclistas e vítimas com suspeita de lesão na coluna (Módulo 04).',
+                descricao: 'Questões sobre condutas terminantemente proibidas com vítimas e motociclistas para evitar agravamento.',
+                topicos: ['Condutas NUNCA Fazer', 'Cuidados com Motociclistas', 'Proteção da Coluna Cervical'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulo 04',
@@ -214,7 +224,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'amb-bat-1',
                 numero: 1,
                 titulo: 'Bateria 1: Poluição Veicular e Resíduos',
-                descricao: 'Questões sobre gases tóxicos (CO, NOx), catalisadores, poluição sonora e descarte sustentável de baterias e pneus (Módulos 01 a 03).',
+                descricao: 'Questões sobre emissão de gases (CO, NOx), catalisadores, poluição sonora e descarte ecológico.',
+                topicos: ['Gases Automotivos', 'PROCONVE e Catalisador', 'Poluição Sonora e Visual'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -226,7 +237,8 @@ export const QUESTOES_MATERIAS_DATA = {
                 id: 'amb-bat-2',
                 numero: 2,
                 titulo: 'Bateria 2: Cidadania e Convívio Social nas Vias',
-                descricao: 'Questões sobre direitos humanos, respeito prioritário aos pedestres e ciclistas e responsabilidade no trânsito (Módulo 04).',
+                descricao: 'Questões sobre direitos humanos, respeito prioritário a pedestres e ciclistas e responsabilidade no trânsito.',
+                topicos: ['Direitos Humanos e Cidadania', 'Prioridade aos Vulneráveis', 'Convivência Harmoniosa'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulo 04',
@@ -287,7 +299,6 @@ export function getBateriasByMateriaId(materiaId) {
  */
 export function isBateriaDesbloqueada(bateria, modulosConcluidosCount = 3) {
     if (!bateria) return false;
-    // Bateria 1 liberada por padrão no front mockado
     if (bateria.numero === 1) return true;
     const necessarios = bateria.modulosNecessarios || (bateria.numero * MODULOS_INTERVALO_DESBLOQUEIO);
     return modulosConcluidosCount >= necessarios;
