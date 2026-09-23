@@ -247,15 +247,15 @@ export const QUESTOES_MATERIAS_DATA = {
         cor: 'purple',
         icone: 'fa-solid fa-leaf',
         descricao: 'Questões sobre poluição veicular, PROCONVE, ruídos no trânsito, convívio cidadão e empatia no trânsito.',
-        totalQuestoes: 30,
-        totalBaterias: 2,
+        totalQuestoes: 60,
+        totalBaterias: 3,
         baterias: [
             {
                 id: 'amb-bat-1',
                 numero: 1,
-                titulo: 'Bateria 1: Poluição Veicular e Resíduos',
-                descricao: 'Questões sobre emissão de gases (CO, NOx), catalisadores, poluição sonora e descarte ecológico.',
-                topicos: ['Gases Automotivos', 'PROCONVE e Catalisador', 'Poluição Sonora e Visual'],
+                titulo: 'Bateria 1: Sociedade e Poluição do Ar e Sonora',
+                descricao: 'Questões sobre impacto urbano, emissões, PROCONVE e poluição sonora dos Módulos 01 a 03.',
+                topicos: ['Trânsito e Meio Ambiente', 'Poluição do Ar e PROCONVE', 'Poluição Sonora e Buzina'],
                 questoesCount: 15,
                 duracao: '20 min',
                 modulosReferencia: 'Módulos 01 a 03',
@@ -266,16 +266,30 @@ export const QUESTOES_MATERIAS_DATA = {
             {
                 id: 'amb-bat-2',
                 numero: 2,
-                titulo: 'Bateria 2: Cidadania e Convívio Social nas Vias',
-                descricao: 'Questões sobre direitos humanos, respeito prioritário a pedestres e ciclistas e responsabilidade no trânsito.',
-                topicos: ['Direitos Humanos e Cidadania', 'Prioridade aos Vulneráveis', 'Convivência Harmoniosa'],
+                titulo: 'Bateria 2: Manutenção, Consumo e Resíduos',
+                descricao: 'Questões sobre manutenção preventiva, combustíveis e descarte correto dos Módulos 04 a 06.',
+                topicos: ['Manutenção e Emissões', 'Consumo Eficiente', 'Resíduos e Logística Reversa'],
                 questoesCount: 15,
                 duracao: '20 min',
-                modulosReferencia: 'Módulo 04',
-                modulosNecessarios: 4,
+                modulosReferencia: 'Módulos 04 a 06',
+                modulosNecessarios: 6,
                 status: 'locked',
                 bloqueado: true,
-                motivoBloqueio: 'Conclua os módulos de Meio Ambiente para desbloquear este simulado!'
+                motivoBloqueio: 'Conclua até o Módulo 6 de Meio Ambiente para desbloquear esta bateria!'
+            },
+            {
+                id: 'amb-bat-3',
+                numero: 3,
+                titulo: 'Simulado Final: Mobilidade e Cidadania no Trânsito',
+                descricao: 'Simulado completo cobrindo sustentabilidade, cidadania e respeito aos vulneráveis dos Módulos 07 a 09.',
+                topicos: ['Mobilidade Sustentável', 'Cidadania no Trânsito', 'Respeito aos Usuários da Via'],
+                questoesCount: 30,
+                duracao: '35 min',
+                modulosReferencia: 'Todos os Módulos (01 a 09)',
+                modulosNecessarios: 9,
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua todos os 9 módulos de Meio Ambiente para desbloquear o simulado final!'
             }
         ]
     }

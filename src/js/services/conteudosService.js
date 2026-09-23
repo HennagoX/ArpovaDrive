@@ -10,7 +10,7 @@ export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o mó
 export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
     let path = filename;
-    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo4/')) {
+    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo4/') && !path.startsWith('modulo5/')) {
         path = `${folder}/${filename}`;
     }
     const encoded = encodeURI(path);
@@ -493,46 +493,115 @@ export const CONTEUDOS_DATA = {
         categoriaKey: 'ambiente',
         cor: 'purple',
         icone: 'fa-solid fa-leaf',
+        pdfFolder: 'modulo5',
         descricao: 'Entenda os impactos ambientais causados por veículos, poluição sonora e atmosférica, além da convivência cidadã no trânsito.',
-        totalCapitulos: 7,
+        totalCapitulos: 9,
         modulos: [
             {
                 id: 'amb-mod-1',
                 numero: 1,
-                titulo: 'Emissão de Gases Tóxicos e Poluição Atmosférica',
-                descricao: 'Principais poluentes automotivos (CO, NOx, fuligem), papel do PROCONVE, funcionamento do catalisador e manutenção preventiva.',
+                titulo: 'Trânsito, Meio Ambiente e Sociedade',
+                descricao: 'Conceitos fundamentais sobre a relação entre escolhas individuais, mobilidade urbana, infraestrutura e sustentabilidade ambiental nas cidades.',
                 duracao: '20 min',
-                topicos: 3,
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_01_Transito_Meio_Ambiente_e_Sociedade.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_01_Transito_Meio_Ambiente_e_Sociedade.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'amb-mod-2',
                 numero: 2,
-                titulo: 'Poluição Sonora e Visual no Trânsito',
-                descricao: 'Limites de ruído permitidos por lei, consequências da poluição sonora contínua e penalidades pelo uso incorreto da buzina e escape.',
+                titulo: 'Poluição do Ar',
+                descricao: 'Processo de combustão veicular, emissões de gases poluentes, papel do PROCONVE/IBAMA e a importância da manutenção preventiva.',
                 duracao: '20 min',
-                topicos: 3,
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_02_Poluicao_do_Ar.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_02_Poluicao_do_Ar.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'amb-mod-3',
                 numero: 3,
-                titulo: 'Descarte Sustentável de Resíduos Automotivos',
-                descricao: 'Destinação ecológica correta de pneus usados, baterias de chumbo-ácido, fluidos de freio e óleo lubrificante queimado.',
-                duracao: '25 min',
+                titulo: 'Poluição Sonora',
+                descricao: 'Efeitos do ruído excessivo na saúde pública, regras de uso breve da buzina pelo CTB e fiscalização de escapamentos irregulares.',
+                duracao: '20 min',
                 topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_03_Poluicao_Sonora.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_03_Poluicao_Sonora.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'amb-mod-4',
                 numero: 4,
-                titulo: 'Cidadania, Direitos Humanos e Empatia nas Vias',
-                descricao: 'O trânsito como espaço coletivo de convivência: respeito prioritário aos pedestres, ciclistas, idosos e pessoas com deficiência.',
+                titulo: 'Manutenção do Veículo e Meio Ambiente',
+                descricao: 'Impactos da manutenção no consumo e emissões: motor, pneus, escapamento, filtros e contenção de vazamentos de fluidos.',
                 duracao: '25 min',
                 topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_04_Manutencao_do_Veiculo.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_04_Manutencao_do_Veiculo.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'amb-mod-5',
+                numero: 5,
+                titulo: 'Combustíveis e Consumo Consciente',
+                descricao: 'Tipos de combustíveis, técnicas de condução eficiente, planejamento de rotas e redução de desperdícios no dia a dia.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_05_Combustiveis_e_Consumo_Consciente.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_05_Combustiveis_e_Consumo_Consciente.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'amb-mod-6',
+                numero: 6,
+                titulo: 'Resíduos e Descarte Correto',
+                descricao: 'Destinação adequada de óleo lubrificante, pneus, filtros e baterias usadas, responsabilidade ambiental e logística reversa.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_06_Residuos_e_Descarte_Correto.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_06_Residuos_e_Descarte_Correto.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'amb-mod-7',
+                numero: 7,
+                titulo: 'Mobilidade Sustentável',
+                descricao: 'Integração modal, transporte coletivo, circulação a pé e por bicicletas, carona solidária e planejamento urbano inclusivo.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_07_Mobilidade_Sustentavel.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_07_Mobilidade_Sustentavel.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'amb-mod-8',
+                numero: 8,
+                titulo: 'Cidadania no Trânsito',
+                descricao: 'Exercício de direitos e cumprimento de deveres coletivos, preservação do patrimônio público e convivência solidária.',
+                duracao: '20 min',
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_08_Cidadania_no_Transito.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_08_Cidadania_no_Transito.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'amb-mod-9',
+                numero: 9,
+                titulo: 'Respeito aos Usuários da Via',
+                descricao: 'Proteção e prioridade aos pedestres, ciclistas, idosos e pessoas com deficiência, distância lateral de segurança e empatia nas vias.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo5/AprovaDrive_Meio_Ambiente_Modulo_09_Respeito_aos_Usuarios_da_Via.pdf',
+                pdfUrl: resolvePdfUrl('modulo5/AprovaDrive_Meio_Ambiente_Modulo_09_Respeito_aos_Usuarios_da_Via.pdf'),
                 status: 'locked',
                 bloqueado: true
             }
@@ -577,7 +646,7 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
     }
 
     const total = conteudo.modulos.length;
-    const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : (id === 'PrimeirosSocorros' ? 'modulo4' : 'modulo1'));
+    const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : (id === 'PrimeirosSocorros' ? 'modulo4' : (id === 'MeioAmbiente' ? 'modulo5' : 'modulo1')));
     return conteudo.modulos.map((modulo, index) => {
         const num = Number(modulo.numero || (index + 1));
         const pdfUrl = modulo.pdfUrl || (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null);
