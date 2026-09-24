@@ -108,23 +108,45 @@ export function initModulosView(router) {
                 return;
             }
 
+            const proximoNumero = numModuloAtual + 1;
+            const proxModulo = (proximoNumero <= MAX_MODULO && proximoNumero <= totalModulos)
+                ? (modulos.find(m => Number(m.numero) === proximoNumero) || null)
+                : null;
+
+            // Progresso mais alto já desbloqueado pelo aluno nesta matéria
+            const progressoAtual = getModuloAtualCached(activeConteudoId);
+
+            // CENÁRIO 1: Navegação por módulo já concluído anteriormente (numModuloAtual < progressoAtual)
+            // O aluno está relendo ou apenas avançando por módulos que já desbloqueou no passado.
+            // Não deve chamar a API para avançar, não concede XP repetido,
+            // não abre modal e NÃO exibe "Parabéns! Módulo concluído". Apenas abre o próximo módulo.
+            if (numModuloAtual < progressoAtual) {
+                if (proxModulo) {
+                    abrirLeituraPdf(activeConteudoId, proxModulo);
+                } else {
+                    router.navigateTo("modulos", { conteudoId: activeConteudoId });
+                }
+                return;
+            }
+
+            // CENÁRIO 2: Conclusão do módulo atual PELA PRIMEIRA VEZ (numModuloAtual >= progressoAtual)
+            // O aluno está completando o módulo e realmente vai ganhar +1 de progressão (+25 XP).
             const originalHtml = btnAvancarTopo.innerHTML;
             try {
                 btnAvancarTopo.disabled = true;
                 btnAvancarTopo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando...';
 
-                // Chamada à rota do backend (POST /modulo/next) para persistir o progresso
+                // Chamada à rota do backend (POST /modulo/next) para persistir o novo progresso
                 const resultado = await avancarModulo(activeConteudoId);
                 const proxModuloNum = Math.min(MAX_MODULO, Number(resultado.modulo_atual || Math.min(MAX_MODULO, numModuloAtual + 1)));
 
                 // Atualiza cirurgicamente o DOM dos módulos imediatamente
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
 
-                // Localiza o próximo módulo na lista do conteúdo se não ultrapassar o limite
-                const proximoNumero = numModuloAtual + 1;
-                const proxModulo = (proximoNumero <= MAX_MODULO && proximoNumero <= totalModulos)
-                    ? (modulos.find(m => Number(m.numero) === proximoNumero) || modulos.find(m => Number(m.numero) === proxModuloNum))
-                    : null;
+                // Localiza o próximo módulo atualizado
+                const proximoModuloCarregar = proxModulo
+                    || modulos.find(m => Number(m.numero) === proxModuloNum)
+                    || null;
 
                 // Verifica se a conclusão DESTE módulo libera uma nova bateria de questões (a cada 3 módulos)
                 const bateriaLiberada = checkBateriaLiberadaPorModulo(activeConteudoId, numModuloAtual);
@@ -132,27 +154,34 @@ export function initModulosView(router) {
                 const xpGanha = Number(resultado.xp_ganha || 0);
                 const xpTexto = xpGanha > 0 ? ` +${xpGanha} XP` : '';
 
+                // Confirma que realmente ganhou +1 no módulo pela primeira vez
+                const realmenteGanhouModulo = proxModuloNum > progressoAtual || xpGanha > 0;
+
                 if (bateriaLiberada) {
-                    showToast(
-                        `Parabéns! Módulo ${String(numModuloAtual).padStart(2, '0')} concluído!${xpTexto}`,
-                        'success',
-                        'fa-solid fa-circle-check'
-                    );
-
-                    // Salva próximo módulo pendente caso o aluno decida continuar a leitura
-                    proximoModuloPendente = proxModulo || null;
-
-                    // Abre o modal avisando sobre a bateria de questões liberada
-                    abrirModalQuestoesLiberadas(conteudo, activeModulo, bateriaLiberada, proxModulo);
-                } else {
-                    // Módulo intermediário: NÃO libera questões, avança direto sem modal
-                    if (proxModulo) {
+                    if (realmenteGanhouModulo) {
                         showToast(
-                            `Parabéns! Módulo concluído. Você avançou para o Módulo ${String(proxModulo.numero).padStart(2, '0')}!${xpTexto}`,
+                            `Parabéns! Módulo ${String(numModuloAtual).padStart(2, '0')} concluído!${xpTexto}`,
                             'success',
                             'fa-solid fa-circle-check'
                         );
-                        abrirLeituraPdf(activeConteudoId, proxModulo);
+                    }
+
+                    // Salva próximo módulo pendente caso o aluno decida continuar a leitura
+                    proximoModuloPendente = proximoModuloCarregar || null;
+
+                    // Abre o modal avisando sobre a bateria de questões liberada
+                    abrirModalQuestoesLiberadas(conteudo, activeModulo, bateriaLiberada, proximoModuloCarregar);
+                } else {
+                    // Módulo intermediário: NÃO libera questões, avança direto sem modal
+                    if (proximoModuloCarregar) {
+                        if (realmenteGanhouModulo) {
+                            showToast(
+                                `Parabéns! Módulo concluído. Você avançou para o Módulo ${String(proximoModuloCarregar.numero).padStart(2, '0')}!${xpTexto}`,
+                                'success',
+                                'fa-solid fa-circle-check'
+                            );
+                        }
+                        abrirLeituraPdf(activeConteudoId, proximoModuloCarregar);
                     } else {
                         showToast(`Você concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!${xpTexto}`, 'success');
                         btnAvancarTopo.style.display = 'none';
@@ -449,6 +478,14 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
 
     if (btnAvancarTopo) {
         btnAvancarTopo.style.display = isUltimoModulo ? 'none' : 'inline-flex';
+        const progressoAtual = getModuloAtualCached(conteudoId);
+        if (numModuloAtual < progressoAtual) {
+            btnAvancarTopo.innerHTML = '<i class="fa-solid fa-forward-step"></i> Próximo Módulo';
+            btnAvancarTopo.title = "Ir para o próximo módulo";
+        } else {
+            btnAvancarTopo.innerHTML = '<i class="fa-solid fa-forward-step"></i> Avançar Módulo';
+            btnAvancarTopo.title = "Concluir leitura e desbloquear o próximo módulo";
+        }
     }
 
     // Atualiza cabeçalhos e breadcrumb da leitura
