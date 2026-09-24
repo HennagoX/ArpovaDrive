@@ -1,9 +1,3 @@
-/**
- * Módulo de Visão: Hub de Questões (SPA)
- * 
- * Gerencia a listagem das matérias de questões, filtros por categoria,
- * busca dinâmica e redirecionamento para as baterias de questões de cada matéria.
- */
 
 import { qs, qsa, setText } from '../../utils/dom.js';
 
@@ -19,12 +13,10 @@ export function initQuestoesView(router) {
     const contador = qs("#contador-questoes");
     const actionBtns = qsa(".btn-praticar-questoes");
 
-    // Vincula campo de busca dinâmica
     if (searchInput) {
         searchInput.addEventListener("input", filtrar);
     }
 
-    // Vincula botões de filtro por categoria
     filters.forEach(filter => {
         filter.addEventListener("click", () => {
             filters.forEach(f => f.classList.remove("active"));
@@ -33,7 +25,6 @@ export function initQuestoesView(router) {
         });
     });
 
-    // Função de filtro dinâmico
     function filtrar() {
         if (!searchInput) return;
         const texto = searchInput.value.toLowerCase().trim();
@@ -62,7 +53,6 @@ export function initQuestoesView(router) {
         }
     }
 
-    // Abertura das baterias pelo botão "Praticar Questões"
     actionBtns?.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -74,7 +64,6 @@ export function initQuestoesView(router) {
         });
     });
 
-    // Permite clicar no card inteiro
     cards.forEach((card) => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {

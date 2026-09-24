@@ -2,11 +2,6 @@ import { MESSAGES } from '../constants/messages.js';
 
 export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o módulo anterior para desbloquear este módulo!';
 
-/**
- * Resolve o caminho relativo do arquivo PDF com base no contexto da página.
- * @param {string} filename - Nome do arquivo PDF em assets/PDFs
- * @returns {string} Caminho URL-encoded para o PDF
- */
 export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
     let path = filename;
@@ -22,10 +17,6 @@ export function resolvePdfUrl(filename, folder = 'modulo1') {
     return `../../assets/PDFs/${encoded}`;
 }
 
-/**
- * Base de dados mockada dos conteúdos e seus respectivos módulos
- * para a plataforma AprovaDrive.
- */
 export const CONTEUDOS_DATA = {
     CodigoTransito: {
         id: 'CodigoTransito',
@@ -609,16 +600,10 @@ export const CONTEUDOS_DATA = {
     }
 };
 
-/**
- * Retorna os detalhes de um conteúdo pelo seu ID ou slug
- * @param {string} id - Identificador do conteúdo (ex: 'CodigoTransito')
- * @returns {Object|null}
- */
 export function getConteudoById(id) {
     if (!id) return null;
     if (CONTEUDOS_DATA[id]) return CONTEUDOS_DATA[id];
 
-    // Busca alternativa por slug
     const normalized = String(id).toLowerCase().replace(/[^a-z0-9]/g, '');
     const foundKey = Object.keys(CONTEUDOS_DATA).find(key => {
         const item = CONTEUDOS_DATA[key];
@@ -629,16 +614,6 @@ export function getConteudoById(id) {
     return foundKey ? CONTEUDOS_DATA[foundKey] : null;
 }
 
-/**
- * Retorna os módulos de um conteúdo pelo ID.
- * Se informado moduloAtual, sincroniza com o banco de dados da API:
- * - Módulos com número < moduloAtual ficam com status 'done' (concluídos) e liberados.
- * - Módulo com número == moduloAtual fica com status 'available' (liberado para estudo).
- * - Módulos com número > moduloAtual ficam com status 'locked' (bloqueados).
- * @param {string} id
- * @param {number|null} [moduloAtual=null]
- * @returns {Array<Object>}
- */
 export function getModulosByConteudoId(id, moduloAtual = null) {
     const conteudo = getConteudoById(id);
     if (!conteudo || !Array.isArray(conteudo.modulos)) {
@@ -680,4 +655,3 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
         };
     });
 }
-

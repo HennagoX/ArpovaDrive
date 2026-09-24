@@ -620,8 +620,8 @@
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Desempenho</span>
             </a>
-        
-        </nav>
+
+                </nav>
     </aside>
 
     <main class="main">
@@ -640,9 +640,6 @@
             </a>
         </header>
 
-        <!-- ==========================================
-             SUB-TELA 1: INÍCIO (DASHBOARD)
-             ========================================== -->
         <section id="view-inicio" class="spa-view">
             <section class="progresso">
                 <div class="nivel">
@@ -673,8 +670,8 @@
                     <div class="icone-card verde-card">
                          <i class="fa-solid fa-book-open"></i>
                     </div>
-        
-                    <h3>Conteúdos</h3>
+
+                            <h3>Conteúdos</h3>
                     <p>Aprenda toda a matéria necessária para sua prova do DETRAN.</p>
                 </a>
 
@@ -786,12 +783,8 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 2: CONTEÚDOS (E-BOOKS)
-             ========================================== -->
         <section id="view-conteudos" class="spa-view" style="display: none;">
 
-            <!-- BANNER BOAS-VINDAS -->
             <section class="welcome">
                 <div>
                     <h2>📚 Hora de estudar!</h2>
@@ -806,7 +799,6 @@
                 </div>
             </section>
 
-            <!-- BUSCA -->
             <div class="search-area">
                 <div class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -814,7 +806,6 @@
                 </div>
             </div>
 
-            <!-- FILTROS POR CATEGORIA -->
             <div class="filters">
                 <button class="filter active" data-category="todos">Todos</button>
                 <button class="filter" data-category="legislacao">Legislação</button>
@@ -824,16 +815,13 @@
                 <button class="filter" data-category="ambiente">Meio Ambiente</button>
             </div>
 
-            <!-- TÍTULO DA SEÇÃO -->
             <div class="section-title">
                 <h2>Todos os conteúdos</h2>
                 <span id="contador">5 conteúdos</span>
             </div>
 
-            <!-- GRID DE E-BOOKS -->
             <section class="ebooks" id="ebooks">
 
-                <!-- CARD 1: Código de Trânsito -->
                 <article class="ebook" data-category="legislacao" data-id="CodigoTransito">
                     <div class="ebook-cover green">
                         <i class="fa-solid fa-scale-balanced"></i>
@@ -865,7 +853,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 2: Placas de Trânsito -->
                 <article class="ebook" data-category="placas" data-id="PlacaTransito">
                     <div class="ebook-cover blue">
                         <i class="fa-solid fa-road"></i>
@@ -897,7 +884,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 3: Direção Defensiva -->
                 <article class="ebook" data-category="seguranca" data-id="DirecaoOfensiva">
                     <div class="ebook-cover yellow">
                         <i class="fa-solid fa-car-burst"></i>
@@ -929,7 +915,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 4: Primeiros Socorros -->
                 <article class="ebook" data-category="saude" data-id="PrimeirosSocorros">
                     <div class="ebook-cover red">
                         <i class="fa-solid fa-kit-medical"></i>
@@ -961,7 +946,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 5: Meio Ambiente e Cidadania -->
                 <article class="ebook" data-category="ambiente" data-id="MeioAmbiente">
                     <div class="ebook-cover purple">
                         <i class="fa-solid fa-leaf"></i>
@@ -997,12 +981,8 @@
 
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 3: MÓDULOS DO CONTEÚDO (SPA)
-             ========================================== -->
         <section id="view-modulos" class="spa-view modulos-theme-green" style="display: none;">
 
-            <!-- NAVEGAÇÃO DE TOPO COM BOTÃO VOLTAR -->
             <div class="modulos-nav-topo">
                 <button type="button" class="btn-voltar-modulos" id="btn-voltar-conteudos">
                     <i class="fa-solid fa-arrow-left"></i> Voltar para conteúdos
@@ -1015,7 +995,6 @@
                 </div>
             </div>
 
-            <!-- HERO CARD DO CONTEÚDO SELECIONADO -->
             <div class="modulo-hero-card" id="modulo-hero-card">
                 <div class="hero-cover green" id="modulo-hero-cover">
                     <i class="fa-solid fa-scale-balanced" id="modulo-hero-icon"></i>
@@ -1050,7 +1029,6 @@
                 </div>
             </div>
 
-            <!-- TÍTULO DA LISTAGEM DE MÓDULOS -->
             <div class="modulos-section-header">
                 <div>
                     <h3>Módulos de Aprendizagem</h3>
@@ -1059,19 +1037,13 @@
                 <span id="modulos-contador-badge" class="hero-stat-badge">4 módulos</span>
             </div>
 
-            <!-- CONTAINER DE INJEÇÃO DOS CARDS REUTILIZÁVEIS -->
             <div class="modules-list" id="modules-list">
-                <!-- Injetado dinamicamente via createModuleCard -->
             </div>
 
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 3.5: LEITURA DE PDF DO MÓDULO (SPA)
-             ========================================== -->
         <section id="view-leitura-pdf" class="spa-view modulos-theme-green" style="display: none;">
 
-            <!-- NAVEGAÇÃO DE TOPO -->
             <div class="leitura-nav-topo">
                 <div class="leitura-nav-left">
                     <button type="button" class="btn-voltar-modulos" id="btn-voltar-leitura-modulos">
@@ -1100,7 +1072,6 @@
                 </div>
             </div>
 
-            <!-- CABEÇALHO DO LEITOR DE PDF -->
             <div class="leitura-header-card">
                 <div class="leitura-header-icon" id="leitura-header-icon">
                     <i class="fa-solid fa-book-open"></i>
@@ -1116,16 +1087,12 @@
                 </div>
             </div>
 
-            <!-- CONTAINER DO PDF EMBARCADO -->
             <div class="leitura-pdf-container">
                 <iframe id="leitura-pdf-frame" class="leitura-pdf-frame" src="" title="Material de Estudo em PDF" allow="fullscreen"></iframe>
             </div>
 
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 4: CRONOGRAMA DA SEMANA (SPA)
-             ========================================== -->
         <section id="view-cronograma" class="spa-view container" style="display: none;">
             <div class="nav-topo">
                 <a href="#inicio" class="btn-voltar" id="btn-voltar-painel-cronograma" data-nav="inicio">
@@ -1148,7 +1115,6 @@
                 </div>
             </header>
 
-            <!-- Seleção de Usuário (Visível apenas para Administrador) -->
             <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
                 <div class="user-selector-label">
                     <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">admin_panel_settings</span>
@@ -1162,7 +1128,6 @@
                 </div>
             </div>
 
-            <!-- Barra de Simulação / Mock de Dia (Visível apenas para Administrador) -->
             <div class="simulation-hud" id="simulation-hud" style="display: none;">
                 <div class="sim-label">
                     <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">science</span>
@@ -1206,7 +1171,6 @@
                 </div>
             </nav>
 
-            <!-- Banner destacando a tarefa atual do usuário -->
             <div id="task-atual-banner" class="current-task-banner" style="display: none;">
                 <div class="banner-info">
                     <span class="material-symbols-outlined icone-inline">play_circle</span>
@@ -1222,7 +1186,6 @@
             </div>
 
             <section class="schedule-list" id="schedule-days-container">
-                <!-- Feedback de Carregamento Explícito (Clean e amigável) -->
                 <div id="cronograma-loading" class="cronograma-state-card loading-state">
                     <div class="loading-spinner"></div>
                     <div class="state-text">
@@ -1231,7 +1194,6 @@
                     </div>
                 </div>
 
-                <!-- Feedback de Erro com Ação de Tentar Novamente -->
                 <div id="cronograma-error" class="cronograma-state-card error-state" style="display: none;">
                     <span class="material-symbols-outlined state-icon">event_busy</span>
                     <div class="state-text">
@@ -1243,7 +1205,6 @@
                     </button>
                 </div>
 
-                <!-- 6 divs: Uma para cada dia da semana (1: Segunda a 6: Sábado) -->
                 <div id="day-tasks-1" class="day-tasks-container" data-day="1" style="display: none;"></div>
                 <div id="day-tasks-2" class="day-tasks-container" data-day="2" style="display: none;"></div>
                 <div id="day-tasks-3" class="day-tasks-container" data-day="3" style="display: none;"></div>
@@ -1253,9 +1214,6 @@
             </section>
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 5: DESEMPENHO
-             ========================================== -->
         <section id="view-desempenho" class="spa-view" style="display: none;">
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -1479,12 +1437,8 @@
             </div>
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 6: BANCO DE QUESTÕES / HUB (SPA)
-             ========================================== -->
         <section id="view-questoes" class="spa-view" style="display: none;">
 
-            <!-- BANNER DE BOAS-VINDAS -->
             <div class="welcome-questoes">
                 <div>
                     <span class="welcome-questoes-tag"><i class="fa-solid fa-graduation-cap"></i> TREINAMENTO & SIMULADOS</span>
@@ -1499,17 +1453,14 @@
                 </div>
             </div>
 
-            <!-- BARRA DE BUSCA E FILTROS -->
             <div class="search-area">
                 <div class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="search-questoes" placeholder="Buscar disciplina ou assunto de questões...">
                 </div>
 
-                
-            </div>
+                            </div>
 
-            <!-- FILTROS POR CATEGORIA -->
             <div class="categories">
                 <button class="filter filter-questoes active" data-category="todos">Todos</button>
                 <button class="filter filter-questoes" data-category="legislacao">Legislação</button>
@@ -1519,12 +1470,8 @@
                 <button class="filter filter-questoes" data-category="ambiente">Meio Ambiente</button>
             </div>
 
-            <!-- CONTADOR -->
-          
-            <!-- GRID DE MATÉRIAS DE QUESTÕES -->
             <section class="questoes-grid" id="questoes-grid">
 
-                <!-- CARD 1: Código de Trânsito -->
                 <article class="questoes-card questoes-subject-card" data-category="legislacao" data-id="CodigoTransito">
                     <div class="questoes-card-header">
                         <div class="questoes-emblem green">
@@ -1562,7 +1509,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 2: Placas de Trânsito -->
                 <article class="questoes-card questoes-subject-card" data-category="placas" data-id="PlacaTransito">
                     <div class="questoes-card-header">
                         <div class="questoes-emblem blue">
@@ -1600,7 +1546,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 3: Direção Defensiva -->
                 <article class="questoes-card questoes-subject-card" data-category="seguranca" data-id="DirecaoOfensiva">
                     <div class="questoes-card-header">
                         <div class="questoes-emblem yellow">
@@ -1638,7 +1583,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 4: Primeiros Socorros -->
                 <article class="questoes-card questoes-subject-card" data-category="saude" data-id="PrimeirosSocorros">
                     <div class="questoes-card-header">
                         <div class="questoes-emblem red">
@@ -1676,7 +1620,6 @@
                     </button>
                 </article>
 
-                <!-- CARD 5: Meio Ambiente e Cidadania -->
                 <article class="questoes-card questoes-subject-card" data-category="ambiente" data-id="MeioAmbiente">
                     <div class="questoes-card-header">
                         <div class="questoes-emblem purple">
@@ -1718,12 +1661,8 @@
 
         </section>
 
-        <!-- ==========================================
-             SUB-TELA 7: BATERIAS DE QUESTÕES DA MATÉRIA (SPA)
-             ========================================== -->
         <section id="view-questoes-modulos" class="spa-view modulos-theme-green" style="display: none;">
 
-            <!-- NAVEGAÇÃO DE TOPO COM BOTÃO VOLTAR -->
             <div class="modulos-nav-topo">
                 <button type="button" class="btn-voltar-modulos" id="btn-voltar-hub-questoes">
                     <i class="fa-solid fa-arrow-left"></i> Voltar para Questões
@@ -1736,7 +1675,6 @@
                 </div>
             </div>
 
-            <!-- HERO CARD DA MATÉRIA SELECIONADA -->
             <div class="questoes-hero-card" id="questoes-modulo-hero-card">
                 <div class="questoes-emblem green" id="questoes-hero-cover">
                     <i class="fa-solid fa-scale-balanced" id="questoes-hero-icon"></i>
@@ -1778,7 +1716,6 @@
                 </div>
             </div>
 
-            <!-- TÍTULO DA LISTAGEM DE BATERIAS -->
             <div class="modulos-section-header">
                 <div>
                     <h3>Baterias de Questões</h3>
@@ -1787,23 +1724,19 @@
                 <span id="questoes-contador-badge" class="questoes-stat-pill">4 baterias</span>
             </div>
 
-            <!-- CONTAINER DE INJEÇÃO DOS CARDS DE BATERIA -->
             <div class="baterias-list" id="questoes-modules-list">
-                <!-- Injetado dinamicamente via createQuestionModuleCard -->
             </div>
 
         </section>
 
-        <!-- CONTAINER FLUTUANTE DE FEEDBACK (TOAST) -->
         <div id="toast-container" class="toast-container" aria-live="polite"></div>
     </main>
 
-    <!-- MODAL GLOBAL: NOVA BATERIA DE QUESTÕES LIBERADA (CENTRALIZADO NA TELA) -->
     <div id="modal-avancar-modulo" class="modal-modulo-overlay modulos-theme-green" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-modulo-titulo">
         <div class="modal-modulo-card">
             <button type="button" class="modal-modulo-close" id="btn-fechar-modal-modulo" aria-label="Fechar modal">&times;</button>
-            
-            <div class="modal-modulo-icon-circle questoes-unlocked" id="modal-modulo-icon-circle">
+
+                        <div class="modal-modulo-icon-circle questoes-unlocked" id="modal-modulo-icon-circle">
                 <i class="fa-solid fa-list-check" id="modal-modulo-icone"></i>
             </div>
 

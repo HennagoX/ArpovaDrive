@@ -1,10 +1,3 @@
-/**
- * Módulo de Visão: Baterias de Questões da Matéria (SPA)
- * 
- * Gerencia a renderização das baterias de questões de uma matéria específica,
- * agrupadas a cada 3 módulos de estudo, feedbacks visuais de bloqueio
- * e retorno ao Hub de Questões.
- */
 
 import { qs, setText } from '../../utils/dom.js';
 import {
@@ -37,10 +30,6 @@ export function initQuestoesModulosView(router) {
     }
 }
 
-/**
- * Atualiza e renderiza as baterias de questões da matéria selecionada
- * @param {string} materiaId 
- */
 export function abrirQuestoesModulos(materiaId) {
     if (!materiaId) return;
 
@@ -56,13 +45,11 @@ export function abrirQuestoesModulos(materiaId) {
 
     const baterias = getBateriasByMateriaId(materiaId);
 
-    // Atualiza cabeçalho global
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, `Questões: ${materia.titulo}`);
     if (subtitleEl) setText(subtitleEl, `Baterias de questões a cada 3 módulos de ${materia.titulo}`);
 
-    // Elementos do DOM
     const viewQuestoesModulos = qs("#view-questoes-modulos");
     const heroCover = qs("#questoes-hero-cover");
     const heroIcon = qs("#questoes-hero-icon");
@@ -77,10 +64,8 @@ export function abrirQuestoesModulos(materiaId) {
     const breadcrumbTitle = qs("#questoes-breadcrumb-title");
     const modulesListContainer = qs("#questoes-modules-list");
 
-    // Atualiza Breadcrumb
     if (breadcrumbTitle) setText(breadcrumbTitle, materia.titulo);
 
-    // Atualiza tema visual dinâmico com base na cor da matéria
     const temaCor = materia.cor || 'green';
     if (viewQuestoesModulos) {
         const themeClasses = Array.from(viewQuestoesModulos.classList).filter(c => c.startsWith('modulos-theme-'));
@@ -94,7 +79,6 @@ export function abrirQuestoesModulos(materiaId) {
         modal.classList.add(`modulos-theme-${temaCor}`);
     }
 
-    // Atualiza Hero Card
     if (heroCover) {
         heroCover.className = `questoes-emblem ${materia.cor || 'green'}`;
     }
@@ -105,7 +89,6 @@ export function abrirQuestoesModulos(materiaId) {
     if (heroTitle) setText(heroTitle, `Questões: ${materia.titulo}`);
     if (heroDesc) setText(heroDesc, materia.descricao);
 
-    // Estatísticas das baterias
     const total = baterias.length;
     const bloqueadas = baterias.filter(b => b.bloqueado).length;
     const liberadas = total - bloqueadas;
@@ -117,7 +100,6 @@ export function abrirQuestoesModulos(materiaId) {
     if (heroProgressFill) heroProgressFill.style.width = `${pctProgresso}%`;
     if (contadorBadge) setText(contadorBadge, `${total} ${total === 1 ? 'bateria' : 'baterias'}`);
 
-    // Renderiza cards reutilizáveis de baterias de questões (Differential / sem resetar à toa)
     if (modulesListContainer) {
         const isSameMateria = modulesListContainer.dataset.materiaId === materiaId && modulesListContainer.children.length > 0;
         if (!isSameMateria) {
@@ -150,12 +132,6 @@ export function abrirQuestoesModulos(materiaId) {
     }
 }
 
-/**
- * Exibe notificação flutuante de feedback
- * @param {string} mensagem 
- * @param {'info'|'locked'|'success'} tipo 
- * @param {string} iconeClass 
- */
 export function showToast(mensagem, tipo = 'info', iconeClass = 'fa-solid fa-circle-info') {
     const toastContainer = qs("#toast-container");
     if (!toastContainer) return;

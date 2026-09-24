@@ -1,9 +1,3 @@
-/**
- * Módulo de Visão: Desempenho (SPA)
- * 
- * Gerencia o painel de estatísticas, taxa de aproveitamento,
- * métricas de questões/simulados, gráficos de matérias e diagnóstico do Tutor IA.
- */
 
 import { qs, setText } from '../../utils/dom.js';
 import { getCurrentUser } from '../../services/authService.js';
@@ -12,15 +6,10 @@ import { SELECTORS } from '../../constants/selectors.js';
 
 let initialized = false;
 
-/**
- * Inicializa a visão de Desempenho
- * @param {Object} router - Instância do SpaRouter
- */
 export function initDesempenhoView(router) {
     if (initialized) return;
     initialized = true;
 
-    // Ações internas da tela de desempenho podem ser vinculadas aqui
     const btnAjustarCronograma = qs('#view-desempenho .ia-botao');
     if (btnAjustarCronograma && router) {
         btnAjustarCronograma.addEventListener('click', (e) => {
@@ -30,11 +19,7 @@ export function initDesempenhoView(router) {
     }
 }
 
-/**
- * Renderiza e atualiza os dados da tela de Desempenho
- */
 export function renderDesempenho() {
-    // 1. Atualiza cabeçalho geral da página
     const user = getCurrentUser();
     const tituloSaudacao = qs('#inicio-saudacao');
     const subtitulo = qs('#inicio-subtitulo');
@@ -51,17 +36,14 @@ export function renderDesempenho() {
         setText(subtitulo, 'Monitore suas estatísticas detalhadas e prepare-se para o DETRAN');
     }
 
-    // 2. Carrega estatísticas do serviço de gamificação
     const gamification = getGamificationData();
     const taxa = getTaxaAproveitamento();
 
-    // Taxa no KPI principal
     const taxaEl = qs(SELECTORS.DESEMPENHO_APROVEITAMENTO);
     if (taxaEl) {
         setText(taxaEl, `${taxa}%`);
     }
 
-    // Gráfico circular cônico
     const circuloEl = qs(SELECTORS.DESEMPENHO_CIRCULO);
     const circuloTaxaEl = qs('#circuloTaxa');
     const circuloStatusEl = qs('#circuloStatusLabel');
@@ -97,7 +79,6 @@ export function renderDesempenho() {
         }
     }
 
-    // Demais KPIs numéricos
     if (gamification) {
         const totalQuestoesEl = qs(SELECTORS.DESEMPENHO_QUESTOES);
         if (totalQuestoesEl) {

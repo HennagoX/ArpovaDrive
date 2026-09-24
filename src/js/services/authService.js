@@ -31,7 +31,6 @@ function getApiError(data, fallbackMessage) {
     return data?.message || data?.error || fallbackMessage;
 }
 
-
 export function getCurrentUser() {
     return getLocalItem(STORAGE_KEYS.AUTH_USER, null);
 }
@@ -121,9 +120,6 @@ export async function cadastrar(userData) {
     return { success: true, user: newUser };
 }
 
-/**
- * Desloga o usuário e remove todos os dados e preferências do localStorage e sessionStorage.
- */
 export function logout() {
     clearAllLocalStorage();
 }

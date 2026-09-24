@@ -39,8 +39,8 @@ body {
 .logo:hover{
   transition:all .2s;
   transform: scale(1.03);
-  
-}
+
+  }
 
 .logo-a {
   color: var(--brand-green);

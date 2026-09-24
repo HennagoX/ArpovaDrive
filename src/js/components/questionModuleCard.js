@@ -1,28 +1,3 @@
-/**
- * Componente Reutilizável: Card de Bateria de Questões (Question Module Card)
- * Padrão: Factory / View Component
- * 
- * Cria e retorna um elemento DOM para a lista de baterias de questões de uma matéria,
- * desbloqueadas sequencialmente a cada 3 módulos de estudo concluídos.
- * 
- * @param {Object} bateria - Dados da bateria de questões
- * @param {string} bateria.id - Identificador único
- * @param {number} bateria.numero - Número da bateria (1, 2, 3...)
- * @param {string} bateria.titulo - Título da bateria
- * @param {string} bateria.descricao - Descrição dos assuntos
- * @param {Array<string>} [bateria.topicos] - Lista de tópicos abordados
- * @param {number} bateria.questoesCount - Total de questões da bateria (ex: 15)
- * @param {string} [bateria.duracao] - Duração estimada (ex: '20 min')
- * @param {string} [bateria.modulosReferencia] - Módulos cobertos (ex: 'Módulos 01 a 03')
- * @param {number} [bateria.modulosNecessarios] - Quantidade de módulos concluídos necessária
- * @param {string} [bateria.status] - 'available' ou 'locked'
- * @param {boolean} [bateria.bloqueado] - Se a bateria está bloqueada
- * @param {string} [bateria.motivoBloqueio] - Explicação do requisito de desbloqueio
- * @param {Object} [options] - Callbacks de interação
- * @param {Function} [options.onStart] - Callback ao clicar em "Iniciar Simulado"
- * @param {Function} [options.onLockedClick] - Callback ao clicar em bateria bloqueada
- * @returns {HTMLElement} Elemento <article class="bateria-card ...">
- */
 export function createQuestionModuleCard(bateria, options = {}) {
     if (!bateria) return null;
 
@@ -44,7 +19,6 @@ export function createQuestionModuleCard(bateria, options = {}) {
     const tagTexto = bateria.modulosReferencia || `Módulos ${(bateria.numero - 1) * 3 + 1} a ${bateria.numero * 3}`;
     const modulosNecessarios = bateria.modulosNecessarios || (bateria.numero * 3);
 
-    // Badge de status
     let statusBadgeHtml = '';
     if (isDone) {
         statusBadgeHtml = '<span class="bateria-status-badge available"><i class="fa-solid fa-check"></i> Concluído</span>';
@@ -54,7 +28,6 @@ export function createQuestionModuleCard(bateria, options = {}) {
         statusBadgeHtml = '<span class="bateria-status-badge available"><i class="fa-solid fa-unlock"></i> Pronta para Treinar</span>';
     }
 
-    // Botão de ação
     let actionButtonHtml = '';
     if (isLocked) {
         const titleHelp = escapeHtml(bateria.motivoBloqueio || `Requer a conclusão de ao menos ${modulosNecessarios} módulos.`);
@@ -71,12 +44,10 @@ export function createQuestionModuleCard(bateria, options = {}) {
         `;
     }
 
-    // Pill de requisito de módulos
     const reqPillHtml = isLocked
         ? `<span class="bateria-req-badge locked"><i class="fa-solid fa-lock"></i> Requer ${modulosNecessarios} módulos</span>`
         : `<span class="bateria-req-badge available"><i class="fa-solid fa-circle-check"></i> Desbloqueada</span>`;
 
-    // Chips de tópicos abordados
     const topicosList = Array.isArray(bateria.topicos) && bateria.topicos.length > 0
         ? bateria.topicos.map(t => `<span class="bateria-topic-chip">${escapeHtml(t)}</span>`).join('')
         : `<span class="bateria-topic-chip">${escapeHtml(tagTexto)}</span>`;
@@ -107,12 +78,10 @@ export function createQuestionModuleCard(bateria, options = {}) {
         </div>
     `;
 
-    // Vincula eventos
     if (isLocked) {
         const triggerLocked = (event) => {
             if (event) event.stopPropagation();
 
-            // Adiciona classe de tremor para feedback tátil/visual imediato
             card.classList.remove('shake');
             void card.offsetWidth;
             card.classList.add('shake');

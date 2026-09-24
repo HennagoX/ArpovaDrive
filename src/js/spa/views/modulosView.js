@@ -1,12 +1,3 @@
-/**
- * Módulo de Visão: Módulos do Conteúdo Selecionado e Leitura de PDF (SPA)
- * 
- * Gerencia:
- * - A listagem e renderização dos cards de módulos do conteúdo selecionado
- * - A sincronização do progresso atual com o backend (PostgreSQL)
- * - A abertura da tela de leitura embarcada de PDFs
- * - O modal de confirmação e chamada à API para avançar para o próximo módulo (+1)
- */
 
 import { qs, setText } from '../../utils/dom.js';
 import {
@@ -31,16 +22,11 @@ let activeConteudoId = null;
 let activeModulo = null;
 let proximoModuloPendente = null;
 
-/**
- * Inicializa ouvintes de eventos da tela de módulos e do leitor de PDF
- * @param {Object} router - Instância do SPA Router
- */
 export function initModulosView(router) {
     routerRef = router;
     if (initialized) return;
     initialized = true;
 
-    // 1. Navegação de retorno da tela de lista de módulos
     const btnVoltar = qs("#btn-voltar-conteudos");
     const breadcrumbRoot = qs("#breadcrumb-root-btn");
 
@@ -56,7 +42,6 @@ export function initModulosView(router) {
         });
     }
 
-    // 2. Navegação de retorno da tela de leitura de PDF
     const btnVoltarLeitura = qs("#btn-voltar-leitura-modulos");
     const breadcrumbLeituraConteudos = qs("#breadcrumb-leitura-conteudos");
     const breadcrumbLeituraModuloRoot = qs("#breadcrumb-leitura-modulo-root");
@@ -90,7 +75,6 @@ export function initModulosView(router) {
         });
     }
 
-    // 3. Botão do topo para avançar módulo na tela de leitura
     const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
     if (btnAvancarTopo) {
         btnAvancarTopo.addEventListener("click", async () => {
@@ -101,7 +85,6 @@ export function initModulosView(router) {
             const modulos = getModulosByConteudoId(activeConteudoId);
             const totalModulos = modulos.length || MAX_MODULO;
 
-            // Se já está no 10º módulo ou no último módulo do conteúdo, encerra e esconde o botão
             if (numModuloAtual >= MAX_MODULO || numModuloAtual >= totalModulos) {
                 showToast(`Você já concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!`, 'info');
                 btnAvancarTopo.style.display = 'none';
@@ -113,13 +96,8 @@ export function initModulosView(router) {
                 ? (modulos.find(m => Number(m.numero) === proximoNumero) || null)
                 : null;
 
-            // Progresso mais alto já desbloqueado pelo aluno nesta matéria
             const progressoAtual = getModuloAtualCached(activeConteudoId);
 
-            // CENÁRIO 1: Navegação por módulo já concluído anteriormente (numModuloAtual < progressoAtual)
-            // O aluno está relendo ou apenas avançando por módulos que já desbloqueou no passado.
-            // Não deve chamar a API para avançar, não concede XP repetido,
-            // não abre modal e NÃO exibe "Parabéns! Módulo concluído". Apenas abre o próximo módulo.
             if (numModuloAtual < progressoAtual) {
                 if (proxModulo) {
                     abrirLeituraPdf(activeConteudoId, proxModulo);
@@ -129,32 +107,25 @@ export function initModulosView(router) {
                 return;
             }
 
-            // CENÁRIO 2: Conclusão do módulo atual PELA PRIMEIRA VEZ (numModuloAtual >= progressoAtual)
-            // O aluno está completando o módulo e realmente vai ganhar +1 de progressão (+25 XP).
             const originalHtml = btnAvancarTopo.innerHTML;
             try {
                 btnAvancarTopo.disabled = true;
                 btnAvancarTopo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando...';
 
-                // Chamada à rota do backend (POST /modulo/next) para persistir o novo progresso
                 const resultado = await avancarModulo(activeConteudoId);
                 const proxModuloNum = Math.min(MAX_MODULO, Number(resultado.modulo_atual || Math.min(MAX_MODULO, numModuloAtual + 1)));
 
-                // Atualiza cirurgicamente o DOM dos módulos imediatamente
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
 
-                // Localiza o próximo módulo atualizado
                 const proximoModuloCarregar = proxModulo
                     || modulos.find(m => Number(m.numero) === proxModuloNum)
                     || null;
 
-                // Verifica se a conclusão DESTE módulo libera uma nova bateria de questões (a cada 3 módulos)
                 const bateriaLiberada = checkBateriaLiberadaPorModulo(activeConteudoId, numModuloAtual);
 
                 const xpGanha = Number(resultado.xp_ganha || 0);
                 const xpTexto = xpGanha > 0 ? ` +${xpGanha} XP` : '';
 
-                // Confirma que realmente ganhou +1 no módulo pela primeira vez
                 const realmenteGanhouModulo = proxModuloNum > progressoAtual || xpGanha > 0;
 
                 if (bateriaLiberada) {
@@ -166,13 +137,10 @@ export function initModulosView(router) {
                         );
                     }
 
-                    // Salva próximo módulo pendente caso o aluno decida continuar a leitura
                     proximoModuloPendente = proximoModuloCarregar || null;
 
-                    // Abre o modal avisando sobre a bateria de questões liberada
                     abrirModalQuestoesLiberadas(conteudo, activeModulo, bateriaLiberada, proximoModuloCarregar);
                 } else {
-                    // Módulo intermediário: NÃO libera questões, avança direto sem modal
                     if (proximoModuloCarregar) {
                         if (realmenteGanhouModulo) {
                             showToast(
@@ -198,7 +166,6 @@ export function initModulosView(router) {
         });
     }
 
-    // 3.5. Botão para alternar modo tela cheia / expandido do visualizador
     const btnExpandPdf = qs("#btn-toggle-expand-pdf");
     if (btnExpandPdf) {
         btnExpandPdf.addEventListener("click", () => {
@@ -206,7 +173,6 @@ export function initModulosView(router) {
         });
     }
 
-    // 4. Ações da Modal de Questões Liberadas
     const btnFecharModal = qs("#btn-fechar-modal-modulo");
     const btnContinuarLendo = qs("#btn-modal-continuar-leitura");
     const modalOverlay = qs("#modal-avancar-modulo");
@@ -254,7 +220,6 @@ export function initModulosView(router) {
         }
     });
 
-    // 5. Botão que vai para a tela de módulos/baterias de questões da matéria
     if (btnIrQuestoes) {
         btnIrQuestoes.addEventListener("click", () => {
             const materiaId = activeConteudoId;
@@ -271,10 +236,6 @@ export function initModulosView(router) {
     }
 }
 
-/**
- * Aplica a classe de cor temática ao modal global (#modal-avancar-modulo)
- * @param {string} temaCor - Nome da cor ('green', 'blue', 'yellow', 'red', 'purple')
- */
 export function aplicarTemaModal(temaCor = 'green') {
     const modal = qs("#modal-avancar-modulo");
     if (modal) {
@@ -284,18 +245,11 @@ export function aplicarTemaModal(temaCor = 'green') {
     }
 }
 
-/**
- * Atualiza cirurgicamente apenas os cards cujo estado mudou e os contadores do Hero,
- * sem resetar ou reconstruir a lista do DOM.
- * @param {string} conteudoId 
- * @param {number} moduloAtual 
- */
 export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
     if (!conteudoId) return;
     const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
     const modulesListContainer = qs("#modules-list");
 
-    // Estatísticas dos módulos sincronizadas
     const total = modulos.length;
     const bloqueados = modulos.filter(m => m.bloqueado).length;
     const liberados = total - bloqueados;
@@ -328,12 +282,6 @@ export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
     }
 }
 
-/**
- * Atualiza e renderiza os módulos do conteúdo selecionado integrando com o banco de dados.
- * Utiliza o localStorage para renderização imediata (0ms) e atualização diferencial no DOM.
- * 
- * @param {string} conteudoId 
- */
 export function abrirModulos(conteudoId) {
     if (!conteudoId) return;
     activeConteudoId = conteudoId;
@@ -348,11 +296,9 @@ export function abrirModulos(conteudoId) {
         return;
     }
 
-    // 1. Obtém o progresso imediatamente do localStorage (0ms de latência)
     const moduloAtual = getModuloAtualCached(conteudoId);
     const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
 
-    // 2. Atualiza cabeçalho global
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, conteudo.titulo);
@@ -361,7 +307,6 @@ export function abrirModulos(conteudoId) {
     const breadcrumbTitle = qs("#modulos-breadcrumb-title");
     if (breadcrumbTitle) setText(breadcrumbTitle, conteudo.titulo);
 
-    // 3. Atualiza o tema visual da tela de módulos com base na cor do conteúdo
     const temaCor = conteudo.cor || 'green';
     const viewModulos = qs("#view-modulos");
     if (viewModulos) {
@@ -371,7 +316,6 @@ export function abrirModulos(conteudoId) {
     }
     aplicarTemaModal(temaCor);
 
-    // 4. Atualiza o Hero Card do conteúdo
     const heroCover = qs("#modulo-hero-cover");
     const heroIcon = qs("#modulo-hero-icon");
     const heroCategory = qs("#modulo-hero-category");
@@ -383,17 +327,14 @@ export function abrirModulos(conteudoId) {
     if (heroTitle) setText(heroTitle, conteudo.titulo);
     if (heroDesc) setText(heroDesc, conteudo.descricao);
 
-    // 5. Renderização diferencial (só muda o que realmente mudou, sem resetar todo o DOM)
     const modulesListContainer = qs("#modules-list");
     const isSameConteudo = modulesListContainer &&
         modulesListContainer.dataset.conteudoId === conteudoId &&
         modulesListContainer.children.length > 0;
 
     if (isSameConteudo) {
-        // Já renderizado para esta matéria: atualiza cirurgicamente cards e hero
         atualizarCardsModuloUI(conteudoId, moduloAtual);
     } else if (modulesListContainer) {
-        // Primeira carga ou troca de matéria: renderiza com base no localStorage instantâneo
         modulesListContainer.dataset.conteudoId = conteudoId;
         modulesListContainer.innerHTML = '';
 
@@ -410,7 +351,6 @@ export function abrirModulos(conteudoId) {
         atualizarCardsModuloUI(conteudoId, moduloAtual);
     }
 
-    // 6. Sincronização em segundo plano não bloqueante (SWR)
     getModuloAtual(conteudoId).then((progresso) => {
         if (progresso && progresso.mudou && activeConteudoId === conteudoId) {
             const novoNum = Math.max(1, Number(progresso.modulo_atual || 1));
@@ -421,11 +361,6 @@ export function abrirModulos(conteudoId) {
     });
 }
 
-/**
- * Abre a tela de leitura do PDF do módulo e exibe o modal para avançar para o próximo módulo.
- * @param {string} conteudoId 
- * @param {Object|number} moduloOrNumero 
- */
 export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     if (!conteudoId) return;
     activeConteudoId = conteudoId;
@@ -433,7 +368,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     const conteudo = getConteudoById(conteudoId);
     if (!conteudo) return;
 
-    // Resolve o módulo
     let modulo = null;
     if (typeof moduloOrNumero === 'object' && moduloOrNumero !== null) {
         modulo = moduloOrNumero;
@@ -450,7 +384,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         document.body.classList.add('no-sidebar');
     }
 
-    // Se o router estiver disponível, navega para a rota de leitura de PDF
     if (routerRef && routerRef.currentRoute !== 'leitura-pdf') {
         routerRef.navigateTo('leitura-pdf', {
             conteudoId,
@@ -459,7 +392,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         });
     }
 
-    // Configura os elementos da tela de visualização
     const temaCor = conteudo.cor || 'green';
     const viewLeitura = qs("#view-leitura-pdf");
     if (viewLeitura) {
@@ -469,7 +401,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     }
     aplicarTemaModal(temaCor);
 
-    // Oculta o botão de avançar módulo no topo caso seja o 10º módulo ou o último módulo da matéria
     const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
     const modulosConteudo = getModulosByConteudoId(conteudoId);
     const totalModulos = modulosConteudo.length || MAX_MODULO;
@@ -488,7 +419,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         }
     }
 
-    // Atualiza cabeçalhos e breadcrumb da leitura
     const breadcrumbRoot = qs("#breadcrumb-leitura-modulo-root");
     const breadcrumbAtual = qs("#breadcrumb-leitura-modulo-atual");
     const badgeNumero = qs("#leitura-modulo-numero-badge");
@@ -519,7 +449,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         headerIcon.className = conteudo.icone || 'fa-solid fa-file-pdf';
     }
 
-    // Carrega o PDF no iframe e no botão externo
     const pdfUrl = modulo.pdfUrl || '';
     if (btnExternal) {
         btnExternal.href = pdfUrl || '#';
@@ -532,15 +461,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
 
 }
 
-/**
- * Abre a modal anunciando que uma nova bateria de questões foi liberada
- * e oferece a opção de ir para as baterias de questões ou continuar a leitura.
- * 
- * @param {Object} conteudo - Dados do conteúdo/matéria
- * @param {Object} moduloConcluido - Módulo concluído
- * @param {Object} bateria - Bateria desbloqueada
- * @param {Object} [proximoModulo] - Próximo módulo a ser lido se continuar
- */
 export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, proximoModulo) {
     const modal = qs("#modal-avancar-modulo");
     if (!modal) return;
@@ -588,17 +508,11 @@ export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, 
     }
 }
 
-/**
- * Função compatível com chamadas legadas
- */
 export function abrirModalAvancar(conteudo, modulo) {
     const bat = checkBateriaLiberadaPorModulo(conteudo?.id || activeConteudoId, modulo?.numero || 3);
     abrirModalQuestoesLiberadas(conteudo, modulo, bat || { numero: 1 }, null);
 }
 
-/**
- * Fecha a modal de avanço de módulo
- */
 export function fecharModalAvancar() {
     const modal = qs("#modal-avancar-modulo");
     if (modal) {
@@ -609,10 +523,6 @@ export function fecharModalAvancar() {
     }
 }
 
-/**
- * Alterna modo expandido / tela cheia do visualizador de PDF
- * @param {boolean} [forceState]
- */
 export function toggleFullscreenReader(forceState) {
     const viewLeitura = qs("#view-leitura-pdf");
     const btnExpandPdf = qs("#btn-toggle-expand-pdf");
@@ -645,12 +555,6 @@ export function toggleFullscreenReader(forceState) {
     }
 }
 
-/**
- * Exibe notificação flutuante acessível para o usuário
- * @param {string} mensagem 
- * @param {'info'|'locked'|'success'} tipo 
- * @param {string} iconeClass 
- */
 export function showToast(mensagem, tipo = 'info', iconeClass = 'fa-solid fa-circle-info') {
     const toastContainer = qs("#toast-container");
     if (!toastContainer) return;

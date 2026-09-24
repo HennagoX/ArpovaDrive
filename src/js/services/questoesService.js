@@ -5,14 +5,6 @@ import { getModuloUserId } from './moduloService.js';
 export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!';
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
 
-/**
- * Base de dados das matérias de questões e suas baterias de simulados.
- * 
- * Regra de Negócio:
- * - As baterias de questões são liberadas sequencialmente a cada 3 módulos de estudo concluídos.
- * - Por padrão (frontend inicial), a primeira bateria está liberada e as demais bloqueadas.
- * - No backend, o aluno só poderá fazer questões após a conclusão do bloco de módulos correspondente.
- */
 export const QUESTOES_MATERIAS_DATA = {
     CodigoTransito: {
         id: 'CodigoTransito',
@@ -295,19 +287,10 @@ export const QUESTOES_MATERIAS_DATA = {
     }
 };
 
-/**
- * Retorna todas as matérias de questões cadastradas
- * @returns {Array<Object>}
- */
 export function getMateriasQuestoes() {
     return Object.values(QUESTOES_MATERIAS_DATA);
 }
 
-/**
- * Retorna os dados de uma matéria de questões por ID ou slug
- * @param {string} id - Ex: 'CodigoTransito' ou 'codigo-transito'
- * @returns {Object|null}
- */
 export function getMateriaQuestoesById(id) {
     if (!id) return null;
     if (QUESTOES_MATERIAS_DATA[id]) return QUESTOES_MATERIAS_DATA[id];
@@ -322,25 +305,11 @@ export function getMateriaQuestoesById(id) {
     return foundKey ? QUESTOES_MATERIAS_DATA[foundKey] : null;
 }
 
-/**
- * Retorna as baterias de questões de uma matéria específica
- * @param {string} materiaId 
- * @returns {Array<Object>}
- */
 export function getBateriasByMateriaId(materiaId) {
     const materia = getMateriaQuestoesById(materiaId);
     return materia && Array.isArray(materia.baterias) ? materia.baterias : [];
 }
 
-/**
- * Helper extensível para verificação de desbloqueio de bateria de questões.
- * Preparado para integração direta com a API do backend:
- * Cada bateria exige que o aluno tenha concluído no mínimo bateria.modulosNecessarios.
- * 
- * @param {Object} bateria - Objeto da bateria de questões
- * @param {number} [modulosConcluidosCount=3] - Quantidade de módulos concluídos pelo aluno no backend
- * @returns {boolean} Se a bateria está apta para realização
- */
 export function isBateriaDesbloqueada(bateria, modulosConcluidosCount = 3) {
     if (!bateria) return false;
     if (bateria.numero === 1) return true;
@@ -348,27 +317,17 @@ export function isBateriaDesbloqueada(bateria, modulosConcluidosCount = 3) {
     return modulosConcluidosCount >= necessarios;
 }
 
-/**
- * Verifica se a conclusão de um determinado módulo desbloqueia uma nova bateria de questões.
- * A cada 3 módulos concluídos (3, 6, 9, etc.) ou no fechamento do conteúdo, uma nova bateria é liberada.
- * 
- * @param {string} materiaId - Identificador do conteúdo/matéria
- * @param {number} moduloNumero - Número do módulo concluído
- * @returns {Object|null} Objeto da bateria liberada ou null
- */
 export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {
     if (!materiaId || !moduloNumero) return null;
     const num = Number(moduloNumero);
     const materia = getMateriaQuestoesById(materiaId);
     const baterias = materia && Array.isArray(materia.baterias) ? materia.baterias : [];
 
-    // Busca se existe uma bateria configurada exatamente para esse número de módulos
     const bateriaExata = baterias.find(b => Number(b.modulosNecessarios) === num);
     if (bateriaExata) {
         return bateriaExata;
     }
 
-    // Regra padrão: a cada 3 módulos (3, 6, 9...)
     if (num % MODULOS_INTERVALO_DESBLOQUEIO === 0) {
         const indice = Math.floor(num / MODULOS_INTERVALO_DESBLOQUEIO);
         const bateriaIndex = baterias[indice - 1];
@@ -383,12 +342,6 @@ export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {
     return null;
 }
 
-/**
- * Consulta o total de questões concluídas e acertos do usuário na API
- * @param {string} [materia] 
- * @param {string} [userId] 
- * @returns {Promise<{success: boolean, acertos: any}>}
- */
 export async function fetchQuestoesConcluidas(materia, userId) {
     const activeUserId = getModuloUserId(userId);
     try {
@@ -408,12 +361,6 @@ export async function fetchQuestoesConcluidas(materia, userId) {
     return { success: false, acertos: null };
 }
 
-/**
- * Envia a resposta de uma questão para validação na API
- * @param {Object} dadosResposta - { questao, num, resposta, materia }
- * @param {string} [userId]
- * @returns {Promise<{success: boolean, correto?: boolean, message?: string}>}
- */
 export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
     const activeUserId = getModuloUserId(userId);
     try {
@@ -436,5 +383,3 @@ export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
         return { success: false, message: err.message };
     }
 }
-
-

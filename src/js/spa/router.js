@@ -1,10 +1,3 @@
-/**
- * Router Modular para SPA (Single Page Application) do AprovaDrive
- * 
- * Gerencia a navegação entre as telas 'inicio', 'conteudos' e a sub-tela 'modulos',
- * sincronizando a visibilidade das seções, classes ativas na barra de navegação
- * e o histórico do navegador (hash / popstate).
- */
 
 import { qs, qsa } from '../utils/dom.js';
 
@@ -18,15 +11,6 @@ class SpaRouter {
         this.handlePopState = this.handlePopState.bind(this);
     }
 
-    /**
-     * Registra uma rota na SPA
-     * @param {string} name - Nome identificador da rota ('inicio', 'conteudos', 'modulos')
-     * @param {Object} config - Configurações da rota
-     * @param {string} config.viewSelector - Seletor do elemento DOM da tela
-     * @param {Function} [config.onEnter] - Callback ao entrar na rota
-     * @param {Function} [config.onLeave] - Callback ao sair da rota
-     * @param {string} [config.navKey] - Identificador correspondente no menu lateral
-     */
     register(name, config) {
         this.routes[name] = {
             name,
@@ -37,13 +21,9 @@ class SpaRouter {
         };
     }
 
-    /**
-     * Inicializa o router e escuta eventos de navegação
-     */
     init() {
         this.navItems = qsa('[data-nav]');
 
-        // Vincula cliques em links com data-nav
         document.addEventListener('click', (e) => {
             const navLink = e.target.closest('[data-nav]');
             if (navLink) {
@@ -55,19 +35,11 @@ class SpaRouter {
             }
         });
 
-        // Escuta eventos de avançar e voltar do navegador
         window.addEventListener('popstate', this.handlePopState);
 
-        // Processa rota inicial baseada na URL atual
         this.resolveCurrentUrl(false);
     }
 
-    /**
-     * Navega para uma rota programaticamente
-     * @param {string} routeName 
-     * @param {Object} [params] 
-     * @param {boolean} [pushState=true] 
-     */
     navigateTo(routeName, params = {}, pushState = true) {
         const route = this.routes[routeName];
         if (!route) {
@@ -75,12 +47,10 @@ class SpaRouter {
             return;
         }
 
-        // Executa hook de saída da rota anterior
         if (this.currentRoute && this.routes[this.currentRoute]?.onLeave) {
             this.routes[this.currentRoute].onLeave();
         }
 
-        // Oculta todas as telas registradas
         Object.values(this.routes).forEach((r) => {
             const el = qs(r.viewSelector);
             if (el) {
@@ -88,19 +58,17 @@ class SpaRouter {
             }
         });
 
-        // Exibe a tela da rota atual com efeito de fade
         const targetEl = qs(route.viewSelector);
         if (targetEl) {
             targetEl.style.display = 'block';
             targetEl.classList.remove('spa-view');
-            void targetEl.offsetWidth; // Força reflow para reiniciar animação
+            void targetEl.offsetWidth;
             targetEl.classList.add('spa-view');
         }
 
         this.currentRoute = routeName;
         this.currentParams = params;
 
-        // Controle da sidebar no modo foco para telas de módulos e leitura de PDF
         if (typeof document !== 'undefined' && document.body) {
             if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf') {
                 document.body.classList.add('no-sidebar');
@@ -109,11 +77,8 @@ class SpaRouter {
             }
         }
 
-
-        // Atualiza marcação ativa no menu lateral
         this.updateNavHighlight(route.navKey);
 
-        // Atualiza histórico do navegador
         if (pushState) {
             const hash = this.buildHash(routeName, params);
             if (window.location.hash !== hash) {
@@ -121,7 +86,6 @@ class SpaRouter {
             }
         }
 
-        // Executa hook de entrada da nova rota
         if (typeof route.onEnter === 'function') {
             route.onEnter(params);
         }
@@ -129,10 +93,6 @@ class SpaRouter {
         window.scrollTo(0, 0);
     }
 
-    /**
-     * Atualiza o destaque ativo no menu lateral
-     * @param {string} navKey 
-     */
     updateNavHighlight(navKey) {
         this.navItems.forEach((item) => {
             if (item.dataset.nav === navKey) {
@@ -143,9 +103,6 @@ class SpaRouter {
         });
     }
 
-    /**
-     * Monta o hash da URL para a rota e parâmetros
-     */
     buildHash(routeName, params = {}) {
         if (routeName === 'leitura-pdf' && params.conteudoId && params.moduloNumero) {
             return `#leitura=${encodeURIComponent(params.conteudoId)}&modulo=${encodeURIComponent(params.moduloNumero)}`;
@@ -171,13 +128,9 @@ class SpaRouter {
         return '#inicio';
     }
 
-    /**
-     * Resolve a rota baseada no hash da URL atual
-     */
     resolveCurrentUrl(pushState = false) {
         const hash = window.location.hash || '';
 
-        // Rota de leitura de PDF do módulo
         const leituraMatch = hash.match(/#leitura=([^&]+)&modulo=([^&]+)/);
         if (leituraMatch && leituraMatch[1] && leituraMatch[2]) {
             const conteudoId = decodeURIComponent(leituraMatch[1]);
@@ -186,7 +139,6 @@ class SpaRouter {
             return;
         }
 
-        // Rota de módulo específico de estudos
         const moduloMatch = hash.match(/#modulo=([^&]+)/);
         if (moduloMatch && moduloMatch[1]) {
             const conteudoId = decodeURIComponent(moduloMatch[1]);
@@ -194,8 +146,6 @@ class SpaRouter {
             return;
         }
 
-
-        // Rota de baterias de questões de matéria específica
         const questoesMatch = hash.match(/#questoes-materia=([^&]+)/);
         if (questoesMatch && questoesMatch[1]) {
             const materiaId = decodeURIComponent(questoesMatch[1]);
@@ -203,31 +153,26 @@ class SpaRouter {
             return;
         }
 
-        // Rota de conteúdos
         if (hash === '#conteudos' || hash.startsWith('#conteudos')) {
             this.navigateTo('conteudos', {}, pushState);
             return;
         }
 
-        // Rota do hub de questões
         if (hash === '#questoes' || hash.startsWith('#questoes')) {
             this.navigateTo('questoes', {}, pushState);
             return;
         }
 
-        // Rota de cronograma
         if (hash === '#cronograma' || hash.startsWith('#cronograma')) {
             this.navigateTo('cronograma', {}, pushState);
             return;
         }
 
-        // Rota de desempenho
         if (hash === '#desempenho' || hash.startsWith('#desempenho')) {
             this.navigateTo('desempenho', {}, pushState);
             return;
         }
 
-        // Padrão: tela de início (dashboard)
         this.navigateTo('inicio', {}, pushState);
     }
 

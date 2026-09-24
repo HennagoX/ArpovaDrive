@@ -1,9 +1,3 @@
-/**
- * Módulo de Visão: Início / Dashboard (SPA)
- * 
- * Gerencia a tela inicial com dados de gamificação, progresso de XP,
- * missões do dia e desempenho do aluno.
- */
 
 import { qs, setText, setHTML } from '../../utils/dom.js';
 import { getCurrentUser, logout } from '../../services/authService.js';
@@ -17,7 +11,6 @@ export function initDashboardView(router) {
     if (initialized) return;
     initialized = true;
 
-    // Vincula logout no perfil
     const perfilBtn = qs('.perfil');
     if (perfilBtn) {
         perfilBtn.addEventListener('click', (e) => {
@@ -28,9 +21,6 @@ export function initDashboardView(router) {
     }
 }
 
-/**
- * Atualiza e renderiza os dados do Dashboard sempre que a tela for acessada
- */
 export async function renderDashboard() {
     const user = getCurrentUser();
 
@@ -55,11 +45,9 @@ export async function renderDashboard() {
         setText('.circulo-interno strong', `${taxa}%`);
     }
 
-    // Carrega dados e missões de hoje diretamente da API
     try {
         const payload = await getTarefas();
         if (payload) {
-            // Sincroniza XP se disponível
             if (payload.usuario && typeof payload.usuario.exp === 'number') {
                 const totalXp = payload.usuario.exp;
                 const xpMaximo = gamification?.xpMaximo || 1000;
@@ -75,7 +63,6 @@ export async function renderDashboard() {
                 }
             }
 
-            // Renderiza missões do dia
             const missaoContainer = qs('.missao');
             if (missaoContainer && payload.tarefasDoDia && payload.tarefasDoDia.length > 0) {
                 const headerHtml = `
@@ -88,21 +75,21 @@ export async function renderDashboard() {
                 const tasksHtml = payload.tarefasDoDia.map((t) => {
                     const isDone = Boolean(t.concluida || t.status === 'done');
                     const isInProgress = !isDone && t.status === 'in_progress';
-                    const icon = isDone 
-                        ? '<i class="fa-solid fa-check"></i>' 
-                        : isInProgress 
-                            ? '<i class="fa-solid fa-play"></i>' 
+                    const icon = isDone
+                        ? '<i class="fa-solid fa-check"></i>'
+                        : isInProgress
+                            ? '<i class="fa-solid fa-play"></i>'
                             : '<i class="fa-solid fa-book-open"></i>';
-                    const iconStyle = isDone 
-                        ? 'background: #e8f5e9; color: #16a34a;' 
-                        : isInProgress 
-                            ? 'background: #e0f2fe; color: #0284c7;' 
+                    const iconStyle = isDone
+                        ? 'background: #e8f5e9; color: #16a34a;'
+                        : isInProgress
+                            ? 'background: #e0f2fe; color: #0284c7;'
                             : 'background: #f1f5f9; color: #64748b;';
 
-                    const statusBadge = isDone 
-                        ? '<span style="color: #16a34a; font-size: 11px; font-weight: bold; margin-left: 8px;">Concluída</span>' 
-                        : isInProgress 
-                            ? '<span style="color: #0284c7; font-size: 11px; font-weight: bold; margin-left: 8px;">Em andamento</span>' 
+                    const statusBadge = isDone
+                        ? '<span style="color: #16a34a; font-size: 11px; font-weight: bold; margin-left: 8px;">Concluída</span>'
+                        : isInProgress
+                            ? '<span style="color: #0284c7; font-size: 11px; font-weight: bold; margin-left: 8px;">Em andamento</span>'
                             : '';
 
                     return `

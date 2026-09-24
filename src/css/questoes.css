@@ -1,11 +1,4 @@
-/* ==========================================================================
-   AprovaDrive - Estilos Exclusivos do Hub de Questões e Baterias de Simulados
-   Diferenciação visual de Conteúdos Teóricos x Simulados Práticos
-   ========================================================================== */
 
-/* --------------------------------------------------------------------------
-   1. VARIÁVEIS DE TEMA DINÂMICO PARA QUESTÕES
-   -------------------------------------------------------------------------- */
 #view-questoes-modulos,
 #view-questoes-modulos.modulos-theme-green {
     --theme-primary: #16a34a;
@@ -62,9 +55,6 @@
     --q-theme-shadow: rgba(124, 58, 237, 0.25);
 }
 
-/* --------------------------------------------------------------------------
-   2. BANNER DE BOAS-VINDAS DA CENTRAL DE QUESTÕES
-   -------------------------------------------------------------------------- */
 .welcome-questoes {
     background: linear-gradient(115deg, #0752a0 0%, #0d47a1 55%, #087e9d 100%);
     color: #ffffff;
@@ -127,9 +117,6 @@
     flex-shrink: 0;
 }
 
-/* --------------------------------------------------------------------------
-   3. GRID EXCLUSIVO DO HUB DE QUESTÕES (NÃO USA .ebooks)
-   -------------------------------------------------------------------------- */
 .questoes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
@@ -143,9 +130,6 @@
     }
 }
 
-/* --------------------------------------------------------------------------
-   4. CARD DA MATÉRIA DE QUESTÕES (DESIGN DE TREINAMENTO)
-   -------------------------------------------------------------------------- */
 .questoes-card {
     background: #ffffff;
     border: 1px solid var(--border-card, #e8ebf0);
@@ -252,7 +236,6 @@
     flex: 1;
 }
 
-/* PAINEL DE MÉTRICAS EM 3 CAIXAS */
 .questoes-metrics-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -291,7 +274,6 @@
     margin-top: 2px;
 }
 
-/* BARRA DE PROGRESSO DO CARD */
 .questoes-progress-bar {
     height: 7px;
     background: #f1f5f9;
@@ -312,7 +294,6 @@
 .questoes-progress-fill.red { background: #dc2626; }
 .questoes-progress-fill.purple { background: #7c3aed; }
 
-/* BOTÃO DE AÇÃO DO HUB (TREINAR) */
 .btn-praticar-questoes {
     background: #0752a0;
     color: #ffffff;
@@ -337,11 +318,6 @@
     box-shadow: 0 6px 16px rgba(7, 82, 160, 0.3);
 }
 
-/* --------------------------------------------------------------------------
-   5. SUB-TELA DE BATERIAS DE QUESTÕES (#view-questoes-modulos)
-   -------------------------------------------------------------------------- */
-
-/* HERO CARD EXCLUSIVO DE SIMULADOS */
 .questoes-hero-card {
     background: #ffffff;
     border: 1px solid var(--border-card, #e8ebf0);
@@ -478,9 +454,6 @@
     transition: width 0.4s ease;
 }
 
-/* --------------------------------------------------------------------------
-   6. LISTA DE BATERIAS DE QUESTÕES (.bateria-card)
-   -------------------------------------------------------------------------- */
 .baterias-list {
     display: flex;
     flex-direction: column;
@@ -531,7 +504,6 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* ÍNDICE VISUAL DA BATERIA */
 .bateria-badge-box {
     width: 60px;
     height: 60px;
@@ -568,7 +540,6 @@
     line-height: 1;
 }
 
-/* CONTEÚDO DA BATERIA */
 .bateria-content {
     flex: 1;
     min-width: 0;
@@ -646,7 +617,6 @@
     margin-bottom: 8px;
 }
 
-/* CHIPS DE TÓPICOS DA BATERIA */
 .bateria-topics-row {
     display: flex;
     align-items: center;
@@ -665,7 +635,6 @@
     font-weight: 600;
 }
 
-/* ÁREA DE AÇÃO DA BATERIA */
 .bateria-action-area {
     display: flex;
     flex-direction: column;
@@ -704,7 +673,6 @@
     border: 1px solid #e2e8f0;
 }
 
-/* BOTÃO DE INICIAR O SIMULADO */
 .btn-bateria-start {
     background: var(--q-theme, #16a34a);
     color: #ffffff;
@@ -729,7 +697,6 @@
     transform: translateY(-2px);
 }
 
-/* BOTÃO DE BATERIA BLOQUEADA */
 .btn-bateria-locked {
     background: #f1f5f9;
     color: #64748b;

@@ -26,10 +26,6 @@ export function removeLocalItem(key) {
     }
 }
 
-/**
- * Remove todos os dados do localStorage e sessionStorage.
- * Garante que nenhum resquício de sessão, tarefas, XP ou perfil permaneça salvo.
- */
 export function clearAllLocalStorage() {
     try {
         localStorage.clear();

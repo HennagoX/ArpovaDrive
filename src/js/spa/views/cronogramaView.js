@@ -1,10 +1,3 @@
-/**
- * Módulo de Visão: Cronograma Semanal (SPA)
- * 
- * Gerencia a renderização das tarefas semanais com cache em sessão (sessionStorage),
- * eliminando requisições repetitivas ao alternar entre as abas da SPA.
- * Mensagens limpas e amigáveis, sem jargões de backend (ex: PostgreSQL).
- */
 
 import { qs, qsa, on, setText } from '../../utils/dom.js';
 import {
@@ -31,20 +24,14 @@ let initialized = false;
 let diaAtual = 1;
 const nomesDias = getNomesDias();
 
-/**
- * Inicializa os ouvintes de eventos da tela de cronograma
- * @param {Object} router 
- */
 export function initCronogramaView(router) {
     if (initialized) return;
     initialized = true;
 
     diaAtual = getDiaSemanaAtual();
 
-    // 1. Configura abas dos dias da semana
     configurarAbas();
 
-    // 2. Configura botão de tentar novamente (em caso de erro)
     const btnRetry = qs('#btn-tentar-novamente');
     if (btnRetry) {
         on(btnRetry, 'click', async () => {
@@ -52,7 +39,6 @@ export function initCronogramaView(router) {
         });
     }
 
-    // 3. Botão voltar ao painel
     const btnVoltarPainel = qs('#btn-voltar-painel-cronograma');
     if (btnVoltarPainel && router) {
         on(btnVoltarPainel, 'click', (e) => {
@@ -62,24 +48,16 @@ export function initCronogramaView(router) {
     }
 }
 
-/**
- * Renderiza o cronograma semanal.
- * Se já estiver em cache na sessão, renderiza instantaneamente sem loading spinner!
- * @param {Object} [options] 
- */
 export async function renderCronograma(options = {}) {
     const activeUserId = getUsuarioAtivoId();
 
-    // Atualiza cabeçalho global
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, 'Cronograma Semanal');
     if (subtitleEl) setText(subtitleEl, 'Acompanhe seu roteiro diário e avance nos estudos.');
 
-    // Atualiza badges do HUD com dados locais
     atualizarHud();
 
-    // Configura permissões de administrador
     try {
         const isAdmin = await verificarPermissaoAdmin(activeUserId);
         const adminBadge = qs('#admin-indicator-badge');
@@ -100,17 +78,11 @@ export async function renderCronograma(options = {}) {
             setMockDia('auto');
         }
     } catch {
-        // Fallback silencioso
     }
 
-    // Carrega o cronograma (usando cache de sessão se disponível)
     await carregarCronograma(activeUserId, options.forceRefresh || false);
 }
 
-/**
- * Carrega e renderiza as tarefas.
- * Prioriza o cache em sessionStorage para performance instantânea no SPA.
- */
 async function carregarCronograma(userId, forceRefresh = false) {
     const loadingEl = qs('#cronograma-loading');
     const errorEl = qs('#cronograma-error');
@@ -118,10 +90,8 @@ async function carregarCronograma(userId, forceRefresh = false) {
 
     const targetUser = userId || getUsuarioAtivoId();
 
-    // 1. Verifica se já temos os dados no cache de sessão
     const cached = !forceRefresh ? getCachedTarefas(targetUser) : null;
     if (cached && cached.dias) {
-        // Renderização instantânea sem flash de loading
         if (loadingEl) loadingEl.style.display = 'none';
         if (errorEl) errorEl.style.display = 'none';
 
@@ -137,7 +107,6 @@ async function carregarCronograma(userId, forceRefresh = false) {
         return;
     }
 
-    // 2. Se não houver cache, exibe feedback visual amigável (sem menção a banco de dados)
     if (loadingEl) loadingEl.style.display = 'flex';
     if (errorEl) errorEl.style.display = 'none';
     if (banner) banner.style.display = 'none';
@@ -183,9 +152,6 @@ async function carregarCronograma(userId, forceRefresh = false) {
     }
 }
 
-/**
- * Renderiza os cards de tarefas nas 6 divs da semana
- */
 function renderizarTarefasNasDivs(payload) {
     const diasData = payload.dias || {};
 
@@ -276,9 +242,6 @@ function renderizarTarefasNasDivs(payload) {
     }
 }
 
-/**
- * Atualiza o banner de missão ativa
- */
 function consumirTaskAtual(taskAtual, diaConcluido = false) {
     const banner = qs('#task-atual-banner');
     const tituloEl = qs('#task-atual-titulo');
@@ -316,9 +279,6 @@ function consumirTaskAtual(taskAtual, diaConcluido = false) {
     }
 }
 
-/**
- * Atualiza status textual das abas
- */
 function atualizarAbas(payload, diaAtualNum) {
     const diasData = payload.dias || {};
 
@@ -350,9 +310,6 @@ function atualizarAbas(payload, diaAtualNum) {
     }
 }
 
-/**
- * Alterna visibilidade entre as abas e divs
- */
 function mudarVisibilidadeDia(diaNum) {
     for (let d = 1; d <= 6; d++) {
         const divDia = qs(`#day-tasks-${d}`);
@@ -409,9 +366,6 @@ function atualizarHud(usuarioPayload) {
     }
 }
 
-/**
- * Ferramentas de administrador
- */
 async function configurarSeletorUsuarios() {
     const selectEl = qs('#select-usuario-ativo');
     const badgeEl = qs('#user-active-id-badge');
@@ -447,7 +401,6 @@ async function configurarSeletorUsuarios() {
             await carregarCronograma(novoId, true);
         });
     } catch {
-        // Fallback silencioso
     }
 }
 

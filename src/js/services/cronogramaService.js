@@ -4,11 +4,6 @@ import { ENDPOINTS, API_URL } from '../constants/routes.js';
 
 export const MOCK_STORAGE_KEY = 'aprovadrive_mock_dia';
 
-/**
- * Obtém o dia simulado (mock) ativo no sistema, caso exista.
- * Pode ser definido via query param na URL (?simularDia=quarta) ou salvo no storage.
- * @returns {string|null}
- */
 export function getMockDia() {
     try {
         if (typeof window !== 'undefined' && window.location) {
@@ -21,7 +16,6 @@ export function getMockDia() {
             }
         }
     } catch {
-        // Fallback para storage
     }
 
     const stored = getLocalItem(MOCK_STORAGE_KEY, null);
@@ -32,10 +26,6 @@ export function getMockDia() {
     return null;
 }
 
-/**
- * Define ou limpa o dia simulado (mock).
- * @param {string|null} dia - Nome do dia ('quarta', 'terca', etc) ou 'auto' para voltar ao tempo real
- */
 export function setMockDia(dia) {
     if (!dia || dia === 'auto' || dia === 'real') {
         removeLocalItem(MOCK_STORAGE_KEY);
@@ -107,14 +97,8 @@ export function getNumeroDia(chaveDia) {
 }
 
 export const ACTIVE_USER_KEY = 'aprovadrive_active_user_id';
-export const DEFAULT_USER_ID = '0b0c0d89-2cea-48ad-9988-928337357643'; // Henrique (Cadastrado)
+export const DEFAULT_USER_ID = '0b0c0d89-2cea-48ad-9988-928337357643';
 
-/**
- * Obtém o ID do usuário ativo no sistema.
- * Prioriza o argumento passado, depois o storage de usuário ativo, depois auth_user, e por fim o padrão Henrique.
- * @param {string} [userId]
- * @returns {string}
- */
 export function getUsuarioAtivoId(userId) {
     if (userId && typeof userId === 'string' && userId.trim()) {
         return userId.trim();
@@ -132,26 +116,16 @@ export function getUsuarioAtivoId(userId) {
         return authId.trim();
     }
 
-    // Default garantido cadastrado no banco PostgreSQL (Henrique)
     setLocalItem(ACTIVE_USER_KEY, DEFAULT_USER_ID);
     return DEFAULT_USER_ID;
 }
 
-/**
- * Define o usuário ativo selecionado no sistema.
- * @param {string} userId
- */
 export function setUsuarioAtivoId(userId) {
     if (userId && typeof userId === 'string') {
         setLocalItem(ACTIVE_USER_KEY, userId.trim());
     }
 }
 
-/**
- * Verifica junto à API se o usuário informado possui permissões de Administrador.
- * @param {string} [userId]
- * @returns {Promise<boolean>}
- */
 export async function verificarPermissaoAdmin(userId) {
     const usuarioId = getUsuarioAtivoId(userId);
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
@@ -175,17 +149,11 @@ export async function verificarPermissaoAdmin(userId) {
     }
 }
 
-/**
- * Consulta a lista de usuários cadastrados no banco de dados através da API.
- * RESTRITO: Apenas executado com sucesso se o usuário for o Administrador.
- * @param {string} [adminId]
- * @returns {Promise<Array>}
- */
 export async function getUsuariosCadastrados(adminId) {
     const requester = getUsuarioAtivoId(adminId);
     try {
         const response = await fetch(ENDPOINTS.TASK.USUARIOS, {
-            headers: { 
+            headers: {
                 'Accept': 'application/json',
                 'X-User-Id': requester
             }
@@ -220,9 +188,6 @@ function getAuthHeaders(targetUserId) {
 
 export const SESSION_CRONOGRAMA_KEY = 'aprovadrive_session_cronograma';
 
-/**
- * Obtém o cronograma cacheado na sessão para o usuário ativo.
- */
 export function getCachedTarefas(userId) {
     try {
         const usuarioId = getUsuarioAtivoId(userId);
@@ -236,14 +201,10 @@ export function getCachedTarefas(userId) {
             }
         }
     } catch {
-        // Fallback
     }
     return null;
 }
 
-/**
- * Salva o payload de tarefas na sessão.
- */
 export function setCachedTarefas(userId, data) {
     try {
         const usuarioId = getUsuarioAtivoId(userId);
@@ -251,13 +212,9 @@ export function setCachedTarefas(userId, data) {
         const key = `${SESSION_CRONOGRAMA_KEY}_${usuarioId}_${mockDia}`;
         sessionStorage.setItem(key, JSON.stringify(data));
     } catch {
-        // Fallback
     }
 }
 
-/**
- * Limpa o cache de tarefas da sessão
- */
 export function clearCachedTarefas(userId) {
     try {
         if (userId) {
@@ -271,13 +228,9 @@ export function clearCachedTarefas(userId) {
             });
         }
     } catch {
-        // Fallback
     }
 }
 
-/**
- * Higieniza mensagens de erro para não expor termos técnicos de banco (ex: PostgreSQL) ao aluno.
- */
 function sanitizeErrorMessage(msg) {
     if (!msg || typeof msg !== 'string') {
         return 'Não foi possível carregar as missões no momento. Tente novamente.';
@@ -299,18 +252,9 @@ function sanitizeErrorMessage(msg) {
     return msg;
 }
 
-/**
- * Busca o payload de tarefas do usuário selecionado na API AprovaDrive.
- * Utiliza cache na sessão (sessionStorage) para não reconsultar a API desnecessariamente.
- * 
- * @param {string} [userId] - Identificador único do usuário
- * @param {boolean} [forceRefresh=false] - Forçar nova requisição à API
- * @returns {Promise<Object>} Payload contendo taskAtual, dias da semana e tarefas
- */
 export async function getTarefas(userId, forceRefresh = false) {
     const usuarioId = getUsuarioAtivoId(userId);
 
-    // 1. Utiliza cache da sessão para carregamento instantâneo se disponível
     if (!forceRefresh) {
         const cached = getCachedTarefas(usuarioId);
         if (cached) {
@@ -321,8 +265,8 @@ export async function getTarefas(userId, forceRefresh = false) {
     const mockDia = getMockDia();
     const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
     const url = `${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`;
-    
-    try {
+
+        try {
         const response = await fetch(url, {
             headers: {
                 ...getAuthHeaders(usuarioId),
@@ -349,14 +293,6 @@ export async function getTarefas(userId, forceRefresh = false) {
     }
 }
 
-/**
- * Envia requisição para iniciar uma tarefa.
- * A validação de negócio é realizada exclusivamente na API.
- * 
- * @param {string} taskId - Identificador único da tarefa
- * @param {string} [userId] - Identificador do usuário (opcional)
- * @returns {Promise<Object>} Resposta da API com payload atualizado
- */
 export async function iniciarTarefa(taskId, userId) {
     const usuarioId = getUsuarioAtivoId(userId);
     const mockDia = getMockDia();

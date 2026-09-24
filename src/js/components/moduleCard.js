@@ -1,24 +1,3 @@
-/**
- * Componente Reutilizável: Card de Módulo (Module Card)
- * Padrão: Factory / View Component (semelhante ao taskCard.js)
- * 
- * Cria e retorna um elemento DOM para a lista de módulos de um conteúdo selecionado,
- * com estados visuais reutilizáveis (liberado/available ou bloqueado/locked).
- * 
- * @param {Object} modulo - Dados do módulo
- * @param {string} modulo.id - Identificador único do módulo
- * @param {number} modulo.numero - Número sequencial do módulo (1, 2, 3...)
- * @param {string} modulo.titulo - Título do módulo
- * @param {string} modulo.descricao - Descrição do que será abordado
- * @param {string} [modulo.duracao] - Duração estimada (ex: '25 min')
- * @param {number} [modulo.topicos] - Quantidade de tópicos/aulas (ex: 4)
- * @param {string} [modulo.status] - Estado ('available', 'locked', 'done')
- * @param {boolean} [modulo.bloqueado] - Se o módulo está bloqueado
- * @param {Object} [options] - Configurações e callbacks adicionais
- * @param {Function} [options.onRead] - Callback disparado ao clicar em "Ler"
- * @param {Function} [options.onLockedClick] - Callback disparado ao tentar acessar um módulo bloqueado
- * @returns {HTMLElement} Elemento <article class="module-card ..."> pronto para inserção no DOM
- */
 export function createModuleCard(modulo, options = {}) {
     if (!modulo) return null;
 
@@ -38,7 +17,6 @@ export function createModuleCard(modulo, options = {}) {
     const duracao = modulo.duracao || '20 min';
     const topicos = modulo.topicos ? `${modulo.topicos} tópicos` : 'Aulas práticas';
 
-    // Ícone lateral
     let statusIconHtml = '';
     if (isDone) {
         statusIconHtml = '<i class="fa-solid fa-circle-check icon-done"></i>';
@@ -48,7 +26,6 @@ export function createModuleCard(modulo, options = {}) {
         statusIconHtml = '<i class="fa-solid fa-book-open icon-open"></i>';
     }
 
-    // Badge de status
     let statusBadgeHtml = '';
     if (isDone) {
         statusBadgeHtml = '<span class="module-badge badge-done"><i class="fa-solid fa-check"></i> Concluído</span>';
@@ -58,7 +35,6 @@ export function createModuleCard(modulo, options = {}) {
         statusBadgeHtml = '<span class="module-badge badge-available"><i class="fa-solid fa-unlock"></i> Liberado</span>';
     }
 
-    // Botão de ação
     let actionButtonHtml = '';
     if (isLocked) {
         actionButtonHtml = `
@@ -79,7 +55,6 @@ export function createModuleCard(modulo, options = {}) {
             </button>
         `;
     }
-
 
     const pdfBadgeHtml = modulo.pdfNome
         ? `<span class="module-meta-pdf"><i class="fa-solid fa-file-pdf"></i> Material PDF</span>`
@@ -107,18 +82,11 @@ export function createModuleCard(modulo, options = {}) {
         </div>
     `;
 
-    // Vincula eventos ao card
     bindCardEvents(card, modulo, options);
 
     return card;
 }
 
-/**
- * Atualiza cirurgicamente um card existente sem recriar nós do DOM.
- * @param {HTMLElement} card - Elemento do card existente
- * @param {Object} modulo - Dados atualizados do módulo
- * @param {Object} [options] - Opções de callbacks (onRead, onLockedClick)
- */
 export function updateModuleCard(card, modulo, options = {}) {
     if (!card || !modulo) return;
 
@@ -126,7 +94,6 @@ export function updateModuleCard(card, modulo, options = {}) {
     const isDone = Boolean(modulo.status === 'done');
     const statusClass = isLocked ? 'locked' : (isDone ? 'done' : 'available');
 
-    // Se o estado já estiver perfeitamente alinhado, não toca no DOM
     if (card.classList.contains(statusClass) && !card.classList.contains(isLocked ? 'available' : 'locked')) {
         return;
     }
@@ -134,7 +101,6 @@ export function updateModuleCard(card, modulo, options = {}) {
     card.classList.remove('locked', 'available', 'done');
     card.classList.add(statusClass);
 
-    // Atualiza a área de ação (badge e botão)
     const actionArea = card.querySelector('.module-action-area');
     if (actionArea) {
         let statusBadgeHtml = '';
@@ -170,13 +136,9 @@ export function updateModuleCard(card, modulo, options = {}) {
         actionArea.innerHTML = `${statusBadgeHtml}${actionButtonHtml}`;
     }
 
-    // Re-vincula eventos para o novo estado
     bindCardEvents(card, modulo, options);
 }
 
-/**
- * Vincula ouvintes de eventos ao card de acordo com o estado de bloqueio
- */
 function bindCardEvents(card, modulo, options = {}) {
     const isLocked = Boolean(modulo.bloqueado || modulo.status === 'locked');
 
@@ -222,11 +184,6 @@ function bindCardEvents(card, modulo, options = {}) {
     }
 }
 
-/**
- * Utilitário de escape de strings para prevenir problemas de XSS.
- * @param {string} str 
- * @returns {string}
- */
 function escapeHtml(str) {
     if (typeof str !== 'string') return '';
     const map = {

@@ -1,7 +1,3 @@
-/* ==========================================================================
-   AprovaDrive - Conteúdos e Módulos SPA
-   Integrado com theme.css e utils.css
-   ========================================================================== */
 
 * {
     margin: 0;
@@ -19,10 +15,6 @@ body {
     margin-left: var(--navbar-width);
     padding: var(--content-padding);
 }
-
-/* ==========================================
-   VISÃO BIBLIOTECA DE CONTEÚDOS (E-BOOKS)
-   ========================================== */
 
 .welcome {
     background: linear-gradient(110deg, var(--gradient-end), var(--primary-blue));
@@ -52,8 +44,6 @@ body {
     opacity: .22;
     margin-right: 30px;
 }
-
-/* BUSCA */
 
 .search-area {
     display: flex;
@@ -91,8 +81,6 @@ body {
     background: transparent;
 }
 
-/* FILTROS */
-
 .filters {
     display: flex;
     gap: var(--space-sm);
@@ -128,8 +116,6 @@ body {
     box-shadow: 0 3px 8px rgba(24, 168, 90, 0.25);
 }
 
-/* TÍTULO DE SEÇÃO */
-
 .section-title {
     display: flex;
     justify-content: space-between;
@@ -148,8 +134,6 @@ body {
     color: #8992a1;
     font-weight: 600;
 }
-
-/* GRID DE E-BOOKS */
 
 .ebooks {
     display: grid;
@@ -292,11 +276,6 @@ body {
     transform: translateY(0);
 }
 
-/* ==========================================
-   SPA - TRANSIÇÃO SUAVE E CONFORTÁVEL
-   Transição rápida, sólida e sem flashes de transparência
-   ========================================== */
-
 .spa-view {
     animation: spaViewEnter 0.16s ease-out;
     will-change: opacity, transform;
@@ -329,12 +308,6 @@ body {
         animation: none;
     }
 }
-
-/* ==========================================
-   SUB-TELA DE MÓDULOS (SPA)
-   Design System Harmonizado com o AprovaDrive
-   Temas Dinâmicos por Conteúdo
-   ========================================== */
 
 #view-modulos,
 #view-questoes-modulos,
@@ -410,7 +383,6 @@ body {
     --theme-shadow: rgba(124, 58, 237, 0.25);
 }
 
-/* MODO FOCO: SEM SIDEBAR NA TELA DE MÓDULOS */
 body.no-sidebar .navbar,
 body.no-sidebar aside.navbar,
 body.no-sidebar .sidebar {
@@ -444,7 +416,6 @@ body.no-sidebar .main {
     }
 }
 
-/* Layout mais amplo e confortável na tela de leitura de PDF */
 body.leitura-pdf-active .main,
 body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     max-width: 1560px !important;
@@ -528,8 +499,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     color: #111;
     font-weight: 700;
 }
-
-/* HERO CARD DO CONTEÚDO SELECIONADO */
 
 .modulo-hero-card {
     background: white;
@@ -668,8 +637,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     transition: width 0.4s ease;
 }
 
-/* SEÇÃO DE MÓDULOS */
-
 .modulos-section-header {
     display: flex;
     justify-content: space-between;
@@ -688,8 +655,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     font-size: 14px;
     color: #777;
 }
-
-/* LISTA DE CARDS DE MÓDULO (REUTILIZÁVEL) */
 
 .modules-list {
     display: flex;
@@ -738,8 +703,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
 }
 
-/* ÍNDICE DO MÓDULO */
-
 .module-index-box {
     width: 52px;
     height: 52px;
@@ -772,8 +735,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     font-weight: 800;
     line-height: 1;
 }
-
-/* CONTEÚDO DO MÓDULO */
 
 .module-content {
     flex: 1;
@@ -839,8 +800,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     line-height: 1.45;
 }
 
-/* ÁREA DE AÇÃO E BOTÕES DO MÓDULO */
-
 .module-action-area {
     display: flex;
     flex-direction: column;
@@ -875,8 +834,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     background: var(--theme-color-badge, #e8f8ee);
     color: var(--theme-color, #16a34a);
 }
-
-/* BOTÕES DE AÇÃO */
 
 .module-action-area .btn-action {
     display: inline-flex;
@@ -923,8 +880,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     vertical-align: middle;
 }
 
-/* ANIMAÇÃO DE SHAKE PARA FEEDBACK DE BLOQUEIO */
-
 @keyframes shakeCard {
     0%, 100% {
         transform: translateX(0);
@@ -941,10 +896,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     animation: shakeCard 0.4s ease-in-out;
     border-color: #dc2626 !important;
 }
-
-/* ==========================================
-   FEEDBACK FLUTUANTE (TOAST NOTIFICATION)
-   ========================================== */
 
 .toast-container {
     position: fixed;
@@ -1016,10 +967,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
         transform: translateY(0);
     }
 }
-
-/* ==========================================
-   RESPONSIVIDADE
-   ========================================== */
 
 @media (max-width: 1000px) {
     .ebooks {
@@ -1114,10 +1061,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
         max-width: 100%;
     }
 }
-
-/* ==========================================================================
-   TELA DE LEITURA DE PDF DO MÓDULO E MODAL DE AVANÇO
-   ========================================================================== */
 
 #view-leitura-pdf {
     display: flex;
@@ -1297,7 +1240,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     line-height: 1.4;
 }
 
-/* VISUALIZADOR DE PDF COM MAIOR ALTURA E FLEXIBILIDADE */
 .leitura-pdf-container {
     width: 100%;
     height: calc(100vh - 210px);
@@ -1336,7 +1278,6 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     display: block;
 }
 
-/* MODO EXPANDIDO / TELA CHEIA DO VISUALIZADOR DE PDF */
 #view-leitura-pdf.is-fullscreen-reader {
     position: fixed;
     top: 0;
@@ -1424,9 +1365,6 @@ body.pdf-fullscreen-active {
     overflow: hidden !important;
 }
 
-/* ==========================================================================
-   MODAL DE AVANÇO DE MÓDULO (100% CENTRALIZADO NA TELA)
-   ========================================================================== */
 .modal-modulo-overlay {
     position: fixed;
     top: 0;

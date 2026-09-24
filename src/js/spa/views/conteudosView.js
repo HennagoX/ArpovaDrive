@@ -1,9 +1,3 @@
-/**
- * Módulo de Visão: Biblioteca de Conteúdos (SPA)
- * 
- * Gerencia a listagem de e-books, filtros por categoria,
- * barra de busca interativa e redirecionamento para os módulos do conteúdo.
- */
 
 import { qs, qsa, setText } from '../../utils/dom.js';
 
@@ -19,12 +13,10 @@ export function initConteudosView(router) {
     const contador = qs("#contador");
     const readBtns = qsa(".read-btn");
 
-    // Vincula busca por texto
     if (search) {
         search.addEventListener("input", filtrar);
     }
 
-    // Vincula botões de filtro
     filters.forEach(filter => {
         filter.addEventListener("click", () => {
             filters.forEach(f => f.classList.remove("active"));
@@ -33,7 +25,6 @@ export function initConteudosView(router) {
         });
     });
 
-    // Função de filtro dinâmico
     function filtrar() {
         if (!search) return;
         const texto = search.value.toLowerCase().trim();
@@ -62,7 +53,6 @@ export function initConteudosView(router) {
         }
     }
 
-    // Abertura de módulos pelo botão "Começar a ler" / "Continuar leitura"
     readBtns?.forEach((btn) => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -74,7 +64,6 @@ export function initConteudosView(router) {
         });
     });
 
-    // Permite clicar no card inteiro
     ebooks.forEach((card) => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', (e) => {

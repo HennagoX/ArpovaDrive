@@ -153,7 +153,6 @@
     -webkit-font-smoothing: antialiased;
 }
 
-
 body {
     background: var(--bg-page);
     color: var(--text-body);
@@ -235,9 +234,6 @@ body {
     }
 }
 
-/* ==========================================
-   SPA - TRANSIÇÃO SUAVE E CONFORTÁVEL (GLOBAL)
-   ========================================== */
 .spa-view {
     animation: spaViewEnter 0.16s ease-out;
     will-change: opacity, transform;
@@ -259,4 +255,3 @@ body {
         animation: none;
     }
 }
-
