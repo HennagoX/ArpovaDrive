@@ -122,6 +122,9 @@ class SpaRouter {
         if (routeName === 'cronograma') {
             return '#cronograma';
         }
+        if (routeName === 'tarefas' || routeName === 'tasks') {
+            return '#tarefas';
+        }
         if (routeName === 'desempenho') {
             return '#desempenho';
         }
@@ -165,6 +168,11 @@ class SpaRouter {
 
         if (hash === '#cronograma' || hash.startsWith('#cronograma')) {
             this.navigateTo('cronograma', {}, pushState);
+            return;
+        }
+
+        if (hash === '#tarefas' || hash.startsWith('#tarefas') || hash === '#tasks' || hash.startsWith('#tasks')) {
+            this.navigateTo('tarefas', {}, pushState);
             return;
         }
 

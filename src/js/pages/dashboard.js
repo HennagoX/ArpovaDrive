@@ -9,6 +9,7 @@ import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaVie
 import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
 import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
 import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
+import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 
 ready(() => {
     router.register('inicio', {
@@ -96,6 +97,14 @@ ready(() => {
         }
     });
 
+    router.register('tarefas', {
+        viewSelector: '#view-tarefas',
+        navKey: 'tarefas',
+        onEnter: () => {
+            renderTarefas();
+        }
+    });
+
     router.register('desempenho', {
         viewSelector: '#view-desempenho',
         navKey: 'desempenho',
@@ -110,6 +119,7 @@ ready(() => {
     initQuestoesView(router);
     initQuestoesModulosView(router);
     initCronogramaView(router);
+    initTarefasView(router);
     initDesempenhoView(router);
 
     router.init();

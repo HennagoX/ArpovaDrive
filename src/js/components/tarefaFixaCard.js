@@ -1,0 +1,180 @@
+export function createTarefaFixaCard(task, options = {}) {
+    if (!task) return null;
+
+    const card = document.createElement('article');
+
+    const isQuestao = task.tipo === 'questao';
+    const isDone = Boolean(task.concluida || task.status === 'done');
+    const isClaimable = !isDone && Boolean(task.podeReivindicar);
+    const isInProgress = !isDone && (task.status === 'in_progress');
+    const isLocked = !isDone && (task.status === 'locked' || task.bloqueada);
+
+    const statusClass = isDone ? 'done' : isClaimable ? 'claimable' : isInProgress ? 'in_progress' : 'locked';
+    const typeClass = isQuestao ? 'tarefa-tipo-questao' : 'tarefa-tipo-modulo';
+
+    card.className = `tarefa-fixa-card ${typeClass} ${statusClass}`;
+    card.dataset.taskId = task.id;
+    card.dataset.tipo = task.tipo;
+    card.dataset.conteudoId = task.conteudoId;
+
+    const xpAmount = task.xp_reward || (isQuestao ? 350 : 150);
+
+    // Tag superior esquerda
+    let tagHtml = '';
+    if (isQuestao) {
+        tagHtml = `
+            <div class="tarefa-badge-desafio">
+                <i class="fa-solid fa-bolt"></i>
+                <span>DESAFIO DE QUESTÕES • META ${task.percentualAlvo || 70}%+</span>
+            </div>
+        `;
+    } else {
+        const modNumStr = String(task.moduloNumero || 1).padStart(2, '0');
+        tagHtml = `
+            <div class="tarefa-badge-modulo">
+                <i class="fa-solid fa-book-bookmark"></i>
+                <span>MÓDULO ${modNumStr}</span>
+            </div>
+        `;
+    }
+
+    // Informação de referência para questões
+    let metaRefHtml = '';
+    if (isQuestao && task.modulosReferencia) {
+        metaRefHtml = `<span class="tarefa-meta-pill"><i class="fa-solid fa-layer-group"></i> ${escapeHtml(task.modulosReferencia)}</span>`;
+    }
+
+    // Botões e Ações
+    let actionHtml = '';
+    if (isDone) {
+        actionHtml = `
+            <div class="tarefa-status-done" title="Missão concluída com sucesso!">
+                <i class="fa-solid fa-circle-check"></i>
+                <span>Concluída</span>
+            </div>
+        `;
+    } else if (isClaimable) {
+        actionHtml = `
+            <button type="button" class="btn-tarefa btn-reivindicar" title="Reivindicar sua recompensa de XP!">
+                <i class="fa-solid fa-gift"></i>
+                <span>Reivindicar +${xpAmount} XP</span>
+            </button>
+        `;
+    } else if (isInProgress) {
+        if (isQuestao) {
+            actionHtml = `
+                <div class="tarefa-actions-group">
+                    <button type="button" class="btn-tarefa btn-praticar" title="Resolver bateria de questões">
+                        <i class="fa-solid fa-circle-play"></i>
+                        <span>Fazer Questões</span>
+                    </button>
+                    <button type="button" class="btn-tarefa btn-reivindicar" title="Reivindicar recompensa se já fez">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Concluir</span>
+                    </button>
+                </div>
+            `;
+        } else {
+            actionHtml = `
+                <div class="tarefa-actions-group">
+                    <button type="button" class="btn-tarefa btn-estudar" title="Ler material do módulo">
+                        <i class="fa-solid fa-book-open-reader"></i>
+                        <span>Estudar Módulo</span>
+                    </button>
+                    <button type="button" class="btn-tarefa btn-reivindicar" title="Concluir módulo e coletar XP">
+                        <i class="fa-solid fa-check"></i>
+                        <span>Concluir</span>
+                    </button>
+                </div>
+            `;
+        }
+    } else {
+        const lockTitle = escapeHtml(task.motivo || 'Complete as etapas anteriores para desbloquear.');
+        actionHtml = `
+            <button type="button" class="btn-tarefa btn-bloqueado" title="${lockTitle}">
+                <i class="fa-solid fa-lock"></i>
+                <span>Bloqueada</span>
+            </button>
+        `;
+    }
+
+    const iconePrincipal = isQuestao ? 'fa-solid fa-trophy' : 'fa-solid fa-book-open';
+
+    card.innerHTML = `
+        <div class="tarefa-left-col">
+            <div class="tarefa-icon-box">
+                <i class="${iconePrincipal}"></i>
+            </div>
+        </div>
+
+        <div class="tarefa-main-col">
+            <div class="tarefa-header-row">
+                ${tagHtml}
+                ${metaRefHtml}
+            </div>
+
+            <h4 class="tarefa-titulo">${escapeHtml(task.titulo || 'Tarefa de Conteúdo')}</h4>
+            <p class="tarefa-descricao">${escapeHtml(task.descricao || 'Conclua para acumular XP permanente.')}</p>
+
+            ${task.motivo && isLocked ? `<div class="tarefa-locked-hint"><i class="fa-solid fa-circle-info"></i> ${escapeHtml(task.motivo)}</div>` : ''}
+        </div>
+
+        <div class="tarefa-reward-col">
+            <div class="tarefa-xp-badge ${isQuestao ? 'xp-gold' : 'xp-blue'}">
+                <i class="fa-solid fa-star"></i>
+                <span>+${xpAmount} XP</span>
+            </div>
+            <div class="tarefa-action-container">
+                ${actionHtml}
+            </div>
+        </div>
+    `;
+
+    // Event Listeners
+    const btnReivindicar = card.querySelector('.btn-reivindicar');
+    if (btnReivindicar && typeof options.onClaim === 'function') {
+        btnReivindicar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            options.onClaim(task, btnReivindicar);
+        });
+    }
+
+    const btnEstudar = card.querySelector('.btn-estudar');
+    if (btnEstudar && typeof options.onStudy === 'function') {
+        btnEstudar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            options.onStudy(task);
+        });
+    }
+
+    const btnPraticar = card.querySelector('.btn-praticar');
+    if (btnPraticar && typeof options.onPractice === 'function') {
+        btnPraticar.addEventListener('click', (e) => {
+            e.stopPropagation();
+            options.onPractice(task);
+        });
+    }
+
+    const btnBloqueado = card.querySelector('.btn-bloqueado');
+    if (btnBloqueado && typeof options.onLockedClick === 'function') {
+        btnBloqueado.addEventListener('click', (e) => {
+            e.stopPropagation();
+            card.classList.remove('shake');
+            void card.offsetWidth;
+            card.classList.add('shake');
+            options.onLockedClick(task);
+        });
+    }
+
+    return card;
+}
+
+function escapeHtml(str) {
+    if (typeof str !== 'string') return '';
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}

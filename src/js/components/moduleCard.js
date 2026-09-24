@@ -56,9 +56,11 @@ export function createModuleCard(modulo, options = {}) {
         `;
     }
 
+
     const pdfBadgeHtml = modulo.pdfNome
         ? `<span class="module-meta-pdf"><i class="fa-solid fa-file-pdf"></i> Material PDF</span>`
         : '';
+        console.log(modulo);
 
     card.innerHTML = `
         <div class="module-index-box">

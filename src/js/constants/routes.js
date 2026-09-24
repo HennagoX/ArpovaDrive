@@ -35,6 +35,10 @@ export const ENDPOINTS = {
     REINICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/reiniciar`,
     RESET_SCHEDULE: `${API_URL}/task/reset-schedule`
   },
+  TAREFAS_FIXAS: {
+    GET_TASKS: (userId) => `${API_URL}/task/fixas${userId ? `?id=${encodeURIComponent(userId)}` : ''}`,
+    CONCLUIR: (taskId) => `${API_URL}/task/fixas/${encodeURIComponent(taskId)}/concluir`
+  },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,
     CADASTRO: `${API_URL}/cadastro`

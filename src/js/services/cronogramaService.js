@@ -97,7 +97,7 @@ export function getNumeroDia(chaveDia) {
 }
 
 export const ACTIVE_USER_KEY = 'aprovadrive_active_user_id';
-export const DEFAULT_USER_ID = '0b0c0d89-2cea-48ad-9988-928337357643';
+export const DEFAULT_USER_ID = '352cdb5d-e451-4573-a8fc-58cc38f69d71';
 
 export function getUsuarioAtivoId(userId) {
     if (userId && typeof userId === 'string' && userId.trim()) {

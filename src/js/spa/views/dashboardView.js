@@ -1,7 +1,7 @@
 
 import { qs, setText, setHTML } from '../../utils/dom.js';
 import { getCurrentUser, logout } from '../../services/authService.js';
-import { getGamificationData, getTaxaAproveitamento } from '../../services/gamificationService.js';
+import { getGamificationData, getTaxaAproveitamento, syncUserGamification, updateLevelUI } from '../../services/gamificationService.js';
 import { getTarefas } from '../../services/cronogramaService.js';
 import { ROUTES } from '../../constants/routes.js';
 
@@ -31,14 +31,7 @@ export async function renderDashboard() {
 
     const gamification = getGamificationData();
     if (gamification) {
-        setText('.nivel h2', `Nível ${gamification.nivel} — ${gamification.tituloNivel}`);
-        setText('.xp-topo span:last-child', `${gamification.xpAtual} / ${gamification.xpMaximo}`);
-        const percentXp = Math.min(100, Math.round((gamification.xpAtual / gamification.xpMaximo) * 100));
-        const barraXp = qs('.barra span');
-        if (barraXp) {
-            barraXp.style.width = `${percentXp}%`;
-        }
-
+        updateLevelUI(gamification);
         setText('.sequencia h3', `${gamification.diasOfensiva} dias de sequência!`);
 
         const taxa = getTaxaAproveitamento();
@@ -48,19 +41,8 @@ export async function renderDashboard() {
     try {
         const payload = await getTarefas();
         if (payload) {
-            if (payload.usuario && typeof payload.usuario.exp === 'number') {
-                const totalXp = payload.usuario.exp;
-                const xpMaximo = gamification?.xpMaximo || 1000;
-                setText('.xp-topo span:last-child', `${totalXp} / ${xpMaximo}`);
-                const percentXp = Math.min(100, Math.round((totalXp / xpMaximo) * 100));
-                const barraXp = qs('.barra span');
-                if (barraXp) {
-                    barraXp.style.width = `${percentXp}%`;
-                }
-                const estatisticaXp = qs('.estatistica strong:last-child');
-                if (estatisticaXp) {
-                    setText(estatisticaXp, `${totalXp} XP`);
-                }
+            if (payload.usuario) {
+                syncUserGamification(payload.usuario);
             }
 
             const missaoContainer = qs('.missao');

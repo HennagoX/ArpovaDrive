@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="../css/cronograma.css">
     <link rel="stylesheet" href="../css/desempenho.css">
     <link rel="stylesheet" href="../css/questoes.css">
+    <link rel="stylesheet" href="../css/tarefas.css">
     <style>
         * {
             margin: 0;
@@ -217,7 +218,7 @@
 
         .cards {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 18px;
             margin-bottom: 30px;
         }
@@ -616,6 +617,10 @@
                 <i class="fa-solid fa-calendar-days"></i>
                 <span>Cronograma</span>
             </a>
+            <a href="#tarefas" class="navbar-item" data-nav="tarefas">
+                <i class="fa-solid fa-list-check"></i>
+                <span>Tarefas</span>
+            </a>
             <a href="#desempenho" class="navbar-item" data-nav="desempenho">
                 <i class="fa-solid fa-chart-line"></i>
                 <span>Desempenho</span>
@@ -647,18 +652,18 @@
                         <i class="fa-solid fa-trophy"></i>
                     </div>
                     <div>
-                        <h2>Nível 7 — Motorista em Treinamento</h2>
-                        <p>Continue estudando para subir de nível!</p>
+                        <h2 id="header-nivel-titulo">Nível 1 — Futuro Condutor</h2>
+                        <p id="header-nivel-subtitulo">Continue estudando para subir de nível!</p>
                     </div>
                 </div>
 
                 <div class="xp">
                     <div class="xp-topo">
-                        <span>XP</span>
-                        <span>680 / 1000</span>
+                        <span>Progresso do Nível</span>
+                        <span id="header-xp-detalhe">0 / 100 XP</span>
                     </div>
                     <div class="barra">
-                        <span></span>
+                        <span id="header-xp-barra-fill"></span>
                     </div>
                 </div>
             </section>
@@ -697,6 +702,14 @@
                     </div>
                     <h3>Cronograma</h3>
                     <p>Acompanhe suas tarefas e saiba exatamente o que estudar.</p>
+                </a>
+
+                <a href="#tarefas" class="card" id="card-tarefas" data-nav="tarefas">
+                    <div class="icone-card verde-card" style="background: #ecfdf5; color: #059669;">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <h3>Tarefas</h3>
+                    <p>Missões fixas por conteúdo com recompensas altas de XP permanente.</p>
                 </a>
             </section>
 
@@ -1212,6 +1225,56 @@
                 <div id="day-tasks-5" class="day-tasks-container" data-day="5" style="display: none;"></div>
                 <div id="day-tasks-6" class="day-tasks-container" data-day="6" style="display: none;"></div>
             </section>
+        </section>
+
+        <section id="view-tarefas" class="spa-view container" style="display: none;">
+            <div class="tarefas-container">
+                <div class="tarefas-hero">
+                    <div class="tarefas-hero-top">
+                        <div class="tarefas-hero-title-area">
+                            <h2><i class="fa-solid fa-list-check"></i> Tarefas Fixas por Conteúdo</h2>
+                            <p>Missões permanentes e únicas de cada módulo estudado e desafios a cada 3 módulos com meta de 70%+ de acertos em questões. Conquiste grandes recompensas de XP!</p>
+                        </div>
+                        <div class="tarefas-hero-stats">
+                            <div class="tarefas-stat-card">
+                                <i class="fa-solid fa-trophy tarefas-stat-icon"></i>
+                                <div class="tarefas-stat-info">
+                                    <strong id="tarefas-stat-concluidas">0 / 0</strong>
+                                    <span>Missões Concluídas</span>
+                                </div>
+                            </div>
+                            <div class="tarefas-stat-card">
+                                <i class="fa-solid fa-bolt tarefas-stat-icon"></i>
+                                <div class="tarefas-stat-info">
+                                    <strong id="tarefas-stat-xp-ganho">+0 XP</strong>
+                                    <span>XP Fixo Coletado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tarefas-hero-progress-area">
+                        <div class="tarefas-progress-meta">
+                            <span>Progresso Geral das Tarefas</span>
+                            <span id="tarefas-hero-progress-pct">0%</span>
+                        </div>
+                        <div class="tarefas-progress-bar-bg">
+                            <div class="tarefas-progress-bar-fill" id="tarefas-hero-progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cronograma-controls-row" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+                    <div id="tarefas-filtros" class="tarefas-filters-container" style="margin-bottom: 0;"></div>
+                    <button type="button" id="btn-recarregar-tarefas" class="btn-retry" style="margin: 0; padding: 10px 16px; font-size: 13px;">
+                        <span class="material-symbols-outlined icone-inline">refresh</span> Atualizar Tarefas
+                    </button>
+                </div>
+
+                <div id="tarefas-conteudos-wrapper">
+                    <!-- Seções de cada conteúdo renderizadas dinamicamente pelo tarefasView.js -->
+                </div>
+            </div>
         </section>
 
         <section id="view-desempenho" class="spa-view" style="display: none;">
