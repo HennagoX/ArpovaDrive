@@ -27,6 +27,7 @@ ready(() => {
 
     if (formLogin) {
         on(formLogin, 'submit',async (event) => {
+            try{
             event.preventDefault();
 
             const usuario = qs(SELECTORS.LOGIN_USUARIO)?.value.trim();
@@ -55,13 +56,25 @@ ready(() => {
                     window.location.href = ROUTES.DASHBOARD;
                 }, TIMING.REDIRECT_DELAY);
             }
+            else
+            if (result?.error && result.error.find("404")) {
+                                 mensagem.style.display = 'block';
+                    mensagem.style.background = '#ffe5e5';
+                    mensagem.style.color = '#c00000';
+                    mensagem.textContent = MESSAGES.LOGIN_ERRADO;
+            }
             else{
                  mensagem.style.display = 'block';
                     mensagem.style.background = '#ffe5e5';
                     mensagem.style.color = '#c00000';
                     mensagem.textContent = MESSAGES.LOGIN_ERRADO;
             }
-        });
+        } catch(erro) {             mensagem.style.display = 'block';
+                    mensagem.style.background = '#ffe5e5';
+                    mensagem.style.color = '#c00000';
+                    mensagem.textContent = "Erro ao se comunicar com o servidor, tente novamente mais tarde.";}
+    
+    });
     }
 
     if (esqueci) {

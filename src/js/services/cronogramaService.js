@@ -289,7 +289,7 @@ export async function getTarefas(userId, forceRefresh = false) {
 
         throw new Error('Nenhuma missão encontrada para esta semana.');
     } catch (err) {
-        throw new Error(sanitizeErrorMessage(err.message));
+        throw new Error("Não foi possível se conectar com o servidor, tente novamente mais tarde.");
     }
 }
 
