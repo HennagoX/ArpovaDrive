@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AprovaDrive | Módulos 3 a 6</title>
+<style>
+:root{--v:#09664e;--a:#176ba5;--t:#263c3c}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.5 Arial,sans-serif;color:var(--t);
+background:radial-gradient(circle at 10% 10%,#dff4e8,transparent 38%),
+radial-gradient(circle at 90% 20%,#e3f2ff,transparent 38%),#f8fbf9}
+main{max-width:790px;margin:25px auto;padding:0 15px}
+header{padding:27px;border-radius:22px;background:linear-gradient(120deg,#07513f,#108062);color:white}
+header h1{margin:10px 0;font-size:clamp(25px,5vw,38px)}
+header p{margin:0;color:#dff8ec}
+.marca{font-weight:900;letter-spacing:2px;color:var(--v);margin-bottom:18px}
+.card{margin-top:18px;padding:25px;border-radius:20px;background:#ffffffd9;
+box-shadow:0 15px 45px #0b503018;backdrop-filter:blur(10px)}
+.info{display:flex;justify-content:space-between;color:var(--a);font-weight:bold;font-size:13px}
+.barra{height:8px;margin:18px 0;background:#e2eee8;border-radius:20px;overflow:hidden}
+.barra span{display:block;height:100%;background:var(--v)}
+h2{font-size:22px;line-height:1.35}
+.opcao{display:block;width:100%;margin:9px 0;padding:13px;text-align:left;
+border:1px solid #d9e9e1;border-radius:11px;background:white;color:var(--t);
+font:inherit;cursor:pointer}
+.opcao:hover:not(:disabled){border-color:var(--v);background:#f2faf5}
+.opcao:disabled{cursor:default}
+.certa{background:#e6f7ed;border-color:#32aa70}
+.errada{background:#fff0ed;border-color:#d98b7f}
+.feedback{padding:13px;margin-top:16px;background:#eaf7ef;border-left:4px solid var(--v)}
+button:focus-visible{outline:3px solid var(--a)}
+.acoes{display:flex;justify-content:space-between;gap:10px;margin-top:22px}
+.botao{padding:11px 16px;border:0;border-radius:10px;background:var(--v);
+color:white;font-weight:bold;cursor:pointer}
+.botao:disabled{opacity:.4;cursor:default}
+.secundario{background:#eaf3ee;color:var(--v)}
+</style>
+</head>
+<body>
+<main>
+<div class="marca">◆ APROVADRIVE</div>
+<header>
+  <small>10 QUESTÕES</small>
+  <h1>Meio Ambiente e Cidadania</h1>
+  <p>Módulos 3 a 6 · Ruídos, manutenção, consumo e resíduos</p>
+</header>
+<section class="card" id="quiz" aria-live="polite"></section>
+</main>
+
+<script>
+const linhas = `
+3|Poluição sonora é:|Qualquer som de veículo.|Excesso de sons indesejados no ambiente.|Apenas música alta.|Somente barulho de obras.|1|O excesso de ruído também afeta a qualidade de vida.
+3|Quais fontes podem aumentar o ruído no trânsito?|Somente bicicletas.|Apenas o vento.|Motores, escapamentos, buzinas e trânsito intenso.|Somente placas.|2|Diferentes fontes de ruído se somam nas cidades.
+3|Quem pode ser afetado por ruídos frequentes?|Pessoas e animais.|Somente motoristas.|Apenas passageiros.|Ninguém fora do veículo.|0|Ruídos podem prejudicar descanso, conversa e concentração.
+4|A manutenção preventiva contribui com o ambiente porque:|Elimina toda emissão.|Ajuda a evitar falhas, desperdícios e vazamentos.|Dispensa o descarte correto.|Transforma combustível sem perdas.|1|Conservar o veículo pode evitar impactos adicionais.
+4|Pneus mal calibrados podem causar:|Maior resistência ao movimento e possível aumento no consumo.|Emissão zero.|Frenagem sempre melhor.|Fim dos ruídos.|0|Siga a calibragem indicada para o veículo.
+4|Problemas no escapamento podem causar:|Mudança na pintura.|Mais passageiros.|Emissões inadequadas ou ruído excessivo.|Redução certa no consumo.|2|Defeitos no sistema devem ser avaliados por uma oficina.
+5|Em veículos a combustão, maior consumo geralmente está associado a:|Mais emissões durante o uso.|Somente vapor de água.|Nenhum impacto.|Fim da manutenção.|0|O uso de combustível gera emissões.
+5|Qual condução evita desperdício?|Acelerar forte e frear logo depois.|Deixar o motor ligado sem necessidade.|Antecipar o trânsito e conduzir suavemente.|Dirigir acima da velocidade adequada.|2|Acelerações e frenagens desnecessárias gastam energia.
+6|Qual conjunto contém resíduos automotivos?|Somente papel.|Apenas água limpa.|Óleo usado, filtros, pneus e baterias.|Somente combustível novo.|2|Manutenção e reparos geram materiais que precisam de destinação adequada.
+6|O que é logística reversa?|Jogar tudo no lixo comum.|Recolher certos produtos usados para destinação adequada.|Guardar peças para sempre.|Transportar resíduos pela contramão.|1|Ela organiza o retorno de alguns materiais após o uso.
+`.trim();
+
+const perguntas = linhas.split("\n").map(linha => {
+  const [modulo, texto, a, b, c, d, correta, explicacao] = linha.split("|");
+  return { modulo, texto, opcoes:[a,b,c,d], correta:Number(correta), explicacao };
+});
+
+const quiz = document.querySelector("#quiz");
+let atual = 0;
+let respostas = Array(10).fill(null);
+
+function mostrar() {
+  const respondidas = respostas.filter(r => r !== null).length;
+
+  if (atual === 10) {
+    const acertos = perguntas.reduce(
+      (total, p, i) => total + Number(respostas[i] === p.correta), 0
+    );
+
+    quiz.innerHTML = `
+      <h2>Resultado: ${acertos}/10</h2>
+      <p>Você concluiu os módulos 3 a 6.</p>
+      <button class="botao" id="reiniciar">Refazer questões</button>
+    `;
+
+    document.querySelector("#reiniciar").onclick = () => {
+      atual = 0;
+      respostas = Array(10).fill(null);
+      mostrar();
+    };
+    return;
+  }
+
+  const p = perguntas[atual];
+  const marcada = respostas[atual];
+
+  quiz.innerHTML = `
+    <div class="info">
+      <span>MÓDULO ${p.modulo} · QUESTÃO ${atual + 1}/10</span>
+      <span>${respondidas}/10 respondidas</span>
+    </div>
+    <div class="barra"><span style="width:${respondidas * 10}%"></span></div>
+    <h2>${p.texto}</h2>
+
+    ${p.opcoes.map((opcao, i) => `
+      <button class="opcao ${
+        marcada !== null
+          ? i === p.correta ? "certa" : i === marcada ? "errada" : ""
+          : ""
+      }" data-opcao="${i}" ${marcada !== null ? "disabled" : ""}>
+        <strong>${"ABCD"[i]}.</strong> ${opcao}
+      </button>
+    `).join("")}
+
+    ${marcada !== null ? `
+      <div class="feedback">
+        <strong>${marcada === p.correta
+          ? "Resposta certa!"
+          : `Correta: alternativa ${"ABCD"[p.correta]}.`}</strong>
+        <br>${p.explicacao}
+      </div>
+    ` : ""}
+
+    <div class="acoes">
+      <button class="botao secundario" id="anterior"
+        ${atual === 0 ? "disabled" : ""}>← Anterior</button>
+      <button class="botao" id="proximo"
+        ${marcada === null ? "disabled" : ""}>
+        ${atual === 9 ? "Ver resultado" : "Próxima →"}
+      </button>
+    </div>
+  `;
+
+  quiz.querySelectorAll("[data-opcao]").forEach(botao => {
+    botao.onclick = () => {
+      respostas[atual] = Number(botao.dataset.opcao);
+      mostrar();
+    };
+  });
+
+  document.querySelector("#anterior").onclick = () => {
+    atual--;
+    mostrar();
+  };
+
+  document.querySelector("#proximo").onclick = () => {
+    atual++;
+    mostrar();
+  };
+}
+
+mostrar();
+</script>
+</body>
+</html>
