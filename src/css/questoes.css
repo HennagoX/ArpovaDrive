@@ -319,7 +319,6 @@
 }
 
 .btn-praticar-questoes:hover {
-    background: #064583;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(7, 82, 160, 0.3);
 }

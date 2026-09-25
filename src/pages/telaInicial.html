@@ -263,13 +263,17 @@
         }
 
         .amarelo-card {
-            background: #fff4d6;
-            color: #d99a00;
+            background: #ffbe0a;
+            color: #ffffff;
         }
 
         .roxo-card {
-            background: #f0e9ff;
-            color: #7047c7;
+            background: #6f2dff;
+            color: #f1f1f1;
+        }
+
+        .vermelho-card{
+            background-color: red;
         }
 
         .card h3 {
@@ -829,7 +833,6 @@
             </div>
 
             <div class="section-title">
-                <h2>Todos os conteúdos</h2>
                 <span id="contador">5 conteúdos</span>
             </div>
 
@@ -1265,7 +1268,7 @@
                 </div>
 
                 <div class="cronograma-controls-row" style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
-                    <div id="tarefas-filtros" class="tarefas-filters-container" style="margin-bottom: 0;"></div>
+                    <div id="tarefas-filtros" class="tarefas-filters-container" style="margin-bottom: 0; padding: 2px;"></div>
                     <button type="button" id="btn-recarregar-tarefas" class="btn-retry" style="margin: 0; padding: 10px 16px; font-size: 13px;">
                         <span class="material-symbols-outlined icone-inline">refresh</span> Atualizar Tarefas
                     </button>
@@ -1565,7 +1568,7 @@
                         </div>
                     </div>
                     <div class="questoes-progress-bar">
-                        <div class="questoes-progress-fill green" style="width: 25%;"></div>
+                        <div class="questoes-progress-fill green" style="width: 0%;"></div>
                     </div>
                     <button type="button" class="btn-praticar-questoes" data-id="CodigoTransito">
                         <i class="fa-solid fa-circle-play"></i> Praticar Questões
@@ -1641,7 +1644,7 @@
                     <div class="questoes-progress-bar">
                         <div class="questoes-progress-fill yellow" style="width: 50%;"></div>
                     </div>
-                    <button type="button" class="btn-praticar-questoes" data-id="DirecaoOfensiva">
+                    <button type="button" class="btn-praticar-questoes amarelo-card" data-id="DirecaoOfensiva">
                         <i class="fa-solid fa-circle-play"></i> Praticar Questões
                     </button>
                 </article>
@@ -1678,7 +1681,7 @@
                     <div class="questoes-progress-bar">
                         <div class="questoes-progress-fill red" style="width: 50%;"></div>
                     </div>
-                    <button type="button" class="btn-praticar-questoes" data-id="PrimeirosSocorros">
+                    <button type="button" class="btn-praticar-questoes vermelho-card " data-id="PrimeirosSocorros">
                         <i class="fa-solid fa-circle-play"></i> Praticar Questões
                     </button>
                 </article>
@@ -1715,7 +1718,7 @@
                     <div class="questoes-progress-bar">
                         <div class="questoes-progress-fill purple" style="width: 50%;"></div>
                     </div>
-                    <button type="button" class="btn-praticar-questoes" data-id="MeioAmbiente">
+                    <button type="button" class="btn-praticar-questoes roxo-card" data-id="MeioAmbiente">
                         <i class="fa-solid fa-circle-play"></i> Praticar Questões
                     </button>
                 </article>
