@@ -81,7 +81,22 @@ export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
         viewQuestoesResolucao.classList.add(`modulos-theme-${temaCor}`);
     }
 
-    perguntas = getQuestoesByBateria(activeMateriaId, activeBateriaNumero);
+    const listaOriginal = getQuestoesByBateria(activeMateriaId, activeBateriaNumero);
+    perguntas = listaOriginal.map(q => {
+        const indices = [0, 1, 2, 3];
+        for (let i = indices.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [indices[i], indices[j]] = [indices[j], indices[i]];
+        }
+        const novoIndiceCorreto = indices.indexOf(q.correta);
+        return {
+            ...q,
+            opcoes: indices.map(idx => q.opcoes[idx]),
+            correta: novoIndiceCorreto,
+            corretaLetra: LETRAS[novoIndiceCorreto],
+            originalCorretaLetra: q.corretaLetra || LETRAS[q.correta]
+        };
+    });
     indexAtual = 0;
     respostasUsuario = Array(perguntas.length).fill(null);
     acertosCount = 0;
@@ -221,6 +236,7 @@ async function tratarResposta(indexEscolhido) {
     const q = perguntas[indexAtual];
     const letraEscolhida = LETRAS[indexEscolhido];
     const isCorretoLocal = indexEscolhido === q.correta;
+    const textoEscolhido = q.opcoes[indexEscolhido];
 
     let respostaApi = null;
     try {
@@ -228,7 +244,8 @@ async function tratarResposta(indexEscolhido) {
             materia: activeMateriaId,
             bateria: activeBateriaNumero,
             num: q.numero,
-            resposta: letraEscolhida
+            resposta: isCorretoLocal ? q.originalCorretaLetra : 'ERRADA',
+            textoResposta: textoEscolhido
         });
     } catch {
         respostaApi = null;
