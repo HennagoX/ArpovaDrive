@@ -29,6 +29,10 @@ export async function renderDashboard() {
         setText('.perfil-nome strong', user.nome);
     }
 
+    if (user && (typeof user.exp === 'number' || user.lv !== undefined)) {
+        syncUserGamification(user);
+    }
+
     const gamification = getGamificationData();
     if (gamification) {
         updateLevelUI(gamification);
@@ -39,7 +43,7 @@ export async function renderDashboard() {
     }
 
     try {
-        const payload = await getTarefas();
+        const payload = await getTarefas(undefined, true);
         if (payload) {
             if (payload.usuario) {
                 syncUserGamification(payload.usuario);

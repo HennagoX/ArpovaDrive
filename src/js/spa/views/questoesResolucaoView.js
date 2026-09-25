@@ -311,6 +311,12 @@ async function renderResultadoFinal() {
             acertos: acertosCount,
             total
         });
+        if (conclusaoData && conclusaoData.totalExp !== undefined && conclusaoData.totalExp !== null) {
+            atualizarXpNoLocalStorage({
+                expTotal: conclusaoData.totalExp,
+                lv: conclusaoData.lv
+            });
+        }
     } catch {}
 
     let tituloResultado = aprovado ? 'Excelente Desempenho!' : 'Bom Treinamento!';

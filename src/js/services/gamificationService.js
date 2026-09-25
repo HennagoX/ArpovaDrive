@@ -3,21 +3,21 @@ import { getLocalItem, setLocalItem } from '../utils/storage.js';
 import { qs, setText } from '../utils/dom.js';
 
 export const TITULOS_NIVEL = [
-    'Futuro Condutor',            // Lv 1
-    'Aluno em Formação',          // Lv 2
-    'Aprendiz da Legislação',     // Lv 3
-    'Conhecedor de Placas',       // Lv 4
-    'Motorista Consciente',       // Lv 5
-    'Piloto Preventivo',          // Lv 6
-    'Motorista em Treinamento',   // Lv 7
-    'Condutor Experiente',        // Lv 8
-    'Mestre da Direção Defensiva',// Lv 9
-    'Perito no Trânsito',         // Lv 10
-    'Piloto de Elite',            // Lv 11
-    'Ás do Volante',              // Lv 12
-    'Especialista DETRAN',        // Lv 13
-    'Instrutor Honorário',        // Lv 14
-    'Lenda do Asfalto'            // Lv 15+
+    'Futuro Condutor',
+    'Aluno em Formação',
+    'Aprendiz da Legislação',
+    'Conhecedor de Placas',
+    'Motorista Consciente',
+    'Piloto Preventivo',
+    'Motorista em Treinamento',
+    'Condutor Experiente',
+    'Mestre da Direção Defensiva',
+    'Perito no Trânsito',
+    'Piloto de Elite',
+    'Ás do Volante',
+    'Especialista DETRAN',
+    'Instrutor Honorário',
+    'Lenda do Asfalto'
 ];
 
 export function getXpRequiredForLevel(level) {
@@ -61,45 +61,58 @@ const DEFAULT_GAMIFICATION = {
 };
 
 export function getGamificationData() {
-    return getLocalItem(STORAGE_KEYS.GAMIFICATION, DEFAULT_GAMIFICATION);
+    const data = getLocalItem(STORAGE_KEYS.GAMIFICATION, null);
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+
+    if (authUser && (typeof authUser.exp === 'number' || authUser.lv !== undefined)) {
+        const userExp = Math.max(0, Number(authUser.exp || 0));
+        const userLevelInfo = getLevelInfo(userExp);
+        const userLv = Math.max(Number(authUser.lv || 1), userLevelInfo.nivel);
+        const userTitulo = authUser.tituloNivel || userLevelInfo.tituloNivel;
+
+        if (!data || data.totalExp !== userExp || data.nivel !== userLv) {
+            const merged = {
+                ...(data || DEFAULT_GAMIFICATION),
+                totalExp: userExp,
+                nivel: userLv,
+                lv: userLv,
+                tituloNivel: userTitulo,
+                xpAtual: userLevelInfo.xpNoNivel,
+                xpMaximo: userLevelInfo.xpNecessarioNivel,
+                progressoPct: userLevelInfo.progressoPct
+            };
+            setLocalItem(STORAGE_KEYS.GAMIFICATION, merged);
+            setLocalItem(STORAGE_KEYS.XP, userExp);
+            setLocalItem(STORAGE_KEYS.LV, userLv);
+            return merged;
+        }
+        return data;
+    }
+
+    return data || DEFAULT_GAMIFICATION;
 }
 
 export function atualizarXpNoLocalStorage(params = {}) {
     const { xpGanho = 0, expTotal = null, lv = null, tituloNivel = null, taskId = null } = params;
 
     let totalExp;
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const gData = getLocalItem(STORAGE_KEYS.GAMIFICATION, null);
+
     if (expTotal !== null && expTotal !== undefined && !isNaN(Number(expTotal))) {
         totalExp = Math.max(0, Number(expTotal));
     } else {
-        // Incrementa em cima do maior XP atual existente em qualquer chave do localStorage
-        const gData = getGamificationData();
-        const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-        const directXp = getLocalItem(STORAGE_KEYS.XP, null);
-        const cronograma = getLocalItem(STORAGE_KEYS.CRONOGRAMA, null);
-        const rawStorageExp = typeof localStorage !== 'undefined' ? localStorage.getItem('exp') : null;
-        const rawStorageUserExp = typeof localStorage !== 'undefined' ? localStorage.getItem('aprovadrive_user_exp') : null;
-        const rawStorageXp = typeof localStorage !== 'undefined' ? localStorage.getItem('aprovadrive_xp') : null;
-
-        const currentExp = Math.max(
-            Number(gData?.totalExp || 0),
-            Number(authUser?.exp || 0),
-            Number(cronograma?.usuario?.exp || 0),
-            Number(directXp || 0),
-            Number(rawStorageExp || 0),
-            Number(rawStorageUserExp || 0),
-            Number(rawStorageXp || 0),
-            0
-        );
-
-        totalExp = Math.max(0, currentExp + Number(xpGanho || 0));
+        const baseExp = authUser && typeof authUser.exp === 'number'
+            ? Number(authUser.exp)
+            : Number(gData?.totalExp || 0);
+        totalExp = Math.max(0, baseExp + Number(xpGanho || 0));
     }
 
     const levelInfo = getLevelInfo(totalExp);
-    const nivelFinal = lv !== null && lv !== undefined ? Number(lv) : levelInfo.nivel;
+    const nivelFinal = Math.max(Number(lv || 1), levelInfo.nivel);
     const tituloFinal = tituloNivel || levelInfo.tituloNivel;
 
-    // 1. Atualiza objeto de gamificação no localStorage
-    const gamification = getGamificationData();
+    const gamification = gData || { ...DEFAULT_GAMIFICATION };
     gamification.totalExp = totalExp;
     gamification.nivel = nivelFinal;
     gamification.lv = nivelFinal;
@@ -109,13 +122,10 @@ export function atualizarXpNoLocalStorage(params = {}) {
     gamification.progressoPct = levelInfo.progressoPct;
     setLocalItem(STORAGE_KEYS.GAMIFICATION, gamification);
 
-    // 2. Salva chaves diretas no localStorage
     setLocalItem(STORAGE_KEYS.XP, totalExp);
     setLocalItem(STORAGE_KEYS.LV, nivelFinal);
 
-    // 3. Atualiza lv e exp no objeto de usuário autenticado (AUTH_USER)
     try {
-        const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
         if (authUser && typeof authUser === 'object') {
             authUser.exp = totalExp;
             authUser.lv = nivelFinal;
@@ -123,29 +133,21 @@ export function atualizarXpNoLocalStorage(params = {}) {
             authUser.tituloNivel = tituloFinal;
             setLocalItem(STORAGE_KEYS.AUTH_USER, authUser);
         }
-    } catch {
-        // Ignora erro de acesso ao storage
-    }
+    } catch {}
 
-    // 4. Atualiza usuario no objeto de CRONOGRAMA no localStorage (se existir)
     try {
         const cronograma = getLocalItem(STORAGE_KEYS.CRONOGRAMA, null);
-        if (cronograma && typeof cronograma === 'object') {
-            if (cronograma.usuario && typeof cronograma.usuario === 'object') {
-                cronograma.usuario.exp = totalExp;
-                cronograma.usuario.lv = nivelFinal;
-                cronograma.usuario.tituloNivel = tituloFinal;
-                cronograma.usuario.xpNoNivel = levelInfo.xpNoNivel;
-                cronograma.usuario.xpNecessarioNivel = levelInfo.xpNecessarioNivel;
-                cronograma.usuario.progressoPct = levelInfo.progressoPct;
-            }
+        if (cronograma && typeof cronograma === 'object' && cronograma.usuario) {
+            cronograma.usuario.exp = totalExp;
+            cronograma.usuario.lv = nivelFinal;
+            cronograma.usuario.tituloNivel = tituloFinal;
+            cronograma.usuario.xpNoNivel = levelInfo.xpNoNivel;
+            cronograma.usuario.xpNecessarioNivel = levelInfo.xpNecessarioNivel;
+            cronograma.usuario.progressoPct = levelInfo.progressoPct;
             setLocalItem(STORAGE_KEYS.CRONOGRAMA, cronograma);
         }
-    } catch {
-        // Ignora erro de acesso ao storage
-    }
+    } catch {}
 
-    // 5. Salva chaves diretas para compatibilidade máxima com qualquer script/inspeção
     try {
         if (typeof localStorage !== 'undefined') {
             localStorage.setItem('aprovadrive_user_lv', String(nivelFinal));
@@ -156,16 +158,13 @@ export function atualizarXpNoLocalStorage(params = {}) {
             localStorage.setItem('exp', String(totalExp));
             localStorage.setItem('xp', String(totalExp));
 
-            // Salva registro da tarefa fixa concluída no histórico local
             if (taskId) {
                 const fixasKey = 'aprovadrive_tarefas_fixas_concluidas';
                 let concluidas = [];
                 try {
                     const raw = localStorage.getItem(fixasKey);
                     if (raw) concluidas = JSON.parse(raw);
-                } catch {
-                    // Ignora parse
-                }
+                } catch {}
                 if (!Array.isArray(concluidas)) concluidas = [];
                 if (!concluidas.includes(taskId)) {
                     concluidas.push(taskId);
@@ -173,14 +172,10 @@ export function atualizarXpNoLocalStorage(params = {}) {
                 }
             }
         }
-    } catch {
-        // Ignora
-    }
+    } catch {}
 
-    // 6. Atualiza elementos visuais do nível na tela imediatamente
     updateLevelUI(gamification);
 
-    // 7. Notifica outros componentes da aplicação
     if (typeof window !== 'undefined') {
         try {
             window.dispatchEvent(new CustomEvent('aprovadrive:xp_updated', {
@@ -192,9 +187,7 @@ export function atualizarXpNoLocalStorage(params = {}) {
                     taskId
                 }
             }));
-        } catch {
-            // Ignora
-        }
+        } catch {}
     }
 
     return gamification;
@@ -214,6 +207,12 @@ export function syncUserGamification(usuario) {
 }
 
 export function getUserLevel() {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    if (authUser && (authUser.lv || authUser.nivel || typeof authUser.exp === 'number')) {
+        const exp = Math.max(0, Number(authUser.exp || 0));
+        const levelInfo = getLevelInfo(exp);
+        return Math.max(Number(authUser.lv || authUser.nivel || 1), levelInfo.nivel);
+    }
     const directLv = getLocalItem(STORAGE_KEYS.LV, null);
     if (directLv !== null && !isNaN(Number(directLv))) {
         return Number(directLv);
@@ -221,10 +220,6 @@ export function getUserLevel() {
     const gamification = getGamificationData();
     if (gamification && (gamification.nivel || gamification.lv)) {
         return Number(gamification.nivel || gamification.lv);
-    }
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    if (authUser && (authUser.lv || authUser.nivel)) {
-        return Number(authUser.lv || authUser.nivel);
     }
     return 1;
 }
@@ -245,16 +240,16 @@ export function updateLevelUI(infoOrUsuario) {
         const exp = typeof infoOrUsuario.exp === 'number' ? infoOrUsuario.exp : (infoOrUsuario.totalExp || 0);
         info = getLevelInfo(exp);
         if (infoOrUsuario.tituloNivel) info.tituloNivel = infoOrUsuario.tituloNivel;
-        if (infoOrUsuario.lv || infoOrUsuario.nivel) info.nivel = infoOrUsuario.lv || infoOrUsuario.nivel;
+        if (infoOrUsuario.lv || infoOrUsuario.nivel) {
+            info.nivel = Math.max(Number(infoOrUsuario.lv || infoOrUsuario.nivel), info.nivel);
+        }
     }
 
-    // Atualiza título do nível: "Nível X — Título"
     const nivelTituloEl = qs('#header-nivel-titulo') || qs('.nivel h2');
     if (nivelTituloEl) {
         setText(nivelTituloEl, `Nível ${info.nivel} — ${info.tituloNivel}`);
     }
 
-    // Atualiza texto de XP: "X / Y XP"
     const xpTextoEl = qs('#header-xp-detalhe') || qs('.xp-topo span:last-child');
     if (xpTextoEl) {
         const xpAtual = (info.xpNoNivel !== undefined ? info.xpNoNivel : info.xpAtual || 0).toLocaleString('pt-BR');
@@ -262,14 +257,12 @@ export function updateLevelUI(infoOrUsuario) {
         setText(xpTextoEl, `${xpAtual} / ${xpMax} XP`);
     }
 
-    // Atualiza barra de progresso do nível (%)
     const barraSpan = qs('#header-xp-barra-fill') || qs('.barra span');
     if (barraSpan) {
         const pct = info.progressoPct !== undefined ? info.progressoPct : Math.min(100, Math.round(((info.xpAtual || 0) / (info.xpMaximo || 100)) * 100));
         barraSpan.style.width = `${pct}%`;
     }
 
-    // Atualiza XP total nas estatísticas da tela inicial
     const estatisticaXp = qs('.estatistica strong:last-child');
     if (estatisticaXp && info.totalExp !== undefined) {
         setText(estatisticaXp, `${info.totalExp.toLocaleString('pt-BR')} XP`);

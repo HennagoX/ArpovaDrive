@@ -1,5 +1,7 @@
 import { ready } from '../utils/dom.js';
 import { router } from '../spa/router.js';
+import { getCurrentUser } from '../services/authService.js';
+import { getGamificationData, syncUserGamification, updateLevelUI } from '../services/gamificationService.js';
 import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.js';
 import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.js';
 import { initModulosView, abrirModulos, abrirLeituraPdf, fecharModalAvancar, toggleFullscreenReader } from '../spa/views/modulosView.js';
@@ -11,6 +13,12 @@ import { initQuestoesResolucaoView, abrirQuestoesResolucao } from '../spa/views/
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 
 ready(() => {
+    const user = getCurrentUser();
+    if (user) {
+        syncUserGamification(user);
+    }
+    updateLevelUI(getGamificationData());
+
     router.register('inicio', {
         viewSelector: '#view-inicio',
         navKey: 'inicio',

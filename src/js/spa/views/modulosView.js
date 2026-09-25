@@ -14,6 +14,7 @@ import {
 } from '../../services/moduloService.js';
 import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
 import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
+import { atualizarXpNoLocalStorage, addXp } from '../../services/gamificationService.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -113,6 +114,14 @@ export function initModulosView(router) {
                 btnAvancarTopo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando...';
 
                 const resultado = await avancarModulo(activeConteudoId);
+                if (resultado?.exp_total && typeof resultado.exp_total.exp === 'number') {
+                    atualizarXpNoLocalStorage({
+                        expTotal: resultado.exp_total.exp,
+                        lv: resultado.exp_total.lv
+                    });
+                } else if (resultado?.xp_ganha > 0) {
+                    addXp(resultado.xp_ganha);
+                }
                 const proxModuloNum = Math.min(MAX_MODULO, Number(resultado.modulo_atual || Math.min(MAX_MODULO, numModuloAtual + 1)));
 
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);

@@ -15,7 +15,7 @@ import {
     getUsuariosCadastrados,
     verificarPermissaoAdmin
 } from '../../services/cronogramaService.js';
-import { addXp, getGamificationData } from '../../services/gamificationService.js';
+import { addXp, getGamificationData, syncUserGamification } from '../../services/gamificationService.js';
 import { SELECTORS } from '../../constants/selectors.js';
 import { createTaskCard } from '../../components/taskCard.js';
 import { showToast } from './modulosView.js';
@@ -133,6 +133,7 @@ async function carregarCronograma(userId, forceRefresh = false) {
         ativarAba(diaAtual);
 
         if (payload.usuario) {
+            syncUserGamification(payload.usuario);
             atualizarHud(payload.usuario);
             const badgeEl = qs('#user-active-id-badge');
             if (badgeEl && payload.usuario.id_usuario) {
@@ -221,6 +222,7 @@ function renderizarTarefasNasDivs(payload) {
                             atualizarAbas(updatedPayload, diaAtual);
 
                             if (updatedPayload.usuario) {
+                                syncUserGamification(updatedPayload.usuario);
                                 atualizarHud(updatedPayload.usuario);
                             }
                             showToast(result.message || `Missão concluída! +${result.xp_reward || 30} XP!`, 'info', 'fa-solid fa-trophy');

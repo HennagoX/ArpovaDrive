@@ -1,6 +1,7 @@
 import { STORAGE_KEYS } from '../constants/storage.js';
 import { getLocalItem, setLocalItem, removeLocalItem, clearAllLocalStorage } from '../utils/storage.js';
 import { API_URL, ENDPOINTS } from '../constants/routes.js';
+import { syncUserGamification } from './gamificationService.js';
 
 const REQUIRED_FIELDS_MESSAGE = 'Preencha todos os campos.';
 const INVALID_CREDENTIALS_MESSAGE = 'E-mail ou senha incorretos.';
@@ -60,16 +61,24 @@ export async function login(email, senha) {
         if (!response.ok) {
             return { success: false, error: getApiError(data, INVALID_CREDENTIALS_MESSAGE) };
         }
-        console.log(API_URL);
+
         const user = getApiUser(data, { email: normalizedEmail });
         setLocalItem(STORAGE_KEYS.AUTH_USER, user);
+
+        const userId = user?.id_usuario || user?.id;
+        if (userId) {
+            setLocalItem('aprovadrive_active_user_id', String(userId));
+        }
+
+        try {
+            sessionStorage.clear();
+        } catch {}
+
+        syncUserGamification(user);
+
         return { success: true, user };
     } catch (error) {
-        console.log(API_URL);
         console.error('Erro ao conectar com a API:', error);
-        if (error.name === 'TimeoutError'){
-              console.warn("Demorou muito.");
-        }
         return { success: false, error: API_CONNECTION_MESSAGE };
     }
 }
@@ -122,4 +131,7 @@ export async function cadastrar(userData) {
 
 export function logout() {
     clearAllLocalStorage();
+    try {
+        sessionStorage.clear();
+    } catch {}
 }

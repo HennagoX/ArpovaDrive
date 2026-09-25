@@ -104,16 +104,23 @@ export function getUsuarioAtivoId(userId) {
         return userId.trim();
     }
 
-    const storedId = getLocalItem(ACTIVE_USER_KEY, null);
-    if (storedId && typeof storedId === 'string' && storedId.trim()) {
-        return storedId.trim();
-    }
-
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+
+    const storedId = getLocalItem(ACTIVE_USER_KEY, null);
+    if (storedId && typeof storedId === 'string' && storedId.trim()) {
+        if (authUser && (authUser.is_admin || authUser.isAdmin)) {
+            return storedId.trim();
+        }
+    }
+
     if (authId && typeof authId === 'string' && authId.trim()) {
         setLocalItem(ACTIVE_USER_KEY, authId.trim());
         return authId.trim();
+    }
+
+    if (storedId && typeof storedId === 'string' && storedId.trim()) {
+        return storedId.trim();
     }
 
     setLocalItem(ACTIVE_USER_KEY, DEFAULT_USER_ID);
