@@ -5,7 +5,7 @@ export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o mó
 export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
     let path = filename;
-    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo4/') && !path.startsWith('modulo5/')) {
+    if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo3/') && !path.startsWith('modulo4/') && !path.startsWith('modulo5/')) {
         path = `${folder}/${filename}`;
     }
     const encoded = encodeURI(path);
@@ -295,46 +295,127 @@ export const CONTEUDOS_DATA = {
         categoriaKey: 'seguranca',
         cor: 'yellow',
         icone: 'fa-solid fa-car-burst',
+        pdfFolder: 'modulo3',
         descricao: 'Aprenda metodologias preventivas de direção para antecipar perigos, evitar acidentes e proteger a sua vida e a de terceiros.',
         totalCapitulos: 10,
         modulos: [
             {
                 id: 'dir-mod-1',
                 numero: 1,
-                titulo: 'Fundamentos e Elementos da Condução Defensiva',
-                descricao: 'Os cinco pilares fundamentais: Conhecimento, Atenção, Previsão, Decisão e Habilidade para evitar ocorrências no dia a dia.',
-                duracao: '25 min',
+                titulo: 'O que é Direção Defensiva?',
+                descricao: 'Conceito essencial, os cinco pilares (Conhecimento, Atenção, Previsão, Decisão e Habilidade) e postura preventiva nas vias.',
+                duracao: '20 min',
                 topicos: 4,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_01.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_01.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'dir-mod-2',
                 numero: 2,
-                titulo: 'Condições Adversas de Clima, Pista e Luz',
-                descricao: 'Como conduzir com segurança em situações de chuva forte, aquaplanagem, neblina, pista escorregadia, noite e ofuscamento solar.',
-                duracao: '30 min',
+                titulo: 'Condições Adversas',
+                descricao: 'Mapa dos fatores de risco: ambiente, luz, via, trânsito, veículo e condutor, e a adaptação contínua da velocidade.',
+                duracao: '25 min',
                 topicos: 5,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_02.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_02.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'dir-mod-3',
                 numero: 3,
-                titulo: 'Distâncias de Segurança e Tempos de Frenagem',
-                descricao: 'Cálculo da regra dos 2 segundos, tempo de reação do condutor, distância de frenagem do veículo e distância total de parada.',
+                titulo: 'Atenção e Estado do Condutor',
+                descricao: 'Atenção difusa, riscos de distrações e celular, combate à fadiga e reflexos do álcool e medicamentos ao volante.',
                 duracao: '25 min',
                 topicos: 4,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_03.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_03.pdf'),
                 status: 'available',
                 bloqueado: false
             },
             {
                 id: 'dir-mod-4',
                 numero: 4,
-                titulo: 'Prevenção de Colisões e Manobras de Emergência',
-                descricao: 'Técnicas defensivas para evitar colisão frontal, traseira, em cruzamentos com semáforo intermitente e controle de pontos cegos.',
+                titulo: 'Preparação e Conservação do Veículo',
+                descricao: 'Checklist visual obrigatório antes de rodar (pneus, freios, luzes, limpadores) e deveres legais do art. 27 do CTB.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_04.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_04.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-5',
+                numero: 5,
+                titulo: 'Velocidade e Distância de Segurança',
+                descricao: 'Velocidade compatível, tempos de reação, frenagem e parada, além da aplicação prática da regra dos dois segundos.',
+                duracao: '30 min',
+                topicos: 5,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_05.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_05.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-6',
+                numero: 6,
+                titulo: 'Chuva e Pista Molhada',
+                descricao: 'Aderência reduzida, cuidados com poças d’água, como evitar e agir defensivamente durante a aquaplanagem.',
+                duracao: '30 min',
+                topicos: 5,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_06.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_06.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-7',
+                numero: 7,
+                titulo: 'Noite, Neblina e Ofuscamento',
+                descricao: 'Visibilidade noturna, uso correto dos faróis em neblina (luz baixa) e técnicas para não perder o controle sob ofuscamento.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_07.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_07.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-8',
+                numero: 8,
+                titulo: 'Cruzamentos e Ultrapassagens',
+                descricao: 'Regras de preferência em cruzamentos sem sinalização, sinalização com antecedência e critérios para ultrapassagem segura.',
+                duracao: '30 min',
+                topicos: 5,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_08.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_08.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-9',
+                numero: 9,
+                titulo: 'Proteção de Usuários Vulneráveis',
+                descricao: 'Prioridade e proteção a pedestres, distância regulamentar de 1,5m para ciclistas, motociclistas e pontos cegos.',
+                duracao: '25 min',
+                topicos: 4,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_09.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_09.pdf'),
+                status: 'available',
+                bloqueado: false
+            },
+            {
+                id: 'dir-mod-10',
+                numero: 10,
+                titulo: 'Prevenção de Colisões',
+                descricao: 'Prevenção de colisões traseiras, frontais e laterais, eliminação de pontos cegos e conduta pacífica no trânsito.',
                 duracao: '35 min',
                 topicos: 6,
+                pdfNome: 'modulo3/AprovaDrive_Direcao_Defensiva_Modulo_10.pdf',
+                pdfUrl: resolvePdfUrl('modulo3/AprovaDrive_Direcao_Defensiva_Modulo_10.pdf'),
                 status: 'locked',
                 bloqueado: true
             }
