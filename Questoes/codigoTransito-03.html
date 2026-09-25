@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AprovaDrive | Código de Trânsito - Bateria 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --primary: #16a34a;
+  --primary-hover: #15803d;
+  --primary-soft: #dcfce7;
+  --brand-green: #16a34a;
+  --brand-green-soft: #f0fdf4;
+  --brand-red: #ef4444;
+  --brand-red-soft: #fef2f2;
+  --text-dark: #0f172a;
+  --text-body: #334155;
+  --text-muted: #64748b;
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --border: #e2e8f0;
+  --border-strong: #cbd5e1;
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 10px 25px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 16px 40px rgba(22, 163, 74, 0.08);
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-body);
+  background: radial-gradient(circle at 10% 10%, #dcfce7 0%, transparent 40%),
+              radial-gradient(circle at 90% 20%, #e0f2fe 0%, transparent 40%),
+              var(--bg-page);
+  min-height: 100vh;
+  line-height: 1.5;
+  padding: 24px 16px 60px;
+}
+.app-container {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.topo-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.marca-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: #0752a0;
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+}
+.marca-link i {
+  color: #16a34a;
+}
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  color: var(--text-body);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 9px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+}
+.btn-voltar:hover {
+  background: #f1f5f9;
+  border-color: var(--border-strong);
+  color: var(--text-dark);
+  transform: translateX(-2px);
+}
+.hero-card {
+  padding: 30px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #14532d 0%, #16a34a 50%, #15803d 100%);
+  color: #ffffff;
+  box-shadow: 0 12px 30px rgba(20, 83, 45, 0.2);
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-card::after {
+  content: "";
+  position: absolute;
+  right: -30px;
+  top: -30px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.hero-card h1 {
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 800;
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.hero-card p {
+  color: #dcfce7;
+  font-size: 14px;
+  max-width: 600px;
+}
+.card-quiz {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(10px);
+}
+.placar-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+.pill-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 5px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+.pill-xp {
+  color: var(--primary);
+  background: var(--primary-soft);
+  border-color: #bbf7d0;
+}
+.barra-wrap {
+  width: 100%;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 14px 0 24px;
+}
+.barra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #22c55e);
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+.tag-modulo {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--primary-soft);
+  padding: 3px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+.pergunta-titulo {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--text-dark);
+  line-height: 1.4;
+  margin-bottom: 22px;
+}
+.opcoes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.opcao-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  background: #ffffff;
+  border: 1.5px solid var(--border);
+  color: var(--text-body);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.opcao-btn:hover:not(:disabled) {
+  border-color: var(--primary);
+  background: #f0fdf4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.08);
+}
+.letra-chip {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: #f1f5f9;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 13px;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+.opcao-btn:hover:not(:disabled) .letra-chip {
+  background: var(--primary);
+  color: #ffffff;
+}
+.opcao-texto {
+  flex: 1;
+}
+.opcao-icon {
+  font-size: 18px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.opcao-btn.certa {
+  background: var(--brand-green-soft) !important;
+  border-color: var(--brand-green) !important;
+  color: #14532d !important;
+}
+.opcao-btn.certa .letra-chip {
+  background: var(--brand-green) !important;
+  color: #ffffff !important;
+}
+.opcao-btn.certa .opcao-icon {
+  opacity: 1;
+  color: var(--brand-green);
+}
+.opcao-btn.errada {
+  background: var(--brand-red-soft) !important;
+  border-color: var(--brand-red) !important;
+  color: #7f1d1d !important;
+}
+.opcao-btn.errada .letra-chip {
+  background: var(--brand-red) !important;
+  color: #ffffff !important;
+}
+.opcao-btn.errada .opcao-icon {
+  opacity: 1;
+  color: var(--brand-red);
+}
+.feedback-box {
+  padding: 16px 20px;
+  border-radius: 16px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.3s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.feedback-box.certo {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #166534;
+}
+.feedback-box.errado {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #991b1b;
+}
+.feedback-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.feedback-desc {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.rodape-acoes {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.btn-acao {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 22px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.btn-primario {
+  background: var(--primary);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(22, 163, 74, 0.25);
+}
+.btn-primario:hover:not(:disabled) {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+}
+.btn-secundario {
+  background: #f1f5f9;
+  color: var(--text-body);
+}
+.btn-secundario:hover:not(:disabled) {
+  background: #e2e8f0;
+  color: var(--text-dark);
+}
+.btn-acao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+.resultado-wrap {
+  text-align: center;
+  padding: 20px 10px;
+}
+.trofeu-circulo {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+.trofeu-circulo.aprovado {
+  background: #f0fdf4;
+  color: #16a34a;
+  border: 4px solid #bbf7d0;
+}
+.trofeu-circulo.reprovado {
+  background: #fef3c7;
+  color: #d97706;
+  border: 4px solid #fde68a;
+}
+.resultado-titulo {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-dark);
+  margin-bottom: 6px;
+}
+.resultado-sub {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 24px;
+}
+.resultado-metricas {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.metrica-card {
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  padding: 16px;
+  border-radius: 16px;
+}
+.metrica-card strong {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-dark);
+}
+.metrica-card span {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.xp-tag-resultado {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 30px;
+  background: var(--primary-soft);
+  color: var(--primary);
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+.resultado-botoes-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btn-resultado-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+@media (max-width: 600px) {
+  body {
+    padding: 16px 12px 40px;
+  }
+  .card-quiz {
+    padding: 20px 16px;
+  }
+  .hero-card {
+    padding: 20px;
+  }
+  .resultado-metricas {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+</head>
+<body>
+<div class="app-container">
+  <header class="topo-nav">
+    <a href="../src/pages/telaInicial.html#questoes" class="marca-link">
+      <i class="fa-solid fa-car-side"></i>
+      <span>AprovaDrive</span>
+    </a>
+    <a href="../src/pages/telaInicial.html#questoes" class="btn-voltar">
+      <i class="fa-solid fa-arrow-left"></i> Painel de Questões
+    </a>
+  </header>
+
+  <section class="hero-card">
+    <span class="hero-tag"><i class="fa-solid fa-scale-balanced"></i> LEGISLAÇÃO &bull; BATERIA 03</span>
+    <h1>Crimes e Segurança Viária</h1>
+    <p>Questões oficiais baseadas nos Módulos 07 a 09 cobrindo crimes de trânsito, conceitos de parada e estacionamento e segurança dos usuários vulneráveis.</p>
+  </section>
+
+  <main class="card-quiz" id="quiz-conteudo">
+  </main>
+</div>
+
+<script>
+const MATERIA = "CodigoTransito";
+const BATERIA = 3;
+const API_URL = "http://localhost:3001";
+const LETRAS = ["A", "B", "C", "D"];
+
+const perguntas = [
+  {
+    modulo: 7,
+    texto: "Qual é a diferença essencial entre uma infração administrativa de trânsito e um crime de trânsito?",
+    opcoes: [
+      "A infração administrativa gera sanções pelo órgão de trânsito, enquanto o crime é julgado pelo Poder Judiciário.",
+      "A infração administrativa acarreta prisão imediata, enquanto o crime gera apenas desconto de pontos na CNH.",
+      "O crime de trânsito aplica-se somente a motoristas que não possuem habilitação legal.",
+      "Não existe diferença legal no CTB, sendo todos os atos julgados por juízes criminais."
+    ],
+    correta: 0,
+    corretaLetra: "A",
+    explicacao: "As infrações administrativas são julgadas pelos órgãos do SNT; os crimes de trânsito (Capítulo XIX) são julgados pela Justiça penal."
+  },
+  {
+    modulo: 7,
+    texto: "A condução de veículo automotor sob influência de álcool com capacidade psicomotora alterada configura:",
+    opcoes: [
+      "Apenas advertência verbal se o condutor aceitar soprar o bafômetro.",
+      "Infração gravíssima com multa (fator 10x), suspensão do direito de dirigir por 12 meses e crime de trânsito.",
+      "Infração média passível de perdão judicial automático na primeira abordagem.",
+      "Mera irregularidade de trânsito sem qualquer implicação penal."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "Conduzir sob influência de álcool acarreta multa gravíssima (10x), suspensão por 12 meses e crime do Art. 306 do CTB."
+  },
+  {
+    modulo: 7,
+    texto: "Caso o condutor se recuse a submeter-se ao teste do etilômetro (bafômetro) em fiscalização de trânsito, ele estará sujeito a:",
+    opcoes: [
+      "Liberação imediata sem qualquer penalidade por ausência de prova pericial.",
+      "Mesmas penalidades de multa gravíssima multiplicada por 10 e suspensão do direito de dirigir por 12 meses.",
+      "Apenas 3 pontos na CNH e multa simples sem retenção do veículo.",
+      "Perda perpétua do direito de dirigir sem direito a recurso na JARI."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "A recusa ao teste do etilômetro (Art. 165-A do CTB) acarreta as mesmas penalidades de multa gravíssima (10x) e suspensão de 12 meses."
+  },
+  {
+    modulo: 7,
+    texto: "Participar na via pública de corrida, disputa ou competição automobilística não autorizada (\"racha\") caracteriza:",
+    opcoes: [
+      "Atividade recreativa lícita desde que realizada fora do horário de pico.",
+      "Infração gravíssima com fator multiplicador e crime de trânsito tipificado no Art. 308 do CTB.",
+      "Infração de trânsito de natureza leve sanada com pedido de desculpas à autoridade.",
+      "Conduta sem previsão de suspensão da habilitação no código vigente."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "O racha é infração gravíssima e crime de trânsito punido com detenção, multa multiplicada e suspensão ou proibição de se habilitar."
+  },
+  {
+    modulo: 8,
+    texto: "Qual é o conceito legal exato de \"Parada\" estabelecido pelo Código de Trânsito Brasileiro?",
+    opcoes: [
+      "Imobilização do veículo pelo tempo estritamente necessário para o embarque ou desembarque de passageiros.",
+      "Estacionar o veículo com motor em funcionamento enquanto o condutor vai a uma farmácia.",
+      "Permanecer com o carro parado na via com o pisca-alerta ligado por até 15 minutos.",
+      "A imobilização prolongada de caminhão de carga para vistoria de nota fiscal."
+    ],
+    correta: 0,
+    corretaLetra: "A",
+    explicacao: "O CTB define parada como a imobilização pelo tempo estritamente necessário para o embarque ou desembarque de passageiros."
+  },
+  {
+    modulo: 8,
+    texto: "A imobilização do veículo na via por tempo superior ao necessário para embarque ou desembarque de passageiros é considerada:",
+    opcoes: [
+      "Parada prolongada permitida em qualquer circunstância.",
+      "Estacionamento, sujeito às regras e proibições de sinalização do local.",
+      "Transbordo regular de pessoas sem exigência de regulamentação.",
+      "Manobra de segurança dispensada de autuação."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "Todo tempo excedente ao embarque ou desembarque rápido é caracterizado perante a lei como estacionamento."
+  },
+  {
+    modulo: 8,
+    texto: "Ligar o pisca-alerta do veículo tem a finalidade regulamentar de:",
+    opcoes: [
+      "Permitir o estacionamento em locais proibidos ou em fila dupla sem ser autuado.",
+      "Sinalizar situações de emergência ou imobilizações nos casos expressamente previstos pelo CTB.",
+      "Autorizar o trânsito acima da velocidade regulamentada na via.",
+      "Garantir preferência de passagem em cruzamentos dotados de semáforo."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "O pisca-alerta é destinado a sinalizar situações de emergência e risco, não concedendo permissão para cometer infrações."
+  },
+  {
+    modulo: 8,
+    texto: "Em relação ao embarque e desembarque de passageiros de automóveis de passeio, a manobra deve ser realizada:",
+    opcoes: [
+      "Sempre pelo lado da calçada (passeio), exceto para o condutor.",
+      "Pelo lado da pista de rolamento para facilitar o fluxo de pedestres.",
+      "Em fila dupla em qualquer via urbana com o pisca-alerta ligado.",
+      "Apenas em pontos regulamentados para ônibus coletivos."
+    ],
+    correta: 0,
+    corretaLetra: "A",
+    explicacao: "O embarque e o desembarque devem ocorrer sempre do lado da calçada, salvo para o condutor, prevenindo atropelamentos."
+  },
+  {
+    modulo: 9,
+    texto: "O Art. 29, § 2º do CTB consolida a seguinte diretriz de segurança e responsabilidade compartilhada no trânsito:",
+    opcoes: [
+      "Os veículos de maior porte têm prioridade absoluta de passagem sobre qualquer pedestre.",
+      "Os veículos maiores são responsáveis pela segurança dos menores, os motorizados pelos não motorizados, e todos pelos pedestres.",
+      "Os ciclistas respondem exclusivamente pela integridade física dos condutores de automóveis.",
+      "A responsabilidade na via recai unicamente sobre os pedestres que não utilizarem colete refletivo."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "A legislação determina que os maiores cuidam dos menores, os motorizados dos não motorizados, e todos protegem os pedestres."
+  },
+  {
+    modulo: 9,
+    texto: "Qual é o cuidado e a distância lateral mínima que o condutor deve manter ao ultrapassar ciclistas na via?",
+    opcoes: [
+      "Buzinar continuamente e passar mantendo distância de 0,5 metro.",
+      "Reduzir a velocidade de forma compatível e guardar a distância lateral de segurança de 1,50 metro.",
+      "Acelerar rapidamente para liberar a faixa sem necessidade de afastamento lateral.",
+      "Manter distância de 3 metros e parar totalmente o motor na pista."
+    ],
+    correta: 1,
+    corretaLetra: "B",
+    explicacao: "O CTB impõe o dever de redução de velocidade e preservação da distância lateral mínima de 1,50 metro ao ultrapassar ciclistas."
+  }
+];
+
+let atual = 0;
+let respostas = Array(perguntas.length).fill(null);
+let acertos = 0;
+let xpGanho = 0;
+
+function obterUserId() {
+  try {
+    return localStorage.getItem("aprovadrive_user_id") ||
+           localStorage.getItem("userId") ||
+           "henrique";
+  } catch {
+    return "henrique";
+  }
+}
+
+function salvarXpLocal(xpExtra) {
+  try {
+    const atualExp = Number(localStorage.getItem("aprovadrive_user_exp") || localStorage.getItem("exp") || 0);
+    const novo = atualExp + xpExtra;
+    localStorage.setItem("aprovadrive_user_exp", String(novo));
+    localStorage.setItem("exp", String(novo));
+  } catch {}
+}
+
+const quizEl = document.querySelector("#quiz-conteudo");
+
+function renderizar() {
+  if (atual >= perguntas.length) {
+    renderizarResultado();
+    return;
+  }
+
+  const p = perguntas[atual];
+  const salva = respostas[atual];
+  const respondida = salva !== null;
+  const respondidasTotal = respostas.filter(r => r !== null).length;
+  const pct = Math.round((respondidasTotal / perguntas.length) * 100);
+
+  quizEl.innerHTML = `
+    <div class="placar-topo">
+      <span class="pill-info"><i class="fa-solid fa-list-check"></i> Questão ${atual + 1} de ${perguntas.length}</span>
+      <span class="pill-info"><i class="fa-solid fa-circle-check"></i> Acertos: ${acertos}/${perguntas.length}</span>
+      <span class="pill-info pill-xp"><i class="fa-solid fa-bolt"></i> +${xpGanho} XP</span>
+    </div>
+
+    <div class="barra-wrap">
+      <div class="barra-fill" style="width: ${pct}%"></div>
+    </div>
+
+    <span class="tag-modulo"><i class="fa-solid fa-book-open"></i> Módulo ${p.modulo}</span>
+    <h2 class="pergunta-titulo">${p.texto}</h2>
+
+    <div class="opcoes-grid">
+      ${p.opcoes.map((opcao, i) => {
+        let classe = "opcao-btn";
+        let icone = '<i class="fa-solid fa-circle-check opcao-icon"></i>';
+        if (respondida) {
+          if (i === p.correta) {
+            classe += " certa";
+            icone = '<i class="fa-solid fa-circle-check opcao-icon"></i>';
+          } else if (i === salva.escolhida) {
+            classe += " errada";
+            icone = '<i class="fa-solid fa-circle-xmark opcao-icon"></i>';
+          }
+        }
+        return `
+          <button type="button" class="${classe}" data-i="${i}" ${respondida ? "disabled" : ""}>
+            <span class="letra-chip">${LETRAS[i]}</span>
+            <span class="opcao-texto">${opcao}</span>
+            ${icone}
+          </button>
+        `;
+      }).join("")}
+    </div>
+
+    ${respondida ? `
+      <div class="feedback-box ${salva.correto ? "certo" : "errado"}">
+        <div class="feedback-title">
+          <i class="fa-solid ${salva.correto ? "fa-circle-check" : "fa-circle-xmark"}"></i>
+          ${salva.correto ? "Parabéns! Resposta correta (+10 XP)" : `Resposta incorreta! Alternativa certa: Letra ${p.corretaLetra}`}
+        </div>
+        <div class="feedback-desc">${p.explicacao}</div>
+      </div>
+    ` : ""}
+
+    <div class="rodape-acoes">
+      <button type="button" class="btn-acao btn-secundario" id="btn-ant" ${atual === 0 ? "disabled" : ""}>
+        <i class="fa-solid fa-arrow-left"></i> Anterior
+      </button>
+      <button type="button" class="btn-acao btn-primario" id="btn-prox" ${!respondida ? "disabled" : ""}>
+        ${atual === perguntas.length - 1 ? "Ver Resultado" : "Próxima"} <i class="fa-solid fa-arrow-right"></i>
+      </button>
+    </div>
+  `;
+
+  quizEl.querySelectorAll("[data-i]").forEach(btn => {
+    btn.onclick = async () => {
+      const idx = Number(btn.dataset.i);
+      await responder(idx);
+    };
+  });
+
+  const btnAnt = document.querySelector("#btn-ant");
+  if (btnAnt) {
+    btnAnt.onclick = () => {
+      if (atual > 0) {
+        atual--;
+        renderizar();
+      }
+    };
+  }
+
+  const btnProx = document.querySelector("#btn-prox");
+  if (btnProx) {
+    btnProx.onclick = () => {
+      atual++;
+      renderizar();
+    };
+  }
+}
+
+async function responder(idx) {
+  if (respostas[atual] !== null) return;
+
+  const p = perguntas[atual];
+  const letra = LETRAS[idx];
+  const userId = obterUserId();
+  let correto = idx === p.correta;
+
+  try {
+    const res = await fetch(`${API_URL}/questoes/checkAcerto`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-User-Id": userId
+      },
+      body: JSON.stringify({
+        materia: MATERIA,
+        bateria: BATERIA,
+        num: atual + 1,
+        resposta: letra,
+        userId: userId
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.correto !== undefined) {
+        correto = Boolean(data.correto);
+      }
+    }
+  } catch {}
+
+  if (correto) {
+    acertos++;
+    xpGanho += 10;
+    salvarXpLocal(10);
+  }
+
+  respostas[atual] = {
+    escolhida: idx,
+    letra: letra,
+    correto: correto
+  };
+
+  renderizar();
+}
+
+async function renderizarResultado() {
+  const total = perguntas.length;
+  const pct = Math.round((acertos / total) * 100);
+  const aprovado = pct >= 70;
+
+  let proximaLiberada = false;
+  try {
+    const resConcluir = await fetch(`${API_URL}/questoes/concluirBateria`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-User-Id": obterUserId()
+      },
+      body: JSON.stringify({
+        materia: MATERIA,
+        bateria: BATERIA,
+        acertos: acertos,
+        total: total,
+        userId: obterUserId()
+      })
+    });
+    if (resConcluir.ok) {
+      const dataConcluir = await resConcluir.json();
+      if (dataConcluir && typeof dataConcluir.proximaBateriaLiberada === "boolean") {
+        proximaLiberada = dataConcluir.proximaBateriaLiberada;
+      }
+    }
+  } catch {}
+
+  if (!proximaLiberada) {
+    try {
+      const resAcesso = await fetch(`${API_URL}/questoes/verificarAcesso?materia=${MATERIA}&bateria=4&userId=${obterUserId()}`);
+      if (resAcesso.ok) {
+        const dataAcesso = await resAcesso.json();
+        if (dataAcesso && typeof dataAcesso.permitido === "boolean") {
+          proximaLiberada = dataAcesso.permitido;
+        }
+      }
+    } catch {}
+  }
+
+  quizEl.innerHTML = `
+    <div class="resultado-wrap">
+      <div class="trofeu-circulo ${aprovado ? "aprovado" : "reprovado"}">
+        <i class="fa-solid ${aprovado ? "fa-trophy" : "fa-graduation-cap"}"></i>
+      </div>
+
+      <h2 class="resultado-titulo">${aprovado ? "Excelente Desempenho!" : "Bom Treinamento!"}</h2>
+      <p class="resultado-sub">${aprovado ? "Você concluiu a Bateria 03 com aproveitamento exemplar." : "Revise os módulos 07 a 09 e tente novamente para melhorar seus acertos."}</p>
+
+      <div class="resultado-metricas">
+        <div class="metrica-card">
+          <strong>${total}</strong>
+          <span>Total Questões</span>
+        </div>
+        <div class="metrica-card">
+          <strong style="color: ${aprovado ? "#16a34a" : "#d97706"};">${acertos}</strong>
+          <span>Acertos</span>
+        </div>
+        <div class="metrica-card">
+          <strong style="color: ${aprovado ? "#16a34a" : "#d97706"};">${pct}%</strong>
+          <span>Aproveitamento</span>
+        </div>
+      </div>
+
+      <div class="xp-tag-resultado">
+        <i class="fa-solid fa-bolt"></i> +${xpGanho} XP conquistados nesta bateria
+      </div>
+
+      <div class="resultado-botoes-grid">
+        ${proximaLiberada ? `
+        <a href="codigoTransito-04.html" class="btn-resultado-link btn-primario" id="btn-proxima-bateria">
+          <i class="fa-solid fa-forward"></i> Ir para Simulado Final (Bateria 04)
+        </a>
+        ` : ""}
+        <button type="button" class="btn-resultado-link ${proximaLiberada ? "btn-secundario" : "btn-primario"}" id="btn-refazer">
+          <i class="fa-solid fa-rotate-left"></i> Refazer Bateria 03
+        </button>
+        <a href="../src/pages/telaInicial.html#questoes" class="btn-resultado-link btn-secundario">
+          <i class="fa-solid fa-layer-group"></i> Voltar ao Painel Geral
+        </a>
+      </div>
+    </div>
+  `;
+
+  document.querySelector("#btn-refazer").onclick = () => {
+    atual = 0;
+    respostas = Array(perguntas.length).fill(null);
+    acertos = 0;
+    xpGanho = 0;
+    renderizar();
+  };
+}
+
+renderizar();
+</script>
+</body>
+</html>
