@@ -67,11 +67,19 @@ export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
         if (match) num = Number(match[0]);
     }
     activeBateriaNumero = Math.max(1, Math.min(4, num));
-    activeBateriaId = typeof bateriaIdOrNumero === 'string' ? bateriaIdOrNumero : `amb-bat-${activeBateriaNumero}`;
 
     const materia = getMateriaQuestoesById(activeMateriaId);
     const baterias = getBateriasByMateriaId(activeMateriaId);
     const bateria = baterias.find(b => Number(b.numero) === activeBateriaNumero) || baterias[activeBateriaNumero - 1];
+    activeBateriaId = typeof bateriaIdOrNumero === 'string' ? bateriaIdOrNumero : (bateria?.id || `${activeMateriaId}-${activeBateriaNumero}`);
+
+    const temaCor = materia?.cor || 'green';
+    const viewQuestoesResolucao = qs('#view-questoes-resolucao');
+    if (viewQuestoesResolucao) {
+        const themeClasses = Array.from(viewQuestoesResolucao.classList).filter(c => c.startsWith('modulos-theme-'));
+        themeClasses.forEach(c => viewQuestoesResolucao.classList.remove(c));
+        viewQuestoesResolucao.classList.add(`modulos-theme-${temaCor}`);
+    }
 
     perguntas = getQuestoesByBateria(activeMateriaId, activeBateriaNumero);
     indexAtual = 0;

@@ -1,6 +1,8 @@
 
 #view-questoes-modulos,
-#view-questoes-modulos.modulos-theme-green {
+#view-questoes-modulos.modulos-theme-green,
+#view-questoes-resolucao,
+#view-questoes-resolucao.modulos-theme-green {
     --theme-primary: #16a34a;
     --theme-primary-hover: #15803d;
     --q-theme: #16a34a;
@@ -11,7 +13,8 @@
     --q-theme-shadow: rgba(22, 163, 74, 0.25);
 }
 
-#view-questoes-modulos.modulos-theme-blue {
+#view-questoes-modulos.modulos-theme-blue,
+#view-questoes-resolucao.modulos-theme-blue {
     --theme-primary: #0752a0;
     --theme-primary-hover: #064583;
     --q-theme: #0752a0;
@@ -22,7 +25,8 @@
     --q-theme-shadow: rgba(7, 82, 160, 0.25);
 }
 
-#view-questoes-modulos.modulos-theme-yellow {
+#view-questoes-modulos.modulos-theme-yellow,
+#view-questoes-resolucao.modulos-theme-yellow {
     --theme-primary: #d97706;
     --theme-primary-hover: #b45309;
     --q-theme: #d97706;
@@ -33,7 +37,8 @@
     --q-theme-shadow: rgba(217, 119, 6, 0.25);
 }
 
-#view-questoes-modulos.modulos-theme-red {
+#view-questoes-modulos.modulos-theme-red,
+#view-questoes-resolucao.modulos-theme-red {
     --theme-primary: #dc2626;
     --theme-primary-hover: #b91c1c;
     --q-theme: #dc2626;
@@ -44,7 +49,8 @@
     --q-theme-shadow: rgba(220, 38, 38, 0.25);
 }
 
-#view-questoes-modulos.modulos-theme-purple {
+#view-questoes-modulos.modulos-theme-purple,
+#view-questoes-resolucao.modulos-theme-purple {
     --theme-primary: #7c3aed;
     --theme-primary-hover: #6d28d9;
     --q-theme: #7c3aed;
@@ -316,6 +322,24 @@
     background: #064583;
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(7, 82, 160, 0.3);
+}
+
+.questoes-subject-card[data-id="CodigoTransito"] .btn-praticar-questoes,
+.questoes-subject-card[data-category="legislacao"] .btn-praticar-questoes {
+    background: #16a34a;
+    box-shadow: 0 3px 8px rgba(22, 163, 74, 0.25);
+}
+
+.questoes-subject-card[data-id="CodigoTransito"] .btn-praticar-questoes:hover,
+.questoes-subject-card[data-category="legislacao"] .btn-praticar-questoes:hover {
+    background: #15803d;
+    box-shadow: 0 6px 16px rgba(22, 163, 74, 0.35);
+}
+
+.questoes-subject-card[data-id="CodigoTransito"] .questoes-category-pill,
+.questoes-subject-card[data-category="legislacao"] .questoes-category-pill {
+    background: #e8f8ee;
+    color: #16a34a;
 }
 
 .questoes-hero-card {
@@ -783,15 +807,20 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #f3e8ff;
-    color: #7c3aed;
-    border: 1px solid #ddd6fe;
+    background: var(--q-theme-soft, #e8f5e9);
+    color: var(--q-theme, #16a34a);
+    border: 1px solid var(--q-theme-border, #c8e6c9);
     font-size: 11px;
     font-weight: 800;
     padding: 4px 10px;
     border-radius: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.resolucao-live-xp {
+    color: var(--q-theme, #16a34a);
+    font-weight: 800;
 }
 
 .resolucao-score-pill {
@@ -844,7 +873,7 @@
 .resolucao-progress-fill {
     height: 100%;
     width: 10%;
-    background: linear-gradient(90deg, #7c3aed, #9333ea);
+    background: linear-gradient(90deg, var(--q-theme, #16a34a), var(--theme-primary-hover, #15803d));
     border-radius: inherit;
     transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -854,7 +883,7 @@
     border: 1px solid #e8ebf0;
     border-radius: 24px;
     padding: 32px;
-    box-shadow: 0 12px 32px rgba(124, 58, 237, 0.06);
+    box-shadow: 0 12px 32px var(--q-theme-shadow, rgba(22, 163, 74, 0.08));
     position: relative;
     transition: all 0.2s ease;
 }
@@ -871,8 +900,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #f1f5f9;
-    color: #475569;
+    background: var(--q-theme-soft, #e8f5e9);
+    color: var(--q-theme, #16a34a);
+    border: 1px solid var(--q-theme-border, #c8e6c9);
     font-size: 11px;
     font-weight: 800;
     padding: 3px 9px;
@@ -920,10 +950,10 @@
 }
 
 .resolucao-opcao-btn:hover:not(:disabled) {
-    border-color: #7c3aed;
-    background: #faf5ff;
+    border-color: var(--q-theme, #16a34a);
+    background: var(--q-theme-badge, #e8f8ee);
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.08);
+    box-shadow: 0 4px 12px var(--q-theme-shadow, rgba(22, 163, 74, 0.12));
 }
 
 .resolucao-opcao-btn:disabled {
@@ -946,7 +976,7 @@
 }
 
 .resolucao-opcao-btn:hover:not(:disabled) .resolucao-letra-chip {
-    background: #7c3aed;
+    background: var(--q-theme, #16a34a);
     color: #ffffff;
 }
 
@@ -1079,7 +1109,7 @@
 }
 
 .btn-resolucao-primario {
-    background: #7c3aed;
+    background: var(--q-theme, #16a34a);
     border: none;
     color: #ffffff;
     padding: 12px 24px;
@@ -1091,12 +1121,12 @@
     align-items: center;
     gap: 8px;
     transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    box-shadow: 0 4px 12px var(--q-theme-shadow, rgba(22, 163, 74, 0.25));
 }
 
 .btn-resolucao-primario:hover:not(:disabled) {
-    background: #6d28d9;
-    box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35);
+    background: var(--q-theme-hover, #15803d);
+    box-shadow: 0 6px 16px var(--q-theme-shadow, rgba(22, 163, 74, 0.35));
     transform: translateY(-1px);
 }
 
@@ -1186,9 +1216,9 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: #f3e8ff;
-    border: 1px solid #ddd6fe;
-    color: #7c3aed;
+    background: var(--q-theme-soft, #e8f5e9);
+    border: 1px solid var(--q-theme-border, #c8e6c9);
+    color: var(--q-theme, #16a34a);
     padding: 8px 18px;
     border-radius: 99px;
     font-size: 13px;
@@ -1217,14 +1247,14 @@
 }
 
 .btn-resultado-primario {
-    background: #7c3aed;
+    background: var(--q-theme, #16a34a);
     color: #ffffff;
     border: none;
-    box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+    box-shadow: 0 4px 12px var(--q-theme-shadow, rgba(22, 163, 74, 0.25));
 }
 
 .btn-resultado-primario:hover {
-    background: #6d28d9;
+    background: var(--q-theme-hover, #15803d);
     transform: translateY(-2px);
 }
 

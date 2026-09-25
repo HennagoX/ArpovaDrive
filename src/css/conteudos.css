@@ -311,10 +311,12 @@ body {
 
 #view-modulos,
 #view-questoes-modulos,
+#view-questoes-resolucao,
 #view-leitura-pdf,
 #modal-avancar-modulo,
 #view-modulos.modulos-theme-green,
 #view-questoes-modulos.modulos-theme-green,
+#view-questoes-resolucao.modulos-theme-green,
 #view-leitura-pdf.modulos-theme-green,
 #modal-avancar-modulo.modulos-theme-green,
 .modulos-theme-green {
@@ -329,6 +331,7 @@ body {
 
 #view-modulos.modulos-theme-blue,
 #view-questoes-modulos.modulos-theme-blue,
+#view-questoes-resolucao.modulos-theme-blue,
 #view-leitura-pdf.modulos-theme-blue,
 #modal-avancar-modulo.modulos-theme-blue,
 .modulos-theme-blue {
@@ -343,6 +346,7 @@ body {
 
 #view-modulos.modulos-theme-yellow,
 #view-questoes-modulos.modulos-theme-yellow,
+#view-questoes-resolucao.modulos-theme-yellow,
 #view-leitura-pdf.modulos-theme-yellow,
 #modal-avancar-modulo.modulos-theme-yellow,
 .modulos-theme-yellow {
@@ -357,6 +361,7 @@ body {
 
 #view-modulos.modulos-theme-red,
 #view-questoes-modulos.modulos-theme-red,
+#view-questoes-resolucao.modulos-theme-red,
 #view-leitura-pdf.modulos-theme-red,
 #modal-avancar-modulo.modulos-theme-red,
 .modulos-theme-red {
@@ -371,6 +376,7 @@ body {
 
 #view-modulos.modulos-theme-purple,
 #view-questoes-modulos.modulos-theme-purple,
+#view-questoes-resolucao.modulos-theme-purple,
 #view-leitura-pdf.modulos-theme-purple,
 #modal-avancar-modulo.modulos-theme-purple,
 .modulos-theme-purple {
