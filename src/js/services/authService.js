@@ -2,10 +2,23 @@ import { STORAGE_KEYS } from '../constants/storage.js';
 import { getLocalItem, setLocalItem, removeLocalItem, clearAllLocalStorage } from '../utils/storage.js';
 import { API_URL, ENDPOINTS } from '../constants/routes.js';
 import { syncUserGamification } from './gamificationService.js';
+import { MESSAGES, getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
+import { TIMING } from '../constants/timing.js';
 
-const REQUIRED_FIELDS_MESSAGE = 'Preencha todos os campos.';
-const INVALID_CREDENTIALS_MESSAGE = 'E-mail ou senha incorretos.';
-const API_CONNECTION_MESSAGE = 'Não foi possível se conectar com o servidor 404';
+function createTimeoutSignal(timeoutMs = TIMING.REQUEST_TIMEOUT) {
+    if (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') {
+        return AbortSignal.timeout(timeoutMs);
+    }
+    const controller = new AbortController();
+    setTimeout(() => {
+        try {
+            controller.abort(new DOMException('TimeoutError', 'TimeoutError'));
+        } catch {
+            controller.abort();
+        }
+    }, timeoutMs);
+    return controller.signal;
+}
 
 function getStoredUsers() {
     const storedUsers = getLocalItem(STORAGE_KEYS.USER_PROFILE, []);
@@ -28,10 +41,6 @@ async function parseResponse(response) {
     }
 }
 
-function getApiError(data, fallbackMessage) {
-    return data?.message || data?.error || fallbackMessage;
-}
-
 export function getCurrentUser() {
     return getLocalItem(STORAGE_KEYS.AUTH_USER, null);
 }
@@ -43,23 +52,24 @@ export function isAuthenticated() {
 export async function login(email, senha) {
     const normalizedEmail = email?.trim();
     if (!normalizedEmail || !senha) {
-        return { success: false, error: REQUIRED_FIELDS_MESSAGE };
+        return { success: false, error: MESSAGES.CAMPOS_OBRIGATORIOS };
     }
 
     try {
         const response = await fetch(ENDPOINTS.AUTH.LOGIN, {
-            signal: AbortSignal.timeout(7000),
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: normalizedEmail, senha })
         });
         const data = await parseResponse(response);
 
-        if (response.status === 429) {
-            return { success: false, error: 'Você fez muitas requisições!' };
-        }
         if (!response.ok) {
-            return { success: false, error: getApiError(data, INVALID_CREDENTIALS_MESSAGE) };
+            const serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                error: getHttpErrorMessage(response.status, serverMsg, MESSAGES.LOGIN_ERRADO)
+            };
         }
 
         const user = getApiUser(data, { email: normalizedEmail });
@@ -79,7 +89,7 @@ export async function login(email, senha) {
         return { success: true, user };
     } catch (error) {
         console.error('Erro ao conectar com a API:', error);
-        return { success: false, error: API_CONNECTION_MESSAGE };
+        return { success: false, error: getNetworkErrorMessage(error) };
     }
 }
 
@@ -87,7 +97,7 @@ export async function cadastrar(userData) {
     const { nome, email, senha, dataNascimento } = userData || {};
     const normalizedEmail = email?.trim();
     if (!nome || !normalizedEmail || !senha || !dataNascimento) {
-        return { success: false, error: REQUIRED_FIELDS_MESSAGE };
+        return { success: false, error: MESSAGES.CAMPOS_OBRIGATORIOS };
     }
 
     const users = getStoredUsers();
@@ -100,6 +110,7 @@ export async function cadastrar(userData) {
 
     try {
         const response = await fetch(ENDPOINTS.AUTH.CADASTRO, {
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -111,11 +122,15 @@ export async function cadastrar(userData) {
         });
         const data = await parseResponse(response);
         if (!response.ok) {
-            return { success: false, error: getApiError(data, 'Esse e-mail já está em uso!') };
+            const serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                error: getHttpErrorMessage(response.status, serverMsg, 'Esse e-mail já está em uso!')
+            };
         }
     } catch (error) {
         console.error('Erro ao conectar com a API:', error);
-        return { success: false, error: API_CONNECTION_MESSAGE };
+        return { success: false, error: getNetworkErrorMessage(error) };
     }
 
     const newUser = {

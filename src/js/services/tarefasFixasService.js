@@ -2,6 +2,8 @@ import { ENDPOINTS } from '../constants/routes.js';
 import { getUsuarioAtivoId } from './cronogramaService.js';
 import { atualizarXpNoLocalStorage, addXp } from './gamificationService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
+import { TIMING } from '../constants/timing.js';
+import { getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
 
 export const SESSION_TAREFAS_FIXAS_KEY = 'aprovadrive_tarefas_fixas_cache';
 
@@ -26,6 +28,7 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
 
     try {
         const response = await fetch(url, {
+            signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
             headers: {
                 'Accept': 'application/json',
                 'X-User-Id': usuarioId
@@ -34,7 +37,7 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
 
         if (!response.ok) {
             const errData = await response.json().catch(() => null);
-            throw new Error(errData?.error || `Erro HTTP ${response.status} ao carregar tarefas fixas.`);
+            throw new Error(getHttpErrorMessage(response.status, errData?.error, 'Erro ao carregar tarefas fixas.'));
         }
 
         const data = await response.json();
@@ -50,7 +53,10 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
         throw new Error('Formato de resposta inválido do servidor.');
     } catch (err) {
         console.warn('[TarefasFixasService] Falha na requisição ao backend:', err.message);
-        throw err;
+        if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Formato de resposta inválido do servidor.')) {
+            throw err;
+        }
+        throw new Error(getNetworkErrorMessage(err));
     }
 }
 
@@ -79,7 +85,7 @@ export async function concluirTarefaFixa(taskId, userId) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || 'Não foi possível concluir esta tarefa.');
+        throw new Error(getHttpErrorMessage(response.status, data.error, 'Não foi possível concluir esta tarefa.'));
     }
 
     // Invalida cache local da sessão para forçar sincronização

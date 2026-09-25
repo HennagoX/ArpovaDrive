@@ -15,6 +15,7 @@ lerna-debug.log*
 # Diagnostic reports (Next.js / Node.js)
 report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
+AI.txt
 # Runtime data
 pids
 *.pid

@@ -1,6 +1,8 @@
 import { STORAGE_KEYS } from '../constants/storage.js';
 import { getLocalItem, setLocalItem, removeLocalItem } from '../utils/storage.js';
 import { ENDPOINTS, API_URL } from '../constants/routes.js';
+import { TIMING } from '../constants/timing.js';
+import { getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
 
 export const MOCK_STORAGE_KEY = 'aprovadrive_mock_dia';
 
@@ -275,6 +277,7 @@ export async function getTarefas(userId, forceRefresh = false) {
 
         try {
         const response = await fetch(url, {
+            signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
             headers: {
                 ...getAuthHeaders(usuarioId),
                 ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
@@ -284,7 +287,7 @@ export async function getTarefas(userId, forceRefresh = false) {
         const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-            const errorMsg = sanitizeErrorMessage(data?.error || `Erro ao carregar tarefas da semana.`);
+            const errorMsg = getHttpErrorMessage(response.status, data?.error, 'Erro ao carregar tarefas da semana.');
             throw new Error(errorMsg);
         }
 
@@ -296,7 +299,10 @@ export async function getTarefas(userId, forceRefresh = false) {
 
         throw new Error('Nenhuma missão encontrada para esta semana.');
     } catch (err) {
-        throw new Error("Não foi possível se conectar com o servidor, tente novamente mais tarde.");
+        if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Nenhuma missão encontrada para esta semana.')) {
+            throw err;
+        }
+        throw new Error(getNetworkErrorMessage(err));
     }
 }
 
@@ -323,7 +329,7 @@ export async function iniciarTarefa(taskId, userId) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || 'Erro ao iniciar tarefa.');
+        throw new Error(getHttpErrorMessage(response.status, data?.error, 'Erro ao iniciar tarefa.'));
     }
 
     if (data.payload) {
@@ -358,7 +364,7 @@ export async function concluirTarefa(taskId, userId, options = {}) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || 'Erro ao concluir tarefa.');
+        throw new Error(getHttpErrorMessage(response.status, data?.error, 'Erro ao concluir tarefa.'));
     }
 
     if (data.payload) {
@@ -392,7 +398,7 @@ export async function pausarTarefa(taskId, userId) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || 'Erro ao pausar tarefa.');
+        throw new Error(getHttpErrorMessage(response.status, data?.error, 'Erro ao pausar tarefa.'));
     }
 
     if (data.payload) {
@@ -425,7 +431,7 @@ export async function reiniciarTarefa(taskId, userId) {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data.error || 'Erro ao reiniciar tarefa.');
+        throw new Error(getHttpErrorMessage(response.status, data?.error, 'Erro ao reiniciar tarefa.'));
     }
 
     if (data.payload) {

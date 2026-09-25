@@ -3,6 +3,8 @@ import { ENDPOINTS } from '../constants/routes.js';
 import { getCurrentUser } from './authService.js';
 import { getUsuarioAtivoId } from './cronogramaService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
+import { TIMING } from '../constants/timing.js';
+import { getHttpErrorMessage } from '../constants/messages.js';
 
 const STORAGE_PREFIX = 'aprovadrive_modulo_progresso_';
 const inFlightRequests = new Map();
@@ -157,7 +159,7 @@ export async function avancarModulo(contentId, userId) {
         const data = await response.json().catch(() => null);
 
         if (!response.ok) {
-            const errorMsg = data?.error || 'Erro ao avançar para o próximo módulo.';
+            const errorMsg = getHttpErrorMessage(response.status, data?.error, 'Erro ao avançar para o próximo módulo.');
             throw new Error(errorMsg);
         }
 
