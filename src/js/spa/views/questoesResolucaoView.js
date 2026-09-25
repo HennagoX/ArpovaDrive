@@ -5,8 +5,11 @@ import {
     getQuestoesByBateria,
     checkAcertoQuestaoAPI,
     concluirBateriaAPI,
-    verificarAcessoBateriaAPI
+    verificarAcessoBateriaAPI,
+    isBateriaDesbloqueada
 } from '../../services/questoesService.js';
+import { getModuloAtualCached } from '../../services/moduloService.js';
+import { showToast } from './modulosView.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
 
 let initialized = false;
@@ -72,6 +75,15 @@ export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
     const baterias = getBateriasByMateriaId(activeMateriaId);
     const bateria = baterias.find(b => Number(b.numero) === activeBateriaNumero) || baterias[activeBateriaNumero - 1];
     activeBateriaId = typeof bateriaIdOrNumero === 'string' ? bateriaIdOrNumero : (bateria?.id || `${activeMateriaId}-${activeBateriaNumero}`);
+
+    const moduloProgresso = getModuloAtualCached(activeMateriaId);
+    if (!isBateriaDesbloqueada(bateria, moduloProgresso)) {
+        showToast(bateria?.motivoBloqueio || 'Esta bateria está bloqueada.', 'locked', 'fa-solid fa-lock');
+        if (routerRef) {
+            routerRef.navigateTo('questoes-modulos', { materiaId: activeMateriaId });
+        }
+        return;
+    }
 
     const temaCor = materia?.cor || 'green';
     const viewQuestoesResolucao = qs('#view-questoes-resolucao');

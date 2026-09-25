@@ -28,8 +28,9 @@ export const QUESTOES_MATERIAS_DATA = {
                 duracao: '15 min',
                 modulosReferencia: 'Módulos 01 a 03',
                 modulosNecessarios: 3,
-                status: 'available',
-                bloqueado: false
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua até o Módulo 3 de Código de Trânsito para desbloquear esta bateria!'
             },
             {
                 id: 'ctb-bat-2',
@@ -98,8 +99,9 @@ export const QUESTOES_MATERIAS_DATA = {
                 duracao: '15 min',
                 modulosReferencia: 'Módulos 01 a 03',
                 modulosNecessarios: 3,
-                status: 'available',
-                bloqueado: false
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua até o Módulo 3 de Placas de Trânsito para desbloquear esta bateria!'
             },
             {
                 id: 'plc-bat-2',
@@ -168,8 +170,9 @@ export const QUESTOES_MATERIAS_DATA = {
                 duracao: '15 min',
                 modulosReferencia: 'Módulos 01 a 03',
                 modulosNecessarios: 3,
-                status: 'available',
-                bloqueado: false
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua até o Módulo 3 de Direção Defensiva para desbloquear esta bateria!'
             },
             {
                 id: 'dir-bat-2',
@@ -210,8 +213,9 @@ export const QUESTOES_MATERIAS_DATA = {
                 duracao: '15 min',
                 modulosReferencia: 'Módulos 01 a 03',
                 modulosNecessarios: 3,
-                status: 'available',
-                bloqueado: false
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua até o Módulo 3 de Primeiros Socorros para desbloquear esta bateria!'
             },
             {
                 id: 'soc-bat-2',
@@ -280,8 +284,9 @@ export const QUESTOES_MATERIAS_DATA = {
                 duracao: '15 min',
                 modulosReferencia: 'Módulos 01 a 03',
                 modulosNecessarios: 3,
-                status: 'available',
-                bloqueado: false
+                status: 'locked',
+                bloqueado: true,
+                motivoBloqueio: 'Conclua até o Módulo 3 de Meio Ambiente e Cidadania para desbloquear esta bateria!'
             },
             {
                 id: 'amb-bat-2',
@@ -364,11 +369,24 @@ export function getBateriasByMateriaId(materiaId, moduloAtual = null) {
     });
 }
 
-export function isBateriaDesbloqueada(bateria, modulosConcluidosCount = 3) {
+export function isBateriaDesbloqueada(bateria, moduloProgresso = 1) {
     if (!bateria) return false;
-    if (bateria.numero === 1) return true;
-    const necessarios = bateria.modulosNecessarios || (bateria.numero * MODULOS_INTERVALO_DESBLOQUEIO);
-    return modulosConcluidosCount >= necessarios;
+    const progresso = Number(moduloProgresso || 1);
+    const batNum = Number(bateria.numero || 1);
+
+    if (batNum === 1) {
+        return progresso >= 4;
+    }
+    if (batNum === 2) {
+        return progresso >= 7;
+    }
+    if (batNum === 3) {
+        return progresso >= 10;
+    }
+    if (batNum >= 4) {
+        return progresso >= 10;
+    }
+    return false;
 }
 
 export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {

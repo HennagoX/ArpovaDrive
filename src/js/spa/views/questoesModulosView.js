@@ -112,36 +112,33 @@ export function abrirQuestoesModulos(materiaId) {
     if (contadorBadge) setText(contadorBadge, `${total} ${total === 1 ? 'bateria' : 'baterias'}`);
 
     if (modulesListContainer) {
-        const isSameMateria = modulesListContainer.dataset.materiaId === materiaId && modulesListContainer.children.length > 0;
-        if (!isSameMateria) {
-            modulesListContainer.dataset.materiaId = materiaId;
-            modulesListContainer.innerHTML = '';
+        modulesListContainer.dataset.materiaId = materiaId;
+        modulesListContainer.innerHTML = '';
 
-            baterias.forEach((bateria) => {
-                const card = createQuestionModuleCard(bateria, {
-                    onStart: (bat) => {
-                        if (routerRef) {
-                            routerRef.navigateTo('questoes-resolucao', {
-                                materiaId,
-                                bateriaId: bat.id,
-                                bateriaNumero: bat.numero
-                            });
-                        }
-                    },
-                    onLockedClick: (bat) => {
-                        showToast(
-                            bat.motivoBloqueio || LOCKED_QUESTION_MESSAGE,
-                            'locked',
-                            'fa-solid fa-lock'
-                        );
+        baterias.forEach((bateria) => {
+            const card = createQuestionModuleCard(bateria, {
+                onStart: (bat) => {
+                    if (routerRef) {
+                        routerRef.navigateTo('questoes-resolucao', {
+                            materiaId,
+                            bateriaId: bat.id,
+                            bateriaNumero: bat.numero
+                        });
                     }
-                });
-
-                if (card) {
-                    modulesListContainer.appendChild(card);
+                },
+                onLockedClick: (bat) => {
+                    showToast(
+                        bat.motivoBloqueio || LOCKED_QUESTION_MESSAGE,
+                        'locked',
+                        'fa-solid fa-lock'
+                    );
                 }
             });
-        }
+
+            if (card) {
+                modulesListContainer.appendChild(card);
+            }
+        });
     }
 }
 
