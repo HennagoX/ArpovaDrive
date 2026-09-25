@@ -56,6 +56,9 @@ export const ENDPOINTS = {
     CONCLUIDAS: (userId, materia) => `${API_URL}/questoes/concluidas?userId=${encodeURIComponent(userId || '')}${materia ? `&materia=${encodeURIComponent(materia)}` : ''}`,
     CHECK_ACERTO: `${API_URL}/questoes/checkAcerto`,
     CHECK_QUESTAO: `${API_URL}/questoes/checkQuestao`,
-    CONCLUIR_QUESTAO: `${API_URL}/questoes/concluirQuestao`
+    CONCLUIR_QUESTAO: `${API_URL}/questoes/concluirQuestao`,
+    PERGUNTAS: (materia, bateria) => `${API_URL}/questoes/perguntas?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}`,
+    CONCLUIR_BATERIA: `${API_URL}/questoes/concluirBateria`,
+    VERIFICAR_ACESSO: (materia, bateria, userId) => `${API_URL}/questoes/verificarAcesso?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`
   }
 };

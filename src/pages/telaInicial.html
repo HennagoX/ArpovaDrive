@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AprovaDrive - Início</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     <link rel="stylesheet" href="../css/theme.css">
     <link rel="stylesheet" href="../css/utils.css">
     <link rel="stylesheet" href="../css/conteudos.css">
@@ -1515,7 +1515,7 @@
                     <i class="fa-solid fa-circle-question"></i>
                 </div>
             </div>
-//
+
             <div class="search-area">
                 <div class="search">
                     <i class="fa-solid fa-magnifying-glass"></i>
@@ -1698,12 +1698,12 @@
                     <div class="questoes-metrics-grid">
                         <div class="metric-box">
                             <i class="fa-solid fa-list-check"></i>
-                            <strong>60</strong>
+                            <strong>40</strong>
                             <span>Questões</span>
                         </div>
                         <div class="metric-box">
                             <i class="fa-solid fa-layer-group"></i>
-                            <strong>3</strong>
+                            <strong>4</strong>
                             <span>Baterias</span>
                         </div>
                         <div class="metric-box">
@@ -1790,6 +1790,49 @@
             <div class="baterias-list" id="questoes-modules-list">
             </div>
 
+        </section>
+
+        <section id="view-questoes-resolucao" class="spa-view" style="display: none;">
+            <div class="resolucao-nav-topo">
+                <button type="button" class="btn-voltar-resolucao" id="btn-voltar-baterias-questoes">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar para Baterias
+                </button>
+
+                <div class="modulos-breadcrumb">
+                    <span class="breadcrumb-root" id="breadcrumb-resolucao-root-btn">Questões</span>
+                    <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current" id="breadcrumb-resolucao-materia">Meio Ambiente</span>
+                    <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current" id="breadcrumb-resolucao-bateria">Bateria 01</span>
+                </div>
+            </div>
+
+            <div class="resolucao-header-card">
+                <div class="resolucao-header-top">
+                    <span class="resolucao-category-badge" id="resolucao-tag-categoria">MEIO AMBIENTE</span>
+                    <div class="resolucao-score-pill">
+                        <i class="fa-solid fa-trophy" style="color: #f59e0b;"></i>
+                        <span id="resolucao-live-score">Acertos: 0/10</span>
+                        <span style="color: #cbd5e1;">•</span>
+                        <span id="resolucao-live-xp" style="color: #7c3aed;">+0 XP</span>
+                    </div>
+                </div>
+
+                <h2 class="resolucao-header-title" id="resolucao-header-title">Bateria 1: Trânsito, Ar e Ruído</h2>
+                <p class="resolucao-header-subtitle" id="resolucao-header-subtitle">Módulos 01 a 03 · Trânsito, poluição do ar e poluição sonora</p>
+
+                <div class="resolucao-progress-wrap">
+                    <div class="resolucao-progress-meta">
+                        <span id="resolucao-progresso-texto">Questão 1 de 10</span>
+                        <span id="resolucao-progresso-pct">10%</span>
+                    </div>
+                    <div class="resolucao-progress-track">
+                        <div class="resolucao-progress-fill" id="resolucao-progresso-fill" style="width: 10%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="resolucao-conteudo-ativo"></div>
         </section>
 
         <div id="toast-container" class="toast-container" aria-live="polite"></div>

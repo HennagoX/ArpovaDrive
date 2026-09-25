@@ -9,6 +9,6 @@ export const MESSAGES = {
     LOGIN_ERRADO: 'E-mail ou senha incorretos.',
     MODULO_BLOQUEADO: 'Conclua o módulo anterior para desbloquear este módulo!',
     MODULO_EM_BREVE: 'Módulo em desenvolvimento. A leitura estará disponível em breve!',
-    QUESTAO_BLOQUEADA: 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!',
-    QUESTAO_EM_BREVE: 'Bateria de questões selecionada. A tela interativa de resolução de questões será conectada em breve!'
+    QUESTAO_BLOQUEADA: 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear este módulo de questões!',
+    QUESTAO_EM_BREVE: 'Módulo de questões selecionado. A tela interativa de resolução de questões será conectada em breve!'
 };

@@ -39,7 +39,7 @@ export function createQuestionModuleCard(bateria, options = {}) {
     } else {
         actionButtonHtml = `
             <button type="button" class="btn-bateria-start" title="Iniciar resolução desta bateria de questões">
-                <i class="fa-solid fa-play"></i> Iniciar Questão
+                <i class="fa-solid fa-play"></i> Iniciar Bateria
             </button>
         `;
     }

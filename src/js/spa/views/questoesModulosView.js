@@ -5,12 +5,15 @@ import {
     getBateriasByMateriaId,
     LOCKED_QUESTION_MESSAGE
 } from '../../services/questoesService.js';
+import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { createQuestionModuleCard } from '../../components/questionModuleCard.js';
 
 let initialized = false;
 let toastTimeout = null;
+let routerRef = null;
 
 export function initQuestoesModulosView(router) {
+    routerRef = router;
     if (initialized) return;
     initialized = true;
 
@@ -43,7 +46,15 @@ export function abrirQuestoesModulos(materiaId) {
         return;
     }
 
-    const baterias = getBateriasByMateriaId(materiaId);
+    const moduloProgresso = getModuloAtualCached(materiaId);
+    const baterias = getBateriasByMateriaId(materiaId, moduloProgresso);
+
+    getModuloAtual(materiaId).then(res => {
+        const modNum = typeof res === 'number' ? res : (res?.modulo_atual || moduloProgresso);
+        if (modNum && modNum !== moduloProgresso) {
+            abrirQuestoesModulos(materiaId);
+        }
+    }).catch(() => {});
 
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
@@ -109,11 +120,13 @@ export function abrirQuestoesModulos(materiaId) {
             baterias.forEach((bateria) => {
                 const card = createQuestionModuleCard(bateria, {
                     onStart: (bat) => {
-                        showToast(
-                            `Iniciando ${bat.titulo} (${bat.questoesCount} questões). A tela interativa de resolução de questões será conectada em breve!`,
-                            'info',
-                            'fa-solid fa-circle-play'
-                        );
+                        if (routerRef) {
+                            routerRef.navigateTo('questoes-resolucao', {
+                                materiaId,
+                                bateriaId: bat.id,
+                                bateriaNumero: bat.numero
+                            });
+                        }
                     },
                     onLockedClick: (bat) => {
                         showToast(

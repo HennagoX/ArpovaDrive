@@ -1,14 +1,13 @@
-
 import { ready } from '../utils/dom.js';
 import { router } from '../spa/router.js';
 import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.js';
 import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.js';
 import { initModulosView, abrirModulos, abrirLeituraPdf, fecharModalAvancar, toggleFullscreenReader } from '../spa/views/modulosView.js';
-
 import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
 import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
 import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
 import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
+import { initQuestoesResolucaoView, abrirQuestoesResolucao } from '../spa/views/questoesResolucaoView.js';
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 
 ready(() => {
@@ -89,6 +88,22 @@ ready(() => {
         }
     });
 
+    router.register('questoes-resolucao', {
+        viewSelector: '#view-questoes-resolucao',
+        navKey: 'questoes',
+        onEnter: (params) => {
+            document.body.classList.add('no-sidebar');
+            if (params && (params.materiaId || params.bateriaId)) {
+                abrirQuestoesResolucao(params.materiaId, params.bateriaId || params.bateriaNumero || 1);
+            } else {
+                router.navigateTo('questoes');
+            }
+        },
+        onLeave: () => {
+            document.body.classList.remove('no-sidebar');
+        }
+    });
+
     router.register('cronograma', {
         viewSelector: '#view-cronograma',
         navKey: 'cronograma',
@@ -118,6 +133,7 @@ ready(() => {
     initModulosView(router);
     initQuestoesView(router);
     initQuestoesModulosView(router);
+    initQuestoesResolucaoView(router);
     initCronogramaView(router);
     initTarefasView(router);
     initDesempenhoView(router);
