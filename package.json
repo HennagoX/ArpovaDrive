@@ -8,8 +8,8 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  
   "type": "module",
+  "packageManager": "npm@11.19.1",
   "bugs": {
     "url": "https://github.com/HennagoX/ArpovaDrive/issues"
   },
