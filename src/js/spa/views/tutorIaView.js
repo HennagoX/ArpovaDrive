@@ -96,8 +96,9 @@ async function handleUserSend(text) {
         conversationHistory.push({ role: 'assistant', content: botReply });
     } catch (err) {
         removeTypingIndicator();
-        const fallbackText = err?.message || 'Não consegui me comunicar com o servidor no momento. Verifique sua conexão e tente novamente.';
+        const fallbackText = 'Estou à disposição para tirar dúvidas sobre a prova teórica do DETRAN e a plataforma AprovaDrive! Que tal revisar as matérias de Legislação e Direção Defensiva ou tentar enviar sua dúvida novamente em instantes?';
         appendBotMessage(fallbackText);
+        conversationHistory.push({ role: 'assistant', content: fallbackText });
     } finally {
         isSending = false;
         if (sendBtn) {
