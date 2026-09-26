@@ -149,8 +149,9 @@ function bindCardEvents(card, modulo, options = {}) {
         const triggerLocked = (event) => {
             if (event) event.stopPropagation();
             card.classList.remove('shake');
-            void card.offsetWidth;
-            card.classList.add('shake');
+            requestAnimationFrame(() => {
+                card.classList.add('shake');
+            });
             if (typeof options.onLockedClick === 'function') {
                 options.onLockedClick(modulo, card);
             }

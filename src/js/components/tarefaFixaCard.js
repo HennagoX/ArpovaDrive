@@ -175,8 +175,9 @@ export function createTarefaFixaCard(task, options = {}) {
         btnBloqueado.addEventListener('click', (e) => {
             e.stopPropagation();
             card.classList.remove('shake');
-            void card.offsetWidth;
-            card.classList.add('shake');
+            requestAnimationFrame(() => {
+                card.classList.add('shake');
+            });
             options.onLockedClick(task);
         });
     }

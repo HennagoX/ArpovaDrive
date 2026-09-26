@@ -51,19 +51,28 @@ class SpaRouter {
             this.routes[this.currentRoute].onLeave();
         }
 
-        Object.values(this.routes).forEach((r) => {
-            const el = qs(r.viewSelector);
-            if (el) {
-                el.style.display = 'none';
-            }
-        });
-
         const targetEl = qs(route.viewSelector);
+
+        if (this.currentRoute && this.routes[this.currentRoute]) {
+            const prevEl = qs(this.routes[this.currentRoute].viewSelector);
+            if (prevEl && prevEl !== targetEl) {
+                prevEl.style.display = 'none';
+            }
+        } else {
+            Object.values(this.routes).forEach((r) => {
+                const el = qs(r.viewSelector);
+                if (el && el !== targetEl) {
+                    el.style.display = 'none';
+                }
+            });
+        }
+
         if (targetEl) {
             targetEl.style.display = 'block';
             targetEl.classList.remove('spa-view');
-            void targetEl.offsetWidth;
-            targetEl.classList.add('spa-view');
+            requestAnimationFrame(() => {
+                targetEl.classList.add('spa-view');
+            });
         }
 
         this.currentRoute = routeName;
