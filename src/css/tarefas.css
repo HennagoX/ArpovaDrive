@@ -374,6 +374,18 @@
     border-radius: 8px;
 }
 
+.tarefa-meta-pill.pill-sucesso {
+    background: #ecfdf5;
+    color: #047857;
+    border-color: #a7f3d0;
+}
+
+.tarefa-meta-pill.pill-alerta {
+    background: #fffbeb;
+    color: #b45309;
+    border-color: #fde68a;
+}
+
 .tarefa-titulo {
     font-size: 16px;
     font-weight: 700;
@@ -394,6 +406,19 @@
     align-items: center;
     gap: 5px;
     margin-top: 4px;
+}
+
+.tarefa-locked-hint.hint-sucesso {
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.tarefa-locked-hint.hint-progresso {
+    color: #d97706;
+}
+
+.tarefa-locked-hint.hint-locked {
+    color: #94a3b8;
 }
 
 .tarefa-reward-col {

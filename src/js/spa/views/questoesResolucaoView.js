@@ -11,6 +11,7 @@ import {
 import { getModuloAtualCached } from '../../services/moduloService.js';
 import { showToast } from './modulosView.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
+import { limparCacheTarefasFixas } from '../../services/tarefasFixasService.js';
 
 let initialized = false;
 let routerRef = null;
@@ -331,6 +332,11 @@ async function renderResultadoFinal() {
         }
     } catch {}
 
+    // Invalida cache de tarefas fixas para refletir o aproveitamento imediatamente
+    try {
+        limparCacheTarefasFixas();
+    } catch {}
+
     let tituloResultado = aprovado ? 'Excelente Desempenho!' : 'Bom Treinamento!';
     let subtitulo = aprovado
         ? 'Você atingiu o aproveitamento recomendado para a prova teórica do DETRAN.'
@@ -355,6 +361,24 @@ async function renderResultadoFinal() {
             temProximaLiberada = Boolean(acessoCheck?.permitido);
         }
     }
+
+    const taskBannerHtml = aprovado ? `
+        <div class="resultado-task-banner aprovado">
+            <i class="fa-solid fa-gift"></i>
+            <div>
+                <strong>Desafio de Tarefas Liberado (${porcentagem}% de acertos)!</strong>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: #047857;">Você atingiu a meta de 70%+ e agora pode reivindicar sua recompensa de XP na aba de Tarefas.</p>
+            </div>
+        </div>
+    ` : `
+        <div class="resultado-task-banner reprovado">
+            <i class="fa-solid fa-circle-exclamation"></i>
+            <div>
+                <strong>Meta de 70% não atingida (${porcentagem}%)</strong>
+                <p style="margin: 2px 0 0 0; font-size: 12px; color: #b45309;">Para liberar a recompensa da Tarefa Fixa desta bateria, é necessário atingir no mínimo 70% de acertos. Refaça a bateria para conquistar o bônus de XP!</p>
+            </div>
+        </div>
+    `;
 
     container.innerHTML = `
         <article class="resolucao-resultado-card">
@@ -384,14 +408,22 @@ async function renderResultadoFinal() {
                 <i class="fa-solid fa-bolt"></i> +${xpGanhoSessao} XP conquistados nesta bateria
             </div>
 
+            ${taskBannerHtml}
+
             <div class="resultado-botoes">
+                ${aprovado ? `
+                    <button type="button" class="btn-resultado-acao btn-resultado-tarefas" id="btn-resultado-ir-tarefas">
+                        <i class="fa-solid fa-gift"></i> Reivindicar +350 XP em Tarefas
+                    </button>
+                ` : ''}
+
                 ${temProximaLiberada ? `
                     <button type="button" class="btn-resultado-acao btn-resultado-primario" id="btn-resultado-proxima-bateria">
                         <i class="fa-solid fa-forward"></i> Próxima Bateria
                     </button>
                 ` : ''}
 
-                <button type="button" class="btn-resultado-acao ${temProximaLiberada ? 'btn-resultado-secundario' : 'btn-resultado-primario'}" id="btn-resultado-refazer">
+                <button type="button" class="btn-resultado-acao ${temProximaLiberada || aprovado ? 'btn-resultado-secundario' : 'btn-resultado-primario'}" id="btn-resultado-refazer">
                     <i class="fa-solid fa-rotate-left"></i> Refazer Esta Bateria
                 </button>
 
@@ -401,6 +433,15 @@ async function renderResultadoFinal() {
             </div>
         </article>
     `;
+
+    const btnIrTarefas = container.querySelector('#btn-resultado-ir-tarefas');
+    if (btnIrTarefas) {
+        btnIrTarefas.addEventListener('click', () => {
+            if (routerRef) {
+                routerRef.navigateTo('tarefas');
+            }
+        });
+    }
 
     const btnRefazer = container.querySelector('#btn-resultado-refazer');
     if (btnRefazer) {

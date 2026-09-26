@@ -40,8 +40,17 @@ export function createTarefaFixaCard(task, options = {}) {
 
     // Informação de referência para questões
     let metaRefHtml = '';
-    if (isQuestao && task.modulosReferencia) {
-        metaRefHtml = `<span class="tarefa-meta-pill"><i class="fa-solid fa-layer-group"></i> ${escapeHtml(task.modulosReferencia)}</span>`;
+    if (isQuestao) {
+        if (task.modulosReferencia) {
+            metaRefHtml += `<span class="tarefa-meta-pill"><i class="fa-solid fa-layer-group"></i> ${escapeHtml(task.modulosReferencia)}</span>`;
+        }
+        if (isDone) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-sucesso"><i class="fa-solid fa-circle-check"></i> Concluído (${task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined ? task.porcentagemAcertos : 100}%)</span>`;
+        } else if (isClaimable) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-sucesso"><i class="fa-solid fa-circle-check"></i> Aproveitamento: ${task.porcentagemAcertos}%</span>`;
+        } else if (isInProgress && task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-alerta"><i class="fa-solid fa-rotate-left"></i> Aproveitamento anterior: ${task.porcentagemAcertos}% (Meta: ${task.percentualAlvo || 70}%)</span>`;
+        }
     }
 
     // Botões e Ações
@@ -62,15 +71,16 @@ export function createTarefaFixaCard(task, options = {}) {
         `;
     } else if (isInProgress) {
         if (isQuestao) {
+            const jaTentou = task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined;
+            const btnText = jaTentou ? `Refazer Bateria (${task.porcentagemAcertos}%)` : 'Fazer Questões';
+            const btnTitle = jaTentou
+                ? `Você obteve ${task.porcentagemAcertos}%. Refaça e alcance ${task.percentualAlvo || 70}%+ para liberar a recompensa!`
+                : `Resolver Bateria ${task.bateriaNumero || 1} e atingir no mínimo ${task.percentualAlvo || 70}% de acertos`;
             actionHtml = `
                 <div class="tarefa-actions-group">
-                    <button type="button" class="btn-tarefa btn-praticar" title="Resolver bateria de questões">
-                        <i class="fa-solid fa-circle-play"></i>
-                        <span>Fazer Questões</span>
-                    </button>
-                    <button type="button" class="btn-tarefa btn-reivindicar" title="Reivindicar recompensa se já fez">
-                        <i class="fa-solid fa-check"></i>
-                        <span>Concluir</span>
+                    <button type="button" class="btn-tarefa btn-praticar" title="${escapeHtml(btnTitle)}">
+                        <i class="fa-solid ${jaTentou ? 'fa-rotate-left' : 'fa-circle-play'}"></i>
+                        <span>${escapeHtml(btnText)}</span>
                     </button>
                 </div>
             `;
@@ -116,7 +126,12 @@ export function createTarefaFixaCard(task, options = {}) {
             <h4 class="tarefa-titulo">${escapeHtml(task.titulo || 'Tarefa de Conteúdo')}</h4>
             <p class="tarefa-descricao">${escapeHtml(task.descricao || 'Conclua para acumular XP permanente.')}</p>
 
-            ${task.motivo && isLocked ? `<div class="tarefa-locked-hint"><i class="fa-solid fa-circle-info"></i> ${escapeHtml(task.motivo)}</div>` : ''}
+            ${task.motivo && !isDone ? `
+                <div class="tarefa-locked-hint ${isClaimable ? 'hint-sucesso' : isInProgress ? 'hint-progresso' : 'hint-locked'}">
+                    <i class="fa-solid ${isClaimable ? 'fa-circle-check' : isInProgress ? 'fa-circle-info' : 'fa-lock'}"></i>
+                    <span>${escapeHtml(task.motivo)}</span>
+                </div>
+            ` : ''}
         </div>
 
         <div class="tarefa-reward-col">

@@ -231,7 +231,14 @@ function createConteudoSection(conteudo) {
                 },
                 onPractice: (t) => {
                     if (currentRouter) {
-                        currentRouter.navigateTo('questoes-modulos', { materiaId: t.conteudoId });
+                        if (t.tipo === 'questao' && t.bateriaNumero) {
+                            currentRouter.navigateTo('questoes-resolucao', {
+                                materiaId: t.conteudoId,
+                                bateriaNumero: t.bateriaNumero
+                            });
+                        } else {
+                            currentRouter.navigateTo('questoes-modulos', { materiaId: t.conteudoId });
+                        }
                     }
                 },
                 onLockedClick: (t) => {
@@ -263,16 +270,10 @@ async function handleClaimTask(task, buttonEl) {
 
     const xpAmount = Number(task.xp_reward || 150);
 
-    // 1. Atualização OTIMISTA e IMEDIATA no localStorage e no cabeçalho
-    atualizarXpNoLocalStorage({
-        xpGanho: xpAmount,
-        taskId: task.id
-    });
-
     try {
         const result = await concluirTarefaFixa(task.id);
 
-        // 2. Confirmação com dados exatos retornados pelo backend
+        // Confirmação com dados exatos retornados pelo backend
         atualizarXpNoLocalStorage({
             xpGanho: result.xpGanho || xpAmount,
             expTotal: result.expTotal,
