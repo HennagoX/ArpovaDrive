@@ -20,7 +20,8 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   CRONOGRAMA: '/dashboard#cronograma',
   DESEMPENHO: '/dashboard#desempenho',
-  QUESTOES: '/dashboard#questoes'
+  QUESTOES: '/dashboard#questoes',
+  SIMULADO: '/dashboard#simulado'
 };
 
 
@@ -64,6 +65,11 @@ export const ENDPOINTS = {
     PERGUNTAS: (materia, bateria) => `${API_URL}/questoes/perguntas?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}`,
     CONCLUIR_BATERIA: `${API_URL}/questoes/concluirBateria`,
     VERIFICAR_ACESSO: (materia, bateria, userId) => `${API_URL}/questoes/verificarAcesso?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`
+  },
+  SIMULADO: {
+    GET_QUESTOES: (materia) => `${API_URL}/questoes/simulado?materia=${encodeURIComponent(materia || 'Geral')}`,
+    CONCLUIR: `${API_URL}/questoes/simulado/concluir`,
+    RESULTADOS: (userId) => `${API_URL}/questoes/simulado/resultados?userId=${encodeURIComponent(userId || '')}`
   },
   AI: {
     CHAT: `${API_URL}/ai/chat`

@@ -505,6 +505,153 @@ export async function concluirBateriaAPI(dadosConclusao, userId) {
     }
 }
 
+function shuffleLocalArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+export function gerarQuestoesSimuladoLocal(materia = 'Geral') {
+    const materiaNorm = String(materia || '').toLowerCase().replace(/[^a-z0-9]/g, '');
+    const isGeral = !materia || materiaNorm === 'geral' || materiaNorm === 'todos' || materiaNorm === 'detran';
+
+    const bancos = {
+        CodigoTransito: QUESTOES_DATA_CODIGO_TRANSITO,
+        PlacasTransito: QUESTOES_DATA_PLACAS_TRANSITO,
+        DirecaoDefensiva: QUESTOES_DATA_DIRECAO_DEFENSIVA,
+        PrimeirosSocorros: QUESTOES_DATA_PRIMEIROS_SOCORROS,
+        MeioAmbiente: QUESTOES_DATA_MEIO_AMBIENTE
+    };
+
+    let selecionadas = [];
+
+    if (isGeral) {
+        Object.entries(bancos).forEach(([matKey, bancoMat]) => {
+            const todasMat = Object.values(bancoMat).flat();
+            const shuffled = shuffleLocalArray(todasMat);
+            const sample = shuffled.slice(0, 6).map(q => ({ ...q, materia: matKey }));
+            selecionadas.push(...sample);
+        });
+    } else {
+        let bancoAlvo = QUESTOES_DATA_MEIO_AMBIENTE;
+        let alvoKey = 'MeioAmbiente';
+
+        if (materiaNorm.includes('codigo') || materiaNorm.includes('legislacao')) {
+            bancoAlvo = QUESTOES_DATA_CODIGO_TRANSITO;
+            alvoKey = 'CodigoTransito';
+        } else if (materiaNorm.includes('placa') || materiaNorm.includes('sinalizacao')) {
+            bancoAlvo = QUESTOES_DATA_PLACAS_TRANSITO;
+            alvoKey = 'PlacasTransito';
+        } else if (materiaNorm.includes('direcao') || materiaNorm.includes('defensiva') || materiaNorm.includes('ofensiva') || materiaNorm.includes('seguranca')) {
+            bancoAlvo = QUESTOES_DATA_DIRECAO_DEFENSIVA;
+            alvoKey = 'DirecaoDefensiva';
+        } else if (materiaNorm.includes('socorro') || materiaNorm.includes('saude') || materiaNorm.includes('primeiro')) {
+            bancoAlvo = QUESTOES_DATA_PRIMEIROS_SOCORROS;
+            alvoKey = 'PrimeirosSocorros';
+        }
+
+        const todas = Object.values(bancoAlvo).flat();
+        const shuffled = shuffleLocalArray(todas);
+        selecionadas = shuffled.slice(0, 30).map(q => ({ ...q, materia: alvoKey }));
+    }
+
+    const misturadas = shuffleLocalArray(selecionadas);
+
+    return misturadas.map((q, idx) => ({
+        numero: idx + 1,
+        modulo: q.modulo || 1,
+        materia: q.materia || materia,
+        texto: q.texto,
+        opcoes: q.opcoes,
+        correta: q.correta,
+        corretaLetra: q.corretaLetra || ['A', 'B', 'C', 'D'][q.correta],
+        explicacao: q.explicacao
+    }));
+}
+
+export async function getSimuladoQuestoesAPI(materia = 'Geral', userId = null) {
+    const activeUserId = getModuloUserId(userId);
+    try {
+        const url = ENDPOINTS.SIMULADO.GET_QUESTOES(materia);
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            if (data && Array.isArray(data.questoes) && data.questoes.length >= 30) {
+                return data.questoes;
+            }
+        }
+    } catch {}
+
+    return gerarQuestoesSimuladoLocal(materia);
+}
+
+export async function concluirSimuladoAPI(dadosConclusao, userId) {
+    const activeUserId = getModuloUserId(userId);
+    try {
+        const response = await fetch(ENDPOINTS.SIMULADO.CONCLUIR, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            },
+            body: JSON.stringify({
+                ...dadosConclusao,
+                userId: activeUserId,
+                id_usuario: activeUserId
+            })
+        });
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch {}
+
+    const total = 30;
+    const acertos = Math.max(0, Math.min(total, Number(dadosConclusao?.acertos) || 0));
+    const porcentagem = Math.round((acertos / total) * 100);
+    const aprovado = acertos >= 20 || porcentagem >= 67;
+
+    return {
+        sucesso: true,
+        success: true,
+        materia: dadosConclusao?.materia || 'Geral',
+        totalQuestoes: total,
+        acertos,
+        porcentagem,
+        aprovado,
+        metaAcertos: 20,
+        metaPorcentagem: 67,
+        expBonus: aprovado ? 150 : 50,
+        podeReivindicarTarefaFixa: aprovado
+    };
+}
+
+export async function getSimuladoResultadosAPI(userId) {
+    const activeUserId = getModuloUserId(userId);
+    try {
+        const url = ENDPOINTS.SIMULADO.RESULTADOS(activeUserId);
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            }
+        });
+        if (response.ok) {
+            return await response.json();
+        }
+    } catch {}
+
+    return { sucesso: false, resultados: [] };
+}
+
 export async function verificarAcessoBateriaAPI(materia, bateriaNumero, userId) {
     const activeUserId = getModuloUserId(userId);
     try {

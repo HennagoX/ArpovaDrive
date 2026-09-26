@@ -79,7 +79,7 @@ class SpaRouter {
         this.currentParams = params;
 
         if (typeof document !== 'undefined' && document.body) {
-            if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf' || routeName === 'questoes-resolucao' || routeName === 'tutor-ia') {
+            if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf' || routeName === 'questoes-resolucao' || routeName === 'simulado-resolucao' || routeName === 'tutor-ia') {
                 document.body.classList.add('no-sidebar');
             } else {
                 document.body.classList.remove('no-sidebar');
@@ -131,6 +131,12 @@ class SpaRouter {
         if (routeName === 'questoes') {
             return '#questoes';
         }
+        if (routeName === 'simulado-resolucao' && params.materiaId) {
+            return `#simulado-materia=${encodeURIComponent(params.materiaId)}`;
+        }
+        if (routeName === 'simulado') {
+            return '#simulado';
+        }
         if (routeName === 'cronograma') {
             return '#cronograma';
         }
@@ -168,6 +174,13 @@ class SpaRouter {
             return;
         }
 
+        const simuladoMatch = hash.match(/#simulado-materia=([^&]+)/);
+        if (simuladoMatch && simuladoMatch[1]) {
+            const materiaId = decodeURIComponent(simuladoMatch[1]);
+            this.navigateTo('simulado-resolucao', { materiaId }, pushState);
+            return;
+        }
+
         const path = (typeof window !== 'undefined' && window.location ? window.location.pathname || '' : '').replace(/\/$/, '').toLowerCase();
 
         if (hash === '#tutor-ia' || hash.startsWith('#tutor-ia') || path === '/tutor-ia') {
@@ -182,6 +195,11 @@ class SpaRouter {
 
         if (hash === '#questoes' || hash.startsWith('#questoes') || path === '/questoes') {
             this.navigateTo('questoes', {}, pushState);
+            return;
+        }
+
+        if (hash === '#simulado' || hash.startsWith('#simulado') || path === '/simulado') {
+            this.navigateTo('simulado', {}, pushState);
             return;
         }
 

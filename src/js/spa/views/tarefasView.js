@@ -231,7 +231,9 @@ function createConteudoSection(conteudo) {
                 },
                 onPractice: (t) => {
                     if (currentRouter) {
-                        if (t.tipo === 'questao' && t.bateriaNumero) {
+                        if (t.tipo === 'simulado' || t.isSimulado) {
+                            currentRouter.navigateTo('simulado');
+                        } else if (t.tipo === 'questao' && t.bateriaNumero) {
                             currentRouter.navigateTo('questoes-resolucao', {
                                 materiaId: t.conteudoId,
                                 bateriaNumero: t.bateriaNumero

@@ -614,7 +614,7 @@
                 <i class="fa-solid fa-circle-question"></i>
                 <span>Questões</span>
             </a>
-            <a href="#simulado" class="navbar-item">
+            <a href="#simulado" class="navbar-item" data-nav="simulado">
                 <i class="fa-solid fa-clipboard-check"></i>
                 <span>Simulado</span>
             </a>
@@ -1737,6 +1737,323 @@
 
             </section>
 
+        </section>
+
+        <section id="view-simulado" class="spa-view" style="display: none;">
+
+            <div class="welcome-questoes">
+                <div>
+                    <span class="welcome-questoes-tag"><i class="fa-solid fa-graduation-cap"></i> SIMULADOS OFICIAIS DETRAN</span>
+                    <h2>Simulados Completos (30 Questões)</h2>
+                    <p>
+                        Teste seus conhecimentos em simulados completos de 30 questões sem bloqueio por módulos.
+                        Meta de aprovação: 67% (20 acertos). Ganhe +600 XP de tarefa fixa na aprovação!
+                    </p>
+                </div>
+                <div class="welcome-questoes-icon">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+            </div>
+
+            <div class="search-area">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-simulado" placeholder="Buscar simulado por disciplina...">
+                </div>
+            </div>
+
+            <div class="categories">
+                <button class="filter filter-simulado active" data-category="todos">Todos</button>
+                <button class="filter filter-simulado" data-category="geral">Geral DETRAN</button>
+                <button class="filter filter-simulado" data-category="legislacao">Legislação</button>
+                <button class="filter filter-simulado" data-category="placas">Sinalização</button>
+                <button class="filter filter-simulado" data-category="seguranca">Segurança</button>
+                <button class="filter filter-simulado" data-category="saude">Primeiros Socorros</button>
+                <button class="filter filter-simulado" data-category="ambiente">Meio Ambiente</button>
+            </div>
+
+            <section class="questoes-grid" id="simulado-grid">
+
+                <article class="questoes-card simulado-card" data-category="geral" data-id="Geral">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem orange">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border-color: rgba(245, 158, 11, 0.3);">
+                            <i class="fa-solid fa-trophy"></i> +600 XP Fixos
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill" style="background: #fffbeb; color: #b45309;">SIMULADO OFICIAL DETRAN</span>
+                    <h3 class="questoes-card-title">Simulado Geral Integrado</h3>
+                    <p class="questoes-card-desc">Simulado oficial cobrindo todas as matérias nos mesmos moldes e pesos da prova teórica do DETRAN.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill orange" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado" data-id="Geral" style="background: #f59e0b; color: #fff;">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+                <article class="questoes-card simulado-card" data-category="legislacao" data-id="CodigoTransito">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem green">
+                            <i class="fa-solid fa-scale-balanced"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked">
+                            <i class="fa-solid fa-bolt"></i> Meta 67%
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill">LEGISLAÇÃO</span>
+                    <h3 class="questoes-card-title">Código de Trânsito</h3>
+                    <p class="questoes-card-desc">Simulado completo de 30 questões sobre normas de circulação, infrações, penalidades e CNH.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill green" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado" data-id="CodigoTransito">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+                <article class="questoes-card simulado-card" data-category="placas" data-id="PlacaTransito">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem blue">
+                            <i class="fa-solid fa-road"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked">
+                            <i class="fa-solid fa-bolt"></i> Meta 67%
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill">SINALIZAÇÃO</span>
+                    <h3 class="questoes-card-title">Placas de Trânsito</h3>
+                    <p class="questoes-card-desc">Simulado de 30 questões sobre placas de regulamentação, advertência, indicação e marcas viárias.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill blue" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado" data-id="PlacaTransito">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+                <article class="questoes-card simulado-card" data-category="seguranca" data-id="DirecaoOfensiva">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem yellow">
+                            <i class="fa-solid fa-car-burst"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked">
+                            <i class="fa-solid fa-bolt"></i> Meta 67%
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill">SEGURANÇA</span>
+                    <h3 class="questoes-card-title">Direção Defensiva</h3>
+                    <p class="questoes-card-desc">Simulado de 30 questões sobre prevenção de acidentes, condições adversas e segurança no trânsito.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill yellow" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado amarelo-card" data-id="DirecaoOfensiva">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+                <article class="questoes-card simulado-card" data-category="saude" data-id="PrimeirosSocorros">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem red">
+                            <i class="fa-solid fa-kit-medical"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked">
+                            <i class="fa-solid fa-bolt"></i> Meta 67%
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill">PRIMEIROS SOCORROS</span>
+                    <h3 class="questoes-card-title">Primeiros Socorros</h3>
+                    <p class="questoes-card-desc">Simulado de 30 questões sobre condutas em acidentes, sinalização da cena e suporte a vítimas.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill red" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado vermelho-card" data-id="PrimeirosSocorros">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+                <article class="questoes-card simulado-card" data-category="ambiente" data-id="MeioAmbiente">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem purple">
+                            <i class="fa-solid fa-leaf"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked">
+                            <i class="fa-solid fa-bolt"></i> Meta 67%
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill">MEIO AMBIENTE</span>
+                    <h3 class="questoes-card-title">Meio Ambiente e Cidadania</h3>
+                    <p class="questoes-card-desc">Simulado de 30 questões sobre emissão veicular, poluição sonora, cidadania e convivência social.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill purple" style="width: 100%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado roxo-card" data-id="MeioAmbiente">
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+            </section>
+
+        </section>
+
+        <section id="view-simulado-resolucao" class="spa-view modulos-theme-orange" style="display: none;">
+            <div class="resolucao-nav-topo">
+                <button type="button" class="btn-voltar-resolucao" id="btn-voltar-hub-simulado">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar para Simulados
+                </button>
+
+                <div class="modulos-breadcrumb">
+                    <span class="breadcrumb-root" id="breadcrumb-simulado-root-btn">Simulados</span>
+                    <i class="fa-solid fa-chevron-right breadcrumb-separator"></i>
+                    <span class="breadcrumb-current" id="breadcrumb-simulado-materia">Simulado Geral DETRAN</span>
+                </div>
+            </div>
+
+            <div class="resolucao-header-card">
+                <div class="resolucao-header-top">
+                    <span class="resolucao-category-badge" id="simulado-resolucao-tag">SIMULADO OFICIAL</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div id="simulado-timer-display" class="simulado-timer-badge">
+                            <i class="fa-solid fa-stopwatch"></i> <span>40:00</span>
+                        </div>
+                        <div class="resolucao-score-pill">
+                            <i class="fa-solid fa-bullseye" style="color: #f59e0b;"></i>
+                            <span id="simulado-respondidas-pill">0/30 respondidas</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="resolucao-header-title" id="simulado-resolucao-title">Simulado Geral DETRAN</h2>
+                <p class="resolucao-header-subtitle" id="simulado-resolucao-subtitle">Simulado oficial de 30 questões · Meta de aprovação: 67% (20 acertos)</p>
+
+                <div class="resolucao-progress-wrap">
+                    <div class="resolucao-progress-meta">
+                        <span id="simulado-progresso-texto">Questão 1 de 30</span>
+                        <span id="simulado-progresso-pct">0%</span>
+                    </div>
+                    <div class="resolucao-progress-track">
+                        <div class="resolucao-progress-fill" id="simulado-progresso-fill" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <div class="simulado-nav-grade-box">
+                    <div class="simulado-grade-header">
+                        <span>Navegador de Questões</span>
+                        <div class="simulado-grade-legenda">
+                            <span class="legenda-item"><span class="dot vazia"></span> Pendente</span>
+                            <span class="legenda-item"><span class="dot respondida"></span> Respondida</span>
+                            <span class="legenda-item"><span class="dot marcada"></span> Marcada para Revisão</span>
+                        </div>
+                    </div>
+                    <div class="simulado-grade-pills" id="simulado-grade-questoes"></div>
+                </div>
+            </div>
+
+            <div id="simulado-resolucao-conteudo"></div>
         </section>
 
         <section id="view-questoes-modulos" class="spa-view modulos-theme-green" style="display: none;">

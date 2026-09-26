@@ -1318,3 +1318,331 @@
     transform: translateY(-2px);
 }
 
+#view-simulado-resolucao,
+#view-simulado-resolucao.modulos-theme-orange {
+    --theme-primary: #ea580c;
+    --theme-primary-hover: #c2410c;
+    --q-theme: #ea580c;
+    --q-theme-hover: #c2410c;
+    --q-theme-soft: #fff7ed;
+    --q-theme-badge: #ffedd5;
+    --q-theme-border: #fed7aa;
+    --q-theme-shadow: rgba(234, 88, 12, 0.25);
+}
+
+.simulado-timer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 14px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.simulado-timer-badge.timer-alerta {
+    background: #dc2626;
+    color: #ffffff;
+    animation: pulse 1s infinite;
+}
+
+.simulado-nav-grade-box {
+    margin-top: 18px;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.simulado-grade-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+}
+
+.simulado-grade-legenda {
+    display: flex;
+    gap: 12px;
+    font-size: 11px;
+    color: #64748b;
+}
+
+.legenda-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.legenda-item .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legenda-item .dot.vazia {
+    background: #cbd5e1;
+}
+
+.legenda-item .dot.respondida {
+    background: #0284c7;
+}
+
+.legenda-item .dot.marcada {
+    background: #eab308;
+}
+
+.simulado-grade-pills {
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    gap: 6px;
+}
+
+@media (max-width: 768px) {
+    .simulado-grade-pills {
+        grid-template-columns: repeat(10, 1fr);
+    }
+}
+
+.btn-pilula-questao {
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.btn-pilula-questao:hover {
+    border-color: #0284c7;
+    background: #f0f9ff;
+}
+
+.btn-pilula-questao.status-vazia {
+    background: #f8fafc;
+    color: #475569;
+    border-color: #cbd5e1;
+}
+
+.btn-pilula-questao.status-respondida {
+    background: #e0f2fe;
+    color: #0369a1;
+    border-color: #7dd3fc;
+}
+
+.btn-pilula-questao.status-marcada {
+    background: #fef9c3;
+    color: #a16207;
+    border-color: #fde047;
+}
+
+.btn-pilula-questao.status-atual {
+    outline: 2px solid #0284c7;
+    outline-offset: 1px;
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.25);
+}
+
+.simulado-pergunta-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px 32px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.simulado-card-meta-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.simulado-card-meta-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.simulado-materia-chip {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #475569;
+}
+
+.simulado-questao-num-tag {
+    font-size: 13px;
+    font-weight: 600;
+    color: #64748b;
+}
+
+.btn-marcar-revisao {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-marcar-revisao:hover {
+    background: #fef9c3;
+    border-color: #fde047;
+    color: #a16207;
+}
+
+.btn-marcar-revisao.marcada {
+    background: #fef08a;
+    border-color: #eab308;
+    color: #854d0e;
+}
+
+.simulado-enunciado {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.5;
+    margin-bottom: 24px;
+}
+
+.simulado-opcoes-lista {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.simulado-opcao-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1.5px solid #e2e8f0;
+    background: #ffffff;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s ease;
+    width: 100%;
+}
+
+.simulado-opcao-item:hover {
+    border-color: #38bdf8;
+    background: #f0f9ff;
+}
+
+.simulado-opcao-item.selecionada {
+    border-color: #0284c7;
+    background: #f0f9ff;
+    box-shadow: 0 0 0 1px #0284c7;
+}
+
+.simulado-letra-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #f1f5f9;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+}
+
+.simulado-opcao-item.selecionada .simulado-letra-circle {
+    background: #0284c7;
+    color: #ffffff;
+}
+
+.simulado-opcao-text {
+    flex: 1;
+    font-size: 15px;
+    color: #334155;
+    line-height: 1.4;
+}
+
+.simulado-radio-indicator {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #cbd5e1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.simulado-radio-indicator i {
+    display: none;
+    font-size: 11px;
+    color: #ffffff;
+}
+
+.simulado-opcao-item.selecionada .simulado-radio-indicator {
+    background: #0284c7;
+    border-color: #0284c7;
+}
+
+.simulado-opcao-item.selecionada .simulado-radio-indicator i {
+    display: block;
+}
+
+.simulado-card-acoes-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 20px;
+}
+
+.btn-finalizar-simulado-top {
+    padding: 10px 18px;
+    border-radius: 10px;
+    border: 1px solid #86efac;
+    background: #ecfdf5;
+    color: #166534;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-finalizar-simulado-top:hover {
+    background: #dcfce7;
+    border-color: #4ade80;
+    color: #14532d;
+    transform: translateY(-1px);
+}
+

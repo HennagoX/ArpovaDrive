@@ -3,6 +3,7 @@ export function createTarefaFixaCard(task, options = {}) {
 
     const card = document.createElement('article');
 
+    const isSimulado = task.tipo === 'simulado' || Boolean(task.isSimulado);
     const isQuestao = task.tipo === 'questao';
     const isDone = Boolean(task.concluida || task.status === 'done');
     const isClaimable = !isDone && Boolean(task.podeReivindicar);
@@ -10,18 +11,24 @@ export function createTarefaFixaCard(task, options = {}) {
     const isLocked = !isDone && (task.status === 'locked' || task.bloqueada);
 
     const statusClass = isDone ? 'done' : isClaimable ? 'claimable' : isInProgress ? 'in_progress' : 'locked';
-    const typeClass = isQuestao ? 'tarefa-tipo-questao' : 'tarefa-tipo-modulo';
+    const typeClass = isSimulado ? 'tarefa-tipo-simulado' : isQuestao ? 'tarefa-tipo-questao' : 'tarefa-tipo-modulo';
 
     card.className = `tarefa-fixa-card ${typeClass} ${statusClass}`;
     card.dataset.taskId = task.id;
     card.dataset.tipo = task.tipo;
     card.dataset.conteudoId = task.conteudoId;
 
-    const xpAmount = task.xp_reward || (isQuestao ? 350 : 150);
+    const xpAmount = task.xp_reward || (isSimulado ? 600 : isQuestao ? 350 : 150);
 
-    // Tag superior esquerda
     let tagHtml = '';
-    if (isQuestao) {
+    if (isSimulado) {
+        tagHtml = `
+            <div class="tarefa-badge-desafio" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border: 1px solid rgba(245, 158, 11, 0.3);">
+                <i class="fa-solid fa-graduation-cap"></i>
+                <span>SIMULADO OFICIAL • META ${task.percentualAlvo || 67}%+ (${task.acertosNecessarios || 20}/30)</span>
+            </div>
+        `;
+    } else if (isQuestao) {
         tagHtml = `
             <div class="tarefa-badge-desafio">
                 <i class="fa-solid fa-bolt"></i>
@@ -38,9 +45,17 @@ export function createTarefaFixaCard(task, options = {}) {
         `;
     }
 
-    // Informação de referência para questões
     let metaRefHtml = '';
-    if (isQuestao) {
+    if (isSimulado) {
+        metaRefHtml += `<span class="tarefa-meta-pill"><i class="fa-solid fa-clipboard-check"></i> 30 Questões Oficiais</span>`;
+        if (isDone) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-sucesso"><i class="fa-solid fa-circle-check"></i> Aprovado (${task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined ? task.porcentagemAcertos : 67}%)</span>`;
+        } else if (isClaimable) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-sucesso"><i class="fa-solid fa-circle-check"></i> Aproveitamento: ${task.porcentagemAcertos}% (${task.acertosObtidos || 20}/30)</span>`;
+        } else if (isInProgress && task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined) {
+            metaRefHtml += `<span class="tarefa-meta-pill pill-alerta"><i class="fa-solid fa-rotate-left"></i> Aproveitamento anterior: ${task.porcentagemAcertos}% (Meta: ${task.percentualAlvo || 67}%)</span>`;
+        }
+    } else if (isQuestao) {
         if (task.modulosReferencia) {
             metaRefHtml += `<span class="tarefa-meta-pill"><i class="fa-solid fa-layer-group"></i> ${escapeHtml(task.modulosReferencia)}</span>`;
         }
@@ -53,7 +68,6 @@ export function createTarefaFixaCard(task, options = {}) {
         }
     }
 
-    // Botões e Ações
     let actionHtml = '';
     if (isDone) {
         actionHtml = `
@@ -70,7 +84,21 @@ export function createTarefaFixaCard(task, options = {}) {
             </button>
         `;
     } else if (isInProgress) {
-        if (isQuestao) {
+        if (isSimulado) {
+            const jaTentou = task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined;
+            const btnText = jaTentou ? `Refazer Simulado (${task.porcentagemAcertos}%)` : 'Fazer Simulado';
+            const btnTitle = jaTentou
+                ? `Você obteve ${task.porcentagemAcertos}%. Refaça e alcance ${task.percentualAlvo || 67}%+ (20 acertos) para liberar a recompensa!`
+                : `Resolver Simulado de 30 questões e atingir no mínimo ${task.percentualAlvo || 67}% (20 acertos)`;
+            actionHtml = `
+                <div class="tarefa-actions-group">
+                    <button type="button" class="btn-tarefa btn-praticar" title="${escapeHtml(btnTitle)}">
+                        <i class="fa-solid ${jaTentou ? 'fa-rotate-left' : 'fa-circle-play'}"></i>
+                        <span>${escapeHtml(btnText)}</span>
+                    </button>
+                </div>
+            `;
+        } else if (isQuestao) {
             const jaTentou = task.porcentagemAcertos !== null && task.porcentagemAcertos !== undefined;
             const btnText = jaTentou ? `Refazer Bateria (${task.porcentagemAcertos}%)` : 'Fazer Questões';
             const btnTitle = jaTentou
@@ -108,7 +136,7 @@ export function createTarefaFixaCard(task, options = {}) {
         `;
     }
 
-    const iconePrincipal = isQuestao ? 'fa-solid fa-trophy' : 'fa-solid fa-book-open';
+    const iconePrincipal = isSimulado ? 'fa-solid fa-graduation-cap' : isQuestao ? 'fa-solid fa-trophy' : 'fa-solid fa-book-open';
 
     card.innerHTML = `
         <div class="tarefa-left-col">

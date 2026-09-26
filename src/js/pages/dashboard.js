@@ -10,6 +10,8 @@ import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoVie
 import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
 import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
 import { initQuestoesResolucaoView, abrirQuestoesResolucao } from '../spa/views/questoesResolucaoView.js';
+import { initSimuladoView, renderSimulado } from '../spa/views/simuladoView.js';
+import { initSimuladoResolucaoView, abrirSimuladoResolucao } from '../spa/views/simuladoResolucaoView.js';
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 import { initTutorIaView } from '../spa/views/tutorIaView.js';
 
@@ -127,6 +129,26 @@ ready(() => {
         }
     });
 
+    router.register('simulado', {
+        viewSelector: '#view-simulado',
+        navKey: 'simulado',
+        onEnter: () => {
+            renderSimulado();
+        }
+    });
+
+    router.register('simulado-resolucao', {
+        viewSelector: '#view-simulado-resolucao',
+        navKey: 'simulado',
+        onEnter: (params) => {
+            document.body.classList.add('no-sidebar');
+            abrirSimuladoResolucao(params?.materiaId || 'Geral');
+        },
+        onLeave: () => {
+            document.body.classList.remove('no-sidebar');
+        }
+    });
+
     router.register('cronograma', {
         viewSelector: '#view-cronograma',
         navKey: 'cronograma',
@@ -157,6 +179,8 @@ ready(() => {
     initQuestoesView(router);
     initQuestoesModulosView(router);
     initQuestoesResolucaoView(router);
+    initSimuladoView(router);
+    initSimuladoResolucaoView(router);
     initCronogramaView(router);
     initTarefasView(router);
     initDesempenhoView(router);
