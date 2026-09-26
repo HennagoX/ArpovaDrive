@@ -1,6 +1,7 @@
 import { MESSAGES } from '../constants/messages.js';
 import { ENDPOINTS } from '../constants/routes.js';
 import { getModuloUserId, getModuloAtual } from './moduloService.js';
+import { fetchDesempenho } from './desempenhoService.js';
 
 export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!';
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
@@ -499,7 +500,9 @@ export async function concluirBateriaAPI(dadosConclusao, userId) {
                 id_usuario: activeUserId
             })
         });
-        return await response.json();
+        const data = await response.json();
+        fetchDesempenho(activeUserId, true).catch(() => {});
+        return data;
     } catch (err) {
         return { success: false, message: err.message };
     }
@@ -610,7 +613,9 @@ export async function concluirSimuladoAPI(dadosConclusao, userId) {
             })
         });
         if (response.ok) {
-            return await response.json();
+            const resultData = await response.json();
+            fetchDesempenho(activeUserId, true).catch(() => {});
+            return resultData;
         }
     } catch {}
 
@@ -618,6 +623,8 @@ export async function concluirSimuladoAPI(dadosConclusao, userId) {
     const acertos = Math.max(0, Math.min(total, Number(dadosConclusao?.acertos) || 0));
     const porcentagem = Math.round((acertos / total) * 100);
     const aprovado = acertos >= 20 || porcentagem >= 67;
+
+    fetchDesempenho(activeUserId, true).catch(() => {});
 
     return {
         sucesso: true,

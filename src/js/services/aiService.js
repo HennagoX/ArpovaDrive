@@ -1,22 +1,30 @@
 import { ENDPOINTS } from '../constants/routes.js';
 import { getNetworkErrorMessage, getHttpErrorMessage } from '../constants/messages.js';
+import { getModuloUserId } from './moduloService.js';
 
 export async function sendChatMessage(message, history = [], context = {}) {
   if (!message || typeof message !== 'string' || !message.trim()) {
     throw new Error('Mensagem não informada.');
   }
 
+  const activeUserId = getModuloUserId(context?.userId || context?.id_usuario);
+
   try {
     const response = await fetch(ENDPOINTS.AI.CHAT, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'X-User-Id': activeUserId
       },
       body: JSON.stringify({
         message: message.trim(),
         history: Array.isArray(history) ? history : [],
-        context: context && typeof context === 'object' ? context : {}
+        context: {
+          ...(context && typeof context === 'object' ? context : {}),
+          userId: activeUserId,
+          id_usuario: activeUserId
+        }
       }),
       signal: typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function' 
         ? AbortSignal.timeout(25000) 

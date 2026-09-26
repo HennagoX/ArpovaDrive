@@ -4,5 +4,6 @@ export const STORAGE_KEYS = {
     GAMIFICATION: 'aprovadrive_gamification',
     CRONOGRAMA: 'aprovadrive_cronograma',
     LV: 'aprovadrive_user_lv',
-    XP: 'aprovadrive_user_xp'
+    XP: 'aprovadrive_user_xp',
+    DESEMPENHO: 'aprovadrive_desempenho'
 };

@@ -71,6 +71,9 @@ export const ENDPOINTS = {
     CONCLUIR: `${API_URL}/questoes/simulado/concluir`,
     RESULTADOS: (userId) => `${API_URL}/questoes/simulado/resultados?userId=${encodeURIComponent(userId || '')}`
   },
+  DESEMPENHO: {
+    GET: (userId) => `${API_URL}/desempenho${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`
+  },
   AI: {
     CHAT: `${API_URL}/ai/chat`
   }
