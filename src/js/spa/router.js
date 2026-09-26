@@ -168,32 +168,34 @@ class SpaRouter {
             return;
         }
 
-        if (hash === '#tutor-ia' || hash.startsWith('#tutor-ia')) {
+        const path = (typeof window !== 'undefined' && window.location ? window.location.pathname || '' : '').replace(/\/$/, '').toLowerCase();
+
+        if (hash === '#tutor-ia' || hash.startsWith('#tutor-ia') || path === '/tutor-ia') {
             this.navigateTo('tutor-ia', {}, pushState);
             return;
         }
 
-        if (hash === '#conteudos' || hash.startsWith('#conteudos')) {
+        if (hash === '#conteudos' || hash.startsWith('#conteudos') || path === '/conteudos') {
             this.navigateTo('conteudos', {}, pushState);
             return;
         }
 
-        if (hash === '#questoes' || hash.startsWith('#questoes')) {
+        if (hash === '#questoes' || hash.startsWith('#questoes') || path === '/questoes') {
             this.navigateTo('questoes', {}, pushState);
             return;
         }
 
-        if (hash === '#cronograma' || hash.startsWith('#cronograma')) {
+        if (hash === '#cronograma' || hash.startsWith('#cronograma') || path === '/cronograma') {
             this.navigateTo('cronograma', {}, pushState);
             return;
         }
 
-        if (hash === '#tarefas' || hash.startsWith('#tarefas') || hash === '#tasks' || hash.startsWith('#tasks')) {
+        if (hash === '#tarefas' || hash.startsWith('#tarefas') || hash === '#tasks' || hash.startsWith('#tasks') || path === '/tarefas') {
             this.navigateTo('tarefas', {}, pushState);
             return;
         }
 
-        if (hash === '#desempenho' || hash.startsWith('#desempenho')) {
+        if (hash === '#desempenho' || hash.startsWith('#desempenho') || path === '/desempenho') {
             this.navigateTo('desempenho', {}, pushState);
             return;
         }

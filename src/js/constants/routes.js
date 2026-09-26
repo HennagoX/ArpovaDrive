@@ -11,13 +11,13 @@ export const API_URL = isLocal
   : 'https://arpova-drive-api.vercel.app';
 
 export const ROUTES = {
-  HOME: '/index.html',
-  LOGIN: '/src/pages/Login.html',
-  CADASTRO: '/src/pages/cadastro.html',
-  DASHBOARD: '/src/pages/telaInicial.html',
-  CRONOGRAMA: '/src/pages/cronograma.html',
-  DESEMPENHO: '/src/pages/desempenho.html',
-  QUESTOES: '/src/pages/questoes.html'
+  HOME: '/',
+  LOGIN: '/login',
+  CADASTRO: '/cadastro',
+  DASHBOARD: '/dashboard',
+  CRONOGRAMA: '/dashboard#cronograma',
+  DESEMPENHO: '/dashboard#desempenho',
+  QUESTOES: '/dashboard#questoes'
 };
 
 export const ENDPOINTS = {

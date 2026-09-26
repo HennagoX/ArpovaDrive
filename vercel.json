@@ -1,0 +1,68 @@
+{
+  "cleanUrls": true,
+  "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/src/pages/Login.html",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/cadastro.html",
+      "destination": "/cadastro",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/telaInicial.html",
+      "destination": "/dashboard",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/login",
+      "destination": "/src/pages/Login.html"
+    },
+    {
+      "source": "/cadastro",
+      "destination": "/src/pages/cadastro.html"
+    },
+    {
+      "source": "/dashboard",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/inicio",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/conteudos",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/questoes",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/cronograma",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/tarefas",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/desempenho",
+      "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/tutor-ia",
+      "destination": "/src/pages/telaInicial.html"
+    }
+  ]
+}
