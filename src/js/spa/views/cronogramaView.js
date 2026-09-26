@@ -16,6 +16,7 @@ import {
     verificarPermissaoAdmin
 } from '../../services/cronogramaService.js';
 import { addXp, getGamificationData, syncUserGamification } from '../../services/gamificationService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 import { SELECTORS } from '../../constants/selectors.js';
 import { createTaskCard } from '../../components/taskCard.js';
 import { showToast } from './modulosView.js';
@@ -49,13 +50,13 @@ export function initCronogramaView(router) {
 }
 
 export async function renderCronograma(options = {}) {
+    usuarioGlobal.updateUI();
     const activeUserId = getUsuarioAtivoId();
 
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, 'Cronograma Semanal');
     if (subtitleEl) setText(subtitleEl, 'Acompanhe seu roteiro diário e avance nos estudos.');
-
     atualizarHud();
 
     try {
@@ -365,6 +366,12 @@ function atualizarHud(usuarioPayload) {
 
     if (gamification && streakBadge) {
         streakBadge.innerHTML = `<span class="material-symbols-outlined icone-inline">local_fire_department</span> Ofensiva: ${gamification.diasOfensiva} Dias`;
+    }
+
+    if (usuarioPayload) {
+        usuarioGlobal.sync(usuarioPayload);
+    } else {
+        usuarioGlobal.updateUI();
     }
 }
 

@@ -1,4 +1,5 @@
 import { qs, qsa, setText } from '../../utils/dom.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 
@@ -76,6 +77,8 @@ export function initSimuladoView(router) {
 }
 
 export function renderSimulado() {
+    usuarioGlobal.updateUI();
+
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
 

@@ -5,6 +5,7 @@ import {
 } from '../../services/questoesService.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
 import { limparCacheTarefasFixas } from '../../services/tarefasFixasService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 let routerRef = null;
@@ -97,6 +98,7 @@ function confirmarSaidaSimulado() {
 }
 
 export async function abrirSimuladoResolucao(materiaId = 'Geral') {
+    usuarioGlobal.updateUI();
     activeMateriaId = materiaId || 'Geral';
     pararTimer();
 

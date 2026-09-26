@@ -1,7 +1,9 @@
 import { qs, qsa } from '../../utils/dom.js';
 import { sendChatMessage } from '../../services/aiService.js';
 import { getCurrentUser } from '../../services/authService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 import { getGamificationData, getTaxaAproveitamento } from '../../services/gamificationService.js';
+import { getLocalDesempenho, fetchDesempenho } from '../../services/desempenhoService.js';
 
 let initialized = false;
 let currentRouter = null;
@@ -10,6 +12,7 @@ let isSending = false;
 
 export function initTutorIaView(router) {
     currentRouter = router;
+    usuarioGlobal.updateUI();
 
     const chatBody = qs('#tutor-ia-chat-messages');
     const input = qs('#tutor-ia-input');
@@ -77,14 +80,17 @@ async function handleUserSend(text) {
     appendTypingIndicator();
     scrollChatBottom();
 
-    const user = getCurrentUser();
     const gamification = getGamificationData();
     const taxa = getTaxaAproveitamento();
+    const desempenho = getLocalDesempenho();
 
     const context = {
-        nome: user?.nome || 'Aluno',
-        nivel: gamification?.lv || 1,
-        taxaAproveitamento: taxa
+        userId: usuarioGlobal.id || null,
+        id_usuario: usuarioGlobal.id || null,
+        nome: usuarioGlobal.nome,
+        nivel: gamification?.lv || usuarioGlobal.lv,
+        taxaAproveitamento: taxa,
+        desempenho
     };
 
     try {

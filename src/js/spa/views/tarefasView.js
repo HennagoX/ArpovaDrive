@@ -11,6 +11,7 @@ import {
     atualizarXpNoLocalStorage,
     updateLevelUI
 } from '../../services/gamificationService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 let currentRouter = null;
@@ -69,6 +70,7 @@ export function setActiveFilter(filterId) {
 }
 
 export async function renderTarefas(forceRefresh = false) {
+    usuarioGlobal.updateUI();
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, 'Tarefas por Conteúdo');
@@ -108,6 +110,7 @@ export async function renderTarefas(forceRefresh = false) {
 
         // Sincroniza barra de XP e nível do topo da tela inicial
         if (payload.usuario) {
+            usuarioGlobal.sync(payload.usuario);
             syncUserGamification(payload.usuario);
         }
 

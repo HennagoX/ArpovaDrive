@@ -1,8 +1,10 @@
 
-import { qs, setText, setHTML } from '../../utils/dom.js';
+import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
 import { getCurrentUser, logout } from '../../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento, syncUserGamification, updateLevelUI } from '../../services/gamificationService.js';
 import { getTarefas } from '../../services/cronogramaService.js';
+import { fetchDesempenho, getLocalDesempenho } from '../../services/desempenhoService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 import { ROUTES } from '../../constants/routes.js';
 
 let initialized = false;
@@ -22,11 +24,12 @@ export function initDashboardView(router) {
 }
 
 export async function renderDashboard() {
+    usuarioGlobal.updateUI();
+
     const user = getCurrentUser();
 
-    if (user && user.nome) {
-        setHTML('#inicio-saudacao', `Olá, ${user.nome}! <span class="material-symbols-outlined icone-inline">waving_hand</span>`);
-        setText('.perfil-nome strong', user.nome);
+    if (usuarioGlobal.nome) {
+        setHTML('#inicio-saudacao', `Olá, ${usuarioGlobal.nome}! <span class="material-symbols-outlined icone-inline">waving_hand</span>`);
     }
 
     if (user && (typeof user.exp === 'number' || user.lv !== undefined)) {
@@ -41,6 +44,19 @@ export async function renderDashboard() {
         const taxa = getTaxaAproveitamento();
         setText('.circulo-interno strong', `${taxa}%`);
     }
+
+    const localDesempenho = getLocalDesempenho();
+    if (localDesempenho) {
+        atualizarCardDesempenhoResumo(localDesempenho);
+    }
+
+    fetchDesempenho(user?.id_usuario, true)
+        .then(remoto => {
+            if (remoto && remoto.resumo) {
+                atualizarCardDesempenhoResumo(remoto);
+            }
+        })
+        .catch(() => {});
 
     try {
         const payload = await getTarefas(undefined, true);
@@ -96,6 +112,29 @@ export async function renderDashboard() {
         }
     } catch (err) {
         console.warn('[DashboardView] Não foi possível carregar missões da API:', err.message);
+    }
+}
+
+function atualizarCardDesempenhoResumo(desempenho) {
+    if (!desempenho || !desempenho.resumo) return;
+    const taxa = Number(desempenho.resumo.taxaAproveitamento ?? 0);
+    const circuloInternoStrong = qs('#card-desempenho-resumo .circulo-interno strong');
+    if (circuloInternoStrong) setText(circuloInternoStrong, `${taxa}%`);
+
+    const circulo = qs('#card-desempenho-resumo .circulo');
+    if (circulo) {
+        const deg = Math.round((Math.max(0, Math.min(100, taxa)) / 100) * 360);
+        const cor = desempenho.resumo.statusCor || (taxa >= 70 ? '#16a34a' : (taxa >= 50 ? '#f59e0b' : '#dc2626'));
+        circulo.style.background = `conic-gradient(${cor} 0deg ${deg}deg, #e5e7eb ${deg}deg 360deg)`;
+    }
+
+    const estatisticas = qsa('#card-desempenho-resumo .estatistica strong');
+    if (estatisticas && estatisticas.length >= 4) {
+        setText(estatisticas[0], String(desempenho.resumo.totalQuestoes ?? 0));
+        setText(estatisticas[1], String(desempenho.resumo.totalAcertos ?? 0));
+        setText(estatisticas[2], String(desempenho.resumo.totalSimulados ?? 0));
+        const xpVal = Number(desempenho.usuario?.exp ?? 0);
+        setText(estatisticas[3], `${xpVal.toLocaleString('pt-BR')} XP`);
     }
 }
 

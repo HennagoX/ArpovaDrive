@@ -15,6 +15,7 @@ import {
 import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
 import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
 import { atualizarXpNoLocalStorage, addXp } from '../../services/gamificationService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -294,6 +295,7 @@ export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
 export function abrirModulos(conteudoId) {
     if (!conteudoId) return;
     activeConteudoId = conteudoId;
+    usuarioGlobal.updateUI();
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');

@@ -12,6 +12,7 @@ import { getModuloAtualCached } from '../../services/moduloService.js';
 import { showToast } from './modulosView.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
 import { limparCacheTarefasFixas } from '../../services/tarefasFixasService.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 let routerRef = null;
@@ -61,6 +62,7 @@ export function initQuestoesResolucaoView(router) {
 }
 
 export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
+    usuarioGlobal.updateUI();
     activeMateriaId = materiaId || 'MeioAmbiente';
 
     let num = 1;

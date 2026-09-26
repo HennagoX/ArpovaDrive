@@ -7,6 +7,7 @@ import {
 } from '../../services/questoesService.js';
 import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { createQuestionModuleCard } from '../../components/questionModuleCard.js';
+import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -35,6 +36,7 @@ export function initQuestoesModulosView(router) {
 
 export function abrirQuestoesModulos(materiaId) {
     if (!materiaId) return;
+    usuarioGlobal.updateUI();
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');
