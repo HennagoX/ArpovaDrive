@@ -19,37 +19,90 @@
     {
       "source": "/inicio",
       "destination": "/src/pages/telaInicial.html"
+    },
+    {
+      "source": "/css/:path*",
+      "destination": "/src/css/:path*"
+    },
+    {
+      "source": "/js/:path*",
+      "destination": "/src/js/:path*"
     }
   ],
   "redirects": [
     {
+      "source": "/src/pages/Login.html",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/Login",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/Login.html",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/cadastro.html",
+      "destination": "/cadastro",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/cadastro",
+      "destination": "/cadastro",
+      "permanent": true
+    },
+    {
+      "source": "/cadastro.html",
+      "destination": "/cadastro",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/telaInicial.html",
+      "destination": "/dashboard",
+      "permanent": true
+    },
+    {
+      "source": "/src/pages/telaInicial",
+      "destination": "/dashboard",
+      "permanent": true
+    },
+    {
+      "source": "/telaInicial.html",
+      "destination": "/dashboard",
+      "permanent": true
+    },
+    {
       "source": "/tutor-ia",
-      "destination": "/src/pages/telaInicial.html#tutor-ia",
+      "destination": "/dashboard#tutor-ia",
       "permanent": false
     },
     {
       "source": "/conteudos",
-      "destination": "/src/pages/telaInicial.html#conteudos",
+      "destination": "/dashboard#conteudos",
       "permanent": false
     },
     {
       "source": "/questoes",
-      "destination": "/src/pages/telaInicial.html#questoes",
+      "destination": "/dashboard#questoes",
       "permanent": false
     },
     {
       "source": "/cronograma",
-      "destination": "/src/pages/telaInicial.html#cronograma",
+      "destination": "/dashboard#cronograma",
       "permanent": false
     },
     {
       "source": "/tarefas",
-      "destination": "/src/pages/telaInicial.html#tarefas",
+      "destination": "/dashboard#tarefas",
       "permanent": false
     },
     {
       "source": "/desempenho",
-      "destination": "/src/pages/telaInicial.html#desempenho",
+      "destination": "/dashboard#desempenho",
       "permanent": false
     }
   ]
