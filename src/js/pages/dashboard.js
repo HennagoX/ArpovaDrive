@@ -33,10 +33,12 @@ ready(() => {
         navKey: 'inicio',
         onEnter: () => {
             document.body.classList.add('no-sidebar');
+            document.body.classList.add('tutor-ia-active');
             initTutorIaView(router);
         },
         onLeave: () => {
             document.body.classList.remove('no-sidebar');
+            document.body.classList.remove('tutor-ia-active');
         }
     });
 
