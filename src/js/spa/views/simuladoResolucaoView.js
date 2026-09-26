@@ -12,7 +12,6 @@ let activeMateriaId = 'Geral';
 let perguntas = [];
 let indexAtual = 0;
 let respostasUsuario = [];
-let marcadasRevisao = new Set();
 let tempoRestanteSegundos = 2400;
 let timerInterval = null;
 let simuladoFinalizado = false;
@@ -153,7 +152,6 @@ export async function abrirSimuladoResolucao(materiaId = 'Geral') {
 
         indexAtual = 0;
         respostasUsuario = Array(perguntas.length).fill(null);
-        marcadasRevisao = new Set();
         tempoRestanteSegundos = 2400;
         simuladoFinalizado = false;
         resultadoFinal = null;
@@ -243,21 +241,14 @@ function renderNavegadorQuestoes() {
     navContainer.innerHTML = perguntas.map((q, idx) => {
         const isAtual = idx === indexAtual;
         const isRespondida = respostasUsuario[idx] !== null;
-        const isMarcada = marcadasRevisao.has(idx);
 
         let statusClass = 'status-vazia';
         if (isRespondida) statusClass = 'status-respondida';
-        if (isMarcada) statusClass = 'status-marcada';
         if (isAtual) statusClass += ' status-atual';
-
-        let iconInner = idx + 1;
-        if (isMarcada) {
-            iconInner = `<i class="fa-solid fa-flag" style="font-size: 10px;"></i>`;
-        }
 
         return `
             <button type="button" class="btn-pilula-questao ${statusClass}" data-indice="${idx}" title="Ir para a Questão ${idx + 1}">
-                ${iconInner}
+                ${idx + 1}
             </button>
         `;
     }).join('');
@@ -289,7 +280,6 @@ function renderQuestaoSimulado() {
 
     const q = perguntas[indexAtual];
     const respSalva = respostasUsuario[indexAtual];
-    const isMarcada = marcadasRevisao.has(indexAtual);
     const respondidasTotal = respostasUsuario.filter(r => r !== null).length;
     const faltam = perguntas.length - respondidasTotal;
 
@@ -301,12 +291,6 @@ function renderQuestaoSimulado() {
                         <i class="fa-solid fa-book-bookmark"></i> ${escapeHtml(q.materia || 'DETRAN')}
                     </span>
                     <span class="simulado-questao-num-tag">Questão ${indexAtual + 1} de ${perguntas.length}</span>
-                </div>
-                <div class="simulado-card-meta-right">
-                    <button type="button" class="btn-marcar-revisao ${isMarcada ? 'marcada' : ''}" id="btn-toggle-revisao">
-                        <i class="fa-solid fa-flag"></i>
-                        <span>${isMarcada ? 'Marcada para Revisão' : 'Marcar para Revisão'}</span>
-                    </button>
                 </div>
             </div>
 
@@ -341,7 +325,7 @@ function renderQuestaoSimulado() {
                 </div>
 
                 <button type="button" class="btn-resolucao-primario" id="btn-simulado-proxima">
-                    ${indexAtual === perguntas.length - 1 ? 'Revisar / Concluir' : 'Próxima'} <i class="fa-solid fa-arrow-right"></i>
+                    ${indexAtual === perguntas.length - 1 ? 'Concluir' : 'Próxima'} <i class="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         </article>
@@ -354,19 +338,6 @@ function renderQuestaoSimulado() {
             selecionarResposta(idxOpcao);
         });
     });
-
-    const btnToggleRevisao = container.querySelector('#btn-toggle-revisao');
-    if (btnToggleRevisao) {
-        btnToggleRevisao.addEventListener('click', () => {
-            if (marcadasRevisao.has(indexAtual)) {
-                marcadasRevisao.delete(indexAtual);
-            } else {
-                marcadasRevisao.add(indexAtual);
-            }
-            atualizarHeaderSimulado();
-            renderQuestaoSimulado();
-        });
-    }
 
     const btnAnt = container.querySelector('#btn-simulado-anterior');
     if (btnAnt) {

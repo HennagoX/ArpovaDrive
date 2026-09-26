@@ -1396,10 +1396,6 @@
     background: #0284c7;
 }
 
-.legenda-item .dot.marcada {
-    background: #eab308;
-}
-
 .simulado-grade-pills {
     display: grid;
     grid-template-columns: repeat(15, 1fr);
@@ -1445,12 +1441,6 @@
     border-color: #7dd3fc;
 }
 
-.btn-pilula-questao.status-marcada {
-    background: #fef9c3;
-    color: #a16207;
-    border-color: #fde047;
-}
-
 .btn-pilula-questao.status-atual {
     outline: 2px solid #0284c7;
     outline-offset: 1px;
@@ -1494,33 +1484,6 @@
     font-size: 13px;
     font-weight: 600;
     color: #64748b;
-}
-
-.btn-marcar-revisao {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background: #f8fafc;
-    color: #475569;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.btn-marcar-revisao:hover {
-    background: #fef9c3;
-    border-color: #fde047;
-    color: #a16207;
-}
-
-.btn-marcar-revisao.marcada {
-    background: #fef08a;
-    border-color: #eab308;
-    color: #854d0e;
 }
 
 .simulado-enunciado {
