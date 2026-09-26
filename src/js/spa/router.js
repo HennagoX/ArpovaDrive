@@ -70,7 +70,7 @@ class SpaRouter {
         this.currentParams = params;
 
         if (typeof document !== 'undefined' && document.body) {
-            if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf') {
+            if (routeName === 'modulos' || routeName === 'questoes-modulos' || routeName === 'leitura-pdf' || routeName === 'questoes-resolucao' || routeName === 'tutor-ia') {
                 document.body.classList.add('no-sidebar');
             } else {
                 document.body.classList.remove('no-sidebar');
@@ -113,6 +113,9 @@ class SpaRouter {
         if (routeName === 'questoes-modulos' && params.materiaId) {
             return `#questoes-materia=${encodeURIComponent(params.materiaId)}`;
         }
+        if (routeName === 'tutor-ia') {
+            return '#tutor-ia';
+        }
         if (routeName === 'conteudos') {
             return '#conteudos';
         }
@@ -153,6 +156,11 @@ class SpaRouter {
         if (questoesMatch && questoesMatch[1]) {
             const materiaId = decodeURIComponent(questoesMatch[1]);
             this.navigateTo('questoes-modulos', { materiaId }, pushState);
+            return;
+        }
+
+        if (hash === '#tutor-ia' || hash.startsWith('#tutor-ia')) {
+            this.navigateTo('tutor-ia', {}, pushState);
             return;
         }
 

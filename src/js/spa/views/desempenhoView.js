@@ -10,11 +10,11 @@ export function initDesempenhoView(router) {
     if (initialized) return;
     initialized = true;
 
-    const btnAjustarCronograma = qs('#view-desempenho .ia-botao');
-    if (btnAjustarCronograma && router) {
-        btnAjustarCronograma.addEventListener('click', (e) => {
+    const btnIa = qs('#view-desempenho .ia-botao');
+    if (btnIa && router) {
+        btnIa.addEventListener('click', (e) => {
             e.preventDefault();
-            router.navigateTo('cronograma');
+            router.navigateTo('tutor-ia');
         });
     }
 }

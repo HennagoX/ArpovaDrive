@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/desempenho.css">
     <link rel="stylesheet" href="../css/questoes.css">
     <link rel="stylesheet" href="../css/tarefas.css">
+    <link rel="stylesheet" href="../css/tutorIa.css">
     <style>
         * {
             margin: 0;
@@ -716,6 +717,17 @@
                     <p>Missões fixas por conteúdo com recompensas altas de XP permanente.</p>
                 </a>
             </section>
+
+            <div class="ia-card ia-card-inicio" id="card-tutor-ia-inicio">
+                <div class="ia-header">
+                    <span class="material-symbols-outlined">auto_awesome</span>
+                    Dicas e Tutor IA
+                </div>
+                <p>Tire dúvidas sobre matérias do DETRAN, receba dicas de estudo personalizadas e saiba como progredir mais rápido no AprovaDrive.</p>
+                <a href="#tutor-ia" class="ia-botao" data-nav="tutor-ia" id="btn-abrir-tutor-ia">
+                    <span class="material-symbols-outlined">chat</span> Conversar com o Tutor IA
+                </a>
+            </div>
 
             <section class="inferior">
                 <div class="missao">
@@ -1453,8 +1465,8 @@
                             Diagnóstico do Tutor IA
                         </div>
                         <p>Detectamos que seu índice em <strong>Mecânica Básica</strong> (45%) e <strong>Primeiros Socorros</strong> (60%) pode comprometer seu resultado na prova oficial. Sugerimos priorizar essas matérias no seu cronograma.</p>
-                        <a href="#cronograma" class="ia-botao" data-nav="cronograma">
-                            <span class="material-symbols-outlined">calendar_month</span> Ajustar Cronograma
+                        <a href="#tutor-ia" class="ia-botao" data-nav="tutor-ia">
+                            <span class="material-symbols-outlined">chat</span> Dicas com o Tutor IA
                         </a>
                     </div>
 
@@ -1836,6 +1848,72 @@
             </div>
 
             <div id="resolucao-conteudo-ativo"></div>
+        </section>
+
+        <section id="view-tutor-ia" class="spa-view" style="display: none;">
+            <div class="tutor-ia-container">
+                <header class="tutor-ia-header">
+                    <button type="button" class="btn-voltar-tutor" id="btn-voltar-tutor-ia" aria-label="Voltar para a página anterior">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        <span>Voltar</span>
+                    </button>
+                    <div class="tutor-ia-header-info">
+                        <div class="tutor-ia-avatar">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                        </div>
+                        <div>
+                            <div class="tutor-ia-nome-status">
+                                <h2>Tutor IA AprovaDrive</h2>
+                                <span class="tutor-ia-badge-online"><span class="badge-dot"></span> Online</span>
+                            </div>
+                            <p>Assistente virtual para seus estudos da prova do DETRAN</p>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="tutor-ia-chat-body" id="tutor-ia-chat-messages">
+                    <div class="chat-msg chat-msg-bot">
+                        <div class="chat-avatar">
+                            <span class="material-symbols-outlined">auto_awesome</span>
+                        </div>
+                        <div class="chat-bubble">
+                            <p>Olá! Eu sou o <strong>Tutor IA do AprovaDrive</strong>. 🚗📚</p>
+                            <p>Estou aqui para tirar dúvidas sobre conteúdos da prova do DETRAN, dar dicas de estudo, explicar regras de trânsito ou te ajudar a entender seu progresso na plataforma. Como posso te ajudar hoje?</p>
+                            <div class="tutor-ia-sugestoes">
+                                <button type="button" class="sugestao-chip" data-msg="Quais são as matérias mais cobradas na prova do DETRAN?">
+                                    🎯 Matérias mais cobradas
+                                </button>
+                                <button type="button" class="sugestao-chip" data-msg="Como funciona o sistema de XP e tarefas fixas?">
+                                    ⭐ XP e Tarefas
+                                </button>
+                                <button type="button" class="sugestao-chip" data-msg="Me dê 3 dicas práticas para passar de primeira na prova teórica.">
+                                    💡 Dicas para passar de primeira
+                                </button>
+                                <button type="button" class="sugestao-chip" data-msg="Qual a diferença entre parada e estacionamento segundo o CTB?">
+                                    🚦 Parada x Estacionamento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <footer class="tutor-ia-footer">
+                    <form id="tutor-ia-form" class="tutor-ia-form">
+                        <input 
+                            type="text" 
+                            id="tutor-ia-input" 
+                            class="tutor-ia-input" 
+                            placeholder="Digite sua dúvida sobre o DETRAN ou o AprovaDrive..." 
+                            autocomplete="off"
+                            maxlength="500"
+                        />
+                        <button type="submit" id="tutor-ia-send-btn" class="tutor-ia-send-btn" aria-label="Enviar mensagem">
+                            <i class="fa-solid fa-paper-plane"></i>
+                        </button>
+                    </form>
+                    <span class="tutor-ia-disclaimer">O Tutor IA é treinado exclusivamente para tirar dúvidas sobre o DETRAN e o AprovaDrive.</span>
+                </footer>
+            </div>
         </section>
 
         <div id="toast-container" class="toast-container" aria-live="polite"></div>

@@ -60,5 +60,9 @@ export const ENDPOINTS = {
     PERGUNTAS: (materia, bateria) => `${API_URL}/questoes/perguntas?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}`,
     CONCLUIR_BATERIA: `${API_URL}/questoes/concluirBateria`,
     VERIFICAR_ACESSO: (materia, bateria, userId) => `${API_URL}/questoes/verificarAcesso?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`
+  },
+  AI: {
+    CHAT: `${API_URL}/ai/chat`
   }
 };
+

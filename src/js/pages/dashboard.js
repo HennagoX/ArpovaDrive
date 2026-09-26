@@ -11,6 +11,7 @@ import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
 import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
 import { initQuestoesResolucaoView, abrirQuestoesResolucao } from '../spa/views/questoesResolucaoView.js';
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
+import { initTutorIaView } from '../spa/views/tutorIaView.js';
 
 ready(() => {
     const user = getCurrentUser();
@@ -24,6 +25,18 @@ ready(() => {
         navKey: 'inicio',
         onEnter: () => {
             renderDashboard();
+        }
+    });
+
+    router.register('tutor-ia', {
+        viewSelector: '#view-tutor-ia',
+        navKey: 'inicio',
+        onEnter: () => {
+            document.body.classList.add('no-sidebar');
+            initTutorIaView(router);
+        },
+        onLeave: () => {
+            document.body.classList.remove('no-sidebar');
         }
     });
 
@@ -145,6 +158,7 @@ ready(() => {
     initCronogramaView(router);
     initTarefasView(router);
     initDesempenhoView(router);
+    initTutorIaView(router);
 
     router.init();
 });
