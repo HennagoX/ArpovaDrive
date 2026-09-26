@@ -21,11 +21,11 @@ export default defineConfig({
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
           const url = (req.url || '').split('?')[0].split('#')[0];
-          if (url === '/login') {
-            req.url = req.url.replace('/login', '/src/pages/Login.html');
-          } else if (url === '/cadastro') {
-            req.url = req.url.replace('/cadastro', '/src/pages/cadastro.html');
-          } else if (url === '/dashboard' || url === '/inicio' || url === '/tutor-ia' || url === '/conteudos' || url === '/questoes' || url === '/cronograma' || url === '/tarefas' || url === '/desempenho') {
+          if (url === '/login' || url === '/Login.html') {
+            req.url = req.url.replace(url, '/src/pages/Login.html');
+          } else if (url === '/cadastro' || url === '/cadastro.html') {
+            req.url = req.url.replace(url, '/src/pages/cadastro.html');
+          } else if (url === '/dashboard' || url === '/inicio' || url === '/tutor-ia' || url === '/conteudos' || url === '/questoes' || url === '/cronograma' || url === '/tarefas' || url === '/desempenho' || url === '/telaInicial.html') {
             req.url = req.url.replace(url, '/src/pages/telaInicial.html');
           }
           next();

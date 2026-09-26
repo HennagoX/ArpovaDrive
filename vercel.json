@@ -21,6 +21,21 @@
       "source": "/index.html",
       "destination": "/",
       "permanent": true
+    },
+    {
+      "source": "/Login.html",
+      "destination": "/login",
+      "permanent": true
+    },
+    {
+      "source": "/cadastro.html",
+      "destination": "/cadastro",
+      "permanent": true
+    },
+    {
+      "source": "/telaInicial.html",
+      "destination": "/dashboard",
+      "permanent": true
     }
   ],
   "rewrites": [

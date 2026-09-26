@@ -3,6 +3,9 @@ const isLocal = typeof window !== 'undefined' && (
   window.location.hostname === '127.0.0.1' ||
   window.location.hostname === '' ||
   window.location.hostname === '0.0.0.0' ||
+  window.location.hostname.startsWith('192.168.') ||
+  window.location.hostname.startsWith('10.') ||
+  window.location.hostname.endsWith('.local') ||
   window.location.protocol === 'file:'
 );
 
@@ -10,15 +13,26 @@ export const API_URL = isLocal
   ? 'http://localhost:3001'
   : 'https://arpova-drive-api.vercel.app';
 
-export const ROUTES = {
-  HOME: '/',
-  LOGIN: '/login',
-  CADASTRO: '/cadastro',
-  DASHBOARD: '/dashboard',
-  CRONOGRAMA: '/dashboard#cronograma',
-  DESEMPENHO: '/dashboard#desempenho',
-  QUESTOES: '/dashboard#questoes'
-};
+export const ROUTES = isLocal
+  ? {
+      HOME: '/index.html',
+      LOGIN: '/src/pages/Login.html',
+      CADASTRO: '/src/pages/cadastro.html',
+      DASHBOARD: '/src/pages/telaInicial.html',
+      CRONOGRAMA: '/src/pages/cronograma.html',
+      DESEMPENHO: '/src/pages/desempenho.html',
+      QUESTOES: '/src/pages/questoes.html'
+    }
+  : {
+      HOME: '/',
+      LOGIN: '/login',
+      CADASTRO: '/cadastro',
+      DASHBOARD: '/dashboard',
+      CRONOGRAMA: '/dashboard#cronograma',
+      DESEMPENHO: '/dashboard#desempenho',
+      QUESTOES: '/dashboard#questoes'
+    };
+
 
 export const ENDPOINTS = {
   AUTH: {
