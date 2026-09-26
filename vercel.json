@@ -1,25 +1,23 @@
 {
-  "redirects": [
+  "rewrites": [
     {
       "source": "/login",
-      "destination": "/src/pages/Login.html",
-      "permanent": false
+      "destination": "/src/pages/Login.html"
     },
     {
       "source": "/cadastro",
-      "destination": "/src/pages/cadastro.html",
-      "permanent": false
+      "destination": "/src/pages/cadastro.html"
     },
     {
       "source": "/dashboard",
-      "destination": "/src/pages/telaInicial.html",
-      "permanent": false
+      "destination": "/src/pages/telaInicial.html"
     },
     {
       "source": "/inicio",
-      "destination": "/src/pages/telaInicial.html",
-      "permanent": false
-    },
+      "destination": "/src/pages/telaInicial.html"
+    }
+  ],
+  "redirects": [
     {
       "source": "/tutor-ia",
       "destination": "/src/pages/telaInicial.html#tutor-ia",
