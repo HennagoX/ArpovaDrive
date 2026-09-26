@@ -31,7 +31,7 @@ export function createTaskCard(task, options = {}) {
     if (tituloLower.includes('quiz') || tituloLower.includes('simulado') || tituloLower.includes('questões') || tituloLower.includes('questoes')) {
         tagClass = 'tag-quiz';
         tagLabel = 'Prática';
-    } else if (tituloLower.includes('placas') || tituloLower.includes('revisão') || tituloLower.includes('revisao') || tituloLower.includes('flashcard')) {
+    } else if (tituloLower.includes('placas') || tituloLower.includes('revisão') || tituloLower.includes('revisao')) {
         tagClass = 'tag-review';
         tagLabel = 'Fixação';
     }
