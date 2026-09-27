@@ -440,3 +440,37 @@ export async function reiniciarTarefa(taskId, userId) {
 
     return data;
 }
+
+export async function regenerarCronogramaComIA(userId) {
+    const usuarioId = getUsuarioAtivoId(userId);
+    const mockDia = getMockDia();
+
+    const url = ENDPOINTS.TASK.REGENERAR_IA || `${API_URL}/task/regenerar-ia`;
+
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...getAuthHeaders(usuarioId),
+            ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+        },
+        body: JSON.stringify({
+            id_usuario: usuarioId,
+            simularDia: mockDia || undefined
+        })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(getHttpErrorMessage(response.status, data?.error, 'Erro ao otimizar missões com IA.'));
+    }
+
+    if (data.payload) {
+        setLocalItem(STORAGE_KEYS.CRONOGRAMA, data.payload);
+        setCachedTarefas(usuarioId, data.payload);
+    }
+
+    return data;
+}
+

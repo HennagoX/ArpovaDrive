@@ -23,10 +23,12 @@ import { showToast } from './modulosView.js';
 import { attachButtonCooldown } from '../../utils/debounce.js';
 
 let initialized = false;
+let currentRouter = null;
 let diaAtual = 1;
 const nomesDias = getNomesDias();
 
 export function initCronogramaView(router) {
+    currentRouter = router;
     if (initialized) return;
     initialized = true;
 
@@ -239,6 +241,31 @@ function renderizarTarefasNasDivs(payload) {
                                 btnEl.innerHTML = originalHtml;
                             }
                         }
+                    },
+
+                    onPractice: (t) => {
+                        if (currentRouter) {
+                            const mat = t.linkAcao?.materiaId || t.parametros_validacao?.materia || 'CodigoTransito';
+                            const bat = t.linkAcao?.bateriaNumero || t.parametros_validacao?.bateria || 1;
+                            if (t.tipo_validacao === 'acertos') {
+                                currentRouter.navigateTo('questoes-modulos', { materiaId: mat });
+                            } else {
+                                currentRouter.navigateTo('questoes-resolucao', { materiaId: mat, bateriaNumero: bat });
+                            }
+                        }
+                    },
+
+                    onSimulado: (t) => {
+                        if (currentRouter) {
+                            currentRouter.navigateTo('simulado');
+                        }
+                    },
+
+                    onStudy: (t) => {
+                        if (currentRouter) {
+                            const mat = t.linkAcao?.conteudoId || t.parametros_validacao?.materia || 'CodigoTransito';
+                            currentRouter.navigateTo('modulos', { conteudoId: mat });
+                        }
                     }
                 });
 
@@ -289,6 +316,7 @@ function consumirTaskAtual(taskAtual, diaConcluido = false) {
 
 function atualizarAbas(payload, diaAtualNum) {
     const diasData = payload.dias || {};
+    const diaHojeValido = diaAtualNum === 0 ? 7 : diaAtualNum;
 
     for (let d = 1; d <= 6; d++) {
         const tab = qs(`${SELECTORS.CRONOGRAMA_TAB_PREFIX}${d}`);
@@ -297,7 +325,10 @@ function atualizarAbas(payload, diaAtualNum) {
         const statusEl = tab.querySelector('.day-status');
         if (!statusEl) continue;
 
+        tab.classList.remove('tab-expired', 'tab-concluded', 'tab-today');
+
         if (d === diaAtualNum) {
+            tab.classList.add('tab-today');
             if (payload.diaConcluido) {
                 statusEl.textContent = '✔ Concluído';
                 statusEl.style.color = '#16a34a';
@@ -305,12 +336,19 @@ function atualizarAbas(payload, diaAtualNum) {
                 statusEl.textContent = '• Hoje';
                 statusEl.style.color = '#2563eb';
             }
-        } else if (d < diaAtualNum) {
+        } else if (d < diaHojeValido) {
             const chave = getChaveDia(d);
             const tarefas = diasData[chave] || [];
             const todasConcluidas = tarefas.length > 0 && tarefas.every(t => t.concluida || t.status === 'done');
-            statusEl.textContent = todasConcluidas ? '✔ Concluído' : 'Anterior';
-            statusEl.style.color = '#64748b';
+            if (todasConcluidas) {
+                tab.classList.add('tab-concluded');
+                statusEl.textContent = '✔ Concluído';
+                statusEl.style.color = '#16a34a';
+            } else {
+                tab.classList.add('tab-expired');
+                statusEl.textContent = '✖ Expirado';
+                statusEl.style.color = '#dc2626';
+            }
         } else {
             statusEl.textContent = 'Bloqueado';
             statusEl.style.color = '#94a3b8';

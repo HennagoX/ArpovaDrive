@@ -12,6 +12,7 @@ import { getModuloAtualCached } from '../../services/moduloService.js';
 import { showToast } from './modulosView.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
 import { limparCacheTarefasFixas } from '../../services/tarefasFixasService.js';
+import { clearCachedTarefas } from '../../services/cronogramaService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
@@ -334,9 +335,10 @@ async function renderResultadoFinal() {
         }
     } catch {}
 
-    // Invalida cache de tarefas fixas para refletir o aproveitamento imediatamente
+    // Invalida cache de tarefas fixas e do cronograma para refletir o aproveitamento imediatamente
     try {
         limparCacheTarefasFixas();
+        clearCachedTarefas();
     } catch {}
 
     let tituloResultado = aprovado ? 'Excelente Desempenho!' : 'Bom Treinamento!';

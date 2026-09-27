@@ -38,7 +38,9 @@ export const ENDPOINTS = {
     CONCLUIR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/concluir`,
     PAUSAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/pausar`,
     REINICIAR: (id) => `${API_URL}/task/${encodeURIComponent(id)}/reiniciar`,
-    RESET_SCHEDULE: `${API_URL}/task/reset-schedule`
+    RESET_SCHEDULE: `${API_URL}/task/reset-schedule`,
+    REGENERAR_IA: `${API_URL}/task/regenerar-ia`,
+    SUGERIR_IA: `${API_URL}/task/sugerir-ia`
   },
   TAREFAS_FIXAS: {
     GET_TASKS: (userId) => `${API_URL}/task/fixas${userId ? `?id=${encodeURIComponent(userId)}` : ''}`,

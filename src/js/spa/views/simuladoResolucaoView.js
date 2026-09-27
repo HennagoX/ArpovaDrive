@@ -5,6 +5,7 @@ import {
 } from '../../services/questoesService.js';
 import { atualizarXpNoLocalStorage } from '../../services/gamificationService.js';
 import { limparCacheTarefasFixas } from '../../services/tarefasFixasService.js';
+import { clearCachedTarefas } from '../../services/cronogramaService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 
 let initialized = false;
@@ -473,6 +474,7 @@ async function finalizarSimulado(forcarPorTempo = false) {
 
     try {
         limparCacheTarefasFixas();
+        clearCachedTarefas();
     } catch {}
 
     renderResultadoSimuladoFinal();

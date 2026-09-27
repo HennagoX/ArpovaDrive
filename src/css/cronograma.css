@@ -342,6 +342,12 @@ body.cronograma-standalone {
   opacity: 0.9;
 }
 
+.schedule-item.claimable {
+  border: 2px solid #22c55e;
+  border-left: 6px solid #16a34a;
+  background: #f0fdf4;
+}
+
 .schedule-item.current {
   border: 2px solid var(--primary-blue);
   border-left: 6px solid var(--primary-blue);
@@ -356,6 +362,24 @@ body.cronograma-standalone {
 
 .schedule-item.pending {
   border-left: 6px solid var(--text-muted-soft);
+}
+
+.schedule-item.locked {
+  border-left: 6px solid #cbd5e1;
+  background: #f8fafc;
+  opacity: 0.85;
+}
+
+.schedule-item.expired {
+  border-left: 6px solid #ef4444;
+  background: #fdfbfb;
+  opacity: 0.82;
+}
+
+.schedule-item.expired .task-title {
+  color: #64748b;
+  text-decoration: line-through;
+  text-decoration-color: #fca5a5;
 }
 
 .time-box {
@@ -381,13 +405,20 @@ body.cronograma-standalone {
   flex: 1;
 }
 
+.task-tags-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
 .task-tag {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   padding: 3px 8px;
   border-radius: var(--radius-sm);
-  margin-bottom: 6px;
   text-transform: uppercase;
 }
 
@@ -404,6 +435,77 @@ body.cronograma-standalone {
 .tag-review {
   background: #f3e8ff;
   color: #6b21a8;
+}
+
+.tag-simulado {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+.task-req-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.task-badge-ia {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #f3e8ff 0%, #ede9fe 100%);
+  color: #7c3aed;
+  border: 1px solid #ddd6fe;
+  padding: 2px 7px;
+  border-radius: 12px;
+}
+
+.task-badge-ia i {
+  color: #a855f7;
+  font-size: 0.75rem;
+}
+
+.task-validation-hint {
+  margin-top: 8px;
+  font-size: 0.8rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.task-validation-hint.hint-sucesso {
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.task-validation-hint.hint-pendente {
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fef3c7;
+}
+
+.task-validation-hint.hint-expirada {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fee2e2;
+}
+
+.task-validation-hint.hint-bloqueada {
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
 }
 
 .task-title {
@@ -460,6 +562,78 @@ body.cronograma-standalone {
   background: var(--brand-green-hover);
 }
 
+.btn-claimable-glow {
+  background: #16a34a !important;
+  box-shadow: 0 0 10px rgba(22, 163, 74, 0.45);
+  animation: pulse-claim 2s infinite ease-in-out;
+}
+
+@keyframes pulse-claim {
+  0%, 100% {
+    box-shadow: 0 0 6px rgba(22, 163, 74, 0.4);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 14px rgba(22, 163, 74, 0.7);
+    transform: scale(1.02);
+  }
+}
+
+.task-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action.btn-praticar {
+  background: var(--primary-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action.btn-praticar:hover {
+  background: var(--primary-blue-hover);
+}
+
+.btn-action.btn-simulado {
+  background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action.btn-simulado:hover {
+  background: linear-gradient(135deg, #be123c 0%, #9f1239 100%);
+}
+
+.btn-action.btn-estudar {
+  background: #059669;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.btn-action.btn-estudar:hover {
+  background: #047857;
+}
+
+.btn-action.btn-check-concluir {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 1px solid #cbd5e1;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-action.btn-check-concluir:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  border-color: #94a3b8;
+}
+
 .btn-action.btn-bloqueado {
   background: #f1f5f9;
   color: #64748b;
@@ -475,6 +649,28 @@ body.cronograma-standalone {
   background: #e2e8f0;
   color: #334155;
   border-color: #94a3b8;
+}
+
+.btn-action.btn-expirado {
+  background: #fee2e2 !important;
+  color: #b91c1c !important;
+  border: 1px solid #fecaca !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: not-allowed !important;
+  opacity: 0.88 !important;
+  pointer-events: none;
+}
+
+.day-tab.tab-expired {
+  border-color: #fee2e2;
+}
+
+.day-tab.tab-expired .day-status {
+  color: #dc2626 !important;
+  font-weight: 700;
 }
 
 .btn-action:disabled {
