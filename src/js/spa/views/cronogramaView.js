@@ -103,7 +103,7 @@ async function carregarCronograma(userId, forceRefresh = false) {
         if (loadingEl) loadingEl.style.display = 'none';
         if (errorEl) errorEl.style.display = 'none';
 
-        diaAtual = cached.diaSemanaAtual || diaAtual;
+        diaAtual = cached.diaSemanaAtual ?? diaAtual;
         renderizarTarefasNasDivs(cached);
         consumirTaskAtual(cached.taskAtual, cached.diaConcluido);
         atualizarAbas(cached, diaAtual);
@@ -140,7 +140,7 @@ async function carregarCronograma(userId, forceRefresh = false) {
         if (loadingEl) loadingEl.style.display = 'none';
         if (errorEl) errorEl.style.display = 'none';
 
-        diaAtual = payload.diaSemanaAtual || diaAtual;
+        diaAtual = payload.diaSemanaAtual ?? diaAtual;
         renderizarTarefasNasDivs(payload);
         consumirTaskAtual(payload.taskAtual, payload.diaConcluido);
         atualizarAbas(payload, diaAtual);
@@ -301,6 +301,7 @@ function consumirTaskAtual(taskAtual, diaConcluido = false) {
     if (!banner) return;
 
     if (diaConcluido || !taskAtual) {
+        console.log(taskAtual);
         banner.style.display = 'flex';
         banner.classList.add('completed-banner');
         if (tituloEl) {
@@ -334,7 +335,7 @@ function atualizarAbas(payload, diaAtualNum) {
     const diasData = payload.dias || {};
     const diaHojeValido = diaAtualNum === 0 ? 7 : diaAtualNum;
 
-    for (let d = 1; d <= 6; d++) {
+    for (let d = 1; d <= 6 ; d++) {
         const tab = qs(`${SELECTORS.CRONOGRAMA_TAB_PREFIX}${d}`);
         if (!tab) continue;
 
@@ -344,6 +345,7 @@ function atualizarAbas(payload, diaAtualNum) {
         tab.classList.remove('tab-expired', 'tab-concluded', 'tab-today');
 
         if (d === diaAtualNum) {
+            console.log(diaAtualNum);
             tab.classList.add('tab-today');
             if (payload.diaConcluido) {
                 statusEl.textContent = '✔ Concluído';
