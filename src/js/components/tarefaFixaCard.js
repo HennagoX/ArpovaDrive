@@ -172,7 +172,7 @@ export function createTarefaFixaCard(task, options = {}) {
                 <span>+${xpAmount} XP</span>
             </div>
             <div class="tarefa-action-container">
-                <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                <div class="tarefa-actions-row" style="display: flex; gap: 10px; align-items: center; justify-content: flex-end; flex-wrap: nowrap; min-width: max-content;">
                     ${actionHtml}
                     ${task.is_custom && typeof options.onDelete === 'function' ? `
                         <button type="button" class="btn-tarefa-admin-delete" title="Excluir tarefa fixa criada por administrador">
