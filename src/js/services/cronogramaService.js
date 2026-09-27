@@ -135,36 +135,48 @@ export function setUsuarioAtivoId(userId) {
     }
 }
 
-export async function verificarPermissaoAdmin(userId) {
-    const usuarioId = getUsuarioAtivoId(userId);
+export async function verificarPermissaoAdmin(userId = null) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    if (!authUser) return false;
 
-    if (authUser && (authUser.id === usuarioId || authUser.id_usuario === usuarioId) && (authUser.is_admin || authUser.isAdmin)) {
+    if (authUser.is_admin || authUser.isAdmin) {
         return true;
     }
 
+    const authId = authUser.id_usuario || authUser.id || authUser.userId;
+    if (!authId) return false;
+
     try {
-        const response = await fetch(`${ENDPOINTS.TASK.ADMIN_CHECK}?id=${encodeURIComponent(usuarioId)}`, {
+        const response = await fetch(`${ENDPOINTS.TASK.ADMIN_CHECK}?id=${encodeURIComponent(authId)}`, {
             headers: {
                 'Accept': 'application/json',
-                'X-User-Id': usuarioId
+                'X-User-Id': authId,
+                'X-Admin-Id': authId
             }
         });
         if (!response.ok) return false;
         const data = await response.json();
-        return Boolean(data.isAdmin);
-    } catch {
+        if (data && data.isAdmin) {
+            authUser.is_admin = true;
+            authUser.isAdmin = true;
+            setLocalItem(STORAGE_KEYS.AUTH_USER, authUser);
+            return true;
+        }
         return false;
+    } catch {
+        return Boolean(authUser.is_admin || authUser.isAdmin);
     }
 }
 
-export async function getUsuariosCadastrados(adminId) {
-    const requester = getUsuarioAtivoId(adminId);
+export async function getUsuariosCadastrados(adminId = null) {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const requester = adminId || authUser?.id_usuario || authUser?.id || authUser?.userId;
     try {
         const response = await fetch(ENDPOINTS.TASK.USUARIOS, {
             headers: {
                 'Accept': 'application/json',
-                'X-User-Id': requester
+                'X-User-Id': requester,
+                'X-Admin-Id': requester
             }
         });
         if (!response.ok) {
@@ -176,6 +188,35 @@ export async function getUsuariosCadastrados(adminId) {
         console.warn('Aviso ao buscar usuários cadastrados via API:', err.message);
         return [];
     }
+}
+
+export async function criarTarefaAdmin(dados) {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+    const targetUserId = dados.id_usuario || dados.userId || getUsuarioAtivoId();
+
+    const response = await fetch(`${API_URL}/task/admin/criar-tarefa`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-User-Id': targetUserId,
+            'X-Admin-Id': authId,
+            'X-Requester-Id': authId
+        },
+        body: JSON.stringify({
+            ...dados,
+            id_usuario: targetUserId
+        })
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao criar missão.');
+    }
+
+    clearCachedTarefas();
+    return resData;
 }
 
 function getAuthHeaders(targetUserId) {
