@@ -60,22 +60,24 @@
    ========================================================= */
 :root[data-theme="dark"],
 body[data-theme="dark"] {
-  /* Vite Colors & Gradients */
-  --vite-purple: #bd34fe;
-  --vite-purple-hover: #a82de0;
-  --vite-purple-soft: rgba(189, 52, 254, 0.16);
-  --vite-cyan: #41d1ff;
-  --vite-cyan-soft: rgba(65, 209, 255, 0.16);
-  --vite-gradient: linear-gradient(135deg, #bd34fe 0%, #41d1ff 100%);
-  --vite-gradient-hover: linear-gradient(135deg, #c74dfd 0%, #5fe0ff 100%);
+  /* Paleta Dark Blue & Medium Blue com Gradientes Fluidos */
+  --blue-deep: #050d1a;
+  --blue-dark: #0a1b38;
+  --blue-medium: #0752a0;
+  --blue-vibrant: #0284c7;
+  --blue-cyan: #38bdf8;
+  --blue-soft: rgba(56, 189, 248, 0.16);
 
-  /* Primary Blue adaptado para Vite Dark */
-  --primary-blue: #a855f7;
-  --primary-blue-hover: #bd34fe;
-  --primary-blue-soft: rgba(189, 52, 254, 0.16);
-  --gradient-start: #bd34fe;
-  --gradient-mid: #797ffc;
-  --gradient-end: #41d1ff;
+  /* Primary Blue restaurado ao tema original de azul escuro e médio */
+  --primary-blue: #0752a0;
+  --primary-blue-hover: #0284c7;
+  --primary-blue-soft: rgba(56, 189, 248, 0.16);
+  --gradient-start: #061021;
+  --gradient-mid: #0752a0;
+  --gradient-end: #0284c7;
+
+  /* Textura de Granulado SVG */
+  --bg-grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E");
 
   /* Brand Accents Adaptados para Dark Mode */
   --brand-green: #10b981;
@@ -85,39 +87,41 @@ body[data-theme="dark"] {
   --brand-yellow-hover: #f59e0b;
   --google-blue: #38bdf8;
 
-  /* Superfícies Vite Dark com Efeito Vidro Escuro (Glassmorphism) */
-  --bg-page: #0f1015;                          /* Fundo preto profundo */
+  /* Superfícies Dark Glass com Efeito Vidro Escuro (Glassmorphism) */
+  --bg-page: #0c0e15;                          /* Fundo preto profundo */
   --bg-card: rgba(20, 21, 29, 0.74);           /* Preto estilizado meio vidro */
   --bg-card-hover: rgba(28, 30, 42, 0.85);     /* Vidro elevado no hover */
   --bg-light: rgba(255, 255, 255, 0.04);       /* Superfície interna sutil */
   --bg-subtle: #141418;                        /* Sidebar / fundo rebaixado */
 
-  /* Tipografia Vite com Alto Contraste */
+  /* Tipografia com Alto Contraste */
   --text-dark: #f8fafc;
   --text-body: #ebebef;
   --text-muted: #94a3b8;
   --text-muted-soft: #8e8e93;
   --text-nav: #a1a1aa;
 
-  /* Bordas Vite Dark e Brilhos Especulares de Vidro */
+  /* Bordas e Brilhos Especulares de Vidro */
   --border-input: rgba(255, 255, 255, 0.12);
   --border-divider: rgba(255, 255, 255, 0.08);
   --border-divider-soft: rgba(255, 255, 255, 0.05);
   --border-card: rgba(255, 255, 255, 0.09);
 
-  /* Sombras e Reflexos Glassmorphism */
+  /* Sombras e Reflexos Glassmorphism com Halo Azul */
   --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-  --shadow-card-strong: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+  --shadow-card-strong: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
 /* =========================================================
-   ESTILOS DE ELEMENTOS NO MODO VITE DARK
+   ESTILOS DE ELEMENTOS NO MODO DARK
    ========================================================= */
 [data-theme="dark"] body {
-  background-color: #0f1015;
+  background-color: #0c0e15;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(189, 52, 254, 0.14), transparent 70%),
-    radial-gradient(ellipse 60% 40% at 100% 25%, rgba(65, 209, 255, 0.08), transparent 60%);
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(7, 82, 160, 0.22), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 25%, rgba(56, 189, 248, 0.1), transparent 60%),
+    radial-gradient(ellipse 60% 40% at 0% 75%, rgba(14, 45, 92, 0.2), transparent 60%);
   background-attachment: fixed;
   color: var(--text-body);
 }
@@ -226,28 +230,29 @@ body[data-theme="dark"] {
 [data-theme="dark"] .gabarito-item-card:hover,
 [data-theme="dark"] [class*="-card"]:hover {
   background: rgba(28, 30, 42, 0.85) !important;
-  border-color: rgba(65, 209, 255, 0.4) !important;
-  box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
   transform: translateY(-4px);
 }
 
-/* Banner de Progresso: Feixes Radiantes e Horizonte Cósmico Estilo Vite */
+/* Banner de Progresso: Gradiente Transicionando Azul Escuro & Médio com Textura Granulada */
 [data-theme="dark"] .progresso {
   background:
-    radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
-    radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
-    repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
-    linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 85% 55% at 50% 115%, rgba(56, 189, 248, 0.4) 0%, rgba(7, 82, 160, 0.3) 35%, transparent 75%),
+    radial-gradient(circle 130px at 50% 110%, rgba(224, 242, 254, 0.3) 0%, transparent 70%),
+    repeating-conic-gradient(from 255deg at 50% 110%, rgba(56, 189, 248, 0.12) 0deg 6deg, transparent 6deg 18deg),
+    linear-gradient(135deg, #050d1a 0%, #0a1b38 22%, #0e2d5c 48%, #0752a0 78%, #0284c7 92%, #38bdf8 100%) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(192, 132, 252, 0.3) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 82, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 [data-theme="dark"] .progresso .trofeu {
-  background: linear-gradient(135deg, #bd34fe, #41d1ff);
+  background: linear-gradient(135deg, #0752a0 0%, #0284c7 50%, #38bdf8 100%);
   color: #ffffff;
-  box-shadow: 0 0 16px rgba(189, 52, 254, 0.5);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.5);
 }
 
 [data-theme="dark"] .progresso .barra {
@@ -255,15 +260,15 @@ body[data-theme="dark"] {
 }
 
 [data-theme="dark"] .progresso .barra span {
-  background: linear-gradient(90deg, #bd34fe, #41d1ff);
-  box-shadow: 0 0 10px rgba(65, 209, 255, 0.6);
+  background: linear-gradient(90deg, #0752a0 0%, #0284c7 60%, #38bdf8 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
 /* Ícones dos Cards do Dashboard no Modo Dark */
 [data-theme="dark"] .icone-card.verde-card { background: rgba(16, 185, 129, 0.18) !important; color: #34d399 !important; }
 [data-theme="dark"] .icone-card.azul-card { background: rgba(59, 130, 246, 0.18) !important; color: #60a5fa !important; }
 [data-theme="dark"] .icone-card.amarelo-card { background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; }
-[data-theme="dark"] .icone-card.roxo-card { background: rgba(189, 52, 254, 0.18) !important; color: #c084fc !important; }
+[data-theme="dark"] .icone-card.roxo-card { background: rgba(99, 102, 241, 0.18) !important; color: #818cf8 !important; }
 [data-theme="dark"] .icone-card.vermelho-card { background: rgba(239, 68, 68, 0.18) !important; color: #f87171 !important; }
 
 /* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro */
@@ -345,22 +350,25 @@ body[data-theme="dark"] {
 
 /* Banner Tutor IA */
 [data-theme="dark"] .ia-banner {
-  background: linear-gradient(135deg, rgba(29, 20, 48, 0.85) 0%, rgba(34, 28, 59, 0.8) 50%, rgba(21, 36, 56, 0.8) 100%) !important;
+  background:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+    radial-gradient(ellipse 85% 55% at 50% 115%, rgba(56, 189, 248, 0.35) 0%, rgba(7, 82, 160, 0.25) 40%, transparent 75%),
+    linear-gradient(135deg, #050d1a 0%, #0a1b38 30%, #0e2d5c 65%, #0752a0 100%) !important;
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(189, 52, 254, 0.35) !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] .ia-botao {
-  background: linear-gradient(135deg, #bd34fe, #41d1ff);
+  background: linear-gradient(135deg, #0752a0 0%, #0284c7 60%, #38bdf8 100%);
   color: #ffffff;
-  box-shadow: 0 4px 15px rgba(189, 52, 254, 0.45);
+  box-shadow: 0 4px 15px rgba(7, 82, 160, 0.45);
 }
 
 [data-theme="dark"] .ia-botao:hover {
-  background: linear-gradient(135deg, #c74dfd, #5fe0ff);
-  box-shadow: 0 6px 20px rgba(65, 209, 255, 0.5);
+  background: linear-gradient(135deg, #0a5fba 0%, #0396e0 60%, #5fe0ff 100%);
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
 }
 
 /* Badges e Ícones dos Cards com Brilho Neon Translúcido */
@@ -371,9 +379,9 @@ body[data-theme="dark"] {
 }
 
 [data-theme="dark"] .azul-card {
-  background: rgba(65, 209, 255, 0.16) !important;
-  color: #41d1ff !important;
-  box-shadow: 0 0 12px rgba(65, 209, 255, 0.25);
+  background: rgba(56, 189, 248, 0.16) !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
 }
 
 [data-theme="dark"] .amarelo-card {
@@ -383,9 +391,9 @@ body[data-theme="dark"] {
 }
 
 [data-theme="dark"] .roxo-card {
-  background: rgba(189, 52, 254, 0.18) !important;
-  color: #bd34fe !important;
-  box-shadow: 0 0 12px rgba(189, 52, 254, 0.3);
+  background: rgba(99, 102, 241, 0.18) !important;
+  color: #818cf8 !important;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
 }
 
 [data-theme="dark"] .vermelho-card {
@@ -406,8 +414,8 @@ body[data-theme="dark"] {
 [data-theme="dark"] input:focus,
 [data-theme="dark"] textarea:focus,
 [data-theme="dark"] select:focus {
-  border-color: #bd34fe;
-  box-shadow: 0 0 0 3px rgba(189, 52, 254, 0.25);
+  border-color: #38bdf8;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
   outline: none;
 }
 
@@ -456,8 +464,8 @@ body[data-theme="dark"] {
 }
 
 [data-theme="dark"] .vite-theme-switch:hover .vite-switch-track {
-  border-color: rgba(189, 52, 254, 0.6);
-  box-shadow: 0 0 10px rgba(189, 52, 254, 0.35);
+  border-color: rgba(56, 189, 248, 0.6);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
 }
 
 .vite-switch-thumb {
@@ -478,7 +486,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .vite-switch-thumb {
   transform: translateX(20px);
   background: #1b1b1f;
-  box-shadow: 0 0 8px rgba(189, 52, 254, 0.6);
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
 }
 
 .vite-switch-thumb svg {
@@ -547,7 +555,7 @@ body[data-theme="dark"] {
 }
 
 [data-theme="dark"] .sidebar-theme-switch:hover {
-  border-color: rgba(189, 52, 254, 0.5);
+  border-color: rgba(56, 189, 248, 0.5);
   background: #202028;
 }
 

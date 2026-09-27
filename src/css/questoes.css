@@ -1750,16 +1750,17 @@
 }
 
 /* =========================================================
-   QUESTÕES NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
+   QUESTÕES NO MODO DARK (PRETO ESTILIZADO MEIO VIDRO)
    ========================================================= */
 [data-theme="dark"] .welcome-questoes {
     background:
-      radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
-      radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
-      repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
-      linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
-    border: 1px solid rgba(192, 132, 252, 0.3) !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 85% 55% at 50% 115%, rgba(56, 189, 248, 0.4) 0%, rgba(7, 82, 160, 0.3) 35%, transparent 75%),
+      radial-gradient(circle 130px at 50% 110%, rgba(224, 242, 254, 0.3) 0%, transparent 70%),
+      repeating-conic-gradient(from 255deg at 50% 110%, rgba(56, 189, 248, 0.12) 0deg 6deg, transparent 6deg 18deg),
+      linear-gradient(135deg, #050d1a 0%, #0a1b38 22%, #0e2d5c 48%, #0752a0 78%, #0284c7 92%, #38bdf8 100%) !important;
+    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 82, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 [data-theme="dark"] .questoes-card,
@@ -1784,8 +1785,8 @@
 [data-theme="dark"] .bateria-card:hover,
 [data-theme="dark"] .gabarito-item-card:hover {
     background: rgba(28, 30, 42, 0.85) !important;
-    border-color: rgba(65, 209, 255, 0.4) !important;
-    box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+    border-color: rgba(56, 189, 248, 0.4) !important;
+    box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
 }
 
 [data-theme="dark"] .metric-box,
@@ -1899,8 +1900,8 @@
 }
 
 [data-theme="dark"] .btn-pilula-questao.status-atual {
-    outline-color: #bd34fe !important;
-    box-shadow: 0 0 0 3px rgba(189, 52, 254, 0.35) !important;
+    outline-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.35) !important;
 }
 
 [data-theme="dark"] .resolucao-feedback-box.correto {

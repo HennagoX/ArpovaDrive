@@ -157,16 +157,16 @@
 }
 
 /* ---------------------------------------------------------
-   2. MODO VITE DARK - Efeitos de Pista Noturna com Cores Vite
+   2. MODO DARK - Efeitos de Pista Noturna com Azul Escuro & Médio Granulado
    --------------------------------------------------------- */
 [data-theme="dark"] .navbar {
     background: #161618;
     border-right: 1px solid #2e2e32;
-    scrollbar-color: rgba(189, 52, 254, 0.3) transparent;
+    scrollbar-color: rgba(56, 189, 248, 0.3) transparent;
 }
 
 [data-theme="dark"] .navbar::-webkit-scrollbar-thumb {
-    background: rgba(189, 52, 254, 0.3);
+    background: rgba(56, 189, 248, 0.3);
 }
 
 [data-theme="dark"] .navbar-item {
@@ -183,8 +183,8 @@
     width: 4px;
     height: 65%;
     border-radius: 0 4px 4px 0;
-    background: linear-gradient(180deg, #f59e0b 0%, #ef4444 35%, #bd34fe 70%, #41d1ff 100%);
-    box-shadow: 0 0 10px rgba(189, 52, 254, 0.8), 0 0 5px #41d1ff;
+    background: linear-gradient(180deg, #f59e0b 0%, #ef4444 35%, #0752a0 70%, #38bdf8 100%);
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.8), 0 0 5px #0752a0;
     transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
     opacity: 0;
     z-index: 2;
@@ -207,21 +207,22 @@
     z-index: 1;
 }
 
-/* Hover no Modo Dark: Pista Noturna & Acento Vite Radiante */
+/* Hover no Modo Dark: Pista Noturna & Gradiente Azul Escuro/Médio com Granulado */
 [data-theme="dark"] .navbar-item:hover {
     background:
-      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(189, 52, 254, 0.4) 0%, rgba(65, 209, 255, 0.18) 45%, transparent 70%),
-      repeating-conic-gradient(from 260deg at 50% 120%, rgba(189, 52, 254, 0.12) 0deg 8deg, transparent 8deg 24deg),
-      linear-gradient(135deg, #091325 0%, #111e3c 45%, #20174e 80%, #130e32 100%) !important;
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.35) 0%, rgba(7, 82, 160, 0.25) 45%, transparent 70%),
+      repeating-conic-gradient(from 260deg at 50% 120%, rgba(56, 189, 248, 0.1) 0deg 8deg, transparent 8deg 24deg),
+      linear-gradient(135deg, #071224 0%, #0c2040 35%, #0f356d 70%, #0752a0 100%) !important;
     color: #f8fafc;
-    border-color: rgba(189, 52, 254, 0.5) !important;
-    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), 0 0 16px rgba(189, 52, 254, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    border-color: rgba(56, 189, 248, 0.45) !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), 0 0 16px rgba(7, 82, 160, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.15);
     transform: translateX(4px);
 }
 
 [data-theme="dark"] .navbar-item:hover i {
-    color: #41d1ff;
-    filter: drop-shadow(0 0 6px rgba(65, 209, 255, 0.8));
+    color: #38bdf8;
+    filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
     transform: scale(1.1);
 }
 
@@ -238,13 +239,14 @@
 /* Active no Modo Dark: Item Selecionado */
 [data-theme="dark"] .navbar-item.active {
     background:
-      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(189, 52, 254, 0.5) 0%, rgba(65, 209, 255, 0.22) 45%, transparent 70%),
-      repeating-conic-gradient(from 260deg at 50% 120%, rgba(189, 52, 254, 0.16) 0deg 8deg, transparent 8deg 24deg),
-      linear-gradient(135deg, #0b152c 0%, #152248 45%, #28195c 80%, #17103b 100%) !important;
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.45) 0%, rgba(7, 82, 160, 0.35) 45%, transparent 70%),
+      repeating-conic-gradient(from 260deg at 50% 120%, rgba(56, 189, 248, 0.15) 0deg 8deg, transparent 8deg 24deg),
+      linear-gradient(135deg, #0a1832 0%, #0f2b57 35%, #15458a 70%, #0752a0 100%) !important;
     color: #ffffff;
     font-weight: 700;
-    border-color: rgba(65, 209, 255, 0.6) !important;
-    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 20px rgba(189, 52, 254, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border-color: rgba(56, 189, 248, 0.65) !important;
+    box-shadow: 0 8px 26px rgba(0, 0, 0, 0.6), 0 0 20px rgba(56, 189, 248, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
     transform: translateX(4px);
 }
 
@@ -258,7 +260,7 @@
     transform: translateY(-50%) scaleY(1);
     opacity: 1;
     width: 4px;
-    box-shadow: 0 0 14px rgba(245, 158, 11, 0.95), 0 0 6px #bd34fe;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.95), 0 0 6px #38bdf8;
 }
 
 [data-theme="dark"] .navbar-item.active::after {
