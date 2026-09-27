@@ -1,5 +1,6 @@
 import { ready } from '../utils/dom.js';
 import { router } from '../spa/router.js';
+import { initTheme } from '../utils/themeManager.js';
 import { getCurrentUser } from '../services/authService.js';
 import { usuarioGlobal } from '../services/userService.js';
 import { getGamificationData, syncUserGamification, updateLevelUI } from '../services/gamificationService.js';
@@ -17,6 +18,7 @@ import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 import { initTutorIaView } from '../spa/views/tutorIaView.js';
 
 ready(() => {
+    initTheme();
     usuarioGlobal.updateUI();
     const user = getCurrentUser();
     if (user) {

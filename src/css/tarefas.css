@@ -142,7 +142,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e2e8f0;
     color: #475569;
     padding: 10px 18px;
@@ -185,7 +185,7 @@
    Seção / Bloco de Conteúdo
    -------------------------------------------------------------------------- */
 .tarefas-conteudo-section {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
     border-radius: 22px;
     padding: 24px 28px;
@@ -286,7 +286,7 @@
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 18px;
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
     border-radius: 18px;
     padding: 18px 22px;
@@ -692,4 +692,80 @@ button.is-cooldown,
     border-color: #e11d48;
     transform: translateY(-1px);
 }
+
+/* =========================================================
+   TAREFAS NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
+   ========================================================= */
+[data-theme="dark"] .tarefas-stat-card,
+[data-theme="dark"] .tarefas-filter-btn,
+[data-theme="dark"] .tarefas-conteudo-section,
+[data-theme="dark"] .tarefa-fixa-card {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-body) !important;
+}
+
+[data-theme="dark"] .tarefa-fixa-card:hover,
+[data-theme="dark"] .tarefas-conteudo-section:hover {
+    background: rgba(28, 30, 42, 0.85) !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+    box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] .tarefas-filter-btn:hover {
+    background: rgba(28, 30, 42, 0.85) !important;
+    color: #41d1ff !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .tarefas-filter-btn.active {
+    background: linear-gradient(135deg, #bd34fe, #41d1ff) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 0 16px rgba(189, 52, 254, 0.4) !important;
+}
+
+[data-theme="dark"] .tarefa-fixa-card.done {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+[data-theme="dark"] .tarefa-fixa-card.claimable {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: #10b981 !important;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.25) !important;
+}
+
+[data-theme="dark"] .tarefa-fixa-card.locked {
+    background: rgba(15, 16, 22, 0.6) !important;
+    opacity: 0.65;
+}
+
+[data-theme="dark"] .tarefa-fixa-card.tarefa-tipo-questao {
+    background: rgba(245, 158, 11, 0.08) !important;
+    border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+[data-theme="dark"] .tarefa-titulo,
+[data-theme="dark"] .tarefas-conteudo-title-box h3 {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .tarefa-subtitulo,
+[data-theme="dark"] .tarefas-conteudo-header p {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .tarefa-icon-box {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .tarefas-conteudo-header {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
 

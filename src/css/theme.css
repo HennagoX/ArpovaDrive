@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
+/* =========================================================
+   TEMA PADRÃO (DEFAULT LIGHT MODE)
+   ========================================================= */
 :root {
   --primary-blue: #0752a0;
   --primary-blue-hover: #064583;
@@ -19,6 +22,7 @@
   --bg-page: #f5f7fb;
   --bg-card: #ffffff;
   --bg-light: #f4f8fa;
+  --bg-subtle: #ffffff;
   --text-dark: #111111;
   --text-body: #222222;
   --text-muted: #666666;
@@ -49,4 +53,467 @@
 
   --shadow-card: 0 10px 25px rgba(0, 0, 0, 0.08);
   --shadow-card-strong: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+/* =========================================================
+   TEMA VITE DARK (ESTILO HTTPS://VITE.DEV/)
+   ========================================================= */
+:root[data-theme="dark"],
+body[data-theme="dark"] {
+  /* Vite Colors & Gradients */
+  --vite-purple: #bd34fe;
+  --vite-purple-hover: #a82de0;
+  --vite-purple-soft: rgba(189, 52, 254, 0.16);
+  --vite-cyan: #41d1ff;
+  --vite-cyan-soft: rgba(65, 209, 255, 0.16);
+  --vite-gradient: linear-gradient(135deg, #bd34fe 0%, #41d1ff 100%);
+  --vite-gradient-hover: linear-gradient(135deg, #c74dfd 0%, #5fe0ff 100%);
+
+  /* Primary Blue adaptado para Vite Dark */
+  --primary-blue: #a855f7;
+  --primary-blue-hover: #bd34fe;
+  --primary-blue-soft: rgba(189, 52, 254, 0.16);
+  --gradient-start: #bd34fe;
+  --gradient-mid: #797ffc;
+  --gradient-end: #41d1ff;
+
+  /* Brand Accents Adaptados para Dark Mode */
+  --brand-green: #10b981;
+  --brand-green-hover: #059669;
+  --brand-green-soft: rgba(16, 185, 129, 0.16);
+  --brand-yellow: #fbbf24;
+  --brand-yellow-hover: #f59e0b;
+  --google-blue: #38bdf8;
+
+  /* Superfícies Vite Dark com Efeito Vidro Escuro (Glassmorphism) */
+  --bg-page: #0f1015;                          /* Fundo preto profundo */
+  --bg-card: rgba(20, 21, 29, 0.74);           /* Preto estilizado meio vidro */
+  --bg-card-hover: rgba(28, 30, 42, 0.85);     /* Vidro elevado no hover */
+  --bg-light: rgba(255, 255, 255, 0.04);       /* Superfície interna sutil */
+  --bg-subtle: #141418;                        /* Sidebar / fundo rebaixado */
+
+  /* Tipografia Vite com Alto Contraste */
+  --text-dark: #f8fafc;
+  --text-body: #ebebef;
+  --text-muted: #94a3b8;
+  --text-muted-soft: #8e8e93;
+  --text-nav: #a1a1aa;
+
+  /* Bordas Vite Dark e Brilhos Especulares de Vidro */
+  --border-input: rgba(255, 255, 255, 0.12);
+  --border-divider: rgba(255, 255, 255, 0.08);
+  --border-divider-soft: rgba(255, 255, 255, 0.05);
+  --border-card: rgba(255, 255, 255, 0.09);
+
+  /* Sombras e Reflexos Glassmorphism */
+  --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  --shadow-card-strong: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+/* =========================================================
+   ESTILOS DE ELEMENTOS NO MODO VITE DARK
+   ========================================================= */
+[data-theme="dark"] body {
+  background-color: #0f1015;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(189, 52, 254, 0.14), transparent 70%),
+    radial-gradient(ellipse 60% 40% at 100% 25%, rgba(65, 209, 255, 0.08), transparent 60%);
+  background-attachment: fixed;
+  color: var(--text-body);
+}
+
+/* Títulos e Textos Principais */
+[data-theme="dark"] .topo h1,
+[data-theme="dark"] .titulo,
+[data-theme="dark"] .titulo-card h2,
+[data-theme="dark"] .secao-titulo h2,
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3 {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .topo p,
+[data-theme="dark"] .card p,
+[data-theme="dark"] .tarefa p,
+[data-theme="dark"] .perfil-nome span,
+[data-theme="dark"] .secao-subtitulo {
+  color: var(--text-muted);
+}
+
+[data-theme="dark"] .perfil-nome strong {
+  color: var(--text-dark);
+}
+
+/* =========================================================
+   CARDS: PRETO ESTILIZADO MEIO VIDRO (DARK GLASSMORPHISM)
+   ========================================================= */
+[data-theme="dark"] .card,
+[data-theme="dark"] .missao,
+[data-theme="dark"] .desempenho,
+[data-theme="dark"] .kpi-card,
+[data-theme="dark"] .painel-card,
+[data-theme="dark"] .painel-secao,
+[data-theme="dark"] .modulo-card,
+[data-theme="dark"] .modulo-hero-card,
+[data-theme="dark"] .module-card,
+[data-theme="dark"] .ebook,
+[data-theme="dark"] .conteudo-card,
+[data-theme="dark"] .cronograma-card,
+[data-theme="dark"] .hud-card,
+[data-theme="dark"] .simulation-hud,
+[data-theme="dark"] .day-tab,
+[data-theme="dark"] .schedule-item,
+[data-theme="dark"] .empty-day-message,
+[data-theme="dark"] .user-selector-bar,
+[data-theme="dark"] .cronograma-state-card,
+[data-theme="dark"] .card-simulado-container,
+[data-theme="dark"] .secao-card,
+[data-theme="dark"] .questoes-card,
+[data-theme="dark"] .questoes-hero-card,
+[data-theme="dark"] .bateria-card,
+[data-theme="dark"] .resolucao-header-card,
+[data-theme="dark"] .resolucao-card,
+[data-theme="dark"] .resolucao-resultado-card,
+[data-theme="dark"] .simulado-pergunta-card,
+[data-theme="dark"] .tarefas-stat-card,
+[data-theme="dark"] .tarefas-conteudo-section,
+[data-theme="dark"] .tarefa-fixa-card,
+[data-theme="dark"] .tutor-ia-card,
+[data-theme="dark"] .metricas-grid,
+[data-theme="dark"] .recurso-card,
+[data-theme="dark"] .materia-item {
+  background: rgba(20, 21, 29, 0.74) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-body);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+              border-color 0.25s ease,
+              box-shadow 0.3s ease,
+              background 0.25s ease !important;
+}
+
+[data-theme="dark"] .card:hover,
+[data-theme="dark"] .missao:hover,
+[data-theme="dark"] .desempenho:hover,
+[data-theme="dark"] .kpi-card:hover,
+[data-theme="dark"] .painel-card:hover,
+[data-theme="dark"] .modulo-card:hover,
+[data-theme="dark"] .modulo-hero-card:hover,
+[data-theme="dark"] .module-card:hover,
+[data-theme="dark"] .ebook:hover,
+[data-theme="dark"] .conteudo-card:hover,
+[data-theme="dark"] .cronograma-card:hover,
+[data-theme="dark"] .hud-card:hover,
+[data-theme="dark"] .day-tab:hover,
+[data-theme="dark"] .schedule-item:hover,
+[data-theme="dark"] .card-simulado-container:hover,
+[data-theme="dark"] .questoes-card:hover,
+[data-theme="dark"] .questoes-hero-card:hover,
+[data-theme="dark"] .bateria-card:hover,
+[data-theme="dark"] .tarefa-fixa-card:hover,
+[data-theme="dark"] .tarefas-conteudo-section:hover,
+[data-theme="dark"] .recurso-card:hover,
+[data-theme="dark"] .materia-item:hover {
+  background: rgba(28, 30, 42, 0.85) !important;
+  border-color: rgba(65, 209, 255, 0.4) !important;
+  box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+  transform: translateY(-4px);
+}
+
+/* Banner de Progresso: Preto Vidro com Acentos Cósmicos Vite */
+[data-theme="dark"] .progresso {
+  background: linear-gradient(135deg, rgba(16, 17, 26, 0.9) 0%, rgba(24, 26, 38, 0.85) 50%, rgba(30, 22, 50, 0.85) 100%) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(189, 52, 254, 0.25) !important;
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.55), 0 0 24px rgba(189, 52, 254, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
+}
+
+[data-theme="dark"] .progresso .trofeu {
+  background: linear-gradient(135deg, #bd34fe, #41d1ff);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(189, 52, 254, 0.5);
+}
+
+[data-theme="dark"] .progresso .barra {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .progresso .barra span {
+  background: linear-gradient(90deg, #bd34fe, #41d1ff);
+  box-shadow: 0 0 10px rgba(65, 209, 255, 0.6);
+}
+
+/* Tarefas e Itens Interativos: Vidro Fumê Translúcido */
+[data-theme="dark"] .tarefa {
+  background: rgba(255, 255, 255, 0.035) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  color: var(--text-body);
+}
+
+[data-theme="dark"] .tarefa:hover {
+  background: rgba(255, 255, 255, 0.075) !important;
+  border-color: rgba(65, 209, 255, 0.35) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transform: translateX(4px);
+}
+
+[data-theme="dark"] .tarefa strong {
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] .check {
+  background: rgba(16, 185, 129, 0.18);
+  color: #34d399;
+}
+
+[data-theme="dark"] .ver {
+  color: #41d1ff;
+}
+
+[data-theme="dark"] .ver:hover {
+  color: #79ddff;
+}
+
+/* Círculo do Gráfico de Desempenho */
+[data-theme="dark"] .circulo-interno {
+  background: #14151c !important;
+  color: #ffffff;
+}
+
+[data-theme="dark"] .circulo {
+  background: conic-gradient(#10b981 0deg 248deg, rgba(255, 255, 255, 0.1) 248deg 360deg);
+}
+
+/* Card de Sequência (Ofensiva) */
+[data-theme="dark"] .sequencia {
+  background: rgba(245, 158, 11, 0.08) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.12);
+}
+
+[data-theme="dark"] .sequencia h3 {
+  color: #fbbf24;
+}
+
+/* Banner Tutor IA */
+[data-theme="dark"] .ia-banner {
+  background: linear-gradient(135deg, rgba(29, 20, 48, 0.85) 0%, rgba(34, 28, 59, 0.8) 50%, rgba(21, 36, 56, 0.8) 100%) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(189, 52, 254, 0.35) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .ia-botao {
+  background: linear-gradient(135deg, #bd34fe, #41d1ff);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(189, 52, 254, 0.45);
+}
+
+[data-theme="dark"] .ia-botao:hover {
+  background: linear-gradient(135deg, #c74dfd, #5fe0ff);
+  box-shadow: 0 6px 20px rgba(65, 209, 255, 0.5);
+}
+
+/* Badges e Ícones dos Cards com Brilho Neon Translúcido */
+[data-theme="dark"] .verde-card {
+  background: rgba(16, 185, 129, 0.16) !important;
+  color: #34d399 !important;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+[data-theme="dark"] .azul-card {
+  background: rgba(65, 209, 255, 0.16) !important;
+  color: #41d1ff !important;
+  box-shadow: 0 0 12px rgba(65, 209, 255, 0.25);
+}
+
+[data-theme="dark"] .amarelo-card {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+[data-theme="dark"] .roxo-card {
+  background: rgba(189, 52, 254, 0.18) !important;
+  color: #bd34fe !important;
+  box-shadow: 0 0 12px rgba(189, 52, 254, 0.3);
+}
+
+[data-theme="dark"] .vermelho-card {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #f87171 !important;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+/* Inputs, Textareas e Modais no Dark Glass */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select {
+  background: rgba(20, 21, 29, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: var(--text-dark);
+}
+
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus,
+[data-theme="dark"] select:focus {
+  border-color: #bd34fe;
+  box-shadow: 0 0 0 3px rgba(189, 52, 254, 0.25);
+  outline: none;
+}
+
+/* =========================================================
+   COMPONENTE DO SWITCH DE TEMA VITE (ESTILO VITE.DEV)
+   ========================================================= */
+.vite-theme-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  border: none;
+  padding: 4px 6px;
+  border-radius: 9999px;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  font-family: var(--font-main);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.vite-theme-switch:hover {
+  opacity: 0.95;
+}
+
+.vite-switch-track {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 24px;
+  border-radius: 9999px;
+  background: #e2e2e4;
+  border: 1px solid #c2c2c4;
+  box-sizing: border-box;
+  transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .vite-switch-track {
+  background: #2f2f35;
+  border-color: #3f3f46;
+}
+
+.vite-theme-switch:hover .vite-switch-track {
+  border-color: #0752a0;
+}
+
+[data-theme="dark"] .vite-theme-switch:hover .vite-switch-track {
+  border-color: rgba(189, 52, 254, 0.6);
+  box-shadow: 0 0 10px rgba(189, 52, 254, 0.35);
+}
+
+.vite-switch-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+[data-theme="dark"] .vite-switch-thumb {
+  transform: translateX(20px);
+  background: #1b1b1f;
+  box-shadow: 0 0 8px rgba(189, 52, 254, 0.6);
+}
+
+.vite-switch-thumb svg {
+  position: absolute;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+/* Ícone de Sol (Modo Claro/Padrão) */
+.icon-sun {
+  opacity: 1;
+  transform: scale(1);
+  color: #f59e0b;
+}
+
+.icon-moon {
+  opacity: 0;
+  transform: scale(0.5);
+  color: #41d1ff;
+}
+
+/* Ícone de Lua (Modo Vite Dark) */
+[data-theme="dark"] .icon-sun {
+  opacity: 0;
+  transform: scale(0.5);
+}
+
+[data-theme="dark"] .icon-moon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.vite-switch-text {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  transition: color 0.25s ease;
+  white-space: nowrap;
+}
+
+[data-theme="dark"] .vite-switch-text {
+  color: #a1a1aa;
+}
+
+/* Container do switch na Sidebar */
+.sidebar-theme-switch-container {
+  padding: 0 2px 14px 2px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--border-divider);
+  display: flex;
+  width: 100%;
+}
+
+.sidebar-theme-switch {
+  width: 100%;
+  justify-content: space-between;
+  padding: 7px 12px;
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+}
+
+[data-theme="dark"] .sidebar-theme-switch {
+  background: #19191e;
+  border-color: #2e2e34;
+}
+
+[data-theme="dark"] .sidebar-theme-switch:hover {
+  border-color: rgba(189, 52, 254, 0.5);
+  background: #202028;
+}
+
+/* Grupo de Ações no Topo */
+.topo-direita {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }

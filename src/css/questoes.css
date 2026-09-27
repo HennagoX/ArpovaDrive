@@ -137,7 +137,7 @@
 }
 
 .questoes-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid var(--border-card, #e8ebf0);
     border-radius: 20px;
     padding: 22px 24px;
@@ -358,7 +358,7 @@
 }
 
 .questoes-hero-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid var(--border-card, #e8ebf0);
     border-radius: 22px;
     padding: 26px 30px;
@@ -500,7 +500,7 @@
 }
 
 .bateria-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid var(--border-card, #e8ebf0);
     border-radius: 18px;
     padding: 20px 24px;
@@ -799,7 +799,7 @@
 }
 
 .resolucao-header-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
     border-radius: 20px;
     padding: 24px;
@@ -894,7 +894,7 @@
 }
 
 .resolucao-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
     border-radius: 24px;
     padding: 32px;
@@ -1152,7 +1152,7 @@
 }
 
 .resolucao-resultado-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
     border-radius: 28px;
     padding: 44px 32px;
@@ -1464,7 +1464,7 @@
 }
 
 .simulado-pergunta-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 28px 32px;
@@ -1624,4 +1624,105 @@
     color: #14532d;
     transform: translateY(-1px);
 }
+
+/* =========================================================
+   QUESTÕES NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
+   ========================================================= */
+[data-theme="dark"] .questoes-card,
+[data-theme="dark"] .questoes-hero-card,
+[data-theme="dark"] .bateria-card,
+[data-theme="dark"] .resolucao-header-card,
+[data-theme="dark"] .resolucao-card,
+[data-theme="dark"] .resolucao-resultado-card,
+[data-theme="dark"] .simulado-pergunta-card {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-body) !important;
+}
+
+[data-theme="dark"] .questoes-card:hover,
+[data-theme="dark"] .questoes-hero-card:hover,
+[data-theme="dark"] .bateria-card:hover {
+    background: rgba(28, 30, 42, 0.85) !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+    box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] .questoes-card h3,
+[data-theme="dark"] .questoes-hero-card h2,
+[data-theme="dark"] .bateria-info h4,
+[data-theme="dark"] .resolucao-pergunta-texto,
+[data-theme="dark"] .resolucao-header-title,
+[data-theme="dark"] .simulado-enunciado,
+[data-theme="dark"] .resolucao-resultado-card h2 {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .questoes-card p,
+[data-theme="dark"] .questoes-hero-card p,
+[data-theme="dark"] .bateria-info p,
+[data-theme="dark"] .resolucao-contador-questao,
+[data-theme="dark"] .simulado-questao-num-tag,
+[data-theme="dark"] .resolucao-resultado-card p {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-voltar-resolucao {
+    background: rgba(20, 21, 29, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #41d1ff !important;
+}
+
+[data-theme="dark"] .btn-voltar-resolucao:hover {
+    background: rgba(28, 30, 42, 0.9) !important;
+    border-color: #41d1ff !important;
+    color: #79ddff !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn,
+[data-theme="dark"] .simulado-opcao-item {
+    background: rgba(255, 255, 255, 0.035) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+    color: #ebebef !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn:hover:not(:disabled),
+[data-theme="dark"] .simulado-opcao-item:hover {
+    background: rgba(255, 255, 255, 0.075) !important;
+    border-color: rgba(65, 209, 255, 0.45) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .simulado-opcao-item.selecionada {
+    background: rgba(65, 209, 255, 0.12) !important;
+    border-color: #41d1ff !important;
+    box-shadow: 0 0 16px rgba(65, 209, 255, 0.25) !important;
+}
+
+[data-theme="dark"] .simulado-card-meta-bar,
+[data-theme="dark"] .simulado-card-acoes-footer {
+    border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .simulado-materia-chip {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .btn-resultado-secundario {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .btn-resultado-secundario:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+}
+
 

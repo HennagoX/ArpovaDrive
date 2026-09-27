@@ -8,6 +8,20 @@
     background: var(--bg-card, #ffffff);
     border-right: 1px solid var(--border-card, #e5e7eb);
     z-index: 100;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(13, 71, 161, 0.2) transparent;
+}
+
+.navbar::-webkit-scrollbar {
+    width: 4px;
+}
+.navbar::-webkit-scrollbar-thumb {
+    background: rgba(13, 71, 161, 0.2);
+    border-radius: 4px;
 }
 
 .navbar,
@@ -20,7 +34,8 @@
     text-align: center;
     font-size: 28px;
     font-weight: 700;
-    margin-bottom: 36px;
+    margin-bottom: 28px;
+    flex-shrink: 0;
 }
 
 .navbar-logo .verde { color: var(--brand-green, #18a85a); }
@@ -32,22 +47,34 @@
     flex-direction: column;
     gap: 8px;
     width: 100%;
+    flex: 1 0 auto;
 }
 
+/* =========================================================
+   ITENS DA SIDEBAR (MODO PADRÃO & MODO VITE DARK)
+   ========================================================= */
 .navbar-item {
+    position: relative;
+    overflow: hidden;
     display: flex;
     align-items: center;
     gap: 12px;
-    padding: 13px 14px;
+    padding: 12px 14px;
     border-radius: var(--radius-md, 14px);
-    color: var(--text-nav, #555555);
+    color: var(--text-nav, #475569);
     text-decoration: none;
-    font-size: 16px;
-    transition: background-color 0.2s, color 0.2s;
+    font-size: 15px;
+    font-weight: 500;
+    transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                color 0.25s ease,
+                border-color 0.25s ease,
+                box-shadow 0.3s ease,
+                transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
     cursor: pointer;
     width: 100%;
     min-width: 0;
     white-space: nowrap;
+    border: 1px solid transparent;
 }
 
 .navbar-item i {
@@ -55,22 +82,358 @@
     text-align: center;
     font-size: 18px;
     flex: 0 0 22px;
+    color: #64748b;
+    transition: color 0.25s ease, transform 0.25s ease, filter 0.25s ease;
 }
 
-.navbar-item span {
+.navbar-item span:not(.nav-item-car) {
     min-width: 0;
     overflow: hidden;
     text-overflow: ellipsis;
+    transition: color 0.25s ease;
 }
 
-.navbar-item:hover,
-.navbar-item.active {
+/* ---------------------------------------------------------
+   1. MODO PADRÃO (DEFAULT LIGHT MODE) - Exatamente como antes!
+   --------------------------------------------------------- */
+:root:not([data-theme="dark"]) .navbar,
+[data-theme="default"] .navbar {
+    background: var(--bg-card, #ffffff);
+    border-right: 1px solid var(--border-card, #e5e7eb);
+}
+
+:root:not([data-theme="dark"]) .navbar-item,
+[data-theme="default"] .navbar-item {
+    color: var(--text-nav, #555555);
+    background: transparent;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+:root:not([data-theme="dark"]) .navbar-item:hover,
+[data-theme="default"] .navbar-item:hover {
     background: var(--primary-blue-soft, #e8f2ff);
     color: var(--primary-blue, #0752a0);
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
 }
 
-.navbar-item.active {
+:root:not([data-theme="dark"]) .navbar-item:hover i,
+[data-theme="default"] .navbar-item:hover i {
+    color: var(--primary-blue, #0752a0);
+    filter: none;
+    transform: none;
+}
+
+:root:not([data-theme="dark"]) .navbar-item.active,
+[data-theme="default"] .navbar-item.active {
+    background: var(--primary-blue-soft, #e8f2ff);
+    color: var(--primary-blue, #0752a0);
     font-weight: 700;
+    border-color: transparent;
+    box-shadow: none;
+    transform: none;
+}
+
+:root:not([data-theme="dark"]) .navbar-item.active i,
+[data-theme="default"] .navbar-item.active i {
+    color: var(--primary-blue, #0752a0);
+    filter: none;
+    transform: none;
+}
+
+/* No modo padrão, oculta todos os adornos de pista noturna */
+:root:not([data-theme="dark"]) .navbar-item::before,
+[data-theme="default"] .navbar-item::before,
+:root:not([data-theme="dark"]) .navbar-item::after,
+[data-theme="default"] .navbar-item::after,
+:root:not([data-theme="dark"]) .nav-item-car,
+[data-theme="default"] .nav-item-car,
+:root:not([data-theme="dark"]) .sidebar-night-widget,
+[data-theme="default"] .sidebar-night-widget {
+    display: none !important;
+}
+
+/* ---------------------------------------------------------
+   2. MODO VITE DARK - Efeitos de Pista Noturna com Cores Vite
+   --------------------------------------------------------- */
+[data-theme="dark"] .navbar {
+    background: #161618;
+    border-right: 1px solid #2e2e32;
+    scrollbar-color: rgba(189, 52, 254, 0.3) transparent;
+}
+
+[data-theme="dark"] .navbar::-webkit-scrollbar-thumb {
+    background: rgba(189, 52, 254, 0.3);
+}
+
+[data-theme="dark"] .navbar-item {
+    color: #a1a1aa;
+}
+
+/* Faixa de Sinalização Luminosa na Borda Esquerda */
+[data-theme="dark"] .navbar-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0);
+    width: 4px;
+    height: 65%;
+    border-radius: 0 4px 4px 0;
+    background: linear-gradient(180deg, #f59e0b 0%, #ef4444 35%, #bd34fe 70%, #41d1ff 100%);
+    box-shadow: 0 0 10px rgba(189, 52, 254, 0.8), 0 0 5px #41d1ff;
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+    opacity: 0;
+    z-index: 2;
+}
+
+/* Linha de Asfalto com Faixa Seccionada no Rodapé do Item */
+[data-theme="dark"] .navbar-item::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    background: repeating-linear-gradient(90deg, rgba(245, 158, 11, 0.8) 0, rgba(245, 158, 11, 0.8) 7px, transparent 7px, transparent 14px);
+    opacity: 0;
+    transform: scaleX(0.2);
+    transform-origin: left center;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Hover no Modo Dark: Pista Noturna & Acento Vite */
+[data-theme="dark"] .navbar-item:hover {
+    background: linear-gradient(135deg, #091322 0%, #111e38 45%, #182849 85%, #0d1a30 100%);
+    color: #f8fafc;
+    border-color: rgba(65, 209, 255, 0.4);
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), 0 0 10px rgba(189, 52, 254, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transform: translateX(4px);
+}
+
+[data-theme="dark"] .navbar-item:hover i {
+    color: #41d1ff;
+    filter: drop-shadow(0 0 6px rgba(65, 209, 255, 0.8));
+    transform: scale(1.1);
+}
+
+[data-theme="dark"] .navbar-item:hover::before {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+}
+
+[data-theme="dark"] .navbar-item:hover::after {
+    opacity: 0.85;
+    transform: scaleX(1);
+}
+
+/* Active no Modo Dark: Item Selecionado */
+[data-theme="dark"] .navbar-item.active {
+    background: linear-gradient(135deg, #091220 0%, #12203a 40%, #1b2d52 75%, #0e1b32 100%);
+    color: #ffffff;
+    font-weight: 700;
+    border-color: rgba(65, 209, 255, 0.6);
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.6), 0 0 14px rgba(189, 52, 254, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateX(4px);
+}
+
+[data-theme="dark"] .navbar-item.active i {
+    color: #fbbf24;
+    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.85));
+    transform: scale(1.14);
+}
+
+[data-theme="dark"] .navbar-item.active::before {
+    transform: translateY(-50%) scaleY(1);
+    opacity: 1;
+    width: 4px;
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.95), 0 0 6px #bd34fe;
+}
+
+[data-theme="dark"] .navbar-item.active::after {
+    opacity: 1;
+    transform: scaleX(1);
+    background: repeating-linear-gradient(90deg, rgba(245, 158, 11, 0.95) 0, rgba(245, 158, 11, 0.95) 8px, transparent 8px, transparent 15px);
+}
+
+/* Carro de Noite nos Itens da Sidebar */
+.nav-item-car {
+    margin-left: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 20px;
+    opacity: 0;
+    transform: translateX(-10px) scale(0.85);
+    transition: opacity 0.3s ease, transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.car-mini-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+}
+
+[data-theme="dark"] .navbar-item:hover .nav-item-car {
+    opacity: 0.9;
+    transform: translateX(0) scale(1);
+}
+
+[data-theme="dark"] .navbar-item.active .nav-item-car {
+    opacity: 1;
+    transform: translateX(0) scale(1.05);
+}
+
+[data-theme="dark"] .navbar-item.active .car-beam-polygon,
+[data-theme="dark"] .navbar-item:hover .car-beam-polygon {
+    animation: headlightPulse 2.2s ease-in-out infinite;
+}
+
+[data-theme="dark"] .navbar-item.active .car-headlight-dot,
+[data-theme="dark"] .navbar-item:hover .car-headlight-dot {
+    filter: drop-shadow(0 0 6px #fef08a);
+}
+
+[data-theme="dark"] .navbar-item.active .car-taillight-dot,
+[data-theme="dark"] .navbar-item:hover .car-taillight-dot {
+    filter: drop-shadow(0 0 5px #ef4444);
+}
+
+@keyframes headlightPulse {
+    0%, 100% {
+        opacity: 0.75;
+        filter: drop-shadow(0 0 3px rgba(254, 240, 138, 0.6));
+    }
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 8px rgba(254, 240, 138, 0.95));
+    }
+}
+
+/* =========================================================
+   WIDGET DA SIDEBAR: CARRO DE NOITE NA RODOVIA
+   ========================================================= */
+.sidebar-night-widget {
+    margin-top: auto;
+    padding-top: 14px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.night-card {
+    position: relative;
+    background: linear-gradient(145deg, #071322 0%, #0d233f 50%, #13345c 100%);
+    border-radius: 16px;
+    padding: 10px;
+    border: 1px solid rgba(56, 189, 248, 0.22);
+    box-shadow: 0 8px 24px rgba(7, 19, 34, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    overflow: hidden;
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: default;
+}
+
+.night-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(56, 189, 248, 0.48);
+    box-shadow: 0 12px 28px rgba(7, 19, 34, 0.5), 0 0 16px rgba(56, 189, 248, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.night-canvas-wrapper {
+    position: relative;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #040914;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.night-drive-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 110px;
+}
+
+/* Animação contínua da faixa amarela da rodovia (sensação de movimento noturno) */
+@keyframes highwayMove {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-44px);
+    }
+}
+
+.highway-dashes-anim {
+    animation: highwayMove 1s linear infinite;
+}
+
+/* Animações das estrelas */
+@keyframes starTwinkle {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+}
+
+.star-twinkle-1 { animation: starTwinkle 2.4s ease-in-out infinite; }
+.star-twinkle-2 { animation: starTwinkle 3.2s ease-in-out infinite 0.7s; }
+.star-twinkle-3 { animation: starTwinkle 2.8s ease-in-out infinite 1.4s; }
+
+/* Animação do feixe do farol na cena noturna */
+@keyframes headlightSceneGlow {
+    0%, 100% {
+        opacity: 0.85;
+    }
+    50% {
+        opacity: 1;
+        filter: drop-shadow(0 0 10px rgba(254, 240, 138, 0.8));
+    }
+}
+
+.night-drive-svg .headlight-beam {
+    animation: headlightSceneGlow 3s ease-in-out infinite;
+}
+
+/* Informações do Rodapé do Card Noturno */
+.night-card-meta {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.night-card-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #f8fafc;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+
+.night-card-title .live-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #10b981;
+    box-shadow: 0 0 8px #10b981;
+    animation: livePulse 1.8s infinite;
+}
+
+.night-card-text {
+    font-size: 11px;
+    color: #94a3b8;
+    margin: 0;
+    line-height: 1.3;
 }
 
 .navbar + .main {
@@ -178,8 +541,10 @@ body {
         padding: 16px 8px;
     }
 
-    .navbar-item span {
-        display: none;
+    .navbar-item span,
+    .nav-item-car,
+    .sidebar-night-widget {
+        display: none !important;
     }
 
     .navbar + .main,
@@ -199,8 +564,10 @@ body {
         border-top: 1px solid var(--border-divider, #dddddd);
     }
 
-    .navbar-logo {
-        display: none;
+    .navbar-logo,
+    .sidebar-night-widget,
+    .nav-item-car {
+        display: none !important;
     }
 
     .navbar-menu {
@@ -216,7 +583,7 @@ body {
         font-size: 10px;
     }
 
-    .navbar-item span {
+    .navbar-item span:not(.nav-item-car) {
         display: block;
     }
 

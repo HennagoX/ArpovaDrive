@@ -52,7 +52,7 @@ body {
 }
 
 .search {
-    background: white;
+    background: var(--bg-card, white);
     border: 1px solid var(--border-input);
     border-radius: var(--radius-md);
     padding: 11px 16px;
@@ -61,7 +61,7 @@ body {
     align-items: center;
     gap: var(--space-sm);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
 }
 
 .search:focus-within {
@@ -79,6 +79,7 @@ body {
     width: 100%;
     font-size: 14px;
     background: transparent;
+    color: inherit;
 }
 
 .filters {
@@ -90,7 +91,7 @@ body {
 
 .filter {
     border: none;
-    background: white;
+    background: var(--bg-card, white);
     border: 1px solid var(--border-card);
     padding: 8px 16px;
     border-radius: var(--radius-lg);
@@ -142,11 +143,11 @@ body {
 }
 
 .ebook {
-    background: white;
+    background: var(--bg-card, white);
     border-radius: var(--radius-md);
     padding: var(--space-lg);
     border: 1px solid var(--border-card);
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease, background 0.25s ease;
     display: flex;
     flex-direction: column;
 }
@@ -453,8 +454,8 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    background: white;
-    border: 1px solid #e8ebf0;
+    background: var(--bg-card, white);
+    border: 1px solid var(--border-card, #e8ebf0);
     color: #0d47a1;
     padding: 10px 18px;
     border-radius: 12px;
@@ -512,8 +513,8 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
 }
 
 .modulo-hero-card {
-    background: white;
-    border: 1px solid #e8ebf0;
+    background: var(--bg-card, white);
+    border: 1px solid var(--border-card, #e8ebf0);
     border-radius: 20px;
     padding: 24px 28px;
     margin-bottom: 28px;
@@ -674,15 +675,15 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
 }
 
 .module-card {
-    background: white;
-    border: 1px solid #e8ebf0;
+    background: var(--bg-card, white);
+    border: 1px solid var(--border-card, #e8ebf0);
     border-radius: 18px;
     padding: 18px 22px;
     display: flex;
     align-items: center;
     gap: 18px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
     position: relative;
 }
 
@@ -1085,7 +1086,7 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: white;
+    background: var(--bg-card, white);
     padding: 14px 20px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-card);
@@ -1186,7 +1187,7 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     display: flex;
     align-items: center;
     gap: 18px;
-    background: white;
+    background: var(--bg-card, white);
     padding: 16px 22px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border-card);
@@ -1413,7 +1414,7 @@ body.modal-modulo-open {
 
 .modal-modulo-card {
     position: relative;
-    background: white;
+    background: var(--bg-card, white);
     width: 100%;
     max-width: 480px;
     margin: auto;
@@ -1779,7 +1780,7 @@ body.modal-modulo-open {
 }
 
 .modal-admin-card {
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
     width: 100%;
     max-width: 520px;
     border-radius: 24px;
@@ -2083,3 +2084,161 @@ body.modal-modulo-open {
     from { opacity: 0; transform: scale(0.95); }
     to { opacity: 1; transform: scale(1); }
 }
+
+/* =========================================================
+   CONTEÚDOS NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
+   ========================================================= */
+[data-theme="dark"] .ebook,
+[data-theme="dark"] .modulo-hero-card,
+[data-theme="dark"] .module-card,
+[data-theme="dark"] .leitura-nav-topo,
+[data-theme="dark"] .leitura-header-card {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-body) !important;
+}
+
+[data-theme="dark"] .ebook:hover,
+[data-theme="dark"] .modulo-hero-card:hover,
+[data-theme="dark"] .module-card:hover {
+    background: rgba(28, 30, 42, 0.85) !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+    box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
+}
+
+[data-theme="dark"] .ebook-title,
+[data-theme="dark"] .module-title,
+[data-theme="dark"] .modulo-hero-info h1,
+[data-theme="dark"] .leitura-nav-title strong,
+[data-theme="dark"] .modulos-breadcrumb .breadcrumb-current {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .ebook-desc,
+[data-theme="dark"] .module-desc,
+[data-theme="dark"] .modulo-hero-info p,
+[data-theme="dark"] .leitura-nav-title span,
+[data-theme="dark"] .modulos-breadcrumb {
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .module-card.available {
+    border-left: 5px solid #10b981 !important;
+}
+
+[data-theme="dark"] .module-card.done {
+    background: rgba(16, 185, 129, 0.08) !important;
+    border-left: 5px solid #10b981 !important;
+}
+
+[data-theme="dark"] .module-card.locked {
+    background: rgba(15, 16, 22, 0.6) !important;
+    border-left: 5px solid #334155 !important;
+    opacity: 0.75;
+}
+
+[data-theme="dark"] .module-index-box {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .search {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+    color: var(--text-dark) !important;
+}
+
+[data-theme="dark"] .search input {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .filter {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .filter:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #41d1ff !important;
+    border-color: rgba(65, 209, 255, 0.3) !important;
+}
+
+[data-theme="dark"] .filter.active {
+    background: linear-gradient(135deg, #bd34fe, #41d1ff) !important;
+    color: #ffffff !important;
+    border-color: transparent !important;
+    box-shadow: 0 0 14px rgba(189, 52, 254, 0.4) !important;
+}
+
+[data-theme="dark"] .btn-voltar-modulos {
+    background: rgba(20, 21, 29, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #41d1ff !important;
+}
+
+[data-theme="dark"] .btn-voltar-modulos:hover {
+    background: rgba(28, 30, 42, 0.9) !important;
+    border-color: #41d1ff !important;
+    color: #79ddff !important;
+}
+
+[data-theme="dark"] .btn-pdf-external,
+[data-theme="dark"] .btn-pdf-expand {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .btn-pdf-external:hover,
+[data-theme="dark"] .btn-pdf-expand:hover {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #ffffff !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+}
+
+[data-theme="dark"] .modal-modulo-card,
+[data-theme="dark"] .modal-admin-card {
+    background: rgba(18, 19, 26, 0.95) !important;
+    backdrop-filter: blur(24px) saturate(180%);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 30px rgba(189, 52, 254, 0.18) !important;
+    color: #ebebef !important;
+}
+
+[data-theme="dark"] .modal-modulo-card h2,
+[data-theme="dark"] .modal-admin-card h2,
+[data-theme="dark"] .modal-admin-card h3 {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .modal-modulo-close {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .modal-modulo-close:hover {
+    background: rgba(255, 255, 255, 0.16) !important;
+    color: #ffffff !important;
+}
+
+[data-theme="dark"] .select-admin-pointer {
+    background: rgba(20, 21, 29, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .admin-tab-btn.active {
+    background: rgba(189, 52, 254, 0.25) !important;
+    color: #41d1ff !important;
+    box-shadow: 0 0 12px rgba(189, 52, 254, 0.3) !important;
+}
+
+

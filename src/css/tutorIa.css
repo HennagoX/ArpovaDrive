@@ -415,7 +415,7 @@ body.tutor-ia-active #view-tutor-ia {
 .tutor-ia-form:focus-within {
     border-color: var(--gradient-mid, #087e9d);
     box-shadow: 0 0 0 3px rgba(8, 126, 157, 0.18), 0 0 16px rgba(8, 167, 131, 0.28);
-    background: #ffffff;
+    background: var(--bg-card, #ffffff);
 }
 
 .tutor-ia-input {
@@ -690,3 +690,72 @@ body.tutor-ia-active #view-tutor-ia {
         font-size: 10px;
     }
 }
+
+/* =========================================================
+   TUTOR IA NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
+   ========================================================= */
+[data-theme="dark"] .tutor-ia-card {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    box-shadow: 0 16px 48px 0 rgba(0, 0, 0, 0.6), 0 0 24px rgba(189, 52, 254, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .btn-voltar-tutor {
+    background: rgba(20, 21, 29, 0.8) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #41d1ff !important;
+}
+
+[data-theme="dark"] .btn-voltar-tutor:hover {
+    background: rgba(28, 30, 42, 0.9) !important;
+    border-color: #41d1ff !important;
+    color: #79ddff !important;
+}
+
+[data-theme="dark"] .chat-msg-bot .chat-bubble {
+    background: rgba(28, 30, 42, 0.85) !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    border-left: 3.5px solid #bd34fe !important;
+    color: #ebebef !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .sugestao-chip {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .sugestao-chip:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+    color: #41d1ff !important;
+    box-shadow: 0 0 14px rgba(65, 209, 255, 0.25) !important;
+}
+
+[data-theme="dark"] .tutor-ia-footer {
+    background: rgba(18, 19, 26, 0.8) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .tutor-ia-form {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .tutor-ia-form:focus-within {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: #bd34fe !important;
+    box-shadow: 0 0 0 3px rgba(189, 52, 254, 0.2), 0 0 16px rgba(65, 209, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .tutor-ia-input {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .tutor-ia-input::placeholder {
+    color: #64748b !important;
+}
+
