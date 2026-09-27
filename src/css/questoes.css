@@ -225,6 +225,11 @@
     text-transform: uppercase;
 }
 
+.questoes-category-pill.pill-simulado-oficial {
+    background: #fffbeb;
+    color: #b45309;
+}
+
 .questoes-card-title {
     font-size: 18px;
     font-weight: 800;
@@ -1625,16 +1630,147 @@
     transform: translateY(-1px);
 }
 
+
+/* =========================================================
+   GABARITO DE REVISÃO DO SIMULADO (ESTILOS BASE)
+   ========================================================= */
+.gabarito-item-card {
+    background: var(--bg-card, #ffffff);
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    padding: 20px 22px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+}
+
+.gabarito-item-card.gabarito-acerto {
+    border-left: 5px solid #16a34a;
+}
+
+.gabarito-item-card.gabarito-erro {
+    border-left: 5px solid #dc2626;
+}
+
+.gabarito-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.gabarito-materia-tag {
+    font-weight: 700;
+    color: #1e293b;
+    font-size: 14px;
+}
+
+.gabarito-status-badge {
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.gabarito-status-badge.badge-acerto {
+    background: #dcfce7;
+    color: #15803d;
+}
+
+.gabarito-status-badge.badge-erro {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+.gabarito-pergunta-texto {
+    font-size: 15px;
+    color: #334155;
+    margin-bottom: 14px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.gabarito-opcoes-grid {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.gabarito-opcao-linha {
+    padding: 9px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #334155;
+}
+
+.gabarito-opcao-linha.correta {
+    border-color: #86efac;
+    background: #f0fdf4;
+    font-weight: 600;
+    color: #166534;
+}
+
+.gabarito-opcao-linha.errada {
+    border-color: #fca5a5;
+    background: #fef2f2;
+    font-weight: 600;
+    color: #991b1b;
+}
+
+.gabarito-icon-acerto {
+    margin-left: auto;
+    color: #16a34a;
+    font-size: 16px;
+}
+
+.gabarito-icon-erro {
+    margin-left: auto;
+    color: #dc2626;
+    font-size: 16px;
+}
+
+.gabarito-explicacao-box {
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: #475569;
+    line-height: 1.45;
+}
+
+.simulado-state-card {
+    background: var(--bg-card, #ffffff);
+}
+
 /* =========================================================
    QUESTÕES NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
    ========================================================= */
+[data-theme="dark"] .welcome-questoes {
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
+      radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
+      repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
+      linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
+    border: 1px solid rgba(192, 132, 252, 0.3) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
 [data-theme="dark"] .questoes-card,
 [data-theme="dark"] .questoes-hero-card,
 [data-theme="dark"] .bateria-card,
 [data-theme="dark"] .resolucao-header-card,
 [data-theme="dark"] .resolucao-card,
 [data-theme="dark"] .resolucao-resultado-card,
-[data-theme="dark"] .simulado-pergunta-card {
+[data-theme="dark"] .simulado-pergunta-card,
+[data-theme="dark"] .gabarito-item-card,
+[data-theme="dark"] .simulado-state-card {
     background: rgba(20, 21, 29, 0.74) !important;
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -1645,12 +1781,57 @@
 
 [data-theme="dark"] .questoes-card:hover,
 [data-theme="dark"] .questoes-hero-card:hover,
-[data-theme="dark"] .bateria-card:hover {
+[data-theme="dark"] .bateria-card:hover,
+[data-theme="dark"] .gabarito-item-card:hover {
     background: rgba(28, 30, 42, 0.85) !important;
     border-color: rgba(65, 209, 255, 0.4) !important;
     box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
 }
 
+[data-theme="dark"] .metric-box,
+[data-theme="dark"] .questoes-rule-box,
+[data-theme="dark"] .questoes-stat-pill,
+[data-theme="dark"] .bateria-badge-box,
+[data-theme="dark"] .bateria-ref-tag,
+[data-theme="dark"] .bateria-meta-item,
+[data-theme="dark"] .resultado-metric-item,
+[data-theme="dark"] .simulado-nav-grade-box,
+[data-theme="dark"] .btn-pilula-questao,
+[data-theme="dark"] .gabarito-opcao-linha,
+[data-theme="dark"] .gabarito-explicacao-box,
+[data-theme="dark"] .resultado-trofeu-box,
+[data-theme="dark"] .questoes-category-pill {
+    background: rgba(255, 255, 255, 0.04) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    color: #ebebef !important;
+}
+
+[data-theme="dark"] .gabarito-item-card.gabarito-acerto {
+    border-left: 5px solid #10b981 !important;
+}
+
+[data-theme="dark"] .gabarito-item-card.gabarito-erro {
+    border-left: 5px solid #ef4444 !important;
+}
+
+[data-theme="dark"] .gabarito-opcao-linha.correta {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border-color: rgba(16, 185, 129, 0.4) !important;
+    color: #34d399 !important;
+}
+
+[data-theme="dark"] .gabarito-opcao-linha.errada {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+    color: #f87171 !important;
+}
+
+[data-theme="dark"] .gabarito-materia-tag,
+[data-theme="dark"] .resultado-metric-item strong,
+[data-theme="dark"] .metric-box strong,
+[data-theme="dark"] .bateria-badge-num,
 [data-theme="dark"] .questoes-card h3,
 [data-theme="dark"] .questoes-hero-card h2,
 [data-theme="dark"] .bateria-info h4,
@@ -1661,6 +1842,9 @@
     color: #f8fafc !important;
 }
 
+[data-theme="dark"] .gabarito-pergunta-texto,
+[data-theme="dark"] .metric-box span,
+[data-theme="dark"] .resultado-metric-item span,
 [data-theme="dark"] .questoes-card p,
 [data-theme="dark"] .questoes-hero-card p,
 [data-theme="dark"] .bateria-info p,
@@ -1702,6 +1886,49 @@
     box-shadow: 0 0 16px rgba(65, 209, 255, 0.25) !important;
 }
 
+[data-theme="dark"] .btn-pilula-questao.status-vazia {
+    background: rgba(255, 255, 255, 0.035) !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .btn-pilula-questao.status-respondida {
+    background: rgba(65, 209, 255, 0.15) !important;
+    border-color: rgba(65, 209, 255, 0.4) !important;
+    color: #41d1ff !important;
+}
+
+[data-theme="dark"] .btn-pilula-questao.status-atual {
+    outline-color: #bd34fe !important;
+    box-shadow: 0 0 0 3px rgba(189, 52, 254, 0.35) !important;
+}
+
+[data-theme="dark"] .resolucao-feedback-box.correto {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    border-left: 4px solid #10b981 !important;
+    color: #34d399 !important;
+}
+
+[data-theme="dark"] .resolucao-feedback-box.errado {
+    background: rgba(239, 68, 68, 0.12) !important;
+    border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    border-left: 4px solid #ef4444 !important;
+    color: #f87171 !important;
+}
+
+[data-theme="dark"] .resultado-task-banner.aprovado {
+    background: rgba(16, 185, 129, 0.12) !important;
+    border: 1px solid rgba(16, 185, 129, 0.3) !important;
+    color: #34d399 !important;
+}
+
+[data-theme="dark"] .resultado-task-banner.reprovado {
+    background: rgba(245, 158, 11, 0.12) !important;
+    border: 1px solid rgba(245, 158, 11, 0.3) !important;
+    color: #fbbf24 !important;
+}
+
 [data-theme="dark"] .simulado-card-meta-bar,
 [data-theme="dark"] .simulado-card-acoes-footer {
     border-color: rgba(255, 255, 255, 0.08) !important;
@@ -1724,5 +1951,6 @@
     color: #ffffff !important;
     border-color: rgba(65, 209, 255, 0.4) !important;
 }
+
 
 

@@ -182,7 +182,13 @@ body[data-theme="dark"] {
 [data-theme="dark"] .tutor-ia-card,
 [data-theme="dark"] .metricas-grid,
 [data-theme="dark"] .recurso-card,
-[data-theme="dark"] .materia-item {
+[data-theme="dark"] .materia-item,
+[data-theme="dark"] .gabarito-item-card,
+[data-theme="dark"] .simulado-state-card,
+[data-theme="dark"] .tarefas-state-card,
+[data-theme="dark"] .simulados-empty-state,
+[data-theme="dark"] [class*="-card"],
+[data-theme="dark"] [class*="card-"] {
   background: rgba(20, 21, 29, 0.74) !important;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -216,20 +222,26 @@ body[data-theme="dark"] {
 [data-theme="dark"] .tarefa-fixa-card:hover,
 [data-theme="dark"] .tarefas-conteudo-section:hover,
 [data-theme="dark"] .recurso-card:hover,
-[data-theme="dark"] .materia-item:hover {
+[data-theme="dark"] .materia-item:hover,
+[data-theme="dark"] .gabarito-item-card:hover,
+[data-theme="dark"] [class*="-card"]:hover {
   background: rgba(28, 30, 42, 0.85) !important;
   border-color: rgba(65, 209, 255, 0.4) !important;
   box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(189, 52, 254, 0.2), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
   transform: translateY(-4px);
 }
 
-/* Banner de Progresso: Preto Vidro com Acentos Cósmicos Vite */
+/* Banner de Progresso: Feixes Radiantes e Horizonte Cósmico Estilo Vite */
 [data-theme="dark"] .progresso {
-  background: linear-gradient(135deg, rgba(16, 17, 26, 0.9) 0%, rgba(24, 26, 38, 0.85) 50%, rgba(30, 22, 50, 0.85) 100%) !important;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
+    radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
+    repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
+    linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(189, 52, 254, 0.25) !important;
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.55), 0 0 24px rgba(189, 52, 254, 0.15), inset 0 1px 0 0 rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(192, 132, 252, 0.3) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
 
 [data-theme="dark"] .progresso .trofeu {
@@ -245,6 +257,34 @@ body[data-theme="dark"] {
 [data-theme="dark"] .progresso .barra span {
   background: linear-gradient(90deg, #bd34fe, #41d1ff);
   box-shadow: 0 0 10px rgba(65, 209, 255, 0.6);
+}
+
+/* Ícones dos Cards do Dashboard no Modo Dark */
+[data-theme="dark"] .icone-card.verde-card { background: rgba(16, 185, 129, 0.18) !important; color: #34d399 !important; }
+[data-theme="dark"] .icone-card.azul-card { background: rgba(59, 130, 246, 0.18) !important; color: #60a5fa !important; }
+[data-theme="dark"] .icone-card.amarelo-card { background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; }
+[data-theme="dark"] .icone-card.roxo-card { background: rgba(189, 52, 254, 0.18) !important; color: #c084fc !important; }
+[data-theme="dark"] .icone-card.vermelho-card { background: rgba(239, 68, 68, 0.18) !important; color: #f87171 !important; }
+
+/* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro */
+[data-theme="dark"] .gabarito-item-card,
+[data-theme="dark"] .simulado-state-card,
+[data-theme="dark"] .tarefas-state-card,
+[data-theme="dark"] .simulados-empty-state,
+[data-theme="dark"] .metric-box,
+[data-theme="dark"] .resultado-metric-item,
+[data-theme="dark"] .questoes-rule-box,
+[data-theme="dark"] .questoes-stat-pill,
+[data-theme="dark"] .hero-stat-badge,
+[data-theme="dark"] .leitura-header-stat,
+[data-theme="dark"] .leitura-meta-pill,
+[data-theme="dark"] .tarefa-meta-pill,
+[data-theme="dark"] .simulado-nav-grade-box {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  color: #ebebef !important;
 }
 
 /* Tarefas e Itens Interativos: Vidro Fumê Translúcido */

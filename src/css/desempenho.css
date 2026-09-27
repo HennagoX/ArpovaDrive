@@ -381,10 +381,31 @@
 }
 
 [data-theme="dark"] .ia-card {
-    background: linear-gradient(135deg, rgba(189, 52, 254, 0.25) 0%, rgba(65, 209, 255, 0.2) 100%) !important;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(189, 52, 254, 0.4) !important;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6), 0 0 24px rgba(189, 52, 254, 0.2) !important;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
+      radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
+      repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
+      linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
+    border: 1px solid rgba(192, 132, 252, 0.3) !important;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
+
+[data-theme="dark"] .simulados-empty-state {
+    background: rgba(255, 255, 255, 0.035) !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px dashed rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .simulados-empty-state strong {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .kpi-icone.cor-verde { background: rgba(16, 185, 129, 0.16) !important; color: #34d399 !important; }
+[data-theme="dark"] .kpi-icone.cor-azul { background: rgba(59, 130, 246, 0.16) !important; color: #60a5fa !important; }
+[data-theme="dark"] .kpi-icone.cor-amarelo { background: rgba(245, 158, 11, 0.16) !important; color: #fbbf24 !important; }
+[data-theme="dark"] .kpi-icone.cor-vermelho { background: rgba(239, 68, 68, 0.16) !important; color: #f87171 !important; }
+[data-theme="dark"] .kpi-icone.cor-roxo { background: rgba(189, 52, 254, 0.16) !important; color: #c084fc !important; }
+
 

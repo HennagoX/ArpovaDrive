@@ -303,7 +303,7 @@ export async function renderTarefas(forceRefresh = false) {
         console.error('[TarefasView] Erro ao carregar tarefas:', err);
         if (container) {
             container.innerHTML = `
-                <div style="background: #fff; border: 1px solid #fed7aa; border-radius: 16px; padding: 32px; text-align: center;">
+                <div class="tarefas-state-card" style="border: 1px solid #fed7aa; border-radius: 16px; padding: 32px; text-align: center;">
                     <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: #ea580c; margin-bottom: 12px;"></i>
                     <h4 style="font-size: 18px; margin-bottom: 8px;">Não foi possível carregar as tarefas</h4>
                     <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">${escapeHtml(err.message)}</p>

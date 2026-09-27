@@ -156,7 +156,7 @@ function aplicarDesempenhoNaTela(desempenho) {
             `).join('');
         } else {
             simuladosContainer.innerHTML = `
-                <div style="padding: 24px 16px; text-align: center; color: #64748b; background: #f8fafc; border-radius: 12px; border: 1px dashed #cbd5e1;">
+                <div class="simulados-empty-state" style="padding: 24px 16px; text-align: center; color: #64748b; border-radius: 12px; border: 1px dashed #cbd5e1;">
                     <span class="material-symbols-outlined" style="font-size: 36px; color: #94a3b8; display: block; margin-bottom: 8px;">assignment_late</span>
                     <strong style="display: block; font-size: 15px; color: #334155; margin-bottom: 4px;">Nenhum simulado realizado ainda</strong>
                     <p style="font-size: 13px; margin-bottom: 12px; line-height: 1.4;">Realize seu primeiro simulado com 30 questões no modelo oficial do DETRAN para testar seu tempo e precisão.</p>

@@ -165,7 +165,7 @@ export async function abrirSimuladoResolucao(materiaId = 'Geral') {
     } catch (err) {
         if (container) {
             container.innerHTML = `
-                <div style="background: #fff; border: 1px solid #fed7aa; border-radius: 16px; padding: 32px; text-align: center;">
+                <div class="simulado-state-card" style="border: 1px solid #fed7aa; border-radius: 16px; padding: 32px; text-align: center;">
                     <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: #ea580c; margin-bottom: 12px;"></i>
                     <h4 style="font-size: 18px; margin-bottom: 8px;">Erro ao carregar simulado</h4>
                     <p style="color: #64748b; font-size: 14px; margin-bottom: 16px;">${escapeHtml(err.message)}</p>
@@ -626,46 +626,46 @@ function renderGabaritoDetalhado() {
                 const letraUsuario = isRespondida ? resp.letraSelecionada : 'Não respondida';
 
                 return `
-                    <div class="gabarito-item-card ${isCorreta ? 'gabarito-acerto' : 'gabarito-erro'}" style="background: #fff; border: 1px solid ${isCorreta ? '#bbf7d0' : '#fecaca'}; border-radius: 12px; padding: 18px 20px; margin-bottom: 16px;">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                            <span style="font-weight: 700; color: #1e293b; font-size: 14px;">
+                    <div class="gabarito-item-card ${isCorreta ? 'gabarito-acerto' : 'gabarito-erro'}">
+                        <div class="gabarito-item-header">
+                            <span class="gabarito-materia-tag">
                                 Questão ${idx + 1} · ${escapeHtml(q.materia || 'DETRAN')}
                             </span>
-                            <span style="font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 9999px; background: ${isCorreta ? '#dcfce7' : '#fee2e2'}; color: ${isCorreta ? '#15803d' : '#b91c1c'};">
+                            <span class="gabarito-status-badge ${isCorreta ? 'badge-acerto' : 'badge-erro'}">
                                 <i class="fa-solid ${isCorreta ? 'fa-check' : 'fa-xmark'}"></i> ${isCorreta ? 'Acertou' : 'Errou'}
                             </span>
                         </div>
 
-                        <p style="font-size: 15px; color: #334155; margin-bottom: 12px; font-weight: 500;">
+                        <p class="gabarito-pergunta-texto">
                             ${escapeHtml(q.texto)}
                         </p>
 
-                        <div style="display: grid; gap: 6px; margin-bottom: 12px;">
+                        <div class="gabarito-opcoes-grid">
                             ${q.opcoes.map((opc, opcIdx) => {
                                 const letra = LETRAS[opcIdx];
                                 const isGabarito = opcIdx === q.correta;
                                 const isMarcouEsta = isRespondida && resp.indexSelecionado === opcIdx;
 
-                                let itemStyle = 'padding: 8px 12px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid #e2e8f0; background: #f8fafc;';
+                                let optClass = 'gabarito-opcao-linha';
                                 if (isGabarito) {
-                                    itemStyle = 'padding: 8px 12px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid #86efac; background: #f0fdf4; font-weight: 600; color: #166534;';
+                                    optClass += ' correta';
                                 } else if (isMarcouEsta && !isCorreta) {
-                                    itemStyle = 'padding: 8px 12px; border-radius: 8px; font-size: 13px; display: flex; align-items: center; gap: 8px; border: 1px solid #fca5a5; background: #fef2f2; font-weight: 600; color: #991b1b;';
+                                    optClass += ' errada';
                                 }
 
                                 return `
-                                    <div style="${itemStyle}">
-                                        <span style="font-weight: 700;">${letra})</span>
+                                    <div class="${optClass}">
+                                        <span class="gabarito-letra-tag">${letra})</span>
                                         <span>${escapeHtml(opc)}</span>
-                                        ${isGabarito ? '<i class="fa-solid fa-circle-check" style="margin-left: auto; color: #16a34a;"></i>' : ''}
-                                        ${isMarcouEsta && !isCorreta ? '<i class="fa-solid fa-circle-xmark" style="margin-left: auto; color: #dc2626;"></i>' : ''}
+                                        ${isGabarito ? '<i class="fa-solid fa-circle-check gabarito-icon-acerto"></i>' : ''}
+                                        ${isMarcouEsta && !isCorreta ? '<i class="fa-solid fa-circle-xmark gabarito-icon-erro"></i>' : ''}
                                     </div>
                                 `;
                             }).join('')}
                         </div>
 
-                        <div style="background: #f1f5f9; border-radius: 8px; padding: 10px 14px; font-size: 13px; color: #475569;">
-                            <strong style="color: #1e293b;"><i class="fa-solid fa-circle-info"></i> Explicação:</strong> ${escapeHtml(q.explicacao || 'Alternativa correta conforme CTB.')}
+                        <div class="gabarito-explicacao-box">
+                            <strong><i class="fa-solid fa-circle-info"></i> Explicação:</strong> ${escapeHtml(q.explicacao || 'Alternativa correta conforme CTB.')}
                         </div>
                     </div>
                 `;

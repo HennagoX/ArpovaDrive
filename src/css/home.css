@@ -467,3 +467,14 @@ body {
   color: #94a3b8 !important;
 }
 
+[data-theme="dark"] .cta-card {
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 105%, rgba(192, 132, 252, 0.45) 0%, rgba(147, 51, 234, 0.3) 25%, rgba(59, 130, 246, 0.15) 50%, transparent 75%),
+    radial-gradient(circle 120px at 50% 105%, rgba(255, 255, 255, 0.35) 0%, transparent 70%),
+    repeating-conic-gradient(from 255deg at 50% 105%, rgba(168, 85, 247, 0.16) 0deg 6deg, transparent 6deg 18deg),
+    linear-gradient(180deg, #090d1e 0%, #111438 30%, #1e1752 65%, #160f3d 100%) !important;
+  border: 1px solid rgba(192, 132, 252, 0.3) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(168, 85, 247, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+}
+
+
