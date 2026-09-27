@@ -710,6 +710,10 @@ body[data-theme="dark"] {
   color: #94a3b8 !important;
   border: 1px solid rgba(255, 255, 255, 0.09) !important;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  min-width: max-content !important;
+  width: auto !important;
 }
 
 [data-theme="dark"] .filter:hover,
@@ -731,6 +735,10 @@ body[data-theme="dark"] {
   color: #ffffff !important;
   border-color: rgba(56, 189, 248, 0.5) !important;
   box-shadow: 0 4px 14px rgba(7, 82, 160, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+  white-space: nowrap !important;
+  flex-shrink: 0 !important;
+  min-width: max-content !important;
+  width: auto !important;
 }
 
 /* 8. Botões Desabilitados ou Bloqueados */

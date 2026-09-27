@@ -131,28 +131,52 @@
    -------------------------------------------------------------------------- */
 .tarefas-filters-container {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
     overflow-x: auto;
-    padding-bottom: 14px;
+    padding: 6px 4px 14px 4px;
     margin-bottom: 24px;
     scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 100% !important;
 }
 
 .tarefas-filter-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
     background: var(--bg-card, #ffffff);
     border: 1px solid #e2e8f0;
     color: #475569;
-    padding: 10px 18px;
-    border-radius: 14px;
-    font-size: 14px;
-    font-weight: 600;
+    padding: 10px 22px !important;
+    min-height: 44px !important;
+    border-radius: 14px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.25 !important;
     cursor: pointer;
-    white-space: nowrap;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: max-content !important;
+    box-sizing: border-box !important;
     transition: all 0.2s ease;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.tarefas-filter-btn i {
+    flex-shrink: 0 !important;
+    font-size: 15px;
+}
+
+.tarefas-filter-btn span {
+    white-space: nowrap !important;
+    display: inline-block !important;
+    min-width: max-content !important;
+    flex-shrink: 0 !important;
 }
 
 .tarefas-filter-btn:hover {
@@ -167,18 +191,32 @@
     color: #ffffff;
     border-color: #0d47a1;
     box-shadow: 0 4px 12px rgba(13, 71, 161, 0.22);
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+    padding: 10px 22px !important;
 }
 
 .tarefas-filter-badge {
     background: rgba(0, 0, 0, 0.08);
-    font-size: 11px;
-    padding: 2px 7px;
-    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap !important;
+    flex-shrink: 0 !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: max-content !important;
 }
 
 .tarefas-filter-btn.active .tarefas-filter-badge {
     background: rgba(255, 255, 255, 0.25);
     color: #ffffff;
+    font-weight: 700;
 }
 
 /* --------------------------------------------------------------------------
@@ -779,6 +817,16 @@ button.is-cooldown,
     box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
 }
 
+[data-theme="dark"] .tarefas-filter-btn {
+    background: rgba(20, 21, 29, 0.85);
+    color: #94a3b8 !important;
+    border: 1px solid rgba(255, 255, 255, 0.09) !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+}
+
 [data-theme="dark"] .tarefas-filter-btn:hover {
     background: rgba(28, 30, 42, 0.85) !important;
     color: #41d1ff !important;
@@ -786,10 +834,26 @@ button.is-cooldown,
 }
 
 [data-theme="dark"] .tarefas-filter-btn.active {
-    background: linear-gradient(135deg, #0752a0, #0284c7) !important;
+    background-image: var(--bg-grain), linear-gradient(135deg, #0752a0 0%, #0284c7 60%, #38bdf8 100%) !important;
     color: #ffffff !important;
-    border-color: transparent !important;
-    box-shadow: 0 0 16px rgba(56, 189, 248, 0.4) !important;
+    border-color: rgba(56, 189, 248, 0.5) !important;
+    box-shadow: 0 0 16px rgba(56, 189, 248, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+    font-weight: 700 !important;
+    flex-shrink: 0 !important;
+    width: auto !important;
+    min-width: max-content !important;
+    white-space: nowrap !important;
+    padding: 10px 22px !important;
+}
+
+[data-theme="dark"] .tarefas-filter-btn .tarefas-filter-badge {
+    background: rgba(255, 255, 255, 0.12) !important;
+    color: #cbd5e1 !important;
+}
+
+[data-theme="dark"] .tarefas-filter-btn.active .tarefas-filter-badge {
+    background: rgba(255, 255, 255, 0.28) !important;
+    color: #ffffff !important;
 }
 
 [data-theme="dark"] .tarefa-fixa-card.done {
