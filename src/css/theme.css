@@ -453,17 +453,28 @@ body[data-theme="dark"] {
    - Aplica a textura granular dos banners (var(--bg-grain))
    ========================================================= */
 
-/* Base para botões no tema escuro: sólidos, transições suaves, sem blur */
+/* Base para botões no tema escuro: sólidos, transições suaves, sem blur e com overflow estritamente contido */
 [data-theme="dark"] button:not(.vite-theme-switch):not(.btn-pilula-questao),
 [data-theme="dark"] .btn,
-[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao),
+[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao):not(span):not(i):not(div):not(p),
 [data-theme="dark"] .ia-botao,
-[data-theme="dark"] .read-btn {
+[data-theme="dark"] .read-btn,
+[data-theme="dark"] .filter,
+[data-theme="dark"] .tarefas-filter-btn,
+[data-theme="dark"] .btn-sim,
+[data-theme="dark"] .sugestao-chip,
+[data-theme="dark"] .admin-tab-btn {
+  position: relative;
+  overflow: hidden !important;
+  background-clip: padding-box !important;
+  -webkit-background-clip: padding-box !important;
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
   background-repeat: repeat, no-repeat !important;
   background-size: 64px 64px, 100% 100% !important;
   background-position: 0 0, center !important;
+  box-sizing: border-box !important;
+  isolation: isolate;
   transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
               box-shadow 0.22s ease,
               border-color 0.2s ease,
