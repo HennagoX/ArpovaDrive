@@ -3,14 +3,18 @@ import { qs, setText } from '../../utils/dom.js';
 import {
     getConteudoById,
     getModulosByConteudoId,
-    LOCKED_MODULE_MESSAGE
+    LOCKED_MODULE_MESSAGE,
+    carregarModulosDinamicos,
+    salvarModuloAdmin,
+    removerModuloAdmin
 } from '../../services/conteudosService.js';
 import {
     getModuloAtual,
     getModuloAtualCached,
     setModuloAtualCached,
     avancarModulo,
-    MAX_MODULO
+    setPonteiroModulo,
+    getModuloUserId
 } from '../../services/moduloService.js';
 import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js';
 import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
@@ -24,6 +28,9 @@ let routerRef = null;
 let activeConteudoId = null;
 let activeModulo = null;
 let proximoModuloPendente = null;
+let moduloParaRemover = null;
+let uploadedPdfBase64 = null;
+let uploadedPdfName = null;
 
 export function initModulosView(router) {
     routerRef = router;
@@ -86,16 +93,16 @@ export function initModulosView(router) {
             const numModuloAtual = Number(activeModulo.numero || 1);
             const conteudo = getConteudoById(activeConteudoId);
             const modulos = getModulosByConteudoId(activeConteudoId);
-            const totalModulos = modulos.length || MAX_MODULO;
+            const totalModulos = modulos.length || 1;
 
-            if (numModuloAtual >= MAX_MODULO || numModuloAtual >= totalModulos) {
+            if (numModuloAtual >= totalModulos) {
                 showToast(`Você já concluiu todos os módulos de ${conteudo?.titulo || 'estudos'}!`, 'info');
                 btnAvancarTopo.style.display = 'none';
                 return;
             }
 
             const proximoNumero = numModuloAtual + 1;
-            const proxModulo = (proximoNumero <= MAX_MODULO && proximoNumero <= totalModulos)
+            const proxModulo = (proximoNumero <= totalModulos)
                 ? (modulos.find(m => Number(m.numero) === proximoNumero) || null)
                 : null;
 
@@ -115,7 +122,7 @@ export function initModulosView(router) {
                 btnAvancarTopo.disabled = true;
                 btnAvancarTopo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Avançando...';
 
-                const resultado = await avancarModulo(activeConteudoId);
+                const resultado = await avancarModulo(activeConteudoId, null, totalModulos);
                 if (resultado?.exp_total && typeof resultado.exp_total.exp === 'number') {
                     atualizarXpNoLocalStorage({
                         expTotal: resultado.exp_total.exp,
@@ -124,7 +131,7 @@ export function initModulosView(router) {
                 } else if (resultado?.xp_ganha > 0) {
                     addXp(resultado.xp_ganha);
                 }
-                const proxModuloNum = Math.min(MAX_MODULO, Number(resultado.modulo_atual || Math.min(MAX_MODULO, numModuloAtual + 1)));
+                const proxModuloNum = Number(resultado.modulo_atual || (numModuloAtual + 1));
 
                 atualizarCardsModuloUI(activeConteudoId, proxModuloNum);
 
@@ -194,7 +201,7 @@ export function initModulosView(router) {
 
     const fecharECarregarProximo = () => {
         fecharModalAvancar();
-        if (proximoModuloPendente && Number(proximoModuloPendente.numero) <= MAX_MODULO) {
+        if (proximoModuloPendente) {
             const nextMod = proximoModuloPendente;
             proximoModuloPendente = null;
             abrirLeituraPdf(activeConteudoId, nextMod);
@@ -248,6 +255,228 @@ export function initModulosView(router) {
             }
         });
     }
+
+    // =========================================================================
+    // Admin: Eventos dos Modais de Gerenciamento de Módulos e PDFs
+    // =========================================================================
+
+    const btnAdminAdd = qs("#btn-admin-add-modulo");
+    if (btnAdminAdd) {
+        btnAdminAdd.addEventListener("click", () => {
+            abrirModalAdminModulo(null);
+        });
+    }
+
+    const btnFecharAdminModal = qs("#btn-fechar-modal-admin-modulo");
+    const btnCancelarAdminModal = qs("#btn-cancelar-admin-modulo");
+    if (btnFecharAdminModal) btnFecharAdminModal.addEventListener("click", fecharModalAdminModulo);
+    if (btnCancelarAdminModal) btnCancelarAdminModal.addEventListener("click", fecharModalAdminModulo);
+
+    const modalAdminOverlay = qs("#modal-admin-modulo");
+    if (modalAdminOverlay) {
+        modalAdminOverlay.addEventListener("click", (e) => {
+            if (e.target === modalAdminOverlay) fecharModalAdminModulo();
+        });
+    }
+
+    const btnCancelarDelete = qs("#btn-cancelar-delete-modulo");
+    if (btnCancelarDelete) btnCancelarDelete.addEventListener("click", fecharModalAdminDelete);
+
+    const modalAdminDelete = qs("#modal-admin-delete");
+    if (modalAdminDelete) {
+        modalAdminDelete.addEventListener("click", (e) => {
+            if (e.target === modalAdminDelete) fecharModalAdminDelete();
+        });
+    }
+
+    const tabUrl = qs("#tab-admin-pdf-url");
+    const tabFile = qs("#tab-admin-pdf-file");
+    if (tabUrl) tabUrl.addEventListener("click", () => ativarTabPdf('url'));
+    if (tabFile) tabFile.addEventListener("click", () => ativarTabPdf('file'));
+
+    const dropzone = qs("#admin-file-dropzone");
+    const fileInput = qs("#admin-modulo-pdf-file-input");
+    const dropzoneFilename = qs("#admin-dropzone-filename");
+
+    if (dropzone && fileInput) {
+        dropzone.addEventListener("click", () => fileInput.click());
+
+        fileInput.addEventListener("change", (e) => {
+            const file = e.target.files?.[0];
+            if (file) {
+                if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+                    showToast('Por favor, selecione exclusivamente arquivos no formato PDF.', 'locked', 'fa-solid fa-triangle-exclamation');
+                    fileInput.value = '';
+                    return;
+                }
+                uploadedPdfName = file.name;
+                if (dropzoneFilename) dropzoneFilename.textContent = `${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    uploadedPdfBase64 = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    }
+
+    const btnSalvarModulo = qs("#btn-salvar-admin-modulo");
+    if (btnSalvarModulo) {
+        btnSalvarModulo.addEventListener("click", async (e) => {
+            if (e) e.preventDefault();
+            const originalHtml = btnSalvarModulo.innerHTML;
+
+            try {
+                btnSalvarModulo.disabled = true;
+                btnSalvarModulo.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
+
+                const tituloInput = qs('#admin-modulo-titulo-input')?.value?.trim();
+                if (!tituloInput) {
+                    showToast('O título do módulo é obrigatório.', 'locked', 'fa-solid fa-triangle-exclamation');
+                    return;
+                }
+
+                const payload = {
+                    id: qs('#admin-modulo-id')?.value || undefined,
+                    conteudo_id: activeConteudoId || 'CodigoTransito',
+                    titulo: tituloInput,
+                    descricao: qs('#admin-modulo-desc-input')?.value?.trim() || '',
+                    duracao: qs('#admin-modulo-duracao-input')?.value?.trim() || '20 min',
+                    topicos: Number(qs('#admin-modulo-topicos-input')?.value || 4),
+                    pdf_url: qs('#admin-modulo-pdf-url-input')?.value?.trim() || undefined,
+                    pdf_base64: uploadedPdfBase64 || undefined,
+                    pdf_nome: uploadedPdfName || undefined
+                };
+
+                await salvarModuloAdmin(payload);
+                fecharModalAdminModulo();
+                showToast('Módulo / Material em PDF configurado com sucesso!', 'success', 'fa-solid fa-circle-check');
+                abrirModulos(activeConteudoId);
+            } catch (err) {
+                showToast(err.message || 'Erro ao salvar módulo.', 'locked', 'fa-solid fa-triangle-exclamation');
+            } finally {
+                btnSalvarModulo.disabled = false;
+                btnSalvarModulo.innerHTML = originalHtml;
+            }
+        });
+    }
+
+    const btnConfirmarDelete = qs("#btn-confirmar-delete-modulo");
+    if (btnConfirmarDelete) {
+        btnConfirmarDelete.addEventListener("click", async () => {
+            if (!moduloParaRemover) return;
+            const originalHtml = btnConfirmarDelete.innerHTML;
+
+            try {
+                btnConfirmarDelete.disabled = true;
+                btnConfirmarDelete.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Removendo...';
+
+                await removerModuloAdmin(moduloParaRemover.id, activeConteudoId);
+                fecharModalAdminDelete();
+                showToast('Módulo / PDF removido com sucesso!', 'info', 'fa-solid fa-trash-can');
+                abrirModulos(activeConteudoId);
+            } catch (err) {
+                showToast(err.message || 'Erro ao remover módulo.', 'locked', 'fa-solid fa-triangle-exclamation');
+            } finally {
+                btnConfirmarDelete.disabled = false;
+                btnConfirmarDelete.innerHTML = originalHtml;
+            }
+        });
+    }
+
+    const btnAdminTrocarPdf = qs("#btn-admin-trocar-pdf");
+    if (btnAdminTrocarPdf) {
+        btnAdminTrocarPdf.addEventListener("click", () => {
+            if (activeModulo) {
+                abrirModalAdminModulo(activeModulo);
+            }
+        });
+    }
+}
+
+function abrirModalAdminModulo(modulo = null) {
+    const modal = qs('#modal-admin-modulo');
+    if (!modal) return;
+
+    const inputId = qs('#admin-modulo-id');
+    const inputConteudoId = qs('#admin-modulo-conteudo-id');
+    const inputTitulo = qs('#admin-modulo-titulo-input');
+    const inputDesc = qs('#admin-modulo-desc-input');
+    const inputDuracao = qs('#admin-modulo-duracao-input');
+    const inputTopicos = qs('#admin-modulo-topicos-input');
+    const inputPdfUrl = qs('#admin-modulo-pdf-url-input');
+    const inputPdfFile = qs('#admin-modulo-pdf-file-input');
+    const titleEl = qs('#modal-admin-modulo-titulo');
+    const dropzoneFilename = qs('#admin-dropzone-filename');
+
+    uploadedPdfBase64 = null;
+    uploadedPdfName = null;
+    if (inputPdfFile) inputPdfFile.value = '';
+
+    if (inputConteudoId) inputConteudoId.value = activeConteudoId || 'CodigoTransito';
+
+    if (modulo) {
+        if (titleEl) titleEl.textContent = 'Editar Módulo / Substituir PDF';
+        if (inputId) inputId.value = modulo.id || '';
+        if (inputTitulo) inputTitulo.value = modulo.titulo || '';
+        if (inputDesc) inputDesc.value = modulo.descricao || '';
+        if (inputDuracao) inputDuracao.value = modulo.duracao || '20 min';
+        if (inputTopicos) inputTopicos.value = modulo.topicos || 4;
+        if (inputPdfUrl) inputPdfUrl.value = modulo.pdfUrl || modulo.pdfNome || '';
+        if (dropzoneFilename) dropzoneFilename.textContent = modulo.pdfNome || 'Clique para selecionar um novo arquivo PDF';
+    } else {
+        if (titleEl) titleEl.textContent = 'Adicionar Novo Módulo / PDF';
+        if (inputId) inputId.value = '';
+        if (inputTitulo) inputTitulo.value = '';
+        if (inputDesc) inputDesc.value = '';
+        if (inputDuracao) inputDuracao.value = '20 min';
+        if (inputTopicos) inputTopicos.value = 4;
+        if (inputPdfUrl) inputPdfUrl.value = '';
+        if (dropzoneFilename) dropzoneFilename.textContent = 'Clique para selecionar um arquivo PDF';
+    }
+
+    ativarTabPdf('url');
+    modal.style.display = 'flex';
+}
+
+function fecharModalAdminModulo() {
+    const modal = qs('#modal-admin-modulo');
+    if (modal) modal.style.display = 'none';
+}
+
+function abrirModalAdminDelete(modulo) {
+    if (!modulo) return;
+    moduloParaRemover = modulo;
+    const modal = qs('#modal-admin-delete');
+    const alvoEl = qs('#delete-modulo-nome-alvo');
+    if (alvoEl) alvoEl.textContent = `"${modulo.titulo || 'Módulo ' + (modulo.numero || '')}"`;
+    if (modal) modal.style.display = 'flex';
+}
+
+function fecharModalAdminDelete() {
+    moduloParaRemover = null;
+    const modal = qs('#modal-admin-delete');
+    if (modal) modal.style.display = 'none';
+}
+
+function ativarTabPdf(tab) {
+    const tabUrl = qs('#tab-admin-pdf-url');
+    const tabFile = qs('#tab-admin-pdf-file');
+    const paneUrl = qs('#pane-admin-pdf-url');
+    const paneFile = qs('#pane-admin-pdf-file');
+
+    if (tab === 'url') {
+        if (tabUrl) tabUrl.classList.add('active');
+        if (tabFile) tabFile.classList.remove('active');
+        if (paneUrl) paneUrl.style.display = 'block';
+        if (paneFile) paneFile.style.display = 'none';
+    } else {
+        if (tabUrl) tabUrl.classList.remove('active');
+        if (tabFile) tabFile.classList.add('active');
+        if (paneUrl) paneUrl.style.display = 'none';
+        if (paneFile) paneFile.style.display = 'block';
+    }
 }
 
 export function aplicarTemaModal(temaCor = 'green') {
@@ -256,6 +485,25 @@ export function aplicarTemaModal(temaCor = 'green') {
         const themeClasses = Array.from(modal.classList).filter(c => c.startsWith('modulos-theme-'));
         themeClasses.forEach(c => modal.classList.remove(c));
         modal.classList.add(`modulos-theme-${temaCor}`);
+    }
+}
+
+async function alterarPonteiroModulo(targetNum) {
+    if (!activeConteudoId) return;
+    try {
+        const num = Math.max(1, Number(targetNum || 1));
+        const activeUserId = getModuloUserId();
+        const res = await setPonteiroModulo(activeConteudoId, num, activeUserId);
+        showToast(res.message || `Ponteiro do Módulo definido para ${num}!`, 'info', 'fa-solid fa-location-crosshairs');
+        setModuloAtualCached(activeConteudoId, num, activeUserId);
+        atualizarCardsModuloUI(activeConteudoId, num);
+
+        const selectAdminPointer = qs("#select-admin-pointer");
+        if (selectAdminPointer) {
+            selectAdminPointer.value = String(num);
+        }
+    } catch (err) {
+        showToast(err.message || 'Erro ao definir ponteiro.', 'locked', 'fa-solid fa-triangle-exclamation');
     }
 }
 
@@ -289,10 +537,18 @@ export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
             if (mod) {
                 updateModuleCard(card, mod, {
                     onRead: (m) => abrirLeituraPdf(conteudoId, m),
-                    onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock')
+                    onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock'),
+                    onAdminEdit: (m) => abrirModalAdminModulo(m),
+                    onAdminDelete: (m) => abrirModalAdminDelete(m),
+                    onSetPointer: (m) => alterarPonteiroModulo(m.numero)
                 });
             }
         });
+    }
+
+    const selectAdminPointer = qs("#select-admin-pointer");
+    if (selectAdminPointer && moduloAtual) {
+        selectAdminPointer.value = String(moduloAtual);
     }
 }
 
@@ -300,6 +556,11 @@ export function abrirModulos(conteudoId) {
     if (!conteudoId) return;
     activeConteudoId = conteudoId;
     usuarioGlobal.updateUI();
+
+    const btnAdminAdd = qs("#btn-admin-add-modulo");
+    if (btnAdminAdd) {
+        btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');
@@ -313,6 +574,30 @@ export function abrirModulos(conteudoId) {
 
     const moduloAtual = getModuloAtualCached(conteudoId);
     const modulos = getModulosByConteudoId(conteudoId, moduloAtual);
+
+    const adminPointerControl = qs("#admin-pointer-control");
+    const selectAdminPointer = qs("#select-admin-pointer");
+    if (adminPointerControl && selectAdminPointer) {
+        if (usuarioGlobal.isAdmin) {
+            adminPointerControl.style.display = 'inline-flex';
+            selectAdminPointer.innerHTML = '';
+            modulos.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m.numero;
+                opt.textContent = `Módulo ${String(m.numero).padStart(2, '0')}: ${m.titulo}`;
+                if (Number(m.numero) === Number(moduloAtual)) {
+                    opt.selected = true;
+                }
+                selectAdminPointer.appendChild(opt);
+            });
+            selectAdminPointer.onchange = async (e) => {
+                const targetNum = Number(e.target.value);
+                await alterarPonteiroModulo(targetNum);
+            };
+        } else {
+            adminPointerControl.style.display = 'none';
+        }
+    }
 
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
@@ -356,7 +641,10 @@ export function abrirModulos(conteudoId) {
         modulos.forEach((modulo) => {
             const card = createModuleCard(modulo, {
                 onRead: (mod) => abrirLeituraPdf(conteudoId, mod),
-                onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock')
+                onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock'),
+                onAdminEdit: (mod) => abrirModalAdminModulo(mod),
+                onAdminDelete: (mod) => abrirModalAdminDelete(mod),
+                onSetPointer: (mod) => alterarPonteiroModulo(mod.numero)
             });
             if (card) {
                 modulesListContainer.appendChild(card);
@@ -365,6 +653,42 @@ export function abrirModulos(conteudoId) {
 
         atualizarCardsModuloUI(conteudoId, moduloAtual);
     }
+
+    // Sincroniza módulos dinâmicos da API em segundo plano
+    carregarModulosDinamicos(conteudoId).then(() => {
+        if (activeConteudoId === conteudoId) {
+            const modulosAtualizados = getModulosByConteudoId(conteudoId, moduloAtual);
+            if (modulesListContainer) {
+                modulesListContainer.innerHTML = '';
+                modulosAtualizados.forEach((modulo) => {
+                    const card = createModuleCard(modulo, {
+                        onRead: (mod) => abrirLeituraPdf(conteudoId, mod),
+                        onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock'),
+                        onAdminEdit: (mod) => abrirModalAdminModulo(mod),
+                        onAdminDelete: (mod) => abrirModalAdminDelete(mod),
+                        onSetPointer: (mod) => alterarPonteiroModulo(mod.numero)
+                    });
+                    if (card) {
+                        modulesListContainer.appendChild(card);
+                    }
+                });
+                atualizarCardsModuloUI(conteudoId, moduloAtual);
+            }
+
+            if (selectAdminPointer) {
+                selectAdminPointer.innerHTML = '';
+                modulosAtualizados.forEach(m => {
+                    const opt = document.createElement('option');
+                    opt.value = m.numero;
+                    opt.textContent = `Módulo ${String(m.numero).padStart(2, '0')}: ${m.titulo}`;
+                    if (Number(m.numero) === Number(moduloAtual)) {
+                        opt.selected = true;
+                    }
+                    selectAdminPointer.appendChild(opt);
+                });
+            }
+        }
+    }).catch(() => {});
 
     getModuloAtual(conteudoId).then((progresso) => {
         if (progresso && progresso.mudou && activeConteudoId === conteudoId) {
@@ -418,9 +742,9 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
 
     const btnAvancarTopo = qs("#btn-avancar-modulo-topo");
     const modulosConteudo = getModulosByConteudoId(conteudoId);
-    const totalModulos = modulosConteudo.length || MAX_MODULO;
+    const totalModulos = modulosConteudo.length || 1;
     const numModuloAtual = Number(modulo.numero || 1);
-    const isUltimoModulo = numModuloAtual >= MAX_MODULO || numModuloAtual >= totalModulos;
+    const isUltimoModulo = numModuloAtual >= totalModulos;
 
     if (btnAvancarTopo) {
         btnAvancarTopo.style.display = isUltimoModulo ? 'none' : 'inline-flex';
@@ -474,6 +798,10 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
         iframePdf.src = pdfUrl;
     }
 
+    const btnTrocarPdf = qs('#btn-admin-trocar-pdf');
+    if (btnTrocarPdf) {
+        btnTrocarPdf.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
 }
 
 export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, proximoModulo) {
@@ -509,7 +837,7 @@ export function abrirModalQuestoesLiberadas(conteudo, moduloConcluido, bateria, 
     }
 
     if (btnContinuar) {
-        if (proximoModulo && Number(proximoModulo.numero) <= MAX_MODULO) {
+        if (proximoModulo) {
             const numProx = String(proximoModulo.numero).padStart(2, '0');
             btnContinuar.innerHTML = `<i class="fa-solid fa-book-open"></i> Continuar lendo (Módulo ${numProx})`;
         } else {

@@ -1,3 +1,5 @@
+import { usuarioGlobal } from '../services/userService.js';
+
 export function createModuleCard(modulo, options = {}) {
     if (!modulo) return null;
 
@@ -16,6 +18,7 @@ export function createModuleCard(modulo, options = {}) {
     const numeroFormatado = String(modulo.numero || 1).padStart(2, '0');
     const duracao = modulo.duracao || '20 min';
     const topicos = modulo.topicos ? `${modulo.topicos} tópicos` : 'Aulas práticas';
+    const isAdmin = Boolean(usuarioGlobal.isAdmin);
 
     let statusIconHtml = '';
     if (isDone) {
@@ -56,11 +59,30 @@ export function createModuleCard(modulo, options = {}) {
         `;
     }
 
-
     const pdfBadgeHtml = modulo.pdfNome
         ? `<span class="module-meta-pdf"><i class="fa-solid fa-file-pdf"></i> Material PDF</span>`
         : '';
-        console.log(modulo);
+
+    const customBadgeHtml = modulo.is_custom
+        ? `<span class="module-tag-custom" title="Módulo adicionado pelo Administrador"><i class="fa-solid fa-sparkles"></i> Módulo Único</span>`
+        : '';
+
+    const isCurrentPointer = modulo.status === 'available';
+    const adminActionsHtml = isAdmin
+        ? `
+        <div class="module-admin-actions">
+            <button type="button" class="btn-module-admin-btn btn-admin-set-pointer ${isCurrentPointer ? 'is-current-pointer' : ''}" title="Definir ponteiro neste módulo (${numeroFormatado})">
+                <i class="fa-solid fa-location-crosshairs"></i>
+            </button>
+            <button type="button" class="btn-module-admin-btn btn-admin-edit" title="Editar ou substituir PDF">
+                <i class="fa-solid fa-pen-to-square"></i>
+            </button>
+            <button type="button" class="btn-module-admin-btn btn-admin-delete" title="Remover este módulo ou PDF">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+        </div>
+        `
+        : '';
 
     card.innerHTML = `
         <div class="module-index-box">
@@ -70,6 +92,7 @@ export function createModuleCard(modulo, options = {}) {
         <div class="module-content">
             <div class="module-meta">
                 <span class="module-tag">Módulo ${numeroFormatado}</span>
+                ${customBadgeHtml}
                 <span class="module-meta-item"><i class="fa-regular fa-clock"></i> ${escapeHtml(duracao)}</span>
                 <span class="module-meta-item"><i class="fa-regular fa-file-lines"></i> ${escapeHtml(topicos)}</span>
                 ${pdfBadgeHtml}
@@ -81,6 +104,7 @@ export function createModuleCard(modulo, options = {}) {
         <div class="module-action-area">
             ${statusBadgeHtml}
             ${actionButtonHtml}
+            ${adminActionsHtml}
         </div>
     `;
 
@@ -95,6 +119,7 @@ export function updateModuleCard(card, modulo, options = {}) {
     const isLocked = Boolean(modulo.bloqueado || modulo.status === 'locked');
     const isDone = Boolean(modulo.status === 'done');
     const statusClass = isLocked ? 'locked' : (isDone ? 'done' : 'available');
+    const isAdmin = Boolean(usuarioGlobal.isAdmin);
 
     if (card.classList.contains(statusClass) && !card.classList.contains(isLocked ? 'available' : 'locked')) {
         return;
@@ -135,7 +160,24 @@ export function updateModuleCard(card, modulo, options = {}) {
             `;
         }
 
-        actionArea.innerHTML = `${statusBadgeHtml}${actionButtonHtml}`;
+        const isCurrentPointer = modulo.status === 'available';
+        const adminActionsHtml = isAdmin
+            ? `
+            <div class="module-admin-actions">
+                <button type="button" class="btn-module-admin-btn btn-admin-set-pointer ${isCurrentPointer ? 'is-current-pointer' : ''}" title="Definir ponteiro neste módulo">
+                    <i class="fa-solid fa-location-crosshairs"></i>
+                </button>
+                <button type="button" class="btn-module-admin-btn btn-admin-edit" title="Editar ou substituir PDF">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                </button>
+                <button type="button" class="btn-module-admin-btn btn-admin-delete" title="Remover este módulo ou PDF">
+                    <i class="fa-solid fa-trash-can"></i>
+                </button>
+            </div>
+            `
+            : '';
+
+        actionArea.innerHTML = `${statusBadgeHtml}${actionButtonHtml}${adminActionsHtml}`;
     }
 
     bindCardEvents(card, modulo, options);
@@ -143,6 +185,30 @@ export function updateModuleCard(card, modulo, options = {}) {
 
 function bindCardEvents(card, modulo, options = {}) {
     const isLocked = Boolean(modulo.bloqueado || modulo.status === 'locked');
+
+    const btnAdminSetPointer = card.querySelector('.btn-admin-set-pointer');
+    if (btnAdminSetPointer && typeof options.onSetPointer === 'function') {
+        btnAdminSetPointer.onclick = (event) => {
+            event.stopPropagation();
+            options.onSetPointer(modulo, card);
+        };
+    }
+
+    const btnAdminEdit = card.querySelector('.btn-admin-edit');
+    if (btnAdminEdit && typeof options.onAdminEdit === 'function') {
+        btnAdminEdit.onclick = (event) => {
+            event.stopPropagation();
+            options.onAdminEdit(modulo, card);
+        };
+    }
+
+    const btnAdminDelete = card.querySelector('.btn-admin-delete');
+    if (btnAdminDelete && typeof options.onAdminDelete === 'function') {
+        btnAdminDelete.onclick = (event) => {
+            event.stopPropagation();
+            options.onAdminDelete(modulo, card);
+        };
+    }
 
     if (isLocked) {
         card.style.cursor = 'default';
@@ -181,7 +247,7 @@ function bindCardEvents(card, modulo, options = {}) {
             };
         }
         card.onclick = (event) => {
-            if (event.target.closest('.btn-ler')) return;
+            if (event.target.closest('.btn-ler') || event.target.closest('.module-admin-actions')) return;
             triggerRead(event);
         };
     }

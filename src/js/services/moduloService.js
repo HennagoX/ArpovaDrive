@@ -11,16 +11,12 @@ const inFlightRequests = new Map();
 const lastFetchTimestamps = new Map();
 const CACHE_TTL_MS = 25000;
 
-export const MAX_MODULO = 10;
+export const MAX_MODULO = 999;
 
 export function getModuloUserId(userId) {
     if (userId && typeof userId === 'string' && userId.trim()) {
         return userId.trim();
     }
-    const user = getCurrentUser();
-    const id = user?.id || user?.id_usuario || user?.userId;
-    if (id) return String(id);
-
     return getUsuarioAtivoId();
 }
 
@@ -34,7 +30,7 @@ export function getModuloAtualCached(contentId, userId) {
     const storageKey = getModuloStorageKey(contentId, userId);
     const cached = getLocalItem(storageKey, null);
     if (cached !== null && !isNaN(Number(cached))) {
-        return Math.min(MAX_MODULO, Math.max(1, Number(cached)));
+        return Math.max(1, Number(cached));
     }
     return 1;
 }
@@ -42,7 +38,7 @@ export function getModuloAtualCached(contentId, userId) {
 export function setModuloAtualCached(contentId, moduloNumero, userId) {
     if (!contentId) return;
     const storageKey = getModuloStorageKey(contentId, userId);
-    const num = Math.min(MAX_MODULO, Math.max(1, Number(moduloNumero || 1)));
+    const num = Math.max(1, Number(moduloNumero || 1));
     setLocalItem(storageKey, num);
     lastFetchTimestamps.set(storageKey, Date.now());
 }
@@ -84,7 +80,7 @@ export async function getModuloAtual(contentId, userId, options = {}) {
 
             if (response.ok) {
                 const data = await response.json();
-                const moduloAtual = Math.min(MAX_MODULO, Math.max(1, Number(data.modulo_atual || 1)));
+                const moduloAtual = Math.max(1, Number(data.modulo_atual || 1));
                 const mudou = moduloAtual !== cachedValue;
 
                 setLocalItem(storageKey, moduloAtual);
@@ -115,7 +111,7 @@ export async function getModuloAtual(contentId, userId, options = {}) {
     return fetchPromise;
 }
 
-export async function avancarModulo(contentId, userId) {
+export async function avancarModulo(contentId, userId, maxModulos = null) {
     if (!contentId) {
         throw new Error('Conteúdo não informado.');
     }
@@ -124,18 +120,18 @@ export async function avancarModulo(contentId, userId) {
     const storageKey = getModuloStorageKey(contentId, activeUserId);
     const cachedAtual = getModuloAtualCached(contentId, activeUserId);
 
-    if (cachedAtual >= MAX_MODULO) {
+    if (maxModulos && cachedAtual >= maxModulos) {
         return {
             success: true,
             conteudo: contentId,
-            modulo_atual: MAX_MODULO,
-            modulo_anterior: MAX_MODULO,
+            modulo_atual: maxModulos,
+            modulo_anterior: maxModulos,
             xp_ganha: 0,
-            message: `Você já concluiu todos os ${MAX_MODULO} módulos de ${contentId}.`
+            message: `Você já concluiu todos os ${maxModulos} módulos de ${contentId}.`
         };
     }
 
-    const proximoEsperado = Math.min(MAX_MODULO, cachedAtual + 1);
+    const proximoEsperado = maxModulos ? Math.min(maxModulos, cachedAtual + 1) : cachedAtual + 1;
 
     setLocalItem(storageKey, proximoEsperado);
     lastFetchTimestamps.set(storageKey, Date.now());
@@ -163,7 +159,7 @@ export async function avancarModulo(contentId, userId) {
             throw new Error(errorMsg);
         }
 
-        const moduloAtual = Math.min(MAX_MODULO, Math.max(proximoEsperado, Number(data.modulo_atual || proximoEsperado)));
+        const moduloAtual = Math.max(proximoEsperado, Number(data.modulo_atual || proximoEsperado));
         const xpGanha = typeof data?.xp_ganha === 'number' ? data.xp_ganha : (moduloAtual > cachedAtual ? 25 : 0);
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
@@ -186,6 +182,62 @@ export async function avancarModulo(contentId, userId) {
             modulo_anterior: cachedAtual,
             xp_ganha: proximoEsperado > cachedAtual ? 25 : 0,
             message: `Avançou para o Módulo ${proximoEsperado}!`
+        };
+    }
+}
+
+export async function setPonteiroModulo(contentId, novoNumero, userId) {
+    if (!contentId) {
+        throw new Error('Conteúdo não informado.');
+    }
+    const num = Math.max(1, Number(novoNumero || 1));
+    const activeUserId = getModuloUserId(userId);
+    const storageKey = getModuloStorageKey(contentId, activeUserId);
+
+    setLocalItem(storageKey, num);
+    lastFetchTimestamps.set(storageKey, Date.now());
+
+    try {
+        const response = await fetch(ENDPOINTS.MODULO.SET || `${API_URL}/modulo/set`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId
+            },
+            body: JSON.stringify({
+                contentId,
+                id: contentId,
+                userId: activeUserId,
+                id_usuario: activeUserId,
+                numero: num
+            })
+        });
+
+        const data = await response.json().catch(() => null);
+
+        if (!response.ok) {
+            const errorMsg = getHttpErrorMessage(response.status, data?.error, 'Erro ao definir ponteiro do módulo.');
+            throw new Error(errorMsg);
+        }
+
+        const moduloAtual = Math.max(1, Number(data.modulo_atual || num));
+        setLocalItem(storageKey, moduloAtual);
+        lastFetchTimestamps.set(storageKey, Date.now());
+
+        return {
+            success: true,
+            conteudo: data.conteudo || contentId,
+            modulo_atual: moduloAtual,
+            message: data.message || `Ponteiro do Módulo definido para ${moduloAtual} com sucesso!`
+        };
+    } catch (err) {
+        console.warn('[ModuloService] Erro na requisição à API, aplicando no localStorage:', err.message);
+        return {
+            success: true,
+            conteudo: contentId,
+            modulo_atual: num,
+            message: `Ponteiro do Módulo definido para ${num}!`
         };
     }
 }

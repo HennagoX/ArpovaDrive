@@ -1,9 +1,18 @@
 import { MESSAGES } from '../constants/messages.js';
+import { API_URL, ENDPOINTS } from '../constants/routes.js';
+import { usuarioGlobal } from './userService.js';
+import { getLocalItem, setLocalItem } from '../utils/storage.js';
 
 export const LOCKED_MODULE_MESSAGE = MESSAGES.MODULO_BLOQUEADO || 'Conclua o módulo anterior para desbloquear este módulo!';
 
 export function resolvePdfUrl(filename, folder = 'modulo1') {
     if (!filename) return null;
+    if (filename.startsWith('http://') || filename.startsWith('https://')) {
+        return filename;
+    }
+    if (filename.startsWith('/uploads/')) {
+        return `${API_URL}${filename}`;
+    }
     let path = filename;
     if (!path.startsWith('modulo1/') && !path.startsWith('modulo2/') && !path.startsWith('modulo3/') && !path.startsWith('modulo4/') && !path.startsWith('modulo5/')) {
         path = `${folder}/${filename}`;
@@ -695,23 +704,146 @@ export function getConteudoById(id) {
     return foundKey ? CONTEUDOS_DATA[foundKey] : null;
 }
 
+let dynamicModulosCache = {
+    modulos: [],
+    removidos: []
+};
+
+// Carrega cache local persistido de módulos customizados
+try {
+    const cached = getLocalItem('aprovadrive_dynamic_modulos_cache', null);
+    if (cached && typeof cached === 'object') {
+        dynamicModulosCache = {
+            modulos: Array.isArray(cached.modulos) ? cached.modulos : [],
+            removidos: Array.isArray(cached.removidos) ? cached.removidos : []
+        };
+    }
+} catch {}
+
+export async function carregarModulosDinamicos(conteudoId = null) {
+    try {
+        const url = ENDPOINTS.MODULOS_CUSTOMIZADOS.LISTAR(conteudoId);
+        const response = await fetch(url, {
+            headers: { 'Accept': 'application/json' }
+        });
+        if (!response.ok) return dynamicModulosCache;
+        const data = await response.json();
+        if (data && Array.isArray(data.modulos)) {
+            dynamicModulosCache = {
+                modulos: data.modulos,
+                removidos: Array.isArray(data.removidos) ? data.removidos : []
+            };
+            setLocalItem('aprovadrive_dynamic_modulos_cache', dynamicModulosCache);
+        }
+    } catch (err) {
+        console.warn('[ConteudosService] Erro ao sincronizar módulos dinâmicos:', err.message);
+    }
+    return dynamicModulosCache;
+}
+
+export async function salvarModuloAdmin(dados) {
+    const requesterId = usuarioGlobal.id_usuario || usuarioGlobal.email;
+    const response = await fetch(ENDPOINTS.MODULOS_CUSTOMIZADOS.SALVAR, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        },
+        body: JSON.stringify(dados)
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao salvar módulo/PDF.');
+    }
+
+    await carregarModulosDinamicos();
+    return resData;
+}
+
+export async function removerModuloAdmin(moduloId, conteudoId = null) {
+    const requesterId = usuarioGlobal.id_usuario || usuarioGlobal.email;
+    const response = await fetch(ENDPOINTS.MODULOS_CUSTOMIZADOS.REMOVER(moduloId, conteudoId), {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        }
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao remover módulo.');
+    }
+
+    await carregarModulosDinamicos();
+    return resData;
+}
+
 export function getModulosByConteudoId(id, moduloAtual = null) {
     const conteudo = getConteudoById(id);
     if (!conteudo || !Array.isArray(conteudo.modulos)) {
         return [];
     }
 
-    const total = conteudo.modulos.length;
     const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : (id === 'PrimeirosSocorros' ? 'modulo4' : (id === 'MeioAmbiente' ? 'modulo5' : 'modulo1')));
-    return conteudo.modulos.map((modulo, index) => {
-        const num = Number(modulo.numero || (index + 1));
+    const removidosSet = new Set(dynamicModulosCache.removidos || []);
+
+    // 1. Filtra os módulos padrão não removidos e aplica overrides se houver
+    const modulosBase = conteudo.modulos
+        .filter(m => !removidosSet.has(m.id))
+        .map((modulo, index) => {
+            const override = (dynamicModulosCache.modulos || []).find(dm => dm.id === modulo.id);
+            if (override) {
+                return {
+                    ...modulo,
+                    ...override,
+                    pdfNome: override.pdf_nome || modulo.pdfNome,
+                    pdfUrl: override.pdf_url ? resolvePdfUrl(override.pdf_url, folder) : (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null)
+                };
+            }
+            return modulo;
+        });
+
+    // 2. Anexa os módulos adicionais customizados criados pelo administrador
+    const modulosCustomizados = (dynamicModulosCache.modulos || [])
+        .filter(dm => dm.conteudo_id === id && !conteudo.modulos.some(bm => bm.id === dm.id))
+        .map(dm => {
+            return {
+                id: dm.id,
+                numero: Number(dm.numero || 99),
+                titulo: dm.titulo,
+                descricao: dm.descricao || '',
+                duracao: dm.duracao || '20 min',
+                topicos: Number(dm.topicos || 4),
+                pdfNome: dm.pdf_nome || 'Material Adicional',
+                pdfUrl: dm.pdf_url ? resolvePdfUrl(dm.pdf_url, folder) : null,
+                is_custom: true
+            };
+        });
+
+    const todosModulos = [...modulosBase, ...modulosCustomizados];
+
+    // Reordena sequencialmente e renumera caso tenham sido adicionados ou removidos
+    todosModulos.sort((a, b) => Number(a.numero || 0) - Number(b.numero || 0));
+
+    const total = todosModulos.length;
+
+    return todosModulos.map((modulo, index) => {
+        const num = index + 1;
         const pdfUrl = modulo.pdfUrl || (modulo.pdfNome ? resolvePdfUrl(modulo.pdfNome, folder) : null);
 
         let status = 'available';
         let bloqueado = false;
 
-        if (moduloAtual !== null && moduloAtual !== undefined) {
-            const nivelAtual = Math.min(10, Math.max(1, Number(moduloAtual)));
+        // Se o usuário for administrador, ele tem visão e acesso a todos os módulos liberados
+        if (usuarioGlobal.isAdmin) {
+            status = 'available';
+            bloqueado = false;
+        } else if (moduloAtual !== null && moduloAtual !== undefined) {
+            const nivelAtual = Math.max(1, Number(moduloAtual));
             if (num < nivelAtual) {
                 status = 'done';
                 bloqueado = false;
@@ -730,6 +862,7 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
 
         return {
             ...modulo,
+            numero: num,
             pdfUrl,
             status,
             bloqueado
