@@ -12,6 +12,7 @@ import {
     updateLevelUI
 } from '../../services/gamificationService.js';
 import { usuarioGlobal } from '../../services/userService.js';
+import { attachButtonCooldown, startCooldown } from '../../utils/debounce.js';
 
 let initialized = false;
 let currentRouter = null;
@@ -38,9 +39,13 @@ export function initTarefasView(router) {
 
     const btnAtualizar = qs('#btn-recarregar-tarefas');
     if (btnAtualizar) {
-        btnAtualizar.addEventListener('click', () => {
+        attachButtonCooldown(btnAtualizar, async () => {
             limparCacheTarefasFixas();
-            renderTarefas(true);
+            await renderTarefas(true);
+        }, {
+            cooldownSeconds: 6,
+            loadingText: 'Atualizando...',
+            formatCooldown: (sec) => `Aguarde (${sec}s)`
         });
     }
 }
@@ -306,8 +311,11 @@ async function handleClaimTask(task, buttonEl) {
     } catch (err) {
         showToast(err.message, 'error', 'fa-solid fa-triangle-exclamation');
         if (buttonEl) {
-            buttonEl.disabled = false;
-            buttonEl.innerHTML = originalContent;
+            startCooldown(buttonEl, 2, {
+                originalHtml: originalContent,
+                originalDisabled: false,
+                formatText: (sec) => `Aguarde (${sec}s)`
+            });
         }
     }
 }

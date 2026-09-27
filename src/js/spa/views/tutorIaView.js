@@ -4,6 +4,7 @@ import { getCurrentUser } from '../../services/authService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { getGamificationData, getTaxaAproveitamento } from '../../services/gamificationService.js';
 import { getLocalDesempenho, fetchDesempenho } from '../../services/desempenhoService.js';
+import { startCooldown } from '../../utils/debounce.js';
 
 let initialized = false;
 let currentRouter = null;
@@ -107,13 +108,18 @@ async function handleUserSend(text) {
         conversationHistory.push({ role: 'assistant', content: fallbackText });
     } finally {
         isSending = false;
-        if (sendBtn) {
-            sendBtn.disabled = false;
-        }
         if (input) {
             input.focus();
         }
         scrollChatBottom();
+        if (sendBtn) {
+            startCooldown(sendBtn, 2, {
+                originalHtml: '<i class="fa-solid fa-paper-plane"></i>',
+                originalDisabled: false,
+                formatText: (s) => `<span style="font-size: 11px; font-weight: bold;">${s}s</span>`,
+                preserveIcon: false
+            });
+        }
     }
 }
 

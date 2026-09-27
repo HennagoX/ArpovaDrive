@@ -16,6 +16,7 @@ import { checkBateriaLiberadaPorModulo } from '../../services/questoesService.js
 import { createModuleCard, updateModuleCard } from '../../components/moduleCard.js';
 import { atualizarXpNoLocalStorage, addXp } from '../../services/gamificationService.js';
 import { usuarioGlobal } from '../../services/userService.js';
+import { startCooldown } from '../../utils/debounce.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -170,8 +171,11 @@ export function initModulosView(router) {
                 console.error("[ModulosView] Erro ao avançar módulo:", err);
                 showToast(err.message || "Erro ao avançar para o próximo módulo.", "locked", "fa-solid fa-triangle-exclamation");
             } finally {
-                btnAvancarTopo.disabled = false;
-                btnAvancarTopo.innerHTML = originalHtml;
+                startCooldown(btnAvancarTopo, 2, {
+                    originalHtml,
+                    originalDisabled: false,
+                    formatText: (sec) => `Aguarde (${sec}s)`
+                });
             }
         });
     }

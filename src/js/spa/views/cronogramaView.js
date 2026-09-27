@@ -20,6 +20,7 @@ import { usuarioGlobal } from '../../services/userService.js';
 import { SELECTORS } from '../../constants/selectors.js';
 import { createTaskCard } from '../../components/taskCard.js';
 import { showToast } from './modulosView.js';
+import { attachButtonCooldown } from '../../utils/debounce.js';
 
 let initialized = false;
 let diaAtual = 1;
@@ -35,8 +36,12 @@ export function initCronogramaView(router) {
 
     const btnRetry = qs('#btn-tentar-novamente');
     if (btnRetry) {
-        on(btnRetry, 'click', async () => {
+        attachButtonCooldown(btnRetry, async () => {
             await carregarCronograma(getUsuarioAtivoId(), true);
+        }, {
+            cooldownSeconds: 2,
+            loadingText: 'Tentando...',
+            formatCooldown: (sec) => `Aguarde (${sec}s)`
         });
     }
 

@@ -620,3 +620,18 @@
         flex-direction: column;
     }
 }
+
+/* --------------------------------------------------------------------------
+   Debounce e Cooldown de Botões com API
+   -------------------------------------------------------------------------- */
+button:disabled.is-cooldown,
+button.is-cooldown,
+.btn-cooldown,
+.btn-retry:disabled {
+    opacity: 0.7 !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    filter: grayscale(0.25);
+    user-select: none;
+    transition: opacity 0.2s ease, filter 0.2s ease;
+}
