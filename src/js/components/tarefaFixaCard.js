@@ -68,6 +68,10 @@ export function createTarefaFixaCard(task, options = {}) {
         }
     }
 
+    if (task.is_custom) {
+        metaRefHtml += `<span class="tarefa-meta-pill pill-custom"><i class="fa-solid fa-sparkles"></i> Customizada</span>`;
+    }
+
     let actionHtml = '';
     if (isDone) {
         actionHtml = `
@@ -168,12 +172,27 @@ export function createTarefaFixaCard(task, options = {}) {
                 <span>+${xpAmount} XP</span>
             </div>
             <div class="tarefa-action-container">
-                ${actionHtml}
+                <div style="display: flex; gap: 8px; align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                    ${actionHtml}
+                    ${task.is_custom && typeof options.onDelete === 'function' ? `
+                        <button type="button" class="btn-tarefa-admin-delete" title="Excluir tarefa fixa criada por administrador">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    ` : ''}
+                </div>
             </div>
         </div>
     `;
 
     // Event Listeners
+    const btnDelete = card.querySelector('.btn-tarefa-admin-delete');
+    if (btnDelete && typeof options.onDelete === 'function') {
+        btnDelete.addEventListener('click', (e) => {
+            e.stopPropagation();
+            options.onDelete(task, btnDelete);
+        });
+    }
+
     const btnReivindicar = card.querySelector('.btn-reivindicar');
     if (btnReivindicar && typeof options.onClaim === 'function') {
         btnReivindicar.addEventListener('click', (e) => {

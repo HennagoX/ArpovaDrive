@@ -2,7 +2,9 @@ import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
 import {
     getTarefasFixas,
     concluirTarefaFixa,
-    limparCacheTarefasFixas
+    limparCacheTarefasFixas,
+    criarTarefaFixaAdmin,
+    removerTarefaFixaAdmin
 } from '../../services/tarefasFixasService.js';
 import { createTarefaFixaCard } from '../../components/tarefaFixaCard.js';
 import {
@@ -19,6 +21,39 @@ let currentRouter = null;
 let activeFilter = 'todos';
 let toastTimeout = null;
 let currentPayload = null;
+let isCustomTitleEdited = false;
+let isCustomDescEdited = false;
+
+export function abrirModalTarefaFixa(defaultConteudoId = null, defaultModuloNum = null) {
+    const modal = qs('#modal-admin-tarefa-fixa');
+    if (!modal) return;
+
+    const selectConteudo = qs('#admin-fixa-conteudo-input');
+    const inputModulo = qs('#admin-fixa-modulo-input');
+    const inputTitulo = qs('#admin-fixa-titulo-input');
+    const inputDesc = qs('#admin-fixa-desc-input');
+    const inputXp = qs('#admin-fixa-xp-input');
+
+    if (defaultConteudoId && selectConteudo) {
+        selectConteudo.value = defaultConteudoId;
+    }
+    const modNum = defaultModuloNum ? Number(defaultModuloNum) : (Number(inputModulo?.value) || 11);
+    if (inputModulo) inputModulo.value = modNum;
+
+    isCustomTitleEdited = false;
+    isCustomDescEdited = false;
+
+    if (inputTitulo) inputTitulo.value = `Concluir Módulo ${modNum}`;
+    if (inputDesc) inputDesc.value = `Estude e conclua a leitura completa do Módulo ${modNum} para desbloquear a recompensa.`;
+    if (inputXp) inputXp.value = 150;
+
+    modal.style.display = 'flex';
+}
+
+export function fecharModalTarefaFixa() {
+    const modal = qs('#modal-admin-tarefa-fixa');
+    if (modal) modal.style.display = 'none';
+}
 
 export function initTarefasView(router) {
     currentRouter = router;
@@ -48,6 +83,124 @@ export function initTarefasView(router) {
             formatCooldown: (sec) => `Aguarde (${sec}s)`
         });
     }
+
+    // Handlers para Modal Admin de Tarefa Fixa
+    const btnAddFixa = qs('#btn-admin-add-tarefa-fixa');
+    if (btnAddFixa) {
+        btnAddFixa.onclick = (e) => {
+            if (e) e.preventDefault();
+            abrirModalTarefaFixa();
+        };
+    }
+
+    const btnFecharModal = qs('#btn-fechar-modal-admin-tarefa-fixa');
+    if (btnFecharModal) {
+        btnFecharModal.onclick = (e) => {
+            if (e) e.preventDefault();
+            fecharModalTarefaFixa();
+        };
+    }
+
+    const btnCancelarModal = qs('#btn-cancelar-admin-tarefa-fixa');
+    if (btnCancelarModal) {
+        btnCancelarModal.onclick = (e) => {
+            if (e.preventDefault) e.preventDefault();
+            fecharModalTarefaFixa();
+        };
+    }
+
+    const modalFixa = qs('#modal-admin-tarefa-fixa');
+    if (modalFixa) {
+        modalFixa.onclick = (e) => {
+            if (e.target === modalFixa) fecharModalTarefaFixa();
+        };
+    }
+
+    const inputModulo = qs('#admin-fixa-modulo-input');
+    const inputTitulo = qs('#admin-fixa-titulo-input');
+    const inputDesc = qs('#admin-fixa-desc-input');
+
+    if (inputTitulo) {
+        inputTitulo.addEventListener('input', () => {
+            isCustomTitleEdited = true;
+        });
+    }
+
+    if (inputDesc) {
+        inputDesc.addEventListener('input', () => {
+            isCustomDescEdited = true;
+        });
+    }
+
+    if (inputModulo) {
+        inputModulo.addEventListener('input', (e) => {
+            const num = Number(e.target.value) || 1;
+            if (!isCustomTitleEdited || !inputTitulo?.value?.trim() || inputTitulo.value.startsWith('Concluir Módulo')) {
+                if (inputTitulo) inputTitulo.value = `Concluir Módulo ${num}`;
+            }
+            if (!isCustomDescEdited || !inputDesc?.value?.trim() || inputDesc.value.includes('Módulo')) {
+                if (inputDesc) inputDesc.value = `Estude e conclua a leitura completa do Módulo ${num} para desbloquear a recompensa.`;
+            }
+        });
+    }
+
+    const btnSalvar = qs('#btn-salvar-admin-tarefa-fixa');
+    async function salvarTarefaFixa() {
+        const originalText = btnSalvar ? btnSalvar.innerHTML : 'Criar Tarefa Fixa';
+
+        try {
+            if (btnSalvar) {
+                btnSalvar.disabled = true;
+                btnSalvar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
+            }
+
+            const conteudo_id = qs('#admin-fixa-conteudo-input')?.value;
+            const modulo_numero = Number(qs('#admin-fixa-modulo-input')?.value);
+            const titulo = qs('#admin-fixa-titulo-input')?.value?.trim();
+            const descricao = qs('#admin-fixa-desc-input')?.value?.trim();
+            const xp_reward = Number(qs('#admin-fixa-xp-input')?.value || 150);
+
+            if (!conteudo_id) throw new Error('Selecione o conteúdo/matéria.');
+            if (!modulo_numero || modulo_numero < 1) throw new Error('Informe um número de módulo válido.');
+            if (!titulo) throw new Error('Informe o título da missão.');
+
+            const res = await criarTarefaFixaAdmin({
+                conteudo_id,
+                modulo_numero,
+                titulo,
+                descricao,
+                xp_reward,
+                tipo: 'modulo'
+            });
+
+            showToast(res.message || `Tarefa Fixa para Módulo ${modulo_numero} criada com sucesso!`, 'success', 'fa-solid fa-circle-check');
+            fecharModalTarefaFixa();
+            limparCacheTarefasFixas();
+            await renderTarefas(true);
+        } catch (err) {
+            showToast(err.message || 'Erro ao criar tarefa fixa.', 'error', 'fa-solid fa-triangle-exclamation');
+        } finally {
+            if (btnSalvar) {
+                btnSalvar.disabled = false;
+                btnSalvar.innerHTML = originalText;
+            }
+        }
+    }
+
+    if (btnSalvar) {
+        btnSalvar.addEventListener('click', salvarTarefaFixa);
+    }
+
+    [inputModulo, inputTitulo, inputDesc].forEach(inputEl => {
+        if (inputEl) {
+            inputEl.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    salvarTarefaFixa();
+                }
+            });
+        }
+    });
 }
 
 export function setActiveFilter(filterId) {
@@ -76,6 +229,15 @@ export function setActiveFilter(filterId) {
 
 export async function renderTarefas(forceRefresh = false) {
     usuarioGlobal.updateUI();
+    const btnAdminAdd = qs('#btn-admin-add-tarefa-fixa');
+    if (btnAdminAdd) {
+        btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+        btnAdminAdd.onclick = (e) => {
+            if (e) e.preventDefault();
+            abrirModalTarefaFixa();
+        };
+    }
+
     const titleEl = qs('#inicio-saudacao');
     const subtitleEl = qs('#inicio-subtitulo');
     if (titleEl) setText(titleEl, 'Tarefas por Conteúdo');
@@ -257,6 +419,19 @@ function createConteudoSection(conteudo) {
                         'locked',
                         'fa-solid fa-lock'
                     );
+                },
+                onDelete: async (t, btn) => {
+                    if (!confirm(`Deseja realmente remover a tarefa fixa "${t.titulo}"?`)) return;
+                    try {
+                        if (btn) btn.disabled = true;
+                        await removerTarefaFixaAdmin(t.id);
+                        showToast(`Tarefa fixa "${t.titulo}" removida com sucesso.`, 'info', 'fa-solid fa-trash-can');
+                        limparCacheTarefasFixas();
+                        await renderTarefas(true);
+                    } catch (err) {
+                        showToast(err.message || 'Erro ao remover tarefa fixa.', 'error', 'fa-solid fa-triangle-exclamation');
+                        if (btn) btn.disabled = false;
+                    }
                 }
             });
 

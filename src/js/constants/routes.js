@@ -44,7 +44,9 @@ export const ENDPOINTS = {
   },
   TAREFAS_FIXAS: {
     GET_TASKS: (userId) => `${API_URL}/task/fixas${userId ? `?id=${encodeURIComponent(userId)}` : ''}`,
-    CONCLUIR: (taskId) => `${API_URL}/task/fixas/${encodeURIComponent(taskId)}/concluir`
+    CONCLUIR: (taskId) => `${API_URL}/task/fixas/${encodeURIComponent(taskId)}/concluir`,
+    CRIAR: `${API_URL}/task/fixas/admin/criar`,
+    REMOVER: (taskId) => `${API_URL}/task/fixas/admin/${encodeURIComponent(taskId)}`
   },
   USUARIOS: {
     ME: `${API_URL}/usuarios/me`,
@@ -57,7 +59,8 @@ export const ENDPOINTS = {
   MODULO: {
     GET: (contentId, userId) => `${API_URL}/modulo/${encodeURIComponent(contentId || '')}${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`,
     GET_QUERY: (contentId, userId) => `${API_URL}/modulo?contentId=${encodeURIComponent(contentId || '')}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
-    NEXT: `${API_URL}/modulo/next`
+    NEXT: `${API_URL}/modulo/next`,
+    SET: `${API_URL}/modulo/set`
   },
   QUESTOES: {
     CONCLUIDAS: (userId, materia) => `${API_URL}/questoes/concluidas?userId=${encodeURIComponent(userId || '')}${materia ? `&materia=${encodeURIComponent(materia)}` : ''}`,
@@ -78,6 +81,11 @@ export const ENDPOINTS = {
   },
   AI: {
     CHAT: `${API_URL}/ai/chat`
+  },
+  MODULOS_CUSTOMIZADOS: {
+    LISTAR: (conteudoId) => `${API_URL}/modulos-customizados${conteudoId ? `?conteudoId=${encodeURIComponent(conteudoId)}` : ''}`,
+    SALVAR: `${API_URL}/modulos-customizados`,
+    REMOVER: (id, conteudoId) => `${API_URL}/modulos-customizados/${encodeURIComponent(id)}${conteudoId ? `?conteudoId=${encodeURIComponent(conteudoId)}` : ''}`
   }
 };
 

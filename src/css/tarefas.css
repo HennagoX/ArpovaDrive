@@ -635,3 +635,61 @@ button.is-cooldown,
     user-select: none;
     transition: opacity 0.2s ease, filter 0.2s ease;
 }
+
+/* --------------------------------------------------------------------------
+   Recursos de Administrador em Tarefas Fixas
+   -------------------------------------------------------------------------- */
+.btn-admin-add-tarefa-fixa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #1e3a8a, #2563eb);
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 9999px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.btn-admin-add-tarefa-fixa:hover {
+    background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35);
+}
+
+.btn-admin-add-tarefa-fixa:active {
+    transform: translateY(0);
+}
+
+.tarefa-meta-pill.pill-custom {
+    background: #fdf4ff;
+    color: #9333ea;
+    border-color: #f0abfc;
+}
+
+.btn-tarefa-admin-delete {
+    background: #fff1f2;
+    color: #e11d48;
+    border: 1px solid #fecdd3;
+    padding: 7px 11px;
+    border-radius: 10px;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-tarefa-admin-delete:hover {
+    background: #e11d48;
+    color: #ffffff;
+    border-color: #e11d48;
+    transform: translateY(-1px);
+}
+

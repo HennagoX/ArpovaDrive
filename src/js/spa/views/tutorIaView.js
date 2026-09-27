@@ -29,13 +29,24 @@ export function initTutorIaView(router) {
     if (initialized) return;
     initialized = true;
 
-    const form = qs('#tutor-ia-form');
-    if (form) {
-        form.addEventListener('submit', (e) => {
+    const btnSend = qs('#tutor-ia-send-btn');
+    const sendMsg = () => {
+        const val = input ? input.value : '';
+        if (val && val.trim()) {
+            handleUserSend(val.trim());
+        }
+    };
+    if (btnSend) {
+        btnSend.addEventListener('click', (e) => {
             e.preventDefault();
-            const val = input ? input.value : '';
-            if (val && val.trim()) {
-                handleUserSend(val.trim());
+            sendMsg();
+        });
+    }
+    if (input) {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMsg();
             }
         });
     }

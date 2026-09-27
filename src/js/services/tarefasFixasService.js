@@ -2,6 +2,7 @@ import { ENDPOINTS } from '../constants/routes.js';
 import { getUsuarioAtivoId } from './cronogramaService.js';
 import { atualizarXpNoLocalStorage, addXp } from './gamificationService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
+import { STORAGE_KEYS } from '../constants/storage.js';
 import { TIMING } from '../constants/timing.js';
 import { getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
 
@@ -123,4 +124,56 @@ export function limparCacheTarefasFixas(userId) {
     } catch {
         // Ignora
     }
+}
+
+export async function criarTarefaFixaAdmin(dados) {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+
+    const response = await fetch(ENDPOINTS.TAREFAS_FIXAS.CRIAR, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-Admin-Id': authId,
+            'X-Requester-Id': authId
+        },
+        body: JSON.stringify(dados)
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao criar tarefa fixa.');
+    }
+
+    try {
+        sessionStorage.clear();
+    } catch {}
+
+    return resData;
+}
+
+export async function removerTarefaFixaAdmin(taskId) {
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
+
+    const response = await fetch(ENDPOINTS.TAREFAS_FIXAS.REMOVER(taskId), {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-Admin-Id': authId,
+            'X-Requester-Id': authId
+        }
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao remover tarefa fixa.');
+    }
+
+    try {
+        sessionStorage.clear();
+    } catch {}
+
+    return resData;
 }
