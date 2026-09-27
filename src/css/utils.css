@@ -210,8 +210,7 @@
 /* Hover no Modo Dark: Pista Noturna & Gradiente Azul Escuro/Médio */
 [data-theme="dark"] .navbar-item:hover {
     background:
-      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.35) 0%, rgba(7, 82, 160, 0.25) 45%, transparent 70%),
-      repeating-conic-gradient(from 260deg at 50% 120%, rgba(56, 189, 248, 0.1) 0deg 8deg, transparent 8deg 24deg),
+      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.25) 0%, rgba(7, 82, 160, 0.2) 45%, transparent 70%),
       linear-gradient(135deg, #071224 0%, #0c2040 35%, #0f356d 70%, #0752a0 100%) !important;
     color: #f8fafc;
     border-color: rgba(56, 189, 248, 0.45) !important;
@@ -238,8 +237,7 @@
 /* Active no Modo Dark: Item Selecionado */
 [data-theme="dark"] .navbar-item.active {
     background:
-      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.45) 0%, rgba(7, 82, 160, 0.35) 45%, transparent 70%),
-      repeating-conic-gradient(from 260deg at 50% 120%, rgba(56, 189, 248, 0.15) 0deg 8deg, transparent 8deg 24deg),
+      radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.35) 0%, rgba(7, 82, 160, 0.25) 45%, transparent 70%),
       linear-gradient(135deg, #0a1832 0%, #0f2b57 35%, #15458a 70%, #0752a0 100%) !important;
     color: #ffffff;
     font-weight: 700;
