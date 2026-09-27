@@ -323,6 +323,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    min-width: 0;
 }
 
 .tarefa-header-row {
@@ -425,18 +426,22 @@
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    gap: 8px;
-    min-width: 170px;
+    justify-content: center;
+    gap: 10px;
+    min-width: 250px;
+    flex-shrink: 0;
 }
 
 .tarefa-xp-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    font-size: 13px;
+    font-size: 13.5px;
     font-weight: 800;
-    padding: 4px 12px;
+    padding: 5px 14px;
     border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .tarefa-xp-badge.xp-blue {
@@ -453,6 +458,8 @@
 .tarefa-action-container {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
+    width: 100%;
 }
 
 /* --------------------------------------------------------------------------
@@ -462,14 +469,19 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 16px;
+    gap: 8px;
+    padding: 10px 20px;
+    min-height: 42px;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
+    line-height: 1.25;
+    white-space: nowrap;
     cursor: pointer;
     border: none;
+    box-sizing: border-box;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .btn-reivindicar {
@@ -520,21 +532,28 @@
 .tarefa-status-done {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    justify-content: center;
+    gap: 8px;
     color: #16a34a;
     font-weight: 700;
     font-size: 14px;
+    line-height: 1.25;
+    white-space: nowrap;
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
-    padding: 6px 14px;
+    padding: 10px 20px;
+    min-height: 42px;
     border-radius: 12px;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .tarefa-actions-group {
     display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
     justify-content: flex-end;
+    flex-wrap: wrap;
 }
 
 /* --------------------------------------------------------------------------
@@ -597,10 +616,10 @@
 /* --------------------------------------------------------------------------
    Responsividade
    -------------------------------------------------------------------------- */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
     .tarefa-fixa-card {
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 16px;
     }
 
     .tarefa-left-col {
@@ -608,12 +627,20 @@
     }
 
     .tarefa-reward-col {
-        align-items: flex-start;
+        align-items: center;
         flex-direction: row;
         justify-content: space-between;
         width: 100%;
+        min-width: 0;
         border-top: 1px solid #f1f5f9;
-        padding-top: 12px;
+        padding-top: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .tarefa-action-container {
+        justify-content: flex-start;
+        width: auto;
     }
 
     .tarefas-hero-top {
@@ -646,14 +673,19 @@ button.is-cooldown,
     background: linear-gradient(135deg, #1e3a8a, #2563eb);
     color: #fff;
     border: none;
-    padding: 8px 16px;
-    border-radius: 9999px;
-    font-size: 0.85rem;
+    padding: 10px 20px;
+    min-height: 42px;
+    border-radius: 12px;
+    font-size: 14px;
     font-weight: 700;
+    line-height: 1.25;
+    white-space: nowrap;
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
     transition: all 0.2s ease;
     text-decoration: none;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .btn-admin-add-tarefa-fixa:hover {
@@ -676,14 +708,18 @@ button.is-cooldown,
     background: #fff1f2;
     color: #e11d48;
     border: 1px solid #fecdd3;
-    padding: 7px 11px;
-    border-radius: 10px;
-    font-size: 13px;
+    padding: 8px 12px;
+    min-height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    font-size: 14px;
     cursor: pointer;
     transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    box-sizing: border-box;
+    flex-shrink: 0;
 }
 
 .btn-tarefa-admin-delete:hover {
@@ -800,6 +836,28 @@ button.is-cooldown,
     -webkit-backdrop-filter: blur(12px);
     border: none !important;
     color: #ebebef !important;
+}
+
+#btn-recarregar-tarefas {
+    min-height: 42px !important;
+    padding: 10px 20px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    white-space: nowrap !important;
+    box-sizing: border-box !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+
+[data-theme="dark"] .tarefa-status-done {
+    background: rgba(16, 185, 129, 0.16) !important;
+    border-color: rgba(16, 185, 129, 0.35) !important;
+    color: #34d399 !important;
+}
+
+[data-theme="dark"] .tarefa-reward-col {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 
