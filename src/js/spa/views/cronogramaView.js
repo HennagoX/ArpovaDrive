@@ -13,8 +13,7 @@ import {
     getUsuarioAtivoId,
     setUsuarioAtivoId,
     getUsuariosCadastrados,
-    verificarPermissaoAdmin,
-    criarTarefaAdmin
+    verificarPermissaoAdmin
 } from '../../services/cronogramaService.js';
 import { addXp, getGamificationData, syncUserGamification } from '../../services/gamificationService.js';
 import { usuarioGlobal } from '../../services/userService.js';
@@ -55,94 +54,6 @@ export function initCronogramaView(router) {
             router.navigateTo('inicio');
         });
     }
-
-    const btnAddTask = qs('#btn-admin-add-task');
-    const modalTask = qs('#modal-admin-task');
-    const btnFecharModalTask = qs('#btn-fechar-modal-admin-task');
-    const btnCancelarModalTask = qs('#btn-cancelar-admin-task');
-    const formTask = qs('#form-admin-task');
-
-    const fecharModalTask = () => {
-        if (modalTask) modalTask.style.display = 'none';
-        const tit = qs('#admin-task-titulo-input');
-        const desc = qs('#admin-task-desc-input');
-        if (tit) tit.value = '';
-        if (desc) desc.value = '';
-    };
-
-    if (btnAddTask && modalTask) {
-        on(btnAddTask, 'click', () => {
-            const selectDia = qs('#admin-task-dia-input');
-            if (selectDia) selectDia.value = String(diaAtual || 1);
-            modalTask.style.display = 'flex';
-        });
-    }
-
-    if (btnFecharModalTask) on(btnFecharModalTask, 'click', fecharModalTask);
-    if (btnCancelarModalTask) on(btnCancelarModalTask, 'click', fecharModalTask);
-    if (modalTask) {
-        on(modalTask, 'click', (e) => {
-            if (e.target === modalTask) fecharModalTask();
-        });
-    }
-
-    const btnSalvarTask = qs('#btn-salvar-admin-task');
-    async function salvarTarefaAdmin() {
-        const originalText = btnSalvarTask ? btnSalvarTask.innerHTML : 'Criar Missão';
-
-        try {
-            if (btnSalvarTask) {
-                btnSalvarTask.disabled = true;
-                btnSalvarTask.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Criando...';
-            }
-
-            const titulo = qs('#admin-task-titulo-input')?.value?.trim();
-            const descricao = qs('#admin-task-desc-input')?.value?.trim();
-            const dia_semana = Number(qs('#admin-task-dia-input')?.value || diaAtual || 1);
-            const xp_reward = Number(qs('#admin-task-xp-input')?.value || 50);
-            const tipo_validacao = qs('#admin-task-tipo-input')?.value || 'bateria';
-            const materia = qs('#admin-task-materia-input')?.value || 'CodigoTransito';
-            const horario = qs('#admin-task-horario-input')?.value || '14:00';
-            const duracao = qs('#admin-task-duracao-input')?.value || '25 min';
-
-            if (!titulo) {
-                throw new Error('Informe o título da missão.');
-            }
-
-            const targetUserId = getUsuarioAtivoId();
-
-            const dados = {
-                id_usuario: targetUserId,
-                titulo,
-                descricao,
-                dia_semana,
-                xp_reward,
-                tipo_validacao,
-                horario,
-                duracao,
-                parametros_validacao: {
-                    materia,
-                    meta_porcentagem: 40
-                }
-            };
-
-            const res = await criarTarefaAdmin(dados);
-            showToast(res.message || `Missão "${titulo}" criada com sucesso!`, 'info', 'fa-solid fa-circle-check');
-            fecharModalTask();
-            await carregarCronograma(targetUserId, true);
-        } catch (err) {
-            showToast(err.message || 'Erro ao criar missão.', 'locked', 'fa-solid fa-triangle-exclamation');
-        } finally {
-            if (btnSalvarTask) {
-                btnSalvarTask.disabled = false;
-                btnSalvarTask.innerHTML = originalText;
-            }
-        }
-    }
-
-    if (btnSalvarTask) {
-        on(btnSalvarTask, 'click', salvarTarefaAdmin);
-    }
 }
 
 export async function renderCronograma(options = {}) {
@@ -160,13 +71,11 @@ export async function renderCronograma(options = {}) {
         const adminBadge = qs('#admin-indicator-badge');
         const userSelectorBar = qs('#user-selector-bar');
         const simulationHud = qs('#simulation-hud');
-        const btnAdminAddTask = qs('#btn-admin-add-task');
 
         if (isAdmin) {
             if (adminBadge) adminBadge.style.display = 'inline-flex';
             if (userSelectorBar) userSelectorBar.style.display = 'flex';
             if (simulationHud) simulationHud.style.display = 'flex';
-            if (btnAdminAddTask) btnAdminAddTask.style.display = 'inline-flex';
 
             configurarBarraSimulacao();
             await configurarSeletorUsuarios();
@@ -174,7 +83,6 @@ export async function renderCronograma(options = {}) {
             if (adminBadge) adminBadge.style.display = 'none';
             if (userSelectorBar) userSelectorBar.style.display = 'none';
             if (simulationHud) simulationHud.style.display = 'none';
-            if (btnAdminAddTask) btnAdminAddTask.style.display = 'none';
             setMockDia('auto');
         }
     } catch {

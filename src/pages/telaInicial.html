@@ -1231,15 +1231,8 @@
             </div>
 
             <div class="schedule-header">
-                <div class="schedule-header-titles">
-                    <h3>Missões do Dia</h3>
-                    <span id="tempo-estimado-dia">Tempo total estimado: 1h 15m</span>
-                </div>
-                <div class="schedule-header-actions">
-                    <button type="button" class="btn-admin-add-task" id="btn-admin-add-task" style="display: none;" title="Criar nova missão para este aluno">
-                        <i class="fa-solid fa-circle-plus"></i> Criar Missão
-                    </button>
-                </div>
+                <h3>Missões do Dia</h3>
+                <span id="tempo-estimado-dia">Tempo total estimado: 1h 15m</span>
             </div>
 
             <!-- SScheduleList -->
@@ -2404,94 +2397,6 @@
                 <button type="button" class="btn-admin-delete-confirm" id="btn-confirmar-delete-modulo">
                     <i class="fa-solid fa-trash-can"></i> Sim, Remover
                 </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Admin: Criar Nova Tarefa / Missão no Cronograma -->
-    <div id="modal-admin-task" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-task-titulo">
-        <div class="modal-admin-card">
-            <div class="modal-admin-header">
-                <div class="modal-admin-header-title">
-                    <div class="modal-admin-icon-circle">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div>
-                        <span class="modal-admin-badge-label">Painel de Administrador</span>
-                        <h3 id="modal-admin-task-titulo">Criar Nova Missão</h3>
-                    </div>
-                </div>
-                <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-task" aria-label="Fechar">&times;</button>
-            </div>
-
-            <div id="form-admin-task" class="modal-admin-form">
-                <div class="admin-form-group">
-                    <label for="admin-task-titulo-input">Título da Missão <span class="req-star">*</span></label>
-                    <input type="text" id="admin-task-titulo-input" required placeholder="Ex: Mini-Quiz: 10 Questões de Legislação">
-                </div>
-
-                <div class="admin-form-group">
-                    <label for="admin-task-desc-input">Descrição da Missão</label>
-                    <textarea id="admin-task-desc-input" rows="2" placeholder="Descreva os objetivos desta missão para o aluno..."></textarea>
-                </div>
-
-                <div class="admin-form-row">
-                    <div class="admin-form-group">
-                        <label for="admin-task-dia-input">Dia da Semana <span class="req-star">*</span></label>
-                        <select id="admin-task-dia-input" required>
-                            <option value="1">Segunda-feira</option>
-                            <option value="2">Terça-feira</option>
-                            <option value="3">Quarta-feira</option>
-                            <option value="4">Quinta-feira</option>
-                            <option value="5">Sexta-feira</option>
-                            <option value="6">Sábado</option>
-                        </select>
-                    </div>
-                    <div class="admin-form-group">
-                        <label for="admin-task-xp-input">Recompensa (XP)</label>
-                        <input type="number" id="admin-task-xp-input" min="5" max="500" value="50">
-                    </div>
-                </div>
-
-                <div class="admin-form-row">
-                    <div class="admin-form-group">
-                        <label for="admin-task-tipo-input">Tipo de Atividade</label>
-                        <select id="admin-task-tipo-input">
-                            <option value="bateria">Bateria de Questões (Quiz)</option>
-                            <option value="estudo">Leitura de Conteúdo/Módulo</option>
-                            <option value="simulado">Simulado Completo</option>
-                            <option value="livre">Conclusão Manual</option>
-                        </select>
-                    </div>
-                    <div class="admin-form-group">
-                        <label for="admin-task-materia-input">Matéria / Conteúdo</label>
-                        <select id="admin-task-materia-input">
-                            <option value="CodigoTransito">Código de Trânsito</option>
-                            <option value="DirecaoDefensiva">Direção Defensiva</option>
-                            <option value="PrimeirosSocorros">Primeiros Socorros</option>
-                            <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
-                            <option value="MecanicaBasica">Mecânica Básica</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="admin-form-row">
-                    <div class="admin-form-group">
-                        <label for="admin-task-horario-input">Horário Sugerido</label>
-                        <input type="text" id="admin-task-horario-input" value="14:00" placeholder="14:00">
-                    </div>
-                    <div class="admin-form-group">
-                        <label for="admin-task-duracao-input">Duração Estimada</label>
-                        <input type="text" id="admin-task-duracao-input" value="25 min" placeholder="25 min">
-                    </div>
-                </div>
-
-                <div class="modal-admin-actions">
-                    <button type="button" class="btn-admin-cancel" id="btn-cancelar-admin-task">Cancelar</button>
-                    <button type="button" class="btn-admin-save" id="btn-salvar-admin-task">
-                        <i class="fa-solid fa-plus-circle"></i> Criar Missão
-                    </button>
-                </div>
             </div>
         </div>
     </div>

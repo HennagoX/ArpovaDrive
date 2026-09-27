@@ -190,35 +190,6 @@ export async function getUsuariosCadastrados(adminId = null) {
     }
 }
 
-export async function criarTarefaAdmin(dados) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
-    const targetUserId = dados.id_usuario || dados.userId || getUsuarioAtivoId();
-
-    const response = await fetch(`${API_URL}/task/admin/criar-tarefa`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-User-Id': targetUserId,
-            'X-Admin-Id': authId,
-            'X-Requester-Id': authId
-        },
-        body: JSON.stringify({
-            ...dados,
-            id_usuario: targetUserId
-        })
-    });
-
-    const resData = await response.json();
-    if (!response.ok) {
-        throw new Error(resData?.error || 'Erro ao criar missão.');
-    }
-
-    clearCachedTarefas();
-    return resData;
-}
-
 function getAuthHeaders(targetUserId) {
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const authId = authUser?.id_usuario || authUser?.id || authUser?.userId;
