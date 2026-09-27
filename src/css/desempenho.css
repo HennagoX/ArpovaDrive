@@ -381,12 +381,16 @@
 }
 
 [data-theme="dark"] .ia-card {
-    background:
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.07'/%3E%3C/svg%3E"),
+    background-image:
+      var(--bg-grain),
       radial-gradient(ellipse 85% 55% at 50% 115%, rgba(56, 189, 248, 0.4) 0%, rgba(7, 82, 160, 0.3) 35%, transparent 75%),
       radial-gradient(circle 130px at 50% 110%, rgba(224, 242, 254, 0.3) 0%, transparent 70%),
       repeating-conic-gradient(from 255deg at 50% 110%, rgba(56, 189, 248, 0.12) 0deg 6deg, transparent 6deg 18deg),
       linear-gradient(135deg, #050d1a 0%, #0a1b38 22%, #0e2d5c 48%, #0752a0 78%, #0284c7 92%, #38bdf8 100%) !important;
+    background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat !important;
+    background-size: 64px 64px, auto, auto, auto, auto !important;
+    background-clip: padding-box !important;
+    overflow: hidden !important;
     border: 1px solid rgba(56, 189, 248, 0.3) !important;
     box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 82, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
 }
