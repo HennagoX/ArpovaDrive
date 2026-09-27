@@ -515,7 +515,9 @@ export function atualizarCardsModuloUI(conteudoId, moduloAtual) {
     const total = modulos.length;
     const bloqueados = modulos.filter(m => m.bloqueado).length;
     const liberados = total - bloqueados;
-    const pctProgresso = total > 0 ? Math.min(100, Math.round((liberados / total) * 100)) : 0;
+    const nivelAtual = Math.max(1, Number(moduloAtual || 1));
+    const concluidos = nivelAtual > total ? total : modulos.filter(m => Number(m.numero) < nivelAtual).length;
+    const pctProgresso = total > 0 ? Math.min(100, Math.round((concluidos / total) * 100)) : 0;
 
     const heroLiberados = qs("#modulo-hero-liberados");
     const heroBloqueados = qs("#modulo-hero-bloqueados");

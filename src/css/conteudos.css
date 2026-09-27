@@ -234,6 +234,11 @@ body {
     font-weight: 500;
 }
 
+.ebook-progress-pct {
+    font-weight: 700;
+    color: #0f172a;
+}
+
 .progress {
     height: 6px;
     background: #edf0f3;

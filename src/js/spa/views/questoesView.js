@@ -1,8 +1,63 @@
 
 import { qs, qsa, setText } from '../../utils/dom.js';
 import { usuarioGlobal } from '../../services/userService.js';
+import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
+import { getBateriasByMateriaId } from '../../services/questoesService.js';
 
 let initialized = false;
+
+export function atualizarProgressoQuestoes() {
+    const cards = qsa(".questoes-subject-card");
+    const activeUserId = usuarioGlobal.id_usuario || usuarioGlobal.id;
+
+    cards.forEach(card => {
+        const materiaId = card.dataset.id;
+        if (!materiaId) return;
+
+        const moduloAtualCached = getModuloAtualCached(materiaId, activeUserId);
+        const baterias = getBateriasByMateriaId(materiaId, moduloAtualCached);
+        const total = baterias.length;
+        const liberadas = baterias.filter(b => !b.bloqueado).length;
+        const pctProgresso = total > 0 ? Math.round((liberadas / total) * 100) : 0;
+
+        const badgeEl = card.querySelector(".questoes-badge-unlocked");
+        if (badgeEl) {
+            badgeEl.innerHTML = `<i class="fa-solid fa-unlock"></i> ${liberadas} ${liberadas === 1 ? 'Liberada' : 'Liberadas'}`;
+        }
+
+        const pctSpan = card.querySelector(".questoes-progress-pct");
+        if (pctSpan) {
+            setText(pctSpan, `${pctProgresso}%`);
+        }
+
+        const fillEl = card.querySelector(".questoes-progress-fill");
+        if (fillEl) {
+            fillEl.style.width = `${pctProgresso}%`;
+        }
+    });
+
+    cards.forEach(async (card) => {
+        const materiaId = card.dataset.id;
+        if (!materiaId) return;
+        try {
+            const res = await getModuloAtual(materiaId, activeUserId);
+            const freshModuloAtual = typeof res === 'number' ? res : (res?.modulo_atual || 1);
+            const baterias = getBateriasByMateriaId(materiaId, freshModuloAtual);
+            const total = baterias.length;
+            const liberadas = baterias.filter(b => !b.bloqueado).length;
+            const pctProgresso = total > 0 ? Math.round((liberadas / total) * 100) : 0;
+
+            const badgeEl = card.querySelector(".questoes-badge-unlocked");
+            if (badgeEl) {
+                badgeEl.innerHTML = `<i class="fa-solid fa-unlock"></i> ${liberadas} ${liberadas === 1 ? 'Liberada' : 'Liberadas'}`;
+            }
+            const pctSpan = card.querySelector(".questoes-progress-pct");
+            if (pctSpan) setText(pctSpan, `${pctProgresso}%`);
+            const fillEl = card.querySelector(".questoes-progress-fill");
+            if (fillEl) fillEl.style.width = `${pctProgresso}%`;
+        } catch {}
+    });
+}
 
 export function initQuestoesView(router) {
     if (initialized) return;
@@ -85,4 +140,6 @@ export function renderQuestoes() {
 
     if (titleEl) setText(titleEl, 'Banco de Questões');
     if (subtitleEl) setText(subtitleEl, 'Pratique com questões simuladas do DETRAN a cada 3 módulos concluídos.');
+
+    atualizarProgressoQuestoes();
 }
