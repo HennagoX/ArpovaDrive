@@ -447,87 +447,322 @@ body[data-theme="dark"] {
 }
 
 /* =========================================================
-   EFEITO FOSCO / GRANULADO EM TODOS OS BOTÕES (MODO DARK)
+   BOTÕES SÓLIDOS COM GRADIENTE E EFEITO GRANULAR (MODO DARK)
+   - Mantém os botões sólidos (sem blur ou transparência de vidro)
+   - Aplica gradientes ricos para diferenciar dos botões flat do tema padrão
+   - Aplica a textura granular dos banners (var(--bg-grain))
    ========================================================= */
-[data-theme="dark"] button:not(.vite-theme-switch),
+
+/* Base para botões no tema escuro: sólidos, transições suaves, sem blur */
+[data-theme="dark"] button:not(.vite-theme-switch):not(.btn-pilula-questao),
 [data-theme="dark"] .btn,
 [data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao),
-[data-theme="dark"] .ia-botao {
-  position: relative;
-  overflow: hidden;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+[data-theme="dark"] .ia-botao,
+[data-theme="dark"] .read-btn {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background-repeat: repeat, no-repeat !important;
+  background-size: 64px 64px, 100% 100% !important;
+  background-position: 0 0, center !important;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 0.22s ease,
+              border-color 0.2s ease,
+              background-color 0.2s ease,
+              filter 0.2s ease !important;
 }
 
-[data-theme="dark"] button:not(.vite-theme-switch)::before,
-[data-theme="dark"] .btn::before,
-[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao)::before,
-[data-theme="dark"] .ia-botao::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-image: var(--bg-grain);
-  background-size: 64px 64px;
-  background-repeat: repeat;
-  opacity: 0.22;
-  pointer-events: none;
-  z-index: 1;
-  transition: opacity 0.2s ease;
+/* 1. Botões Primários / Azuis (Sólido + Gradiente Azul + Granular) */
+[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(:disabled),
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn-principal,
+[data-theme="dark"] .btn-destaque,
+[data-theme="dark"] .btn-action.btn-praticar,
+[data-theme="dark"] .btn-praticar,
+[data-theme="dark"] .btn-resolucao-primario,
+[data-theme="dark"] .btn-resultado-primario,
+[data-theme="dark"] .btn-bateria-start,
+[data-theme="dark"] .btn-modal-avancar:not(.btn-modal-questoes),
+[data-theme="dark"] .btn-admin-save,
+[data-theme="dark"] .btn-admin-add-modulo,
+[data-theme="dark"] .btn-admin-add-tarefa-fixa,
+[data-theme="dark"] .read-btn,
+[data-theme="dark"] .btn-avancar-modulo-topo,
+[data-theme="dark"] .tutor-ia-send-btn,
+[data-theme="dark"] .ia-botao,
+[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]),
+[data-theme="dark"] .btn-praticar-questoes.azul-card,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="PlacaTransito"],
+[data-theme="dark"] .btn-iniciar-simulado[data-category="placas"] {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0752a0 0%, #0284c7 50%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(7, 82, 160, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-[data-theme="dark"] button:not(.vite-theme-switch):hover::before,
-[data-theme="dark"] .btn:hover::before,
-[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao):hover::before,
-[data-theme="dark"] .ia-botao:hover::before {
-  opacity: 0.32;
+[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(:disabled):hover,
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn-principal:hover,
+[data-theme="dark"] .btn-destaque:hover,
+[data-theme="dark"] .btn-action.btn-praticar:hover,
+[data-theme="dark"] .btn-praticar:hover,
+[data-theme="dark"] .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .btn-resultado-primario:hover,
+[data-theme="dark"] .btn-bateria-start:hover,
+[data-theme="dark"] .btn-modal-avancar:not(.btn-modal-questoes):hover,
+[data-theme="dark"] .btn-admin-save:hover,
+[data-theme="dark"] .btn-admin-add-modulo:hover,
+[data-theme="dark"] .btn-admin-add-tarefa-fixa:hover,
+[data-theme="dark"] .read-btn:hover,
+[data-theme="dark"] .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .tutor-ia-send-btn:hover,
+[data-theme="dark"] .ia-botao:hover,
+[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]):hover,
+[data-theme="dark"] .btn-praticar-questoes.azul-card:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="PlacaTransito"]:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-category="placas"]:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0961bd 0%, #0396e0 50%, #5fe0ff 100%) !important;
+  border-color: rgba(56, 189, 248, 0.7) !important;
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
 }
 
-[data-theme="dark"] button:not(.vite-theme-switch) > *,
-[data-theme="dark"] .btn > *,
-[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao) > *,
-[data-theme="dark"] .ia-botao > * {
-  position: relative;
-  z-index: 2;
+/* 2. Botões Verdes / Ação / Estudar / Concluir / Reivindicar (Sólido + Gradiente Verde + Granular) */
+[data-theme="dark"] .btn-reivindicar,
+[data-theme="dark"] .btn-estudar,
+[data-theme="dark"] .btn-action.btn-estudar,
+[data-theme="dark"] .btn-action.btn-concluir,
+[data-theme="dark"] .btn-claimable-glow,
+[data-theme="dark"] .btn-modal-questoes,
+[data-theme="dark"] .btn-modal-avancar.btn-modal-questoes,
+[data-theme="dark"] .module-action-area .btn-ler,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="CodigoTransito"],
+[data-theme="dark"] button.btn-iniciar-simulado[style*="16a34a"],
+[data-theme="dark"] .btn-praticar-questoes.verde-card {
+  background-image: var(--bg-grain), linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(52, 211, 153, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-[data-theme="dark"] .ia-botao {
-  background: linear-gradient(135deg, #0752a0 0%, #0284c7 60%, #38bdf8 100%);
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(7, 82, 160, 0.45);
+[data-theme="dark"] .btn-reivindicar:hover,
+[data-theme="dark"] .btn-estudar:hover,
+[data-theme="dark"] .btn-action.btn-estudar:hover,
+[data-theme="dark"] .btn-action.btn-concluir:hover,
+[data-theme="dark"] .btn-claimable-glow:hover,
+[data-theme="dark"] .btn-modal-questoes:hover,
+[data-theme="dark"] .btn-modal-avancar.btn-modal-questoes:hover,
+[data-theme="dark"] .module-action-area .btn-ler:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="CodigoTransito"]:hover,
+[data-theme="dark"] button.btn-iniciar-simulado[style*="16a34a"]:hover,
+[data-theme="dark"] .btn-praticar-questoes.verde-card:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%) !important;
+  border-color: rgba(52, 211, 153, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
 }
 
-[data-theme="dark"] .ia-botao:hover {
-  background: linear-gradient(135deg, #0a5fba 0%, #0396e0 60%, #5fe0ff 100%);
-  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.5);
+/* 3. Botões Âmbar / Laranja (Simulados e Direção Defensiva - Sólido + Gradiente Âmbar + Granular) */
+[data-theme="dark"] .btn-action.btn-simulado,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="Geral"],
+[data-theme="dark"] .btn-iniciar-simulado[data-id="DirecaoOfensiva"],
+[data-theme="dark"] button.btn-iniciar-simulado[style*="f59e0b"],
+[data-theme="dark"] .btn-praticar-questoes.amarelo-card,
+[data-theme="dark"] .btn-praticar-questoes[data-id="DirecaoOfensiva"] {
+  background-image: var(--bg-grain), linear-gradient(135deg, #9a3412 0%, #d97706 50%, #f59e0b 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(251, 191, 36, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-/* Badges e Ícones dos Cards com Brilho Neon Translúcido */
-[data-theme="dark"] .verde-card {
+[data-theme="dark"] .btn-action.btn-simulado:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="Geral"]:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="DirecaoOfensiva"]:hover,
+[data-theme="dark"] button.btn-iniciar-simulado[style*="f59e0b"]:hover,
+[data-theme="dark"] .btn-praticar-questoes.amarelo-card:hover,
+[data-theme="dark"] .btn-praticar-questoes[data-id="DirecaoOfensiva"]:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #c2410c 0%, #f59e0b 50%, #fbbf24 100%) !important;
+  border-color: rgba(251, 191, 36, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+/* 4. Botões Roxos / Violeta (Meio Ambiente & Cidadania - Sólido + Gradiente Roxo + Granular) */
+[data-theme="dark"] .btn-praticar-questoes.roxo-card,
+[data-theme="dark"] .btn-praticar-questoes[data-id="MeioAmbiente"],
+[data-theme="dark"] .btn-iniciar-simulado.roxo-card,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="MeioAmbiente"] {
+  background-image: var(--bg-grain), linear-gradient(135deg, #4c1d95 0%, #6366f1 50%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(167, 139, 250, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .btn-praticar-questoes.roxo-card:hover,
+[data-theme="dark"] .btn-praticar-questoes[data-id="MeioAmbiente"]:hover,
+[data-theme="dark"] .btn-iniciar-simulado.roxo-card:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="MeioAmbiente"]:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #a78bfa 100%) !important;
+  border-color: rgba(167, 139, 250, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+/* 5. Botões Vermelhos / Perigo / Primeiros Socorros (Sólido + Gradiente Vermelho + Granular) */
+[data-theme="dark"] .btn-admin-delete-confirm,
+[data-theme="dark"] .btn-tarefa-admin-delete,
+[data-theme="dark"] .btn-module-admin-btn.btn-admin-delete,
+[data-theme="dark"] .btn-finalizar-simulado-top,
+[data-theme="dark"] .btn-praticar-questoes.vermelho-card,
+[data-theme="dark"] .btn-praticar-questoes[data-id="PrimeirosSocorros"],
+[data-theme="dark"] .btn-iniciar-simulado.vermelho-card,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="PrimeirosSocorros"] {
+  background-image: var(--bg-grain), linear-gradient(135deg, #881337 0%, #dc2626 50%, #ef4444 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(248, 113, 113, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .btn-admin-delete-confirm:hover,
+[data-theme="dark"] .btn-tarefa-admin-delete:hover,
+[data-theme="dark"] .btn-module-admin-btn.btn-admin-delete:hover,
+[data-theme="dark"] .btn-finalizar-simulado-top:hover,
+[data-theme="dark"] .btn-praticar-questoes.vermelho-card:hover,
+[data-theme="dark"] .btn-praticar-questoes[data-id="PrimeirosSocorros"]:hover,
+[data-theme="dark"] .btn-iniciar-simulado.vermelho-card:hover,
+[data-theme="dark"] .btn-iniciar-simulado[data-id="PrimeirosSocorros"]:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #9f1239 0%, #ef4444 50%, #f87171 100%) !important;
+  border-color: rgba(248, 113, 113, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(248, 113, 113, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+/* 6. Botões Secundários / Voltar / Cancelar / Outline (Sólidos Escuros + Gradiente Grafite + Granular) */
+[data-theme="dark"] .btn-voltar,
+[data-theme="dark"] .btn-voltar-modulos,
+[data-theme="dark"] .btn-voltar-resolucao,
+[data-theme="dark"] .btn-voltar-tutor,
+[data-theme="dark"] .btn-sair,
+[data-theme="dark"] .btn-admin-cancel,
+[data-theme="dark"] .btn-modal-continuar,
+[data-theme="dark"] .btn-resolucao-secundario,
+[data-theme="dark"] .btn-resultado-secundario,
+[data-theme="dark"] .btn-resultado-tarefas,
+[data-theme="dark"] .btn-retry,
+[data-theme="dark"] .btn-pdf-external,
+[data-theme="dark"] .btn-pdf-expand,
+[data-theme="dark"] .btn-pdf-admin-edit,
+[data-theme="dark"] .btn-module-admin-btn:not(.btn-admin-delete),
+[data-theme="dark"] .btn-secundario,
+[data-theme="dark"] .btn-outline {
+  background-image: var(--bg-grain), linear-gradient(135deg, #181b26 0%, #242938 100%) !important;
+  color: #e2e8f0 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .btn-voltar:hover,
+[data-theme="dark"] .btn-voltar-modulos:hover,
+[data-theme="dark"] .btn-voltar-resolucao:hover,
+[data-theme="dark"] .btn-voltar-tutor:hover,
+[data-theme="dark"] .btn-sair:hover,
+[data-theme="dark"] .btn-admin-cancel:hover,
+[data-theme="dark"] .btn-modal-continuar:hover,
+[data-theme="dark"] .btn-resolucao-secundario:hover:not(:disabled),
+[data-theme="dark"] .btn-resultado-secundario:hover,
+[data-theme="dark"] .btn-resultado-tarefas:hover,
+[data-theme="dark"] .btn-retry:hover,
+[data-theme="dark"] .btn-pdf-external:hover,
+[data-theme="dark"] .btn-pdf-expand:hover,
+[data-theme="dark"] .btn-pdf-admin-edit:hover,
+[data-theme="dark"] .btn-module-admin-btn:not(.btn-admin-delete):hover,
+[data-theme="dark"] .btn-secundario:hover,
+[data-theme="dark"] .btn-outline:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #242938 0%, #30374b 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), 0 0 12px rgba(56, 189, 248, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  transform: translateY(-2px);
+}
+
+/* 7. Filtros, Abas e Sugestões (Pills - Sólidos com Gradiente Discreto e Granular) */
+[data-theme="dark"] .filter,
+[data-theme="dark"] .tarefas-filter-btn,
+[data-theme="dark"] .btn-sim,
+[data-theme="dark"] .sugestao-chip,
+[data-theme="dark"] .admin-tab-btn {
+  background-image: var(--bg-grain), linear-gradient(135deg, #151722 0%, #1e2230 100%) !important;
+  color: #94a3b8 !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .filter:hover,
+[data-theme="dark"] .tarefas-filter-btn:hover,
+[data-theme="dark"] .btn-sim:hover,
+[data-theme="dark"] .sugestao-chip:hover,
+[data-theme="dark"] .admin-tab-btn:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #1e2230 0%, #282e42 100%) !important;
+  color: #38bdf8 !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  transform: translateY(-1px);
+}
+
+[data-theme="dark"] .filter.active,
+[data-theme="dark"] .tarefas-filter-btn.active,
+[data-theme="dark"] .btn-sim.active,
+[data-theme="dark"] .admin-tab-btn.active {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0752a0 0%, #0284c7 60%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 4px 14px rgba(7, 82, 160, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* 8. Botões Desabilitados ou Bloqueados */
+[data-theme="dark"] button:disabled,
+[data-theme="dark"] .btn:disabled,
+[data-theme="dark"] .btn-bloqueado,
+[data-theme="dark"] .btn-bateria-locked,
+[data-theme="dark"] .btn-cooldown {
+  background-image: var(--bg-grain), linear-gradient(135deg, #151720 0%, #1a1c27 100%) !important;
+  color: #64748b !important;
+  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  box-shadow: none !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+  opacity: 0.65 !important;
+}
+
+/* Badges e Ícones dos Cards com Brilho Neon Translúcido (exclusivo para chips/ícones, não botões) */
+[data-theme="dark"] .verde-card:not(button):not([class*="btn-"]) {
   background: rgba(16, 185, 129, 0.16) !important;
   color: #34d399 !important;
   box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
 }
 
-[data-theme="dark"] .azul-card {
+[data-theme="dark"] .azul-card:not(button):not([class*="btn-"]) {
   background: rgba(56, 189, 248, 0.16) !important;
   color: #38bdf8 !important;
   box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
 }
 
-[data-theme="dark"] .amarelo-card {
+[data-theme="dark"] .amarelo-card:not(button):not([class*="btn-"]) {
   background: rgba(245, 158, 11, 0.16) !important;
   color: #fbbf24 !important;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
 }
 
-[data-theme="dark"] .roxo-card {
+[data-theme="dark"] .roxo-card:not(button):not([class*="btn-"]) {
   background: rgba(99, 102, 241, 0.18) !important;
   color: #818cf8 !important;
   box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
 }
 
-[data-theme="dark"] .vermelho-card {
+[data-theme="dark"] .vermelho-card:not(button):not([class*="btn-"]) {
   background: rgba(239, 68, 68, 0.16) !important;
   color: #f87171 !important;
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);

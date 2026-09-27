@@ -697,7 +697,6 @@ button.is-cooldown,
    TAREFAS NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
    ========================================================= */
 [data-theme="dark"] .tarefas-stat-card,
-[data-theme="dark"] .tarefas-filter-btn,
 [data-theme="dark"] .tarefas-conteudo-section,
 [data-theme="dark"] .tarefa-fixa-card {
     background: rgba(20, 21, 29, 0.74) !important;
