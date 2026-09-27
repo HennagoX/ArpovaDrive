@@ -308,7 +308,7 @@ function consumirTaskAtual(taskAtual, diaConcluido = false) {
             tituloEl.innerHTML = '<strong>Parabéns!</strong> Você concluiu todas as missões de hoje. Descanse e volte amanhã!';
         }
         if (xpEl) {
-            xpEl.textContent = 'Dia Completo :)';
+            xpEl.textContent = 'Dia Completo';
         }
         const metaTag = qs('.hud-card .level-tag');
         if (metaTag) {
@@ -348,10 +348,10 @@ function atualizarAbas(payload, diaAtualNum) {
             console.log(diaAtualNum);
             tab.classList.add('tab-today');
             if (payload.diaConcluido) {
-                statusEl.textContent = '✔ Concluído';
+                statusEl.textContent = 'Concluído';
                 statusEl.style.color = '#16a34a';
             } else {
-                statusEl.textContent = '• Hoje';
+                statusEl.textContent = 'Hoje';
                 statusEl.style.color = '#2563eb';
             }
         } else if (d < diaHojeValido) {
@@ -360,11 +360,11 @@ function atualizarAbas(payload, diaAtualNum) {
             const todasConcluidas = tarefas.length > 0 && tarefas.every(t => t.concluida || t.status === 'done');
             if (todasConcluidas) {
                 tab.classList.add('tab-concluded');
-                statusEl.textContent = '✔ Concluído';
+                statusEl.textContent = 'Concluído';
                 statusEl.style.color = '#16a34a';
             } else {
                 tab.classList.add('tab-expired');
-                statusEl.textContent = '✖ Expirado';
+                statusEl.textContent = 'Expirado';
                 statusEl.style.color = '#dc2626';
             }
         } else {
