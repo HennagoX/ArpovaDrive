@@ -2091,13 +2091,21 @@ body.modal-modulo-open {
 [data-theme="dark"] .ebook,
 [data-theme="dark"] .modulo-hero-card,
 [data-theme="dark"] .module-card,
-[data-theme="dark"] .leitura-nav-topo,
 [data-theme="dark"] .leitura-header-card {
     background: rgba(20, 21, 29, 0.74) !important;
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.09) !important;
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+    color: var(--text-body) !important;
+}
+
+[data-theme="dark"] .leitura-nav-topo {
+    background: rgba(20, 21, 29, 0.74) !important;
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: none !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
     color: var(--text-body) !important;
 }
 
@@ -2246,14 +2254,14 @@ body.modal-modulo-open {
       var(--bg-grain),
       linear-gradient(
         120deg,
-        #050e1d 0%,
-        #081b38 15%,
-        #0b2854 30%,
-        #073f7e 45%,
-        #0752a0 60%,
-        #026cb0 75%,
-        #0284c7 88%,
-        #081b38 100%
+        rgb(14, 76, 183) 0%,
+        #1864d7 15%,
+        #1673ff 30%,
+        #1864d7 45%,
+        #1864d7 60%,
+        #143971 75%,
+        #1864d7 88%,
+        #1864d7 100%
       ) !important;
     background-repeat: repeat, no-repeat !important;
     background-size: 64px 64px, 240% 240% !important;
@@ -2261,8 +2269,10 @@ body.modal-modulo-open {
     background-clip: padding-box !important;
     overflow: hidden !important;
     animation: dynamicBlueGradient 14s ease-in-out infinite !important;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 1px solid rgba(56, 189, 248, 0.3) !important;
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 82, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
 [data-theme="dark"] .hero-stat-badge,
@@ -2272,7 +2282,7 @@ body.modal-modulo-open {
     background: rgba(255, 255, 255, 0.04) !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    border: none !important;
     color: #ebebef !important;
 }
 

@@ -34,6 +34,7 @@
   --border-card: #e8ebf0;
 
   --font-main: 'Inter', Arial, Helvetica, sans-serif;
+  --bg-grain: url("data:image/png;base64,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");
 
   --navbar-width: 250px;
   --navbar-width-collapsed: 75px;
@@ -156,7 +157,6 @@ body[data-theme="dark"] {
 [data-theme="dark"] .desempenho,
 [data-theme="dark"] .kpi-card,
 [data-theme="dark"] .painel-card,
-[data-theme="dark"] .painel-secao,
 [data-theme="dark"] .modulo-card,
 [data-theme="dark"] .modulo-hero-card,
 [data-theme="dark"] .module-card,
@@ -167,11 +167,6 @@ body[data-theme="dark"] {
 [data-theme="dark"] .simulation-hud,
 [data-theme="dark"] .day-tab,
 [data-theme="dark"] .schedule-item,
-[data-theme="dark"] .empty-day-message,
-[data-theme="dark"] .user-selector-bar,
-[data-theme="dark"] .cronograma-state-card,
-[data-theme="dark"] .card-simulado-container,
-[data-theme="dark"] .secao-card,
 [data-theme="dark"] .questoes-card,
 [data-theme="dark"] .questoes-hero-card,
 [data-theme="dark"] .bateria-card,
@@ -179,19 +174,14 @@ body[data-theme="dark"] {
 [data-theme="dark"] .resolucao-card,
 [data-theme="dark"] .resolucao-resultado-card,
 [data-theme="dark"] .simulado-pergunta-card,
-[data-theme="dark"] .tarefas-stat-card,
-[data-theme="dark"] .tarefas-conteudo-section,
 [data-theme="dark"] .tarefa-fixa-card,
+[data-theme="dark"] .tarefas-conteudo-section,
 [data-theme="dark"] .tutor-ia-card,
-[data-theme="dark"] .metricas-grid,
 [data-theme="dark"] .recurso-card,
 [data-theme="dark"] .materia-item,
-[data-theme="dark"] .gabarito-item-card,
-[data-theme="dark"] .simulado-state-card,
-[data-theme="dark"] .tarefas-state-card,
-[data-theme="dark"] .simulados-empty-state,
-[data-theme="dark"] [class*="-card"],
-[data-theme="dark"] [class*="card-"] {
+[data-theme="dark"] .modal-admin-card,
+[data-theme="dark"] .modal-modulo-card,
+[data-theme="dark"] .modal-delete-card {
   background: rgba(20, 21, 29, 0.74) !important;
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
@@ -218,20 +208,36 @@ body[data-theme="dark"] {
 [data-theme="dark"] .hud-card:hover,
 [data-theme="dark"] .day-tab:hover,
 [data-theme="dark"] .schedule-item:hover,
-[data-theme="dark"] .card-simulado-container:hover,
 [data-theme="dark"] .questoes-card:hover,
 [data-theme="dark"] .questoes-hero-card:hover,
 [data-theme="dark"] .bateria-card:hover,
 [data-theme="dark"] .tarefa-fixa-card:hover,
 [data-theme="dark"] .tarefas-conteudo-section:hover,
 [data-theme="dark"] .recurso-card:hover,
-[data-theme="dark"] .materia-item:hover,
-[data-theme="dark"] .gabarito-item-card:hover,
-[data-theme="dark"] [class*="-card"]:hover {
+[data-theme="dark"] .materia-item:hover {
   background: rgba(28, 30, 42, 0.85) !important;
   border-color: rgba(56, 189, 248, 0.4) !important;
   box-shadow: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.3), inset 0 1px 0 0 rgba(255, 255, 255, 0.16) !important;
   transform: translateY(-4px);
+}
+
+/* Divs e grids estruturais que não precisam de borda no modo dark */
+[data-theme="dark"] .metricas-grid {
+  background: rgba(20, 21, 29, 0.74) !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: none !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .painel-secao,
+[data-theme="dark"] .tarefas-cards-list {
+  border: none !important;
+}
+
+[data-theme="dark"] .icone-card {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* =========================================================
@@ -249,20 +255,31 @@ body[data-theme="dark"] {
   }
 }
 
-/* Banner de Progresso: Gradiente Dinâmico com Tons Próximos de Azul e Textura Granulada */
-[data-theme="dark"] .progresso {
+/* =========================================================
+   BANNERS (PROGRESSO, BOAS-VINDAS, TUTOR IA, HERO, CTA):
+   GRADIENTE DINÂMICO DE TONS DE AZUL + TEXTURA GRANULADA
+   ========================================================= */
+[data-theme="dark"] .progresso,
+[data-theme="dark"] .ia-card-inicio,
+[data-theme="dark"] .ia-card,
+[data-theme="dark"] .ia-banner,
+[data-theme="dark"] .welcome,
+[data-theme="dark"] .welcome-questoes,
+[data-theme="dark"] .tarefas-hero,
+[data-theme="dark"] .current-task-banner,
+[data-theme="dark"] .cta-card {
   background-image:
     var(--bg-grain),
     linear-gradient(
       120deg,
-      #050e1d 0%,
-      #081b38 15%,
-      #0b2854 30%,
-      #073f7e 45%,
-      #0752a0 60%,
-      #026cb0 75%,
-      #0284c7 88%,
-      #081b38 100%
+      rgb(14, 76, 183) 0%,
+      #1864d7 15%,
+      #1673ff 30%,
+      #1864d7 45%,
+      #1864d7 60%,
+      #143971 75%,
+      #1864d7 88%,
+      #1864d7 100%
     ) !important;
   background-repeat: repeat, no-repeat !important;
   background-size: 64px 64px, 240% 240% !important;
@@ -270,10 +287,11 @@ body[data-theme="dark"] {
   background-clip: padding-box !important;
   overflow: hidden !important;
   animation: dynamicBlueGradient 14s ease-in-out infinite !important;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(7, 82, 160, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
 }
 
 [data-theme="dark"] .progresso .trofeu {
@@ -291,6 +309,51 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
+/* Tipografia e detalhes internos dos banners */
+[data-theme="dark"] .ia-card-inicio h2,
+[data-theme="dark"] .ia-card-inicio p,
+[data-theme="dark"] .ia-card h2,
+[data-theme="dark"] .ia-card p,
+[data-theme="dark"] .welcome h2,
+[data-theme="dark"] .welcome p,
+[data-theme="dark"] .welcome-questoes h2,
+[data-theme="dark"] .welcome-questoes p,
+[data-theme="dark"] .tarefas-hero h2,
+[data-theme="dark"] .tarefas-hero p,
+[data-theme="dark"] .current-task-banner h2,
+[data-theme="dark"] .current-task-banner p,
+[data-theme="dark"] .cta-card h2,
+[data-theme="dark"] .cta-card p {
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .ia-card-inicio p,
+[data-theme="dark"] .ia-card p,
+[data-theme="dark"] .welcome p,
+[data-theme="dark"] .welcome-questoes p,
+[data-theme="dark"] .tarefas-hero p,
+[data-theme="dark"] .current-task-banner p,
+[data-theme="dark"] .cta-card p {
+  opacity: 0.92;
+}
+
+[data-theme="dark"] .ia-card-inicio .ia-header,
+[data-theme="dark"] .ia-card .ia-header {
+  color: #ffffff !important;
+  font-weight: 800;
+}
+
+[data-theme="dark"] .ia-card-inicio .ia-header .material-symbols-outlined,
+[data-theme="dark"] .ia-card .ia-header .material-symbols-outlined {
+  color: var(--brand-yellow, #f5b000) !important;
+  filter: drop-shadow(0 0 8px rgba(245, 176, 0, 0.75));
+}
+
+[data-theme="dark"] .welcome-questoes-tag {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
 /* Ícones dos Cards do Dashboard no Modo Dark */
 [data-theme="dark"] .icone-card.verde-card { background: rgba(16, 185, 129, 0.18) !important; color: #34d399 !important; }
 [data-theme="dark"] .icone-card.azul-card { background: rgba(59, 130, 246, 0.18) !important; color: #60a5fa !important; }
@@ -298,11 +361,15 @@ body[data-theme="dark"] {
 [data-theme="dark"] .icone-card.roxo-card { background: rgba(99, 102, 241, 0.18) !important; color: #818cf8 !important; }
 [data-theme="dark"] .icone-card.vermelho-card { background: rgba(239, 68, 68, 0.18) !important; color: #f87171 !important; }
 
-/* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro */
+/* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro (Sem borda extra em divs que não precisam) */
 [data-theme="dark"] .gabarito-item-card,
 [data-theme="dark"] .simulado-state-card,
 [data-theme="dark"] .tarefas-state-card,
 [data-theme="dark"] .simulados-empty-state,
+[data-theme="dark"] .empty-day-message,
+[data-theme="dark"] .user-selector-bar,
+[data-theme="dark"] .cronograma-state-card,
+[data-theme="dark"] .tarefas-stat-card,
 [data-theme="dark"] .metric-box,
 [data-theme="dark"] .resultado-metric-item,
 [data-theme="dark"] .questoes-rule-box,
@@ -311,26 +378,30 @@ body[data-theme="dark"] {
 [data-theme="dark"] .leitura-header-stat,
 [data-theme="dark"] .leitura-meta-pill,
 [data-theme="dark"] .tarefa-meta-pill,
-[data-theme="dark"] .simulado-nav-grade-box {
+[data-theme="dark"] .stat-badge,
+[data-theme="dark"] .circulo-destaque,
+[data-theme="dark"] .simulado-nav-grade-box,
+[data-theme="dark"] .gabarito-explicacao-box,
+[data-theme="dark"] .resultado-trofeu-box,
+[data-theme="dark"] .questoes-category-pill {
   background: rgba(255, 255, 255, 0.04) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: none !important;
   color: #ebebef !important;
 }
 
-/* Tarefas e Itens Interativos: Vidro Fumê Translúcido */
+/* Tarefas e Itens Interativos: Vidro Fumê Translúcido sem Borda Extra */
 [data-theme="dark"] .tarefa {
   background: rgba(255, 255, 255, 0.035) !important;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border: none !important;
   color: var(--text-body);
 }
 
 [data-theme="dark"] .tarefa:hover {
   background: rgba(255, 255, 255, 0.075) !important;
-  border-color: rgba(65, 209, 255, 0.35) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
   transform: translateX(4px);
 }
@@ -375,31 +446,49 @@ body[data-theme="dark"] {
   color: #fbbf24;
 }
 
-/* Banner Tutor IA */
-[data-theme="dark"] .ia-banner {
-  background-image:
-    var(--bg-grain),
-    linear-gradient(
-      120deg,
-      #050e1d 0%,
-      #081b38 15%,
-      #0b2854 30%,
-      #073f7e 45%,
-      #0752a0 60%,
-      #026cb0 75%,
-      #0284c7 88%,
-      #081b38 100%
-    ) !important;
-  background-repeat: repeat, no-repeat !important;
-  background-size: 64px 64px, 240% 240% !important;
-  background-position: 0 0, 0% 50% !important;
-  background-clip: padding-box !important;
-  overflow: hidden !important;
-  animation: dynamicBlueGradient 14s ease-in-out infinite !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+/* =========================================================
+   EFEITO FOSCO / GRANULADO EM TODOS OS BOTÕES (MODO DARK)
+   ========================================================= */
+[data-theme="dark"] button:not(.vite-theme-switch),
+[data-theme="dark"] .btn,
+[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao),
+[data-theme="dark"] .ia-botao {
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] button:not(.vite-theme-switch)::before,
+[data-theme="dark"] .btn::before,
+[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao)::before,
+[data-theme="dark"] .ia-botao::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: var(--bg-grain);
+  background-size: 64px 64px;
+  background-repeat: repeat;
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.2s ease;
+}
+
+[data-theme="dark"] button:not(.vite-theme-switch):hover::before,
+[data-theme="dark"] .btn:hover::before,
+[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao):hover::before,
+[data-theme="dark"] .ia-botao:hover::before {
+  opacity: 0.32;
+}
+
+[data-theme="dark"] button:not(.vite-theme-switch) > *,
+[data-theme="dark"] .btn > *,
+[data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao) > *,
+[data-theme="dark"] .ia-botao > * {
+  position: relative;
+  z-index: 2;
 }
 
 [data-theme="dark"] .ia-botao {
