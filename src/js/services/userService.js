@@ -94,6 +94,15 @@ export const usuarioGlobal = {
         return this.autenticado;
     },
 
+    get isAdmin() {
+        const u = getRawUser();
+        return Boolean(u?.is_admin === true || u?.isAdmin === true);
+    },
+
+    get is_admin() {
+        return this.isAdmin;
+    },
+
     /**
      * Retorna uma cópia plana com todos os dados básicos do usuário.
      */
@@ -112,6 +121,8 @@ export const usuarioGlobal = {
             nivel: this.nivel,
             tituloNivel: this.tituloNivel,
             diasOfensiva: this.diasOfensiva,
+            isAdmin: this.isAdmin,
+            is_admin: this.isAdmin,
             autenticado: this.autenticado
         };
     },
@@ -122,7 +133,21 @@ export const usuarioGlobal = {
     sync(partialData = {}) {
         if (!partialData || typeof partialData !== 'object') return this.get();
         const current = getRawUser() || {};
+
+        // Se partialData for de outro usuário diferente do autenticado, NÃO sobrescreve a sessão do admin!
+        const partialId = partialData.id_usuario || partialData.id || partialData.userId;
+        const currentId = current.id_usuario || current.id || current.userId;
+        if (partialId && currentId && String(partialId).toLowerCase() !== String(currentId).toLowerCase()) {
+            return this.get();
+        }
+
         const merged = { ...current, ...partialData };
+        // Preserva o status de administrador
+        if (current.is_admin || current.isAdmin) {
+            merged.is_admin = true;
+            merged.isAdmin = true;
+        }
+
         setLocalItem(STORAGE_KEYS.AUTH_USER, merged);
         this.updateUI();
         this._notify();
@@ -137,8 +162,17 @@ export const usuarioGlobal = {
 
         const nome = this.nome;
         const inicial = this.inicial;
+        const isAdmin = this.isAdmin;
 
         try {
+            if (document.body) {
+                if (isAdmin) {
+                    document.body.classList.add('usuario-is-admin');
+                } else {
+                    document.body.classList.remove('usuario-is-admin');
+                }
+            }
+
             // Atualiza o nome exibido em 'Meu perfil' (ou qualquer .perfil-nome strong)
             const perfilNomes = container.querySelectorAll
                 ? container.querySelectorAll('.perfil-nome strong')
@@ -150,6 +184,26 @@ export const usuarioGlobal = {
                 }
             });
 
+            // Gerencia badge de Administrador no topo
+            const perfis = container.querySelectorAll
+                ? container.querySelectorAll('.perfil-nome')
+                : document.querySelectorAll('.perfil-nome');
+
+            perfis.forEach(perf => {
+                let badge = perf.querySelector('.badge-admin-topo');
+                if (isAdmin) {
+                    if (!badge) {
+                        badge = document.createElement('span');
+                        badge.className = 'badge-admin-topo';
+                        badge.title = 'Acesso Administrativo Ativo';
+                        badge.innerHTML = '<i class="fa-solid fa-shield-halved"></i> Admin';
+                        perf.appendChild(badge);
+                    }
+                } else if (badge) {
+                    badge.remove();
+                }
+            });
+
             // Atualiza a letra do avatar (.avatar)
             const avatares = container.querySelectorAll
                 ? container.querySelectorAll('.perfil .avatar, .topo .avatar')
@@ -158,6 +212,11 @@ export const usuarioGlobal = {
             avatares.forEach(el => {
                 if (el && inicial) {
                     el.textContent = inicial;
+                    if (isAdmin) {
+                        el.classList.add('avatar-admin');
+                    } else {
+                        el.classList.remove('avatar-admin');
+                    }
                 }
             });
         } catch (err) {
