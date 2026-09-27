@@ -127,13 +127,13 @@ body[data-theme="dark"] {
 }
 
 /* Títulos e Textos Principais */
-[data-theme="dark"] .topo h1,
+[data-theme="dark"] body h1,
 [data-theme="dark"] .titulo,
-[data-theme="dark"] .titulo-card h2,
-[data-theme="dark"] .secao-titulo h2,
-[data-theme="dark"] h1,
-[data-theme="dark"] h2,
-[data-theme="dark"] h3 {
+[data-theme="dark"]  body h2,
+[data-theme="dark"]  body h3,
+[data-theme="dark"] body h4,
+[data-theme="dark"] .simulado-pergunta-card .simulado-opcao-text
+{
   color: var(--text-dark);
 }
 
@@ -360,6 +360,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .icone-card.amarelo-card { background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; }
 [data-theme="dark"] .icone-card.roxo-card { background: rgba(99, 102, 241, 0.18) !important; color: #818cf8 !important; }
 [data-theme="dark"] .icone-card.vermelho-card { background: rgba(239, 68, 68, 0.18) !important; color: #f87171 !important; }
+[data-theme="dark"] .icone-card.laranja-card { background: rgba(239, 68, 68, 0.18) !important; color: #ef7410 !important; }
 
 /* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro (Sem borda extra em divs que não precisam) */
 [data-theme="dark"] .gabarito-item-card,
@@ -500,7 +501,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-avancar-modulo-topo,
 [data-theme="dark"] .tutor-ia-send-btn,
 [data-theme="dark"] .ia-botao,
-[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]),
+[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.laranja-card):not(.amarelo-card):not(.laranja-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]),
 [data-theme="dark"] .btn-praticar-questoes.azul-card,
 [data-theme="dark"] .btn-iniciar-simulado[data-id="PlacaTransito"],
 [data-theme="dark"] .btn-iniciar-simulado[data-category="placas"] {
@@ -528,7 +529,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-avancar-modulo-topo:hover,
 [data-theme="dark"] .tutor-ia-send-btn:hover,
 [data-theme="dark"] .ia-botao:hover,
-[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]):hover,
+[data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(laranja-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]):hover,
 [data-theme="dark"] .btn-praticar-questoes.azul-card:hover,
 [data-theme="dark"] .btn-iniciar-simulado[data-id="PlacaTransito"]:hover,
 [data-theme="dark"] .btn-iniciar-simulado[data-category="placas"]:hover {
