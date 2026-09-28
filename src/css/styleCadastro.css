@@ -15,6 +15,7 @@ body {
 }
 
 .card {
+  position: relative;
   width: 100%;
   max-width: 520px;
   background: var(--bg-card);
@@ -79,12 +80,59 @@ h1 {
   margin-bottom: 30px;
 }
 
+.auth-section {
+  width: 100%;
+  animation: authFadeIn 0.25s ease-out;
+}
+
+@keyframes authFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.btn-voltar {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--bg-light, #f1f5f9);
+  border: 1px solid var(--border-input, #e2e8f0);
+  color: var(--text-dark, #334155);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 0;
+  line-height: 1;
+  box-sizing: border-box;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+  z-index: 10;
+}
+
+.btn-voltar:hover {
+  background: var(--border-card, #e2e8f0);
+  color: var(--text-dark, #0f172a);
+  transform: scale(1.05);
+}
+
+.btn-voltar:active {
+  transform: scale(0.95);
+}
+
 .campo {
   position: relative;
   margin-bottom: 18px;
 }
 
-.campo input {
+.campo input,
+.campo select {
   width: 100%;
   height: 54px;
   border: 2px solid var(--border-input);
@@ -92,17 +140,44 @@ h1 {
   outline: none;
   font-size: 16px;
   padding: 0 45px 0 50px;
-  color: #333333;
+  color: var(--text-dark, #333333);
+  background: var(--bg-card, #ffffff);
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.campo input:focus {
+.campo select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.campo select option {
+  background: var(--bg-card, #ffffff);
+  color: var(--text-dark, #333333);
+}
+
+.campo input:focus,
+.campo select:focus {
   border-color: var(--brand-green);
   box-shadow: 0 0 0 3px rgba(24, 168, 90, 0.15);
 }
 
 .campo input::placeholder {
   color: var(--text-muted);
+}
+
+.campo-select::after {
+  content: "\f078";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 12px;
+  color: var(--text-muted);
+  pointer-events: none;
 }
 
 .icone {
@@ -231,6 +306,12 @@ h1 {
   color: var(--google-blue);
 }
 
+.google-svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
 .rodape-link {
   text-align: center;
   margin-top: 25px;
@@ -244,7 +325,9 @@ h1 {
   text-decoration: none;
 }
 
-#mensagem {
+#mensagem,
+#mensagemEsqueci,
+#mensagemSeguranca {
   display: none;
   margin-top: 15px;
   padding: 12px;
@@ -263,6 +346,15 @@ h1 {
     border-radius: 20px;
   }
 
+  .btn-voltar {
+    top: 18px;
+    left: 18px;
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+
   .logo {
     font-size: 38px;
   }
@@ -276,7 +368,8 @@ h1 {
     margin-bottom: 20px;
   }
 
-  .campo input {
+  .campo input,
+  .campo select {
     height: 48px;
     font-size: 15px;
   }

@@ -12,50 +12,103 @@
 </head>
 <body>
     <div class="card">
-        <div class="logo">
-            <a href="/" aria-label="AprovaDrive">
-                <img src="/assets/logo.svg" alt="AprovaDrive" class="aprovadrive-logo" width="240" height="50">
-            </a>
-        </div>
-
-        <h1>Crie sua conta</h1>
-        <p class="subtitle">Preencha os dados abaixo para se cadastrar</p>
-
-        <form id="formCadastro">
-            <div class="campo">
-                <span class="icone"><i class="fa-solid fa-user"></i></span>
-                <input type="text" id="nome" placeholder="Nome completo" required>
+        <!-- SEÇÃO: DADOS CADASTRAIS -->
+        <section id="secaoCadastro" class="auth-section">
+            <div class="logo">
+                <a href="/" aria-label="AprovaDrive">
+                    <img src="/assets/logo.svg" alt="AprovaDrive" class="aprovadrive-logo" width="240" height="50">
+                </a>
             </div>
 
-            <div class="campo">
-                <span class="icone"><i class="fa-solid fa-envelope"></i></span>
-                <input type="email" id="email" placeholder="E-mail" required>
+            <h1>Crie sua conta</h1>
+            <p class="subtitle">Preencha os dados abaixo para se cadastrar</p>
+
+            <form id="formCadastro">
+                <div class="campo">
+                    <span class="icone"><i class="fa-solid fa-user"></i></span>
+                    <input type="text" id="nome" placeholder="Nome completo" required>
+                </div>
+
+                <div class="campo">
+                    <span class="icone"><i class="fa-solid fa-envelope"></i></span>
+                    <input type="email" id="email" placeholder="E-mail" required>
+                </div>
+
+                <div class="campo">
+                    <span class="icone"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="senhaCadastro" placeholder="Senha (mínimo 6 caracteres)" required>
+                </div>
+
+                <div class="campo">
+                    <span class="icone"><i class="fa-solid fa-lock"></i></span>
+                    <input type="password" id="confirmarSenha" placeholder="Confirme a senha" required>
+                </div>
+
+                <div class="campo" id="campoData">
+                    <span class="icone"><i class="fa-solid fa-calendar"></i></span>
+                    <input type="date" id="dataNascimento" required>
+                </div>
+
+                <button type="submit" class="btn-primary" id="btnContinuarCadastro">Continuar</button>
+
+                <div id="mensagem"></div>
+            </form>
+
+            <p class="rodape-link">
+                Já possui uma conta?
+                <a href="/login">Entrar</a>
+            </p>
+        </section>
+
+        <!-- SEÇÃO: PERGUNTA DE SEGURANÇA -->
+        <section id="secaoPergunta" class="auth-section" style="display: none;">
+            <button type="button" class="btn-voltar" id="btnVoltarCadastro" aria-label="Voltar para os dados do cadastro" title="Voltar">
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <div class="logo">
+                <a href="/" aria-label="AprovaDrive">
+                    <img src="/assets/logo.svg" alt="AprovaDrive" class="aprovadrive-logo" width="240" height="50">
+                </a>
             </div>
 
-            <div class="campo">
-                <span class="icone"><i class="fa-solid fa-lock"></i></span>
-                <input type="password" id="senhaCadastro" placeholder="Senha (mínimo 6 caracteres)" required>
-            </div>
+            <h1>Crie sua pergunta de segurança</h1>
+            <p class="subtitle">Defina uma pergunta e resposta secreta para recuperar sua conta se esquecer sua senha.</p>
 
-            <div class="campo">
-                <span class="icone"><i class="fa-solid fa-lock"></i></span>
-                <input type="password" id="confirmarSenha" placeholder="Confirme a senha" required>
-            </div>
+            <form id="formPerguntaSeguranca">
+                <div class="campo campo-select">
+                    <span class="icone"><i class="fa-solid fa-circle-question"></i></span>
+                    <select id="perguntaSeguranca" required>
+                        <option value="" disabled selected>Selecione uma pergunta de segurança</option>
+                        <option value="Qual o nome do seu primeiro animal de estimação?">Qual o nome do seu primeiro animal de estimação?</option>
+                        <option value="Qual é a sua cidade natal?">Qual é a sua cidade natal?</option>
+                        <option value="Qual o nome da sua primeira escola?">Qual o nome da sua primeira escola?</option>
+                        <option value="Qual o modelo do seu primeiro carro?">Qual o modelo do seu primeiro carro?</option>
+                        <option value="Qual o sobrenome de solteira da sua mãe?">Qual o sobrenome de solteira da sua mãe?</option>
+                        <option value="custom">Criar minha própria pergunta...</option>
+                    </select>
+                </div>
 
-            <div class="campo" id="campoData">
-                <span class="icone"><i class="fa-solid fa-calendar"></i></span>
-                <input type="date" id="dataNascimento" required>
-            </div>
+                <div class="campo" id="campoPerguntaCustom" style="display: none;">
+                    <span class="icone"><i class="fa-solid fa-pen"></i></span>
+                    <input type="text" id="perguntaCustom" placeholder="Digite sua própria pergunta">
+                </div>
 
-            <button type="submit" class="btn-primary">Cadastrar</button>
+                <div class="campo">
+                    <span class="icone"><i class="fa-solid fa-shield-halved"></i></span>
+                    <input type="text" id="respostaSeguranca" placeholder="Resposta de segurança" required>
+                </div>
 
-            <div id="mensagem"></div>
-        </form>
+                <button type="submit" class="btn-primary" id="btnFinalizarCadastro">Concluir Cadastro</button>
 
-        <p class="rodape-link">
-            Já possui uma conta?
-            <a href="/login">Entrar</a>
-        </p>
+                <div id="mensagemSeguranca"></div>
+            </form>
+
+            <p class="rodape-link">
+                Já possui uma conta?
+                <a href="/login">Entrar</a>
+            </p>
+        </section>
     </div>
 
     <script type="module" src="/src/js/pages/cadastro.js"></script>
