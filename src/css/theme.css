@@ -1614,3 +1614,38 @@ body[data-theme="dark"] {
   align-items: center;
   gap: 16px;
 }
+
+/* =========================================================
+   LOGO APROVADRIVE TEMATIZADO (MODO DARK / CYBER NEON THEME)
+   ========================================================= */
+[data-theme="dark"] .aprovadrive-logo,
+[data-theme="dark"] .aprovadrive-logo-icon-svg {
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.55));
+}
+
+[data-theme="dark"] .aprovadrive-path-green {
+  fill: url(#aprovadrive-grad-green-dark) !important;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.65)) drop-shadow(0 0 22px rgba(5, 150, 105, 0.35)) !important;
+}
+
+[data-theme="dark"] .aprovadrive-path-road {
+  stroke: #f0fdf4 !important;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 8px rgba(52, 211, 153, 0.6)) !important;
+}
+
+[data-theme="dark"] .aprovadrive-path-blue {
+  fill: url(#aprovadrive-grad-blue-dark) !important;
+  filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.7)) drop-shadow(0 0 26px rgba(2, 132, 199, 0.35)) !important;
+}
+
+[data-theme="dark"] .aprovadrive-path-yellow {
+  fill: url(#aprovadrive-grad-yellow-dark) !important;
+  filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.65)) drop-shadow(0 0 26px rgba(217, 119, 6, 0.3)) !important;
+}
+
+[data-theme="dark"] .navbar-logo-link:hover .aprovadrive-logo,
+[data-theme="dark"] .logo:hover .aprovadrive-logo {
+  transform: scale(1.03) translateY(-1px);
+  filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 16px rgba(56, 189, 248, 0.35));
+}
+

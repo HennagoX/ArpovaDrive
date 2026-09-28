@@ -24,16 +24,46 @@ body {
 }
 
 .logo {
-  text-align: center;
-  font-size: 48px;
-  font-weight: bold;
-  letter-spacing: -1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   margin-bottom: 25px;
 }
 
-.logo-a { color: var(--brand-green); }
-.logo-aprova { color: var(--primary-blue); }
-.logo-drive { color: var(--brand-yellow); }
+.logo .aprovadrive-logo,
+.logo .aprovadrive-logo-full {
+  max-width: 250px;
+  width: 100%;
+  height: auto;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover .aprovadrive-logo,
+.logo:hover .aprovadrive-logo-full {
+  transform: scale(1.03);
+}
+
+/* Caminhos do logo no Modo Claro (Padrão) */
+.aprovadrive-path-green {
+  fill: url(#aprovadrive-grad-green-light);
+  transition: fill 0.3s ease, filter 0.3s ease;
+}
+
+.aprovadrive-path-road {
+  stroke: #ffffff;
+  transition: stroke 0.3s ease, filter 0.3s ease;
+}
+
+.aprovadrive-path-blue {
+  fill: url(#aprovadrive-grad-blue-light);
+  transition: fill 0.3s ease, filter 0.3s ease;
+}
+
+.aprovadrive-path-yellow {
+  fill: url(#aprovadrive-grad-yellow-light);
+  transition: fill 0.3s ease, filter 0.3s ease;
+}
 
 h1 {
   text-align: center;
