@@ -355,10 +355,10 @@ function renderFilterTabs(conteudos) {
 
 function createConteudoSection(conteudo) {
     const section = document.createElement('section');
-    section.className = 'tarefas-conteudo-section';
+    const cor = conteudo.cor || 'green';
+    section.className = `tarefas-conteudo-section modulos-theme-${cor}`;
     section.dataset.conteudoId = conteudo.id;
 
-    const cor = conteudo.cor || 'green';
     const icone = conteudo.icone || 'fa-solid fa-book';
     const pct = conteudo.porcentagemConcluida || 0;
 

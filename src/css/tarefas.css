@@ -918,7 +918,7 @@ button.is-cooldown,
     animation: dynamicBlueGradient 14s ease-in-out infinite !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    border: none !important;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
@@ -951,6 +951,60 @@ button.is-cooldown,
 
 [data-theme="dark"] .tarefa-reward-col {
     border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* Cores temáticas para tarefas de cada módulo/conteúdo (Light Mode) */
+.tarefas-conteudo-section.modulos-theme-green {
+    --theme-color: #16a34a;
+    --theme-color-hover: #15803d;
+    --theme-color-soft: #e8f5e9;
+    --theme-color-border: #c8e6c9;
+}
+.tarefas-conteudo-section.modulos-theme-blue {
+    --theme-color: #0752a0;
+    --theme-color-hover: #064583;
+    --theme-color-soft: #e8f2ff;
+    --theme-color-border: #bfdbfe;
+}
+.tarefas-conteudo-section.modulos-theme-yellow {
+    --theme-color: #d97706;
+    --theme-color-hover: #b45309;
+    --theme-color-soft: #fff6d9;
+    --theme-color-border: #fde68a;
+}
+.tarefas-conteudo-section.modulos-theme-purple {
+    --theme-color: #7c3aed;
+    --theme-color-hover: #6d28d9;
+    --theme-color-soft: #f3e8ff;
+    --theme-color-border: #ddd6fe;
+}
+.tarefas-conteudo-section.modulos-theme-red {
+    --theme-color: #dc2626;
+    --theme-color-hover: #b91c1c;
+    --theme-color-soft: #fee2e2;
+    --theme-color-border: #fecaca;
+}
+
+.tarefas-conteudo-section .tarefas-conteudo-progress-mini-fill {
+    background: var(--theme-color, #16a34a);
+}
+
+.tarefas-conteudo-section .btn-tarefa.btn-estudar,
+.tarefas-conteudo-section .btn-tarefa.btn-praticar {
+    background: var(--theme-color, #16a34a);
+    box-shadow: 0 4px 12px var(--theme-shadow, rgba(0, 0, 0, 0.15));
+}
+
+.tarefas-conteudo-section .btn-tarefa.btn-estudar:hover,
+.tarefas-conteudo-section .btn-tarefa.btn-praticar:hover {
+    background: var(--theme-color-hover, #15803d);
+    transform: translateY(-2px);
+}
+
+.tarefas-conteudo-section .btn-tarefa.btn-bloqueado {
+    background: var(--theme-color-soft, #f1f5f9);
+    color: var(--theme-color, #94a3b8);
+    border: 1px solid var(--theme-color-border, #e2e8f0);
 }
 
 

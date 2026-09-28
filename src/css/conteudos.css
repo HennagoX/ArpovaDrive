@@ -875,16 +875,16 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
 }
 
 .module-action-area .btn-bloqueado {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
+    background: var(--theme-color-soft, #f1f5f9);
+    color: var(--theme-color, #64748b);
+    border: 1px solid var(--theme-color-border, #e2e8f0);
     cursor: pointer;
 }
 
 .module-action-area .btn-bloqueado:hover {
-    background: #e2e8f0;
-    color: #334155;
-    border-color: #cbd5e1;
+    background: var(--theme-color-soft, #e2e8f0);
+    color: var(--theme-color-hover, #334155);
+    border-color: var(--theme-color, #cbd5e1);
 }
 
 .icone-inline {
@@ -2249,31 +2249,6 @@ body.modal-modulo-open {
     box-shadow: 0 0 12px rgba(56, 189, 248, 0.3) !important;
 }
 
-[data-theme="dark"] .welcome {
-    background-image:
-      var(--bg-grain),
-      linear-gradient(
-        120deg,
-        rgb(14, 76, 183) 0%,
-        #1864d7 15%,
-        #1673ff 30%,
-        #1864d7 45%,
-        #1864d7 60%,
-        #143971 75%,
-        #1864d7 88%,
-        #1864d7 100%
-      ) !important;
-    background-repeat: repeat, no-repeat !important;
-    background-size: 64px 64px, 240% 240% !important;
-    background-position: 0 0, 0% 50% !important;
-    background-clip: padding-box !important;
-    overflow: hidden !important;
-    animation: dynamicBlueGradient 14s ease-in-out infinite !important;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
-}
 
 [data-theme="dark"] .hero-stat-badge,
 [data-theme="dark"] .leitura-header-stat,

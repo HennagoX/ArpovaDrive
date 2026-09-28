@@ -742,9 +742,9 @@
 }
 
 .btn-bateria-locked {
-    background: #f1f5f9;
-    color: #64748b;
-    border: 1px solid #e2e8f0;
+    background: var(--q-theme-soft, #f1f5f9);
+    color: var(--q-theme, #64748b);
+    border: 1px solid var(--q-theme-border, #e2e8f0);
     border-radius: 12px;
     font-weight: 700;
     font-size: 14px;
@@ -759,9 +759,9 @@
 }
 
 .btn-bateria-locked:hover {
-    background: #e2e8f0;
-    color: #334155;
-    border-color: #cbd5e1;
+    background: var(--q-theme-soft, #e2e8f0);
+    color: var(--q-theme-hover, #334155);
+    border-color: var(--q-theme, #cbd5e1);
 }
 
 #view-questoes-resolucao {
@@ -1774,7 +1774,7 @@
     animation: dynamicBlueGradient 14s ease-in-out infinite !important;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(56, 189, 248, 0.3) !important;
+    border: none !important;
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
 
@@ -1883,22 +1883,22 @@
 
 [data-theme="dark"] .resolucao-opcao-btn,
 [data-theme="dark"] .simulado-opcao-item {
-    background: rgba(255, 255, 255, 0.035) !important;
-    border: 1.5px solid rgba(255, 255, 255, 0.08) !important;
+    background: rgba(20, 21, 29, 0.78) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.09) !important;
     color: #ebebef !important;
 }
 
 [data-theme="dark"] .resolucao-opcao-btn:hover:not(:disabled),
 [data-theme="dark"] .simulado-opcao-item:hover {
-    background: rgba(255, 255, 255, 0.075) !important;
-    border-color: rgba(65, 209, 255, 0.45) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+    background: rgba(30, 32, 45, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55);
 }
 
 [data-theme="dark"] .simulado-opcao-item.selecionada {
-    background: rgba(65, 209, 255, 0.12) !important;
-    border-color: #41d1ff !important;
-    box-shadow: 0 0 16px rgba(65, 209, 255, 0.25) !important;
+    background: rgba(30, 34, 48, 0.95) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 6px 20px rgba(0, 0, 0, 0.5) !important;
 }
 
 [data-theme="dark"] .btn-pilula-questao.status-vazia {

@@ -241,6 +241,133 @@ body[data-theme="dark"] {
 }
 
 /* =========================================================
+   CARDS DE RESPOSTA (A, B, C, D) PADRONIZADOS EM PRETO (DARK GLASS)
+   ========================================================= */
+[data-theme="dark"] .resolucao-opcao-btn,
+[data-theme="dark"] .simulado-opcao-item {
+  background: rgba(20, 21, 29, 0.78) !important;
+  background-image: none !important;
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  color: #ebebef !important;
+  text-shadow: none !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.2s ease,
+              border-color 0.2s ease,
+              box-shadow 0.2s ease !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-corpo,
+[data-theme="dark"] .simulado-opcao-text {
+  color: #e2e8f0 !important;
+  text-shadow: none !important;
+}
+
+/* Chip com a letra da opção (A, B, C, D) em tom preto/grafite padronizado */
+[data-theme="dark"] .resolucao-letra-chip,
+[data-theme="dark"] .simulado-letra-circle {
+  background: rgba(255, 255, 255, 0.06) !important;
+  background-image: none !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
+  text-shadow: none !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+  transition: all 0.2s ease !important;
+}
+
+/* Hover nos cards de resposta padronizados - preto suavemente elevado e borda iluminada */
+[data-theme="dark"] .resolucao-opcao-btn:hover:not(:disabled),
+[data-theme="dark"] .simulado-opcao-item:hover {
+  background: rgba(30, 32, 45, 0.9) !important;
+  background-image: none !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  transform: translateY(-2px) !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn:hover:not(:disabled) .resolucao-letra-chip,
+[data-theme="dark"] .simulado-opcao-item:hover .simulado-letra-circle {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Opção selecionada no Simulado */
+[data-theme="dark"] .simulado-opcao-item.selecionada {
+  background: rgba(30, 34, 48, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.35) !important;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25), 0 6px 20px rgba(0, 0, 0, 0.5) !important;
+}
+
+[data-theme="dark"] .simulado-opcao-item.selecionada .simulado-letra-circle {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .simulado-radio-indicator {
+  border-color: rgba(255, 255, 255, 0.28) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+[data-theme="dark"] .simulado-opcao-item.selecionada .simulado-radio-indicator {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Estados de acerto e erro (Correta / Errada) na resolução */
+[data-theme="dark"] .resolucao-opcao-btn.correta {
+  background: rgba(16, 185, 129, 0.18) !important;
+  background-image: none !important;
+  border-color: #10b981 !important;
+  color: #ecfdf5 !important;
+  box-shadow: 0 0 18px rgba(16, 185, 129, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn.correta .resolucao-letra-chip {
+  background: #10b981 !important;
+  border-color: #10b981 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn.correta .resolucao-opcao-icon {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  color: #34d399 !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn.errada {
+  background: rgba(239, 68, 68, 0.18) !important;
+  background-image: none !important;
+  border-color: #ef4444 !important;
+  color: #fef2f2 !important;
+  box-shadow: 0 0 18px rgba(239, 68, 68, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn.errada .resolucao-letra-chip {
+  background: #ef4444 !important;
+  border-color: #ef4444 !important;
+  color: #ffffff !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn.errada .resolucao-opcao-icon {
+  opacity: 1 !important;
+  transform: scale(1) !important;
+  color: #f87171 !important;
+}
+
+[data-theme="dark"] .resolucao-opcao-btn:disabled:not(.correta):not(.errada) {
+  opacity: 0.6 !important;
+  cursor: default !important;
+  transform: none !important;
+}
+
+/* =========================================================
    ANIMAÇÃO DE GRADIENTE DINÂMICO DE TONS DE AZUL
    ========================================================= */
 @keyframes dynamicBlueGradient {
@@ -252,6 +379,24 @@ body[data-theme="dark"] {
   }
   100% {
     background-position: 0 0, 0% 50%;
+  }
+}
+
+/* =========================================================
+   PROPRIEDADE E ANIMAÇÃO DA BORDA GIRATÓRIA (@property)
+   ========================================================= */
+@property --angulo-borda {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes girarBordaBanner {
+  0% {
+    --angulo-borda: 0deg;
+  }
+  100% {
+    --angulo-borda: 360deg;
   }
 }
 
@@ -268,6 +413,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .tarefas-hero,
 [data-theme="dark"] .current-task-banner,
 [data-theme="dark"] .cta-card {
+  position: relative !important;
   background-image:
     var(--bg-grain),
     linear-gradient(
@@ -289,9 +435,64 @@ body[data-theme="dark"] {
   animation: dynamicBlueGradient 14s ease-in-out infinite !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border: none !important;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
+}
+
+/* =========================================================
+   BORDA GIRATÓRIA EM GRADIENTE DE TONS DE AZUL (MODO DARK)
+   Gira suavemente nos banners principais sem alterar tamanho ou layout
+   ========================================================= */
+[data-theme="dark"] .progresso::before,
+[data-theme="dark"] .ia-card-inicio::before,
+[data-theme="dark"] .ia-card::before,
+[data-theme="dark"] .ia-banner::before,
+[data-theme="dark"] .welcome::before,
+[data-theme="dark"] .welcome-questoes::before,
+[data-theme="dark"] .tarefas-hero::before,
+[data-theme="dark"] .current-task-banner::before,
+[data-theme="dark"] .cta-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angulo-borda),
+    rgba(56, 189, 248, 0.2) 0deg,
+    rgba(14, 165, 233, 0.45) 50deg,
+    #0284c7 90deg,
+    #38bdf8 130deg,
+    #bae6fd 150deg,
+    #60a5fa 170deg,
+    rgba(29, 78, 216, 0.4) 210deg,
+    rgba(56, 189, 248, 0.2) 240deg,
+    rgba(14, 165, 233, 0.5) 280deg,
+    #e6e5e5 320deg,
+    rgba(56, 189, 248, 0.2) 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 2;
+  animation: girarBordaBanner 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-theme="dark"] .progresso::before,
+  [data-theme="dark"] .ia-card-inicio::before,
+  [data-theme="dark"] .ia-card::before,
+  [data-theme="dark"] .ia-banner::before,
+  [data-theme="dark"] .welcome::before,
+  [data-theme="dark"] .welcome-questoes::before,
+  [data-theme="dark"] .tarefas-hero::before,
+  [data-theme="dark"] .current-task-banner::before,
+  [data-theme="dark"] .cta-card::before {
+    animation: none !important;
+  }
 }
 
 [data-theme="dark"] .progresso .trofeu {
@@ -455,7 +656,7 @@ body[data-theme="dark"] {
    ========================================================= */
 
 /* Base para botões no tema escuro: sólidos, transições suaves, sem blur e com overflow estritamente contido */
-[data-theme="dark"] button:not(.vite-theme-switch):not(.btn-pilula-questao),
+[data-theme="dark"] button:not(.vite-theme-switch):not(.btn-pilula-questao):not(.resolucao-opcao-btn):not(.simulado-opcao-item),
 [data-theme="dark"] .btn,
 [data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao):not(span):not(i):not(div):not(p),
 [data-theme="dark"] .ia-botao,
@@ -484,21 +685,16 @@ body[data-theme="dark"] {
 }
 
 /* 1. Botões Primários / Azuis (Sólido + Gradiente Azul + Granular) */
-[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(:disabled),
+[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(.btn-ler):not(.btn-bateria-start):not(.btn-avancar-modulo-topo):not(.btn-modal-avancar):not(.btn-resolucao-primario):not(.btn-resultado-primario):not(.btn-bloqueado):not(.btn-bateria-locked):not(.btn-tarefa):not(.resolucao-opcao-btn):not(.simulado-opcao-item):not(:disabled),
 [data-theme="dark"] .btn-primary,
 [data-theme="dark"] .btn-principal,
 [data-theme="dark"] .btn-destaque,
 [data-theme="dark"] .btn-action.btn-praticar,
 [data-theme="dark"] .btn-praticar,
-[data-theme="dark"] .btn-resolucao-primario,
-[data-theme="dark"] .btn-resultado-primario,
-[data-theme="dark"] .btn-bateria-start,
-[data-theme="dark"] .btn-modal-avancar:not(.btn-modal-questoes),
 [data-theme="dark"] .btn-admin-save,
 [data-theme="dark"] .btn-admin-add-modulo,
 [data-theme="dark"] .btn-admin-add-tarefa-fixa,
 [data-theme="dark"] .read-btn,
-[data-theme="dark"] .btn-avancar-modulo-topo,
 [data-theme="dark"] .tutor-ia-send-btn,
 [data-theme="dark"] .ia-botao,
 [data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.laranja-card):not(.amarelo-card):not(.laranja-card):not(.roxo-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]),
@@ -512,21 +708,16 @@ body[data-theme="dark"] {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
 
-[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(:disabled):hover,
+[data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(.btn-ler):not(.btn-bateria-start):not(.btn-avancar-modulo-topo):not(.btn-modal-avancar):not(.btn-resolucao-primario):not(.btn-resultado-primario):not(.btn-bloqueado):not(.btn-bateria-locked):not(.btn-tarefa):not(.resolucao-opcao-btn):not(.simulado-opcao-item):not(:disabled):hover,
 [data-theme="dark"] .btn-primary:hover,
 [data-theme="dark"] .btn-principal:hover,
 [data-theme="dark"] .btn-destaque:hover,
 [data-theme="dark"] .btn-action.btn-praticar:hover,
 [data-theme="dark"] .btn-praticar:hover,
-[data-theme="dark"] .btn-resolucao-primario:hover:not(:disabled),
-[data-theme="dark"] .btn-resultado-primario:hover,
-[data-theme="dark"] .btn-bateria-start:hover,
-[data-theme="dark"] .btn-modal-avancar:not(.btn-modal-questoes):hover,
 [data-theme="dark"] .btn-admin-save:hover,
 [data-theme="dark"] .btn-admin-add-modulo:hover,
 [data-theme="dark"] .btn-admin-add-tarefa-fixa:hover,
 [data-theme="dark"] .read-btn:hover,
-[data-theme="dark"] .btn-avancar-modulo-topo:hover,
 [data-theme="dark"] .tutor-ia-send-btn:hover,
 [data-theme="dark"] .ia-botao:hover,
 [data-theme="dark"] .btn-praticar-questoes:not(.verde-card):not(.amarelo-card):not(.roxo-card):not(laranja-card):not(.vermelho-card):not([data-id="DirecaoOfensiva"]):not([data-id="PrimeirosSocorros"]):not([data-id="MeioAmbiente"]):hover,
@@ -545,9 +736,6 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-action.btn-estudar,
 [data-theme="dark"] .btn-action.btn-concluir,
 [data-theme="dark"] .btn-claimable-glow,
-[data-theme="dark"] .btn-modal-questoes,
-[data-theme="dark"] .btn-modal-avancar.btn-modal-questoes,
-[data-theme="dark"] .module-action-area .btn-ler,
 [data-theme="dark"] .btn-iniciar-simulado[data-id="CodigoTransito"],
 [data-theme="dark"] button.btn-iniciar-simulado[style*="16a34a"],
 [data-theme="dark"] .btn-praticar-questoes.verde-card {
@@ -563,9 +751,6 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-action.btn-estudar:hover,
 [data-theme="dark"] .btn-action.btn-concluir:hover,
 [data-theme="dark"] .btn-claimable-glow:hover,
-[data-theme="dark"] .btn-modal-questoes:hover,
-[data-theme="dark"] .btn-modal-avancar.btn-modal-questoes:hover,
-[data-theme="dark"] .module-action-area .btn-ler:hover,
 [data-theme="dark"] .btn-iniciar-simulado[data-id="CodigoTransito"]:hover,
 [data-theme="dark"] button.btn-iniciar-simulado[style*="16a34a"]:hover,
 [data-theme="dark"] .btn-praticar-questoes.verde-card:hover {
@@ -653,6 +838,484 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
+/* 5.1. Botões Temáticos dos Módulos e Tarefas (Dark Mode)
+   Aplica as cores temáticas (Verde, Azul, Amarelo, Roxo, Vermelho)
+   nas subtelas de módulos (#view-modulos, #view-questoes-modulos,
+   #view-leitura-pdf, #view-questoes-resolucao, #modal-avancar-modulo)
+   e nas tarefas de cada módulo/conteúdo (.tarefas-conteudo-section). */
+
+/* Fallback padrão (Verde) caso esteja fora de container com tema */
+[data-theme="dark"] .btn-ler,
+[data-theme="dark"] .module-action-area .btn-ler,
+[data-theme="dark"] .btn-bloqueado,
+[data-theme="dark"] .module-action-area .btn-bloqueado,
+[data-theme="dark"] .btn-bateria-start,
+[data-theme="dark"] .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .btn-bateria-locked,
+[data-theme="dark"] .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .btn-avancar-modulo-topo,
+[data-theme="dark"] .btn-modal-avancar,
+[data-theme="dark"] .btn-modal-questoes,
+[data-theme="dark"] .btn-resolucao-primario,
+[data-theme="dark"] .btn-resultado-primario,
+[data-theme="dark"] .btn-resultado-tarefas {
+  background-image: var(--bg-grain), linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(52, 211, 153, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .btn-ler:hover,
+[data-theme="dark"] .module-action-area .btn-ler:hover,
+[data-theme="dark"] .btn-bloqueado:hover,
+[data-theme="dark"] .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .btn-bateria-start:hover,
+[data-theme="dark"] .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .btn-bateria-locked:hover,
+[data-theme="dark"] .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .btn-modal-avancar:hover,
+[data-theme="dark"] .btn-modal-questoes:hover,
+[data-theme="dark"] .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .btn-resultado-primario:hover,
+[data-theme="dark"] .btn-resultado-tarefas:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%) !important;
+  border-color: rgba(52, 211, 153, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+/* 5.1.1 Verde (Legislação de Trânsito) */
+[data-theme="dark"] .modulos-theme-green .btn-ler,
+[data-theme="dark"] .modulos-theme-green .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-green .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-green .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-green .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-green .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-green .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-green .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-green .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-green .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-green .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-green .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-green #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-green .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-green .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-green .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-bloqueado {
+  background-image: var(--bg-grain), linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(52, 211, 153, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .modulos-theme-green .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-green .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-green .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-green .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-green .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-green .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-green .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-green .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-green .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-green .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-green .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-green .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-green #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-green .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-green .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-green .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-green .btn-tarefa.btn-bloqueado:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #047857 0%, #10b981 50%, #34d399 100%) !important;
+  border-color: rgba(52, 211, 153, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(52, 211, 153, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .modulos-theme-green .btn-resolucao-primario:disabled {
+  background-image: var(--bg-grain), linear-gradient(135deg, #065f46 0%, #059669 50%, #10b981 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(52, 211, 153, 0.3) !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .modulos-theme-green .resolucao-modulo-tag {
+  background: rgba(5, 150, 105, 0.18) !important;
+  color: #34d399 !important;
+  border: 1px solid rgba(52, 211, 153, 0.3) !important;
+}
+
+[data-theme="dark"] .modulos-theme-green .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-green .tarefas-conteudo-progress-mini-fill {
+  background: linear-gradient(90deg, #059669 0%, #10b981 100%) !important;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.5) !important;
+}
+
+/* 5.1.2 Azul (Mecânica Básica) */
+[data-theme="dark"] .modulos-theme-blue .btn-ler,
+[data-theme="dark"] .modulos-theme-blue .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-blue .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-blue .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-blue .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-blue .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-blue .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-blue .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-blue .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-blue .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-blue .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-blue .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-blue #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-blue .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-blue .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-blue .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-bloqueado {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0752a0 0%, #0284c7 50%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 4px 14px rgba(7, 82, 160, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .modulos-theme-blue .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-blue .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-blue .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-blue .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-blue .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-blue .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-blue #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-blue .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-blue .btn-tarefa.btn-bloqueado:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0961bd 0%, #0396e0 50%, #5fe0ff 100%) !important;
+  border-color: rgba(56, 189, 248, 0.7) !important;
+  box-shadow: 0 6px 20px rgba(56, 189, 248, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .modulos-theme-blue .btn-resolucao-primario:disabled {
+  background-image: var(--bg-grain), linear-gradient(135deg, #0752a0 0%, #0284c7 50%, #38bdf8 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .modulos-theme-blue .resolucao-modulo-tag {
+  background: rgba(2, 132, 199, 0.18) !important;
+  color: #38bdf8 !important;
+  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .modulos-theme-blue .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-blue .tarefas-conteudo-progress-mini-fill {
+  background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%) !important;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
+}
+
+/* 5.1.3 Amarelo / Âmbar (Direção Defensiva) & Laranja (Simulado) */
+[data-theme="dark"] .modulos-theme-yellow .btn-ler,
+[data-theme="dark"] .modulos-theme-yellow .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-yellow .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-yellow .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-yellow .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-yellow .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-yellow .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-yellow .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-yellow .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-yellow .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-yellow .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-yellow .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-yellow #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-yellow .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-yellow .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-yellow .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-bloqueado,
+[data-theme="dark"] .modulos-theme-orange .btn-ler,
+[data-theme="dark"] .modulos-theme-orange .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-orange .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-orange .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-orange .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-orange .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-orange .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-orange .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-orange .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-orange .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-orange .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-orange .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-orange #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-orange .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-orange .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-orange .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-orange #btn-simulado-proxima,
+[data-theme="dark"] .modulos-theme-orange #btn-resultado-reivindicar-600xp,
+[data-theme="dark"] .modulos-theme-orange #btn-tentar-simulado-novamente,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-bloqueado {
+  background-image: var(--bg-grain), linear-gradient(135deg, #9a3412 0%, #d97706 50%, #f59e0b 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(251, 191, 36, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(217, 119, 6, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .modulos-theme-yellow .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-yellow .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-yellow .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-yellow .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-yellow .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-yellow .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-yellow #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-yellow .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-yellow .btn-tarefa.btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-orange .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-orange .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-orange .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-orange .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-orange .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-orange #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-orange .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-orange #btn-simulado-proxima:hover,
+[data-theme="dark"] .modulos-theme-orange #btn-resultado-reivindicar-600xp:hover,
+[data-theme="dark"] .modulos-theme-orange #btn-tentar-simulado-novamente:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-orange .btn-tarefa.btn-bloqueado:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #c2410c 0%, #f59e0b 50%, #fbbf24 100%) !important;
+  border-color: rgba(251, 191, 36, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(251, 191, 36, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .modulos-theme-yellow .btn-resolucao-primario:disabled,
+[data-theme="dark"] .modulos-theme-orange .btn-resolucao-primario:disabled {
+  background-image: var(--bg-grain), linear-gradient(135deg, #9a3412 0%, #d97706 50%, #f59e0b 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .modulos-theme-yellow .resolucao-modulo-tag,
+[data-theme="dark"] .modulos-theme-orange .resolucao-modulo-tag {
+  background: rgba(217, 119, 6, 0.18) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.3) !important;
+}
+
+[data-theme="dark"] .modulos-theme-yellow .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-yellow .tarefas-conteudo-progress-mini-fill,
+[data-theme="dark"] .modulos-theme-orange .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-orange .tarefas-conteudo-progress-mini-fill {
+  background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%) !important;
+  box-shadow: 0 0 10px rgba(251, 191, 36, 0.5) !important;
+}
+
+/* 5.1.4 Roxo / Violeta (Meio Ambiente & Cidadania) */
+[data-theme="dark"] .modulos-theme-purple .btn-ler,
+[data-theme="dark"] .modulos-theme-purple .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-purple .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-purple .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-purple .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-purple .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-purple .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-purple .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-purple .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-purple .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-purple .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-purple .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-purple #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-purple .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-purple .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-purple .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-bloqueado {
+  background-image: var(--bg-grain), linear-gradient(135deg, #4c1d95 0%, #6366f1 50%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(167, 139, 250, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .modulos-theme-purple .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-purple .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-purple .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-purple .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-purple .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-purple .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-purple #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-purple .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-purple .btn-tarefa.btn-bloqueado:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #a78bfa 100%) !important;
+  border-color: rgba(167, 139, 250, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(167, 139, 250, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .modulos-theme-purple .btn-resolucao-primario:disabled {
+  background-image: var(--bg-grain), linear-gradient(135deg, #4c1d95 0%, #6366f1 50%, #8b5cf6 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(167, 139, 250, 0.3) !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .modulos-theme-purple .resolucao-modulo-tag {
+  background: rgba(99, 102, 241, 0.18) !important;
+  color: #a78bfa !important;
+  border: 1px solid rgba(167, 139, 250, 0.3) !important;
+}
+
+[data-theme="dark"] .modulos-theme-purple .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-purple .tarefas-conteudo-progress-mini-fill {
+  background: linear-gradient(90deg, #6366f1 0%, #8b5cf6 100%) !important;
+  box-shadow: 0 0 10px rgba(167, 139, 250, 0.5) !important;
+}
+
+/* 5.1.5 Vermelho (Primeiros Socorros) */
+[data-theme="dark"] .modulos-theme-red .btn-ler,
+[data-theme="dark"] .modulos-theme-red .module-action-area .btn-ler,
+[data-theme="dark"] .modulos-theme-red .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-red .module-action-area .btn-bloqueado,
+[data-theme="dark"] .modulos-theme-red .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-red .bateria-action-area .btn-bateria-start,
+[data-theme="dark"] .modulos-theme-red .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-red .bateria-action-area .btn-bateria-locked,
+[data-theme="dark"] .modulos-theme-red .btn-avancar-modulo-topo,
+[data-theme="dark"] .modulos-theme-red .btn-modal-avancar,
+[data-theme="dark"] .modulos-theme-red .btn-modal-questoes,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-red .btn-modal-avancar,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-red #btn-modal-confirmar-avanco,
+[data-theme="dark"] .modulos-theme-red .btn-resolucao-primario,
+[data-theme="dark"] .modulos-theme-red .btn-resultado-primario,
+[data-theme="dark"] .modulos-theme-red .btn-resultado-tarefas,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-praticar,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-estudar,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-reivindicar,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-bloqueado {
+  background-image: var(--bg-grain), linear-gradient(135deg, #881337 0%, #dc2626 50%, #ef4444 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(248, 113, 113, 0.45) !important;
+  box-shadow: 0 4px 15px rgba(220, 38, 38, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+[data-theme="dark"] .modulos-theme-red .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-red .module-action-area .btn-ler:hover,
+[data-theme="dark"] .modulos-theme-red .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-red .module-action-area .btn-bloqueado:hover,
+[data-theme="dark"] .modulos-theme-red .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-red .bateria-action-area .btn-bateria-start:hover,
+[data-theme="dark"] .modulos-theme-red .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-red .bateria-action-area .btn-bateria-locked:hover,
+[data-theme="dark"] .modulos-theme-red .btn-avancar-modulo-topo:hover,
+[data-theme="dark"] .modulos-theme-red .btn-modal-avancar:hover,
+[data-theme="dark"] .modulos-theme-red .btn-modal-questoes:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-red .btn-modal-avancar:hover,
+[data-theme="dark"] #modal-avancar-modulo.modulos-theme-red #btn-modal-confirmar-avanco:hover,
+[data-theme="dark"] .modulos-theme-red .btn-resolucao-primario:hover:not(:disabled),
+[data-theme="dark"] .modulos-theme-red .btn-resultado-primario:hover,
+[data-theme="dark"] .modulos-theme-red .btn-resultado-tarefas:hover,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-praticar:hover,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-estudar:hover,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-reivindicar:hover,
+[data-theme="dark"] .modulos-theme-red .btn-tarefa.btn-bloqueado:hover {
+  background-image: var(--bg-grain), linear-gradient(135deg, #9f1239 0%, #ef4444 50%, #f87171 100%) !important;
+  border-color: rgba(248, 113, 113, 0.75) !important;
+  box-shadow: 0 6px 20px rgba(248, 113, 113, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transform: translateY(-2px);
+}
+
+[data-theme="dark"] .modulos-theme-red .btn-resolucao-primario:disabled {
+  background-image: var(--bg-grain), linear-gradient(135deg, #881337 0%, #dc2626 50%, #ef4444 100%) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(248, 113, 113, 0.3) !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+[data-theme="dark"] .modulos-theme-red .resolucao-modulo-tag {
+  background: rgba(220, 38, 38, 0.18) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(248, 113, 113, 0.3) !important;
+}
+
+[data-theme="dark"] .modulos-theme-red .resolucao-progress-fill,
+[data-theme="dark"] .modulos-theme-red .tarefas-conteudo-progress-mini-fill {
+  background: linear-gradient(90deg, #dc2626 0%, #ef4444 100%) !important;
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.5) !important;
+}
+
 /* 6. Botões Secundários / Voltar / Cancelar / Outline (Sólidos Escuros + Gradiente Grafite + Granular) */
 [data-theme="dark"] .btn-voltar,
 [data-theme="dark"] .btn-voltar-modulos,
@@ -663,7 +1326,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-modal-continuar,
 [data-theme="dark"] .btn-resolucao-secundario,
 [data-theme="dark"] .btn-resultado-secundario,
-[data-theme="dark"] .btn-resultado-tarefas,
+[data-theme="dark"] .btn-resultado-tarefas:not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
 [data-theme="dark"] .btn-retry,
 [data-theme="dark"] .btn-pdf-external,
 [data-theme="dark"] .btn-pdf-expand,
@@ -686,7 +1349,7 @@ body[data-theme="dark"] {
 [data-theme="dark"] .btn-modal-continuar:hover,
 [data-theme="dark"] .btn-resolucao-secundario:hover:not(:disabled),
 [data-theme="dark"] .btn-resultado-secundario:hover,
-[data-theme="dark"] .btn-resultado-tarefas:hover,
+[data-theme="dark"] .btn-resultado-tarefas:not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]):hover,
 [data-theme="dark"] .btn-retry:hover,
 [data-theme="dark"] .btn-pdf-external:hover,
 [data-theme="dark"] .btn-pdf-expand:hover,
@@ -743,10 +1406,10 @@ body[data-theme="dark"] {
 }
 
 /* 8. Botões Desabilitados ou Bloqueados */
-[data-theme="dark"] button:disabled,
-[data-theme="dark"] .btn:disabled,
-[data-theme="dark"] .btn-bloqueado,
-[data-theme="dark"] .btn-bateria-locked,
+[data-theme="dark"] button:disabled:not(.btn-resolucao-primario):not(.resolucao-opcao-btn):not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
+[data-theme="dark"] .btn:disabled:not(.btn-resolucao-primario):not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
+[data-theme="dark"] .btn-bloqueado:not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
+[data-theme="dark"] .btn-bateria-locked:not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
 [data-theme="dark"] .btn-cooldown {
   background-image: var(--bg-grain), linear-gradient(135deg, #151720 0%, #1a1c27 100%) !important;
   color: #64748b !important;
