@@ -28,7 +28,10 @@ export const ROUTES = {
 export const ENDPOINTS = {
   AUTH: {
     LOGIN: `${API_URL}/auth/login`,
-    CADASTRO: `${API_URL}/auth/register`
+    CADASTRO: `${API_URL}/auth/register`,
+    PERGUNTA_SEGURANCA: `${API_URL}/auth/pergunta-seguranca`,
+    VERIFICAR_RESPOSTA: `${API_URL}/auth/verificar-resposta`,
+    REDEFINIR_SENHA: `${API_URL}/auth/redefinir-senha`
   },
   TASK: {
     GET_TASKS: `${API_URL}/task/tasks?id=`,

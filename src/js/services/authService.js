@@ -94,18 +94,10 @@ export async function login(email, senha) {
 }
 
 export async function cadastrar(userData) {
-    const { nome, email, senha, dataNascimento } = userData || {};
+    const { nome, email, senha, dataNascimento, perguntaSeguranca, respostaSeguranca } = userData || {};
     const normalizedEmail = email?.trim();
     if (!nome || !normalizedEmail || !senha || !dataNascimento) {
         return { success: false, error: MESSAGES.CAMPOS_OBRIGATORIOS };
-    }
-
-    const users = getStoredUsers();
-    const emailJaCadastrado = users.some(
-        user => user?.email?.toLowerCase() === normalizedEmail.toLowerCase()
-    );
-    if (emailJaCadastrado) {
-        return { success: false, error: 'E-mail já cadastrado localmente.' };
     }
 
     try {
@@ -117,7 +109,9 @@ export async function cadastrar(userData) {
                 email: normalizedEmail,
                 nome,
                 senha,
-                data_nascimento: dataNascimento
+                data_nascimento: dataNascimento,
+                pergunta_seguranca: perguntaSeguranca?.trim() || null,
+                resposta_seguranca: respostaSeguranca?.trim() || null
             })
         });
         const data = await parseResponse(response);
@@ -128,20 +122,117 @@ export async function cadastrar(userData) {
                 error: getHttpErrorMessage(response.status, serverMsg, 'Esse e-mail já está em uso!')
             };
         }
+
+        return { success: true, user: data?.usuario || { nome, email: normalizedEmail } };
     } catch (error) {
         console.error('Erro ao conectar com a API:', error);
         return { success: false, error: getNetworkErrorMessage(error) };
     }
+}
 
-    const newUser = {
-        nome,
-        email: normalizedEmail,
-        dataNascimento,
-        criadoEm: new Date().toISOString()
-    };
-    users.push(newUser);
-    setLocalItem(STORAGE_KEYS.USER_PROFILE, users);
-    return { success: true, user: newUser };
+export async function buscarPerguntaSeguranca(email) {
+    const normalizedEmail = email?.trim();
+    if (!normalizedEmail) {
+        return { success: false, error: 'Por favor, informe seu e-mail.' };
+    }
+
+    try {
+        const response = await fetch(ENDPOINTS.AUTH.PERGUNTA_SEGURANCA, {
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: normalizedEmail })
+        });
+        const data = await parseResponse(response);
+
+        if (!response.ok) {
+            const serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                error: getHttpErrorMessage(response.status, serverMsg, 'Usuário não encontrado ou sem pergunta configurada.')
+            };
+        }
+
+        return { success: true, pergunta: data?.pergunta };
+    } catch (error) {
+        console.error('Erro ao buscar pergunta de segurança:', error);
+        return { success: false, error: getNetworkErrorMessage(error) };
+    }
+}
+
+export async function verificarRespostaSeguranca(email, resposta) {
+    const normalizedEmail = email?.trim();
+    const normalizedResposta = resposta?.trim();
+
+    if (!normalizedEmail || !normalizedResposta) {
+        return { success: false, error: 'E-mail e resposta são obrigatórios.' };
+    }
+
+    try {
+        const response = await fetch(ENDPOINTS.AUTH.VERIFICAR_RESPOSTA, {
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: normalizedEmail,
+                resposta: normalizedResposta
+            })
+        });
+        const data = await parseResponse(response);
+
+        if (!response.ok) {
+            const serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                error: getHttpErrorMessage(response.status, serverMsg, 'Resposta de segurança incorreta.')
+            };
+        }
+
+        return { success: true, message: data?.message || 'Resposta correta!' };
+    } catch (error) {
+        console.error('Erro ao verificar resposta de segurança:', error);
+        return { success: false, error: getNetworkErrorMessage(error) };
+    }
+}
+
+export async function redefinirSenha(email, resposta, novaSenha) {
+    const normalizedEmail = email?.trim();
+    const normalizedResposta = resposta?.trim();
+
+    if (!normalizedEmail || !normalizedResposta || !novaSenha) {
+        return { success: false, error: 'Preencha todos os campos.' };
+    }
+
+    if (novaSenha.length < 6) {
+        return { success: false, error: MESSAGES.SENHA_CURTA };
+    }
+
+    try {
+        const response = await fetch(ENDPOINTS.AUTH.REDEFINIR_SENHA, {
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: normalizedEmail,
+                resposta: normalizedResposta,
+                novaSenha
+            })
+        });
+        const data = await parseResponse(response);
+
+        if (!response.ok) {
+            const serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                error: getHttpErrorMessage(response.status, serverMsg, 'Não foi possível redefinir a senha.')
+            };
+        }
+
+        return { success: true, message: data?.message || 'Senha redefinida com sucesso!' };
+    } catch (error) {
+        console.error('Erro ao redefinir senha:', error);
+        return { success: false, error: getNetworkErrorMessage(error) };
+    }
 }
 
 export function logout() {

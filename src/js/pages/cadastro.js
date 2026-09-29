@@ -3,6 +3,7 @@ import { SELECTORS } from '../constants/selectors.js';
 import { ROUTES } from '../constants/routes.js';
 import { MESSAGES } from '../constants/messages.js';
 import { TIMING } from '../constants/timing.js';
+import { cadastrar } from '../services/authService.js';
 
 ready( () => {
     if (localStorage.getItem("aprovadrive_auth_user")) {
@@ -106,7 +107,7 @@ ready( () => {
     }
 
     if (formPergunta) {
-        on(formPergunta, 'submit', (event) => {
+        on(formPergunta, 'submit', async (event) => {
             event.preventDefault();
 
             const isCustom = selectPergunta?.value === 'custom';
@@ -135,16 +136,48 @@ ready( () => {
                 return;
             }
 
-            if (mensagemSeguranca) {
-                mensagemSeguranca.style.display = 'block';
-                mensagemSeguranca.style.background = '#e4f8ec';
-                mensagemSeguranca.style.color = '#16834a';
-                mensagemSeguranca.textContent = MESSAGES.CADASTRO_SUCESSO;
-            }
+            try {
+                const nome = qs(SELECTORS.CADASTRO_NOME)?.value.trim();
+                const email = qs(SELECTORS.CADASTRO_EMAIL)?.value.trim();
+                const senha = qs(SELECTORS.CADASTRO_SENHA)?.value;
+                const dataNascimento = qs(SELECTORS.CADASTRO_DATA_NASCIMENTO)?.value;
 
-            setTimeout(() => {
-                window.location.href = ROUTES.LOGIN;
-            }, TIMING.REDIRECT_SUCCESS);
+                const result = await cadastrar({
+                    nome,
+                    email,
+                    senha,
+                    dataNascimento,
+                    perguntaSeguranca: pergunta,
+                    respostaSeguranca: resposta
+                });
+
+                if (result.success) {
+                    if (mensagemSeguranca) {
+                        mensagemSeguranca.style.display = 'block';
+                        mensagemSeguranca.style.background = '#e4f8ec';
+                        mensagemSeguranca.style.color = '#16834a';
+                        mensagemSeguranca.textContent = MESSAGES.CADASTRO_SUCESSO;
+                    }
+
+                    setTimeout(() => {
+                        window.location.href = ROUTES.LOGIN;
+                    }, TIMING.REDIRECT_SUCCESS);
+                } else {
+                    if (mensagemSeguranca) {
+                        mensagemSeguranca.style.display = 'block';
+                        mensagemSeguranca.style.background = '#ffe5e5';
+                        mensagemSeguranca.style.color = '#c00000';
+                        mensagemSeguranca.textContent = result.error || 'Erro ao realizar cadastro.';
+                    }
+                }
+            } catch (err) {
+                if (mensagemSeguranca) {
+                    mensagemSeguranca.style.display = 'block';
+                    mensagemSeguranca.style.background = '#ffe5e5';
+                    mensagemSeguranca.style.color = '#c00000';
+                    mensagemSeguranca.textContent = MESSAGES.CONEXAO_FALHA;
+                }
+            }
         });
     }
 });
