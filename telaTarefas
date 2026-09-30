@@ -1,0 +1,117 @@
+   <section id="view-tarefas" class="spa-view container" style="display: none;">
+            <div class="tarefas-container">
+                <div class="tarefas-hero">
+                    <div class="tarefas-hero-top">
+                        <div class="tarefas-hero-title-area">
+                            <h2><i class="fa-solid fa-list-check"></i> Tarefas Fixas por Conteúdo</h2>
+                            <p>Missões permanentes e únicas de cada módulo estudado e desafios a cada 3 módulos com meta de 70%+ de acertos em questões. Conquiste grandes recompensas de XP!</p>
+                        </div>
+                        <div class="tarefas-hero-stats">
+                            <div class="tarefas-stat-card">
+                                <i class="fa-solid fa-trophy tarefas-stat-icon"></i>
+                                <div class="tarefas-stat-info">
+                                    <strong id="tarefas-stat-concluidas">0 / 0</strong>
+                                    <span>Missões Concluídas</span>
+                                </div>
+                            </div>
+                            <div class="tarefas-stat-card">
+                                <i class="fa-solid fa-bolt tarefas-stat-icon"></i>
+                                <div class="tarefas-stat-info">
+                                    <strong id="tarefas-stat-xp-ganho">+0 XP</strong>
+                                    <span>XP Fixo Coletado</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tarefas-hero-progress-area">
+                        <div class="tarefas-progress-meta">
+                            <span>Progresso Geral das Tarefas</span>
+                            <span id="tarefas-hero-progress-pct">0%</span>
+                        </div>
+                        <div class="tarefas-progress-bar-bg">
+                            <div class="tarefas-progress-bar-fill" id="tarefas-hero-progress-fill" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cronograma-controls-row" style="margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; width: 100%;">
+                    <div id="tarefas-filtros" class="tarefas-filters-container" style="flex: 1 1 100%; min-width: 0; width: 100%; margin-bottom: 0;"></div>
+                    <div style="display: flex; gap: 10px; align-items: center; margin-left: auto;">
+                        <button type="button" class="btn-admin-add-tarefa-fixa" id="btn-admin-add-tarefa-fixa" style="display: none;" title="Criar Nova Tarefa Fixa de Módulo">
+                            <i class="fa-solid fa-circle-plus"></i> Nova Tarefa Fixa
+                        </button>
+                        <button type="button" id="btn-recarregar-tarefas" class="btn-retry" style="margin: 0; padding: 10px 18px; font-size: 13.5px;">
+                            <span class="material-symbols-outlined icone-inline">refresh</span> Atualizar Tarefas
+                        </button>
+                    </div>
+                </div>
+
+                <div id="tarefas-conteudos-wrapper">
+                    <!-- Seções de cada conteúdo renderizadas dinamicamente pelo tarefasView.js -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SDesempenho -->
+        <section id="view-desempenho" class="spa-view" style="display: none;">
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-verde">
+                        <span class="material-symbols-outlined">trending_up</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Aproveitamento</span>
+                        <strong id="taxaAproveitamento">69%</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-azul">
+                        <span class="material-symbols-outlined">assignment</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Questões Totais</span>
+                        <strong id="totalQuestoes">124</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-verde">
+                        <span class="material-symbols-outlined">check_circle</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Acertos</span>
+                        <strong id="totalAcertos">86</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-vermelho">
+                        <span class="material-symbols-outlined">cancel</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Erros</span>
+                        <strong id="totalErros">38</strong>
+                    </div>
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-icone cor-amarelo">
+                        <span class="material-symbols-outlined">verified</span>
+                    </div>
+                    <div class="kpi-info">
+                        <span>Simulados</span>
+                        <strong id="totalSimulados">8</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="conteudo-grid">
+                <!-- SPainelCard -->
+                <section class="painel-card">
+                    <h2 class="secao-titulo">
+                        <span class="material-symbols-outlined">pie_chart</span>
+                        Desempenho por Matéria
+                    </h2>
+</section>
