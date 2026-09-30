@@ -1,0 +1,78 @@
+   <section id="view-simulado" class="spa-view" style="display: none;">
+
+            <div class="welcome-questoes">
+                <div>
+                    <span class="welcome-questoes-tag"><i class="fa-solid fa-graduation-cap"></i> SIMULADOS OFICIAIS DETRAN</span>
+                    <h2>Simulados Completos (30 Questões)</h2>
+                    <p>
+                        Teste seus conhecimentos em simulados completos de 30 questões sem bloqueio por módulos.
+                        Meta de aprovação: 67% (20 acertos). Ganhe +600 XP de tarefa fixa na aprovação!
+                    </p>
+                </div>
+                <div class="welcome-questoes-icon">
+                    <i class="fa-solid fa-clipboard-check"></i>
+                </div>
+            </div>
+
+            <div class="search-area">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search-simulado" placeholder="Buscar simulado por disciplina...">
+                </div>
+            </div>
+
+            <div class="categories">
+                <button class="filter filter-simulado active" data-category="todos">Todos</button>
+                <button class="filter filter-simulado" data-category="geral">Geral DETRAN</button>
+                <button class="filter filter-simulado" data-category="legislacao">Legislação</button>
+                <button class="filter filter-simulado" data-category="placas">Sinalização</button>
+                <button class="filter filter-simulado" data-category="seguranca">Segurança</button>
+                <button class="filter filter-simulado" data-category="saude">Primeiros Socorros</button>
+                <button class="filter filter-simulado" data-category="ambiente">Meio Ambiente</button>
+            </div>
+
+            <!-- SSimuladoGrid -->
+            <section class="questoes-grid" id="simulado-grid">
+
+                <article class="questoes-card simulado-card" data-category="geral" data-id="Geral">
+                    <div class="questoes-card-header">
+                        <div class="questoes-emblem orange">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="questoes-badge-unlocked" style="background: rgba(245, 158, 11, 0.15); color: #d97706; border-color: rgba(245, 158, 11, 0.3);">
+                            <i class="fa-solid fa-trophy"></i> +600 XP Fixos
+                        </span>
+                    </div>
+                    <span class="questoes-category-pill pill-simulado-oficial">SIMULADO OFICIAL DETRAN</span>
+                    <h3 class="questoes-card-title">Simulado Geral Integrado</h3>
+                    <p class="questoes-card-desc">Simulado oficial cobrindo todas as matérias nos mesmos moldes e pesos da prova teórica do DETRAN.</p>
+                    <div class="questoes-metrics-grid">
+                        <div class="metric-box">
+                            <i class="fa-solid fa-list-check"></i>
+                            <strong>30</strong>
+                            <span>Questões</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-bullseye"></i>
+                            <strong>67%</strong>
+                            <span>20 Acertos</span>
+                        </div>
+                        <div class="metric-box">
+                            <i class="fa-solid fa-stopwatch"></i>
+                            <strong>40 min</strong>
+                            <span>Duração</span>
+                        </div>
+                    </div>
+                    <div class="questoes-progress-meta">
+                        <span>Melhor Desempenho</span>
+                        <span class="simulado-progress-pct">0%</span>
+                    </div>
+                    <div class="questoes-progress-bar">
+                        <div class="questoes-progress-fill orange" style="width: 0%;"></div>
+                    </div>
+                    <button type="button" class="btn-praticar-questoes btn-iniciar-simulado " data-id="Geral" >
+                        <i class="fa-solid fa-circle-play"></i> Iniciar Simulado
+                    </button>
+                </article>
+
+    </section>
