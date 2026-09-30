@@ -1,0 +1,86 @@
+  <section id="view-cronograma" class="spa-view container" style="display: none;">
+            <div class="nav-topo">
+                <a href="#inicio" class="btn-voltar" id="btn-voltar-painel-cronograma" data-nav="inicio">
+                    <i class="fa-solid fa-arrow-left"></i> Voltar ao Painel
+                </a>
+            </div>
+
+            <header class="hud-card">
+                <div class="user-info">
+                    <h2><span class="material-symbols-outlined icone-inline">calendar_month</span> Cronograma da Semana</h2>
+                    <span class="level-tag">Meta Semanal: 12/15 Aulas</span>
+                </div>
+                <div class="stats-group">
+                    <div class="stat-badge"><span class="material-symbols-outlined icone-inline">local_fire_department</span>
+                        Ofensiva: 5 Dias</div>
+                    <div class="stat-badge xp"><span class="material-symbols-outlined icone-inline">bolt</span> Total: 850 XP</div>
+                    <div id="admin-indicator-badge" class="stat-badge admin" style="display: none;">
+                        <span class="material-symbols-outlined icone-inline">shield_person</span> Admin
+                    </div>
+                </div>
+            </header>
+
+            <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
+                <div class="user-selector-label">
+                    <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">admin_panel_settings</span>
+                    <strong>Painel Admin - Selecionar Aluno:</strong>
+                </div>
+                <div class="user-selector-controls">
+                    <select id="select-usuario-ativo" class="select-user-dropdown" title="Selecione um usuário">
+                        <option value="0b0c0d89-2cea-48ad-9988-928337357643">Henrique (Henrique@gmail.com)</option>
+                    </select>
+                    <span id="user-active-id-badge" class="user-id-badge">ID: 0b0c0d89...</span>
+                </div>
+            </div>
+
+            <div class="simulation-hud" id="simulation-hud" style="display: none;">
+                <div class="sim-label">
+                    <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">science</span>
+                    <strong>Simular Dia:</strong>
+                </div>
+                <div class="sim-buttons">
+                    <button type="button" class="btn-sim active" data-sim="auto">Hoje (Real)</button>
+                    <button type="button" class="btn-sim" data-sim="segunda">Segunda</button>
+                    <button type="button" class="btn-sim" data-sim="terca">Terça</button>
+                    <button type="button" class="btn-sim" data-sim="quarta">Quarta</button>
+                    <button type="button" class="btn-sim" data-sim="quinta">Quinta</button>
+                    <button type="button" class="btn-sim" data-sim="sexta">Sexta</button>
+                    <button type="button" class="btn-sim" data-sim="sabado">Sábado</button>
+                </div>
+            </div>
+
+            <nav class="week-nav">
+                <div class="day-tab" id="day-tab-1">
+                    <div class="day-name">Segunda</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-2">
+                    <div class="day-name">Terça</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-3">
+                    <div class="day-name">Quarta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-4">
+                    <div class="day-name">Quinta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-5">
+                    <div class="day-name">Sexta</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+                <div class="day-tab" id="day-tab-6">
+                    <div class="day-name">Sábado</div>
+                    <div class="day-status">3 Aulas</div>
+                </div>
+            </nav>
+
+            <div id="task-atual-banner" class="current-task-banner" style="display: none;">
+                <div class="banner-info">
+            
+                    <span class="banner-tag">Missão Atual</span>
+                   <h3 id="task-atual-titulo">Nenhuma missão ativa</h3>
+                </div>
+                <div id="task-atual-xp" class="xp-badge">+0 XP</div>
+            </div>
