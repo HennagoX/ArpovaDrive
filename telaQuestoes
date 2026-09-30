@@ -1,0 +1,94 @@
+   <section id="view-conteudos" class="spa-view" style="display: none;">
+
+            <!-- SWelcome -->
+             <div class="card-borda-giratoria">
+            <section class="welcome">
+                <div>
+                    <h2>Hora de estudar!</h2>
+                    <p>
+                        Acesse seus e-books, avance nos conteúdos
+                        e prepare-se para sua aprovação.
+                    </p>
+                </div>
+
+                <div class="welcome-icon">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                </div>
+            </section>
+
+            <div class="search-area">
+                <div class="search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="search" placeholder="Buscar por assunto ou e-book...">
+                </div>
+            </div>
+
+            <div class="filters">
+                <button class="filter active" data-category="todos">Todos</button>
+                <button class="filter" data-category="legislacao">Legislação</button>
+                <button class="filter" data-category="placas">Placas</button>
+                <button class="filter" data-category="seguranca">Segurança</button>
+                <button class="filter" data-category="saude">Primeiros Socorros</button>
+                <button class="filter" data-category="ambiente">Meio Ambiente</button>
+            </div>
+
+            <div class="section-title">
+                <span id="contador">5 conteúdos</span>
+            </div>
+
+            <!-- SEbooks -->
+            <section class="ebooks" id="ebooks">
+
+                <article class="ebook" data-category="legislacao" data-id="CodigoTransito">
+                    <div class="ebook-cover green">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+
+                    <span class="category">LEGISLAÇÃO</span>
+
+                    <h3>Código de Trânsito</h3>
+
+                    <p>
+                        Aprenda as principais leis e regras
+                        do Código de Trânsito Brasileiro.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            10 módulos
+                        </span>
+                        <span class="ebook-progress-pct">0%</span>
+                    </div>
+
+                    <div class="progress">
+                        <div class="progress-bar" style="width: 0%"></div>
+                    </div>
+
+                    <button name="CodigoTransito" class="read-btn" data-id="CodigoTransito">
+                        <i class="fa-solid fa-book-open"></i> Começar a ler
+                    </button>
+                </article>
+
+                <article class="ebook" data-category="placas" data-id="PlacaTransito">
+                    <div class="ebook-cover blue">
+                        <i class="fa-solid fa-road"></i>
+                    </div>
+
+                    <span class="category">SINALIZAÇÃO</span>
+
+                    <h3>Placas de Trânsito</h3>
+
+                    <p>
+                        Conheça os tipos de placas e aprenda
+                        o significado de cada sinalização.
+                    </p>
+
+                    <div class="info">
+                        <span>
+                            <i class="fa-regular fa-file-lines"></i>
+                            10 módulos
+                        </span>
+                        <span class="ebook-progress-pct">0%</span>
+                    </div> 
+</section>
