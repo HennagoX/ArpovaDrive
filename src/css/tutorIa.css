@@ -294,9 +294,15 @@ body.tutor-ia-active #view-tutor-ia {
 
 /* AI Message Formatted Elements */
 .chat-msg-bot .chat-bubble .bot-msg-content {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    display: block;
+}
+
+.chat-msg-bot .chat-bubble .bot-msg-content > *:first-child {
+    margin-top: 0 !important;
+}
+
+.chat-msg-bot .chat-bubble .bot-msg-content > *:last-child {
+    margin-bottom: 0 !important;
 }
 
 .chat-msg-bot .chat-bubble p,
@@ -357,16 +363,35 @@ body.tutor-ia-active #view-tutor-ia {
 .chat-msg-bot .chat-bubble ul,
 .chat-msg-bot .chat-bubble ol,
 .chat-msg-bot .chat-bubble .bot-list {
-    margin: 6px 0 10px 0;
-    padding-left: 22px;
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
+    margin: 8px 0 12px 0;
+    padding-left: 24px;
+    display: block;
+    box-sizing: border-box;
+}
+
+.chat-msg-bot .chat-bubble ul,
+.chat-msg-bot .chat-bubble ul.bot-list {
+    list-style-type: disc !important;
+}
+
+.chat-msg-bot .chat-bubble ol,
+.chat-msg-bot .chat-bubble ol.bot-list {
+    list-style-type: decimal !important;
+}
+
+.chat-msg-bot .chat-bubble ol.bot-letter-list {
+    list-style-type: upper-alpha !important;
 }
 
 .chat-msg-bot .chat-bubble li {
-    line-height: 1.55;
+    line-height: 1.6;
+    margin-bottom: 6px;
+    padding-left: 4px;
     position: relative;
+}
+
+.chat-msg-bot .chat-bubble li:last-child {
+    margin-bottom: 0;
 }
 
 .chat-msg-bot .chat-bubble ul li::marker,
@@ -379,6 +404,41 @@ body.tutor-ia-active #view-tutor-ia {
 .chat-msg-bot .chat-bubble ol.bot-list li::marker {
     color: var(--gradient-mid, #087e9d);
     font-weight: 700;
+}
+
+/* List Lead-in / Group Titles */
+.chat-msg-bot .chat-bubble .bot-list-lead {
+    font-weight: 700;
+    color: var(--primary-blue, #0752a0);
+    margin: 12px 0 4px 0;
+    line-height: 1.45;
+}
+
+.chat-msg-bot .chat-bubble .bot-list-lead + .bot-list {
+    margin-top: 2px !important;
+}
+
+/* Duration / Time Tag */
+.chat-msg-bot .chat-bubble .bot-time-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: rgba(8, 126, 157, 0.08);
+    color: var(--primary-blue, #0752a0);
+    border: 1px solid rgba(8, 126, 157, 0.2);
+    border-radius: 999px;
+    padding: 1px 7px;
+    font-size: 0.84em;
+    font-weight: 600;
+    line-height: 1.4;
+    vertical-align: middle;
+    margin: 0 2px;
+    white-space: nowrap;
+}
+
+.chat-msg-bot .chat-bubble .bot-time-pill i {
+    font-size: 0.88em;
+    color: var(--gradient-mid, #087e9d);
 }
 
 /* Blockquotes / Dicas / Callouts */
@@ -967,6 +1027,20 @@ body.tutor-ia-active #view-tutor-ia {
 [data-theme="dark"] .chat-msg-bot .chat-bubble ol li::marker,
 [data-theme="dark"] .chat-msg-bot .chat-bubble ol.bot-list li::marker {
     color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .chat-msg-bot .chat-bubble .bot-list-lead {
+    color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .chat-msg-bot .chat-bubble .bot-time-pill {
+    background: rgba(56, 189, 248, 0.12) !important;
+    border-color: rgba(56, 189, 248, 0.25) !important;
+    color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .chat-msg-bot .chat-bubble .bot-time-pill i {
+    color: #7dd3fc !important;
 }
 
 [data-theme="dark"] .chat-msg-bot .chat-bubble blockquote,

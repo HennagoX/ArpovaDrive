@@ -227,11 +227,12 @@ export function formatBotText(raw) {
     if (!raw) return '<p class="bot-paragraph"></p>';
 
     const escaped = escapeHtml(String(raw).trim());
-    const lines = escaped.split(/\r?\n/);
+    const rawLines = escaped.split(/\r?\n/);
+    const lines = preprocessListLines(rawLines);
 
     const htmlBlocks = [];
     let currentParagraph = [];
-    let currentList = null; // { type: 'ul' | 'ol', items: [] }
+    let currentList = null; // { type: 'ul' | 'ol', items: [], start?: number, isLetter?: boolean }
     let currentQuote = [];
     let currentTable = [];
     let inCodeBlock = false;
@@ -239,7 +240,7 @@ export function formatBotText(raw) {
 
     const flushParagraph = () => {
         if (currentParagraph.length > 0) {
-            const content = currentParagraph.map(formatInline).join('<br>');
+            const content = currentParagraph.map(formatKeyValueLine).join('<br>');
             htmlBlocks.push(`<p class="bot-paragraph">${content}</p>`);
             currentParagraph = [];
         }
@@ -248,11 +249,13 @@ export function formatBotText(raw) {
     const flushList = () => {
         if (currentList) {
             const tag = currentList.type;
-            const cls = tag === 'ol' ? 'bot-list bot-ordered-list' : 'bot-list';
+            let cls = tag === 'ol' ? 'bot-list bot-ordered-list' : 'bot-list';
+            if (currentList.isLetter) cls += ' bot-letter-list';
+            const startAttr = (tag === 'ol' && currentList.start && currentList.start !== 1 && !currentList.isLetter) ? ` start="${currentList.start}"` : '';
             const itemsHtml = currentList.items
                 .map(item => `<li>${formatInline(item)}</li>`)
                 .join('');
-            htmlBlocks.push(`<${tag} class="${cls}">${itemsHtml}</${tag}>`);
+            htmlBlocks.push(`<${tag} class="${cls}"${startAttr}>${itemsHtml}</${tag}>`);
             currentList = null;
         }
     };
@@ -365,8 +368,24 @@ export function formatBotText(raw) {
             flushQuote();
         }
 
-        // Unordered list (- item, * item, • item)
-        const ulMatch = line.match(/^(\s*)[-*•]\s+(.*)$/);
+        // List lead-in title (ends with ":" and is followed by a list item)
+        let nextNonEmpty = '';
+        for (let j = i + 1; j < lines.length; j++) {
+            if (lines[j].trim()) {
+                nextNonEmpty = lines[j].trim();
+                break;
+            }
+        }
+        if (isListLeadIn(trimmed, nextNonEmpty)) {
+            flushAll();
+            const formattedLead = formatInline(trimmed);
+            const content = formattedLead.includes('<strong>') ? formattedLead : `<strong>${formattedLead}</strong>`;
+            htmlBlocks.push(`<p class="bot-paragraph bot-list-lead">${content}</p>`);
+            continue;
+        }
+
+        // Unordered list (- item, * item, • item, etc.)
+        const ulMatch = parseUnorderedLine(line);
         if (ulMatch) {
             flushParagraph();
             flushQuote();
@@ -374,20 +393,33 @@ export function formatBotText(raw) {
                 flushList();
                 currentList = { type: 'ul', items: [] };
             }
-            currentList.items.push(ulMatch[2]);
+            currentList.items.push(ulMatch.text);
             continue;
         }
 
-        // Ordered list (1. item, 2. item)
-        const olMatch = line.match(/^(\s*)\d+[.)]\s+(.*)$/);
+        // Ordered list (1. item, 2. item, 1) item, etc.)
+        const olMatch = parseOrderedLine(line);
         if (olMatch) {
             flushParagraph();
             flushQuote();
-            if (!currentList || currentList.type !== 'ol') {
+            if (!currentList || currentList.type !== 'ol' || currentList.isLetter) {
                 flushList();
-                currentList = { type: 'ol', items: [] };
+                currentList = { type: 'ol', items: [], start: olMatch.num };
             }
-            currentList.items.push(olMatch[2]);
+            currentList.items.push(olMatch.text);
+            continue;
+        }
+
+        // Lettered list (A) item, B) item)
+        const letterMatch = parseLetteredLine(line);
+        if (letterMatch) {
+            flushParagraph();
+            flushQuote();
+            if (!currentList || currentList.type !== 'ol' || !currentList.isLetter) {
+                flushList();
+                currentList = { type: 'ol', items: [], isLetter: true };
+            }
+            currentList.items.push(letterMatch.text);
             continue;
         }
 
@@ -412,6 +444,77 @@ export function formatBotText(raw) {
     flushAll();
 
     return htmlBlocks.join('') || `<p class="bot-paragraph">${formatInline(escaped)}</p>`;
+}
+
+function preprocessListLines(rawLines) {
+    const lines = [...rawLines];
+    for (let i = 0; i < lines.length - 1; i++) {
+        const cur = lines[i].trim();
+        if (!cur) continue;
+
+        let nextIdx = -1;
+        for (let j = i + 1; j < lines.length; j++) {
+            if (lines[j].trim()) {
+                nextIdx = j;
+                break;
+            }
+        }
+
+        if (nextIdx !== -1) {
+            const nextTrimmed = lines[nextIdx].trim();
+            const nextIsTwo = /^(\s*)(2)(?:[º°\)]|(?:\.(?!\d))|(?:\s*[-–—:]))\s*(.*)$/.test(nextTrimmed);
+            const isCurSpecial = /^(\s*)(?:[-*•–—+▫▪]|\d+|#{1,6}|>|&gt;|\||```)/.test(cur) || /(?::|\:\*{1,2}|:\_{1,2})$/.test(cur);
+            if (nextIsTwo && !isCurSpecial) {
+                lines[i] = '1. ' + cur;
+            }
+        }
+    }
+    return lines;
+}
+
+function parseOrderedLine(line) {
+    const m = line.match(/^(\s*)(\d+)(?:[º°\)]|(?:\.(?!\d))|(?:\s*[-–—:]))\s*(.*)$/);
+    if (m && m[3] !== undefined && m[3].trim().length > 0) {
+        return { num: parseInt(m[2], 10), text: m[3] };
+    }
+    return null;
+}
+
+function parseLetteredLine(line) {
+    const m = line.match(/^(\s*)([A-Da-d])[\.\)]\s+(.*)$/);
+    if (m && m[3] !== undefined) {
+        return { letter: m[2].toUpperCase(), text: m[3] };
+    }
+    return null;
+}
+
+function parseUnorderedLine(line) {
+    const m = line.match(/^(\s*)[-*•–—+▫▪]\s+(.*)$/);
+    if (m && m[2] !== undefined) {
+        return { text: m[2] };
+    }
+    return null;
+}
+
+function isListLeadIn(trimmed, nextLine) {
+    if (!/(?::|\:\*{1,2}|:\_{1,2})$/.test(trimmed)) return false;
+    if (!nextLine) return false;
+    const next = nextLine.trim();
+    return !!(parseOrderedLine(next) || parseUnorderedLine(next) || parseLetteredLine(next));
+}
+
+function formatKeyValueLine(line) {
+    const m = line.match(/^(\*\*|__)?([A-ZÀ-Úa-z][\w\sÀ-ÿ\(\)\/\-]{1,35})(\*\*|__)?:\s+(.+)$/) ||
+              line.match(/^(\*\*|__)([A-ZÀ-Úa-z][\w\sÀ-ÿ\(\)\/\-]{1,35}):(\*\*|__)\s+(.+)$/);
+    if (m) {
+        const key = m[2];
+        let val = m[4];
+        if (/tempo|duraç[ãa]o|hor[aá]rio|carga/i.test(key)) {
+            val = val.replace(/(\b\d+[\s\u00a0\u202f]*(?:min(?:utos)?|h(?:oras)?|s(?:egundos)?)\b)/gi, '<span class="bot-time-pill"><i class="fa-regular fa-clock"></i> $1</span>');
+        }
+        return `<strong>${key}:</strong> ${formatInline(val)}`;
+    }
+    return formatInline(line);
 }
 
 function formatInline(text) {
@@ -442,6 +545,12 @@ function formatInline(text) {
     // Italic: *text* (word boundaries)
     formatted = formatted.replace(/(^|[^\w*])\*([^\s*](?:[^*\n]*?[^\s*])?)\*(?=[^\w*]|$)/g, '$1<em>$2</em>');
     formatted = formatted.replace(/(^|[^\w_])_([^\s_](?:[^_\n]*?[^\s_])?)_(?=[^\w_]|$)/g, '$1<em>$2</em>');
+
+    // Time durations in parentheses: e.g. (5 min), (12 min)
+    formatted = formatted.replace(
+        /\((\d+[\s\u00a0\u202f]*(?:min(?:utos)?|h(?:oras)?|s(?:egundos)?))\)/gi,
+        '<span class="bot-time-pill"><i class="fa-regular fa-clock"></i> $1</span>'
+    );
 
     // Restore inline code tokens
     codeTokens.forEach((token, index) => {
