@@ -1451,21 +1451,54 @@ body[data-theme="dark"] {
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
 }
 
-/* Inputs, Textareas e Modais no Dark Glass */
-[data-theme="dark"] input,
+/* Inputs, Textareas e Modais no Dark Glass - Alto contraste e visibilidade */
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 [data-theme="dark"] textarea,
 [data-theme="dark"] select {
-  background: rgba(20, 21, 29, 0.8);
-  border-color: rgba(255, 255, 255, 0.12);
-  color: var(--text-dark);
+  background: #14151d !important;
+  background-color: #14151d !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  caret-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] select option {
+  background-color: #1a1c26 !important;
+  color: #f8fafc !important;
 }
 
 [data-theme="dark"] input:focus,
 [data-theme="dark"] textarea:focus,
 [data-theme="dark"] select:focus {
-  border-color: #38bdf8;
-  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
-  outline: none;
+  border-color: #38bdf8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+  outline: none !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme="dark"] input:-webkit-autofill,
+[data-theme="dark"] input:-webkit-autofill:hover, 
+[data-theme="dark"] input:-webkit-autofill:focus,
+[data-theme="dark"] textarea:-webkit-autofill,
+[data-theme="dark"] textarea:-webkit-autofill:hover,
+[data-theme="dark"] textarea:-webkit-autofill:focus,
+[data-theme="dark"] select:-webkit-autofill,
+[data-theme="dark"] select:-webkit-autofill:hover,
+[data-theme="dark"] select:-webkit-autofill:focus {
+  -webkit-text-fill-color: #f8fafc !important;
+  -webkit-box-shadow: 0 0 0px 1000px #14151d inset !important;
+  box-shadow: 0 0 0px 1000px #14151d inset !important;
+  transition: background-color 5000s ease-in-out 0s;
+  caret-color: #38bdf8 !important;
 }
 
 /* =========================================================

@@ -2150,19 +2150,94 @@
     border-color: #ef4444;
 }
 
+[data-theme="dark"] .admin-alternativas-title {
+    color: #f1f5f9 !important;
+}
+
 [data-theme="dark"] .admin-alternativa-row input {
-    background: rgba(20, 21, 29, 0.9) !important;
-    border-color: rgba(255, 255, 255, 0.12) !important;
+    background: #14151d !important;
+    background-color: #14151d !important;
+    border-color: rgba(255, 255, 255, 0.16) !important;
     color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .admin-alternativa-row input::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .admin-alternativa-row input:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
 }
 
 [data-theme="dark"] .alternativa-letra {
     background: rgba(255, 255, 255, 0.08) !important;
-    color: #cbd5e1 !important;
+    color: #38bdf8 !important;
+    border: 1px solid rgba(56, 189, 248, 0.25) !important;
 }
 
 [data-theme="dark"] .checkbox-label-admin {
-    color: #cbd5e1 !important;
+    color: #f1f5f9 !important;
+}
+
+/* Modais de Administração de Questões e Simulados */
+[data-theme="dark"] #modal-admin-questao input:not([type="checkbox"]),
+[data-theme="dark"] #modal-admin-questao textarea,
+[data-theme="dark"] #modal-admin-questao select,
+[data-theme="dark"] #modal-admin-simulado input,
+[data-theme="dark"] #modal-admin-simulado textarea,
+[data-theme="dark"] #modal-admin-simulado select {
+    background: #14151d !important;
+    background-color: #14151d !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] #modal-admin-questao input::placeholder,
+[data-theme="dark"] #modal-admin-questao textarea::placeholder,
+[data-theme="dark"] #modal-admin-simulado input::placeholder,
+[data-theme="dark"] #modal-admin-simulado textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] #modal-admin-questao select option,
+[data-theme="dark"] #modal-admin-simulado select option {
+    background-color: #1a1c26 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] #modal-admin-questao input:focus,
+[data-theme="dark"] #modal-admin-questao textarea:focus,
+[data-theme="dark"] #modal-admin-questao select:focus,
+[data-theme="dark"] #modal-admin-simulado input:focus,
+[data-theme="dark"] #modal-admin-simulado textarea:focus,
+[data-theme="dark"] #modal-admin-simulado select:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme="dark"] #search-questoes,
+[data-theme="dark"] #search-simulado {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+}
+
+[data-theme="dark"] #search-questoes::placeholder,
+[data-theme="dark"] #search-simulado::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
 }
 
 

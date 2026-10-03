@@ -1875,21 +1875,24 @@ body.modal-modulo-open {
 
 .admin-form-group input[type="text"],
 .admin-form-group input[type="number"],
-.admin-form-group textarea {
+.admin-form-group textarea,
+.admin-form-group select {
     width: 100%;
     padding: 10px 14px;
     border: 1px solid #cbd5e1;
     border-radius: 12px;
     font-size: 14px;
     color: #0f172a;
+    background: #ffffff;
     outline: none;
     box-sizing: border-box;
     font-family: inherit;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, color 0.2s;
 }
 
 .admin-form-group input:focus,
-.admin-form-group textarea:focus {
+.admin-form-group textarea:focus,
+.admin-form-group select:focus {
     border-color: #6366f1;
     box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
@@ -2247,6 +2250,47 @@ body.modal-modulo-open {
     background: rgba(56, 189, 248, 0.2) !important;
     color: #38bdf8 !important;
     box-shadow: 0 0 12px rgba(56, 189, 248, 0.3) !important;
+}
+
+[data-theme="dark"] .admin-form-group label {
+    color: #f1f5f9 !important;
+}
+
+[data-theme="dark"] .admin-form-group input[type="text"],
+[data-theme="dark"] .admin-form-group input[type="number"],
+[data-theme="dark"] .admin-form-group textarea,
+[data-theme="dark"] .admin-form-group select {
+    background: #14151d !important;
+    background-color: #14151d !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+    caret-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .admin-form-group input::placeholder,
+[data-theme="dark"] .admin-form-group textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
+}
+
+[data-theme="dark"] .admin-form-group select option {
+    background-color: #1a1c26 !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .admin-form-group input:focus,
+[data-theme="dark"] .admin-form-group textarea:focus,
+[data-theme="dark"] .admin-form-group select:focus {
+    border-color: #38bdf8 !important;
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+[data-theme="dark"] .admin-form-hint {
+    color: #94a3b8 !important;
 }
 
 

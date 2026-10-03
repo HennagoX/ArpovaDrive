@@ -384,3 +384,24 @@ h1 {
     font-size: 15px;
   }
 }
+
+/* Dark Mode para Campos de Formulário de Autenticação */
+[data-theme="dark"] .campo input,
+[data-theme="dark"] .campo select {
+  background: #14151d !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+  color: #f8fafc !important;
+  -webkit-text-fill-color: #f8fafc !important;
+  caret-color: #38bdf8 !important;
+}
+
+[data-theme="dark"] .campo input::placeholder {
+  color: #94a3b8 !important;
+  -webkit-text-fill-color: #94a3b8 !important;
+  opacity: 1 !important;
+}
+
+[data-theme="dark"] .campo select option {
+  background-color: #1a1c26 !important;
+  color: #f8fafc !important;
+}
