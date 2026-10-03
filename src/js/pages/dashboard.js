@@ -9,10 +9,10 @@ import { initConteudosView, renderConteudos } from '../spa/views/conteudosView.j
 import { initModulosView, abrirModulos, abrirLeituraPdf, fecharModalAvancar, toggleFullscreenReader } from '../spa/views/modulosView.js';
 import { initCronogramaView, renderCronograma } from '../spa/views/cronogramaView.js';
 import { initDesempenhoView, renderDesempenho } from '../spa/views/desempenhoView.js';
-import { initQuestoesView, renderQuestoes } from '../spa/views/questoesView.js';
+import { initQuestoesView, renderQuestoes, abrirModalAdminQuestao } from '../spa/views/questoesView.js';
 import { initQuestoesModulosView, abrirQuestoesModulos } from '../spa/views/questoesModulosView.js';
 import { initQuestoesResolucaoView, abrirQuestoesResolucao } from '../spa/views/questoesResolucaoView.js';
-import { initSimuladoView, renderSimulado } from '../spa/views/simuladoView.js';
+import { initSimuladoView, renderSimulado, abrirModalAdminSimulado } from '../spa/views/simuladoView.js';
 import { initSimuladoResolucaoView, abrirSimuladoResolucao } from '../spa/views/simuladoResolucaoView.js';
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 import { initTutorIaView } from '../spa/views/tutorIaView.js';
@@ -21,6 +21,13 @@ import { initAdminHistoryView } from '../spa/views/adminHistoryView.js';
 ready(() => {
     initTheme();
     usuarioGlobal.updateUI();
+    usuarioGlobal.verificarAdminComServidor().catch(() => {});
+
+    if (typeof window !== 'undefined') {
+        window.abrirModalAdminQuestao = abrirModalAdminQuestao;
+        window.abrirModalAdminSimulado = abrirModalAdminSimulado;
+    }
+
     const user = getCurrentUser();
     if (user) {
         syncUserGamification(user);
