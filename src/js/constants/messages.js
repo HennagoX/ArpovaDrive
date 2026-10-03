@@ -58,6 +58,7 @@ const TECHNICAL_ERROR_PATTERNS = [
     'conflict',
     'too many requests',
     'bad gateway',
+    'invalid data',
     'service unavailable',
     'gateway timeout',
     'cannot get',

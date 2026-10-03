@@ -31,7 +31,8 @@ export const ENDPOINTS = {
     CADASTRO: `${API_URL}/auth/register`,
     PERGUNTA_SEGURANCA: `${API_URL}/auth/pergunta-seguranca`,
     VERIFICAR_RESPOSTA: `${API_URL}/auth/verificar-resposta`,
-    REDEFINIR_SENHA: `${API_URL}/auth/redefinir-senha`
+    REDEFINIR_SENHA: `${API_URL}/auth/redefinir-senha`,
+    VERIFICAR_EMAIL: `${API_URL}/auth/verificar-email`
   },
   TASK: {
     GET_TASKS: `${API_URL}/task/tasks?id=`,

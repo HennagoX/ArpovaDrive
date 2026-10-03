@@ -116,16 +116,82 @@ export async function cadastrar(userData) {
         });
         const data = await parseResponse(response);
         if (!response.ok) {
-            const serverMsg = data?.message || data?.error;
+            let serverMsg = data?.message || data?.error;
+            if (data?.details?.fieldErrors) {
+                const firstField = Object.keys(data.details.fieldErrors)[0];
+                if (firstField && data.details.fieldErrors[firstField]?.length > 0) {
+                    serverMsg = data.details.fieldErrors[firstField][0];
+                }
+            } else if (data?.details?.formErrors?.length > 0) {
+                serverMsg = data.details.formErrors[0];
+            }
+
+            const fallbackMsg = response.status === 409
+                ? 'Esse e-mail já está em uso!'
+                : 'Não foi possível concluir o cadastro. Verifique os dados informados.';
+
             return {
                 success: false,
-                error: getHttpErrorMessage(response.status, serverMsg, 'Esse e-mail já está em uso!')
+                error: getHttpErrorMessage(response.status, serverMsg, fallbackMsg)
             };
         }
 
         return { success: true, user: data?.usuario || { nome, email: normalizedEmail } };
     } catch (error) {
         console.error('Erro ao conectar com a API:', error);
+        return { success: false, error: getNetworkErrorMessage(error) };
+    }
+}
+
+export async function verificarEmailDisponivel(email) {
+    const normalizedEmail = email?.trim().toLowerCase();
+    if (!normalizedEmail) {
+        return { success: false, disponivel: false, error: 'Por favor, informe seu e-mail.' };
+    }
+
+    try {
+        const response = await fetch(ENDPOINTS.AUTH.VERIFICAR_EMAIL, {
+            signal: createTimeoutSignal(TIMING.REQUEST_TIMEOUT),
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email: normalizedEmail })
+        });
+
+        // Se o endpoint /auth/verificar-email não existir (404 da rota), faz fallback para buscarPerguntaSeguranca
+        if (response.status === 404) {
+            const fallbackCheck = await buscarPerguntaSeguranca(normalizedEmail);
+            if (fallbackCheck.success || fallbackCheck.error?.includes('pergunta de segurança configurada')) {
+                return { success: true, disponivel: false, exists: true, message: 'Esse e-mail já está em uso!' };
+            }
+            if (fallbackCheck.error?.includes('não encontrado')) {
+                return { success: true, disponivel: true, exists: false, message: 'E-mail disponível.' };
+            }
+        }
+
+        const data = await parseResponse(response);
+        if (!response.ok) {
+            if (response.status === 409) {
+                return { success: true, disponivel: false, exists: true, message: 'Esse e-mail já está em uso!' };
+            }
+            let serverMsg = data?.message || data?.error;
+            return {
+                success: false,
+                disponivel: false,
+                error: getHttpErrorMessage(response.status, serverMsg, 'Não foi possível verificar a disponibilidade do e-mail.')
+            };
+        }
+
+        const exists = Boolean(data?.exists);
+        const disponivel = data?.disponivel !== undefined ? Boolean(data?.disponivel) : !exists;
+
+        return {
+            success: true,
+            disponivel,
+            exists,
+            message: data?.message || (exists ? 'Esse e-mail já está em uso!' : 'E-mail disponível.')
+        };
+    } catch (error) {
+        console.error('Erro ao verificar e-mail:', error);
         return { success: false, error: getNetworkErrorMessage(error) };
     }
 }

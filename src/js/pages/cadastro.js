@@ -3,7 +3,7 @@ import { SELECTORS } from '../constants/selectors.js';
 import { ROUTES } from '../constants/routes.js';
 import { MESSAGES } from '../constants/messages.js';
 import { TIMING } from '../constants/timing.js';
-import { cadastrar } from '../services/authService.js';
+import { cadastrar, verificarEmailDisponivel } from '../services/authService.js';
 import { initTheme } from '../utils/themeManager.js';
 
 ready(() => {
@@ -247,7 +247,18 @@ ready(() => {
     }
 
     if (formCadastro) {
-        on(formCadastro, 'submit', (event) => {
+        const inputEmail = qs(SELECTORS.CADASTRO_EMAIL);
+        if (inputEmail) {
+            on(inputEmail, 'input', () => {
+                inputEmail.classList.remove('input-erro');
+                if (mensagem && (mensagem.textContent.includes('e-mail') || mensagem.textContent.includes('E-mail'))) {
+                    mensagem.style.display = 'none';
+                    mensagem.textContent = '';
+                }
+            });
+        }
+
+        on(formCadastro, 'submit', async (event) => {
             event.preventDefault();
 
             const nome = qs(SELECTORS.CADASTRO_NOME)?.value.trim();
@@ -262,6 +273,22 @@ ready(() => {
                     mensagem.style.background = '#ffe5e5';
                     mensagem.style.color = '#c00000';
                     mensagem.textContent = MESSAGES.CAMPOS_OBRIGATORIOS;
+                }
+                return;
+            }
+
+            // Validação de formato de e-mail no front
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                if (mensagem) {
+                    mensagem.style.display = 'block';
+                    mensagem.style.background = '#ffe5e5';
+                    mensagem.style.color = '#c00000';
+                    mensagem.textContent = 'Por favor, insira um e-mail válido.';
+                }
+                if (inputEmail) {
+                    inputEmail.classList.add('input-erro');
+                    inputEmail.focus();
                 }
                 return;
             }
@@ -304,6 +331,42 @@ ready(() => {
                     mensagem.textContent = MESSAGES.SENHA_CURTA;
                 }
                 return;
+            }
+
+            // Verifica se o e-mail já existe no banco antes de ir para a etapa de segurança
+            const btnContinuar = qs('#btnContinuarCadastro');
+            const textoOriginal = btnContinuar ? btnContinuar.textContent : 'Continuar';
+            if (btnContinuar) {
+                btnContinuar.disabled = true;
+                btnContinuar.textContent = 'Verificando...';
+            }
+
+            try {
+                const checagem = await verificarEmailDisponivel(email);
+                if (checagem.success && !checagem.disponivel) {
+                    if (mensagem) {
+                        mensagem.style.display = 'block';
+                        mensagem.style.background = '#ffe5e5';
+                        mensagem.style.color = '#c00000';
+                        mensagem.textContent = checagem.message || 'Esse e-mail já está em uso!';
+                    }
+                    if (inputEmail) {
+                        inputEmail.classList.add('input-erro');
+                        inputEmail.focus();
+                    }
+                    return;
+                }
+            } catch (err) {
+                console.warn('[Cadastro] Não foi possível pré-verificar e-mail:', err);
+            } finally {
+                if (btnContinuar) {
+                    btnContinuar.disabled = false;
+                    btnContinuar.textContent = textoOriginal;
+                }
+            }
+
+            if (inputEmail) {
+                inputEmail.classList.remove('input-erro');
             }
 
             if (mensagem) {
