@@ -13,6 +13,13 @@ export function initDesempenhoView(router) {
     if (initialized) return;
     initialized = true;
 
+    window.addEventListener('aprovadrive:desempenho-invalidado', () => {
+        const viewDesempenho = qs('#view-desempenho');
+        if (viewDesempenho && viewDesempenho.style.display !== 'none') {
+            renderDesempenho(true);
+        }
+    });
+
     const btnIa = qs('#view-desempenho .ia-botao');
     if (btnIa && router) {
         btnIa.addEventListener('click', (e) => {
@@ -169,31 +176,23 @@ function aplicarDesempenhoNaTela(desempenho) {
     }
 }
 
-let lastRenderedDesempenhoUser = null;
-let lastRenderedDesempenhoTime = 0;
-
 export async function renderDesempenho(forceRefresh = false) {
     const user = getCurrentUser();
     const userId = user?.id_usuario || null;
 
-    // Se já foi renderizado recentemente para o mesmo usuário e não é forceRefresh, apenas atualiza UI
-    if (!forceRefresh && lastRenderedDesempenhoUser === userId && (Date.now() - lastRenderedDesempenhoTime < 30000)) {
-        usuarioGlobal.updateUI();
-        return;
-    }
+    usuarioGlobal.updateUI();
 
-    // Renderização imediata com cache/local (sem piscar nem travar UI)
+    // 1. Renderização imediata com cache/local (sem piscar nem travar UI)
     const local = getLocalDesempenho();
     if (local) {
         aplicarDesempenhoNaTela(local);
     }
 
+    // 2. Busca dados mais recentes no servidor e atualiza a tela
     try {
         const remoto = await fetchDesempenho(userId, forceRefresh);
         if (remoto && remoto.resumo) {
             aplicarDesempenhoNaTela(remoto);
-            lastRenderedDesempenhoUser = userId;
-            lastRenderedDesempenhoTime = Date.now();
         }
     } catch (err) {
         console.warn('[DesempenhoView] Erro ao sincronizar dados remotos:', err.message);

@@ -14,6 +14,18 @@ export function initDashboardView(router) {
     if (initialized) return;
     initialized = true;
 
+    window.addEventListener('aprovadrive:desempenho-invalidado', () => {
+        const viewInicio = qs('#view-inicio');
+        if (viewInicio && viewInicio.style.display !== 'none') {
+            const user = getCurrentUser();
+            fetchDesempenho(user?.id_usuario, true).then(remoto => {
+                if (remoto && remoto.resumo) {
+                    atualizarCardDesempenhoResumo(remoto);
+                }
+            }).catch(() => {});
+        }
+    });
+
     const perfilBtn = qs('.perfil');
     if (perfilBtn) {
         perfilBtn.addEventListener('click', (e) => {

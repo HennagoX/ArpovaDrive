@@ -485,6 +485,8 @@ export async function concluirTarefa(taskId, userId, options = {}) {
         setCachedTarefas(usuarioId, data.payload);
     }
 
+    import('./desempenhoService.js').then(m => m.invalidateLocalDesempenhoCache(usuarioId)).catch(() => {});
+
     return data;
 }
 

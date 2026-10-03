@@ -8,16 +8,15 @@ import { getModuloUserId } from './moduloService.js';
 let cachedDesempenho = null;
 const memoryDesempenhoCache = new Map();
 const inFlightDesempenho = new Map();
-const DESEMPENHO_CACHE_TTL_MS = 60 * 1000;
+const DESEMPENHO_CACHE_TTL_MS = 15 * 1000; // 15 segundos
 
 export function invalidateLocalDesempenhoCache(userId = null) {
-  if (userId) {
-    const activeUserId = getModuloUserId(userId);
-    memoryDesempenhoCache.delete(activeUserId);
-  } else {
-    memoryDesempenhoCache.clear();
-  }
+  memoryDesempenhoCache.clear();
   cachedDesempenho = null;
+  setLocalItem(STORAGE_KEYS.DESEMPENHO, null);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('aprovadrive:desempenho-invalidado', { detail: { userId } }));
+  }
 }
 
 export const MATERIAS_DESEMPENHO_CONFIG = [
@@ -170,24 +169,14 @@ export function sincronizarGamificationComDesempenho(desempenho) {
 
 export async function fetchDesempenho(userId = null, forceRefresh = false) {
   const activeUserId = getModuloUserId(userId);
+  const now = Date.now();
 
   if (!forceRefresh) {
     if (memoryDesempenhoCache.has(activeUserId)) {
       const entry = memoryDesempenhoCache.get(activeUserId);
-      if (Date.now() - entry.timestamp < DESEMPENHO_CACHE_TTL_MS && entry.data?.resumo) {
+      if (now - entry.timestamp < DESEMPENHO_CACHE_TTL_MS && entry.data?.resumo) {
         return entry.data;
       }
-    }
-
-    if (cachedDesempenho && cachedDesempenho.resumo) {
-      return cachedDesempenho;
-    }
-
-    const localStored = getLocalItem(STORAGE_KEYS.DESEMPENHO, null);
-    if (localStored && localStored.resumo) {
-      cachedDesempenho = localStored;
-      memoryDesempenhoCache.set(activeUserId, { data: localStored, timestamp: Date.now() });
-      return localStored;
     }
   }
 

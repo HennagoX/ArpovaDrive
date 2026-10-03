@@ -514,7 +514,11 @@ export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
                 simularDia: mockDia || undefined
             })
         });
-        return await response.json();
+        const resData = await response.json();
+        if (response.ok) {
+            invalidateLocalDesempenhoCache(activeUserId);
+        }
+        return resData;
     } catch (err) {
         return { success: false, message: err.message };
     }
