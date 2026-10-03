@@ -74,7 +74,7 @@ export async function carregarERenderizarHistorico(conteudoId = null) {
     container.innerHTML = `
         <div class="historico-loading">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Buscando arquivos salvos...</span>
+            <span>Buscando arquivos deletados...</span>
         </div>
     `;
 
@@ -123,8 +123,8 @@ function renderizarListaHistorico(lista) {
         container.innerHTML = `
             <div class="historico-empty">
                 <i class="fa-solid fa-folder-open"></i>
-                <span>Nenhum arquivo anterior encontrado.</span>
-                <small style="color: #94a3b8;">Os arquivos salvos e versões de PDFs enviados pelo administrador aparecerão aqui para restaurar ou deletar.</small>
+                <span>Nenhum arquivo deletado no momento.</span>
+                <small style="color: #94a3b8;">Arquivos e módulos removidos anteriormente aparecerão aqui para serem restaurados ou excluídos definitivamente.</small>
             </div>
         `;
         return;
