@@ -1,7 +1,7 @@
 
-import { ENDPOINTS } from '../constants/routes.js';
+import { ENDPOINTS, API_URL } from '../constants/routes.js';
 import { getCurrentUser } from './authService.js';
-import { getUsuarioAtivoId } from './cronogramaService.js';
+import { getUsuarioAtivoId, getMockDia, clearCachedTarefas } from './cronogramaService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
 import { TIMING } from '../constants/timing.js';
 import { getHttpErrorMessage } from '../constants/messages.js';
@@ -117,6 +117,7 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
     }
 
     const activeUserId = getModuloUserId(userId);
+    const mockDia = getMockDia();
     const storageKey = getModuloStorageKey(contentId, activeUserId);
     const cachedAtual = getModuloAtualCached(contentId, activeUserId);
 
@@ -135,6 +136,7 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
 
     setLocalItem(storageKey, proximoEsperado);
     lastFetchTimestamps.set(storageKey, Date.now());
+    clearCachedTarefas(activeUserId);
 
     try {
         const response = await fetch(ENDPOINTS.MODULO.NEXT, {
@@ -142,13 +144,15 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-User-Id': activeUserId
+                'X-User-Id': activeUserId,
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
             },
             body: JSON.stringify({
                 contentId,
                 id: contentId,
                 userId: activeUserId,
-                id_usuario: activeUserId
+                id_usuario: activeUserId,
+                simularDia: mockDia || undefined
             })
         });
 
@@ -163,6 +167,7 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
         const xpGanha = typeof data?.xp_ganha === 'number' ? data.xp_ganha : (moduloAtual > cachedAtual ? 25 : 0);
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
+        clearCachedTarefas(activeUserId);
 
         return {
             success: true,
@@ -183,6 +188,42 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
             xp_ganha: proximoEsperado > cachedAtual ? 25 : 0,
             message: `Avançou para o Módulo ${proximoEsperado}!`
         };
+    }
+}
+
+export async function registrarLeituraModulo(contentId, moduloNumero, userId) {
+    if (!contentId) return { success: false };
+    const activeUserId = getModuloUserId(userId);
+    const mockDia = getMockDia();
+    const num = Math.max(1, Number(moduloNumero || 1));
+
+    clearCachedTarefas(activeUserId);
+
+    try {
+        const url = ENDPOINTS.MODULO.REGISTRAR_LEITURA || `${API_URL}/modulo/leitura`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-User-Id': activeUserId,
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+            },
+            body: JSON.stringify({
+                contentId,
+                id: contentId,
+                modulo: num,
+                userId: activeUserId,
+                id_usuario: activeUserId,
+                simularDia: mockDia || undefined
+            })
+        });
+
+        const data = await response.json().catch(() => null);
+        return data || { success: true };
+    } catch (err) {
+        console.warn('[ModuloService] Erro ao registrar leitura do módulo:', err.message);
+        return { success: false, message: err.message };
     }
 }
 

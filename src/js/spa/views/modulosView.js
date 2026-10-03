@@ -25,6 +25,7 @@ import {
     getModuloAtualCached,
     setModuloAtualCached,
     avancarModulo,
+    registrarLeituraModulo,
     setPonteiroModulo,
     getModuloUserId
 } from '../../services/moduloService.js';
@@ -752,6 +753,10 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
 
     if (!modulo) return;
     activeModulo = modulo;
+
+    // Registra leitura para cumprimento de tarefas do cronograma no mesmo dia
+    const activeUserId = getModuloUserId();
+    registrarLeituraModulo(conteudoId, modulo.numero, activeUserId).catch(() => {});
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');

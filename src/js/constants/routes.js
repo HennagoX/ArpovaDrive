@@ -63,7 +63,8 @@ export const ENDPOINTS = {
     GET: (contentId, userId) => `${API_URL}/modulo/${encodeURIComponent(contentId || '')}${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`,
     GET_QUERY: (contentId, userId) => `${API_URL}/modulo?contentId=${encodeURIComponent(contentId || '')}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
     NEXT: `${API_URL}/modulo/next`,
-    SET: `${API_URL}/modulo/set`
+    SET: `${API_URL}/modulo/set`,
+    REGISTRAR_LEITURA: `${API_URL}/modulo/leitura`
   },
   QUESTOES: {
     CONCLUIDAS: (userId, materia) => `${API_URL}/questoes/concluidas?userId=${encodeURIComponent(userId || '')}${materia ? `&materia=${encodeURIComponent(materia)}` : ''}`,

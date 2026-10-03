@@ -2,6 +2,7 @@ import { MESSAGES } from '../constants/messages.js';
 import { ENDPOINTS } from '../constants/routes.js';
 import { getModuloUserId, getModuloAtual } from './moduloService.js';
 import { fetchDesempenho } from './desempenhoService.js';
+import { getMockDia, clearCachedTarefas } from './cronogramaService.js';
 
 export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!';
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
@@ -464,18 +465,21 @@ export async function fetchQuestoesConcluidas(materia, userId) {
 
 export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
     const activeUserId = getModuloUserId(userId);
+    const mockDia = getMockDia();
     try {
         const response = await fetch(ENDPOINTS.QUESTOES.CHECK_ACERTO, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-User-Id': activeUserId
+                'X-User-Id': activeUserId,
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
             },
             body: JSON.stringify({
                 ...dadosResposta,
                 userId: activeUserId,
-                id_usuario: activeUserId
+                id_usuario: activeUserId,
+                simularDia: mockDia || undefined
             })
         });
         return await response.json();
@@ -486,24 +490,31 @@ export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
 
 export async function concluirBateriaAPI(dadosConclusao, userId) {
     const activeUserId = getModuloUserId(userId);
+    const mockDia = getMockDia();
+    clearCachedTarefas(activeUserId);
+
     try {
         const response = await fetch(ENDPOINTS.QUESTOES.CONCLUIR_BATERIA, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-User-Id': activeUserId
+                'X-User-Id': activeUserId,
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
             },
             body: JSON.stringify({
                 ...dadosConclusao,
                 userId: activeUserId,
-                id_usuario: activeUserId
+                id_usuario: activeUserId,
+                simularDia: mockDia || undefined
             })
         });
         const data = await response.json();
+        clearCachedTarefas(activeUserId);
         fetchDesempenho(activeUserId, true).catch(() => {});
         return data;
     } catch (err) {
+        clearCachedTarefas(activeUserId);
         return { success: false, message: err.message };
     }
 }
@@ -598,27 +609,34 @@ export async function getSimuladoQuestoesAPI(materia = 'Geral', userId = null) {
 
 export async function concluirSimuladoAPI(dadosConclusao, userId) {
     const activeUserId = getModuloUserId(userId);
+    const mockDia = getMockDia();
+    clearCachedTarefas(activeUserId);
+
     try {
         const response = await fetch(ENDPOINTS.SIMULADO.CONCLUIR, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
-                'X-User-Id': activeUserId
+                'X-User-Id': activeUserId,
+                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
             },
             body: JSON.stringify({
                 ...dadosConclusao,
                 userId: activeUserId,
-                id_usuario: activeUserId
+                id_usuario: activeUserId,
+                simularDia: mockDia || undefined
             })
         });
         if (response.ok) {
             const resultData = await response.json();
+            clearCachedTarefas(activeUserId);
             fetchDesempenho(activeUserId, true).catch(() => {});
             return resultData;
         }
     } catch {}
 
+    clearCachedTarefas(activeUserId);
     const total = 30;
     const acertos = Math.max(0, Math.min(total, Number(dadosConclusao?.acertos) || 0));
     const porcentagem = Math.round((acertos / total) * 100);
