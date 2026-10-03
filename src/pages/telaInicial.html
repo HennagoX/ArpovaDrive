@@ -1321,8 +1321,8 @@
                         <label for="select-admin-pointer"><i class="fa-solid fa-location-crosshairs"></i> Ponteiro:</label>
                         <select id="select-admin-pointer" class="select-admin-pointer" title="Alterar ponteiro de módulo do aluno"></select>
                     </div>
-                    <button type="button" class="btn-admin-add-modulo btn-admin-historico-pdf" id="btn-admin-historico-pdf" style="display: none;" title="Consultar histórico de criações e mudanças de PDFs e reverter">
-                        <i class="fa-solid fa-clock-rotate-left"></i> Histórico de PDFs
+                    <button type="button" class="btn-admin-add-modulo btn-admin-historico-pdf" id="btn-admin-historico-pdf" style="display: none;" title="Restaurar arquivos ou gerenciar versões salvas">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Restaurar Arquivos
                     </button>
                     <button type="button" class="btn-admin-add-modulo" id="btn-admin-add-modulo" style="display: none;" title="Adicionar novo módulo e material em PDF">
                         <i class="fa-solid fa-file-circle-plus"></i> Adicionar Módulo / PDF
@@ -2715,11 +2715,11 @@
             <div class="modal-admin-header">
                 <div class="modal-admin-header-title">
                     <div class="modal-admin-icon-circle historico-circle">
-                        <i class="fa-solid fa-clock-rotate-left"></i>
+                        <i class="fa-solid fa-file-arrow-up"></i>
                     </div>
                     <div>
-                        <span class="modal-admin-badge-label">Auditoria & Versões</span>
-                        <h3 id="modal-admin-historico-titulo">Histórico de Alterações de PDFs</h3>
+                        <span class="modal-admin-badge-label">Administrador</span>
+                        <h3 id="modal-admin-historico-titulo">Restaurar ou Deletar Arquivos</h3>
                     </div>
                 </div>
                 <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-historico" aria-label="Fechar">&times;</button>
@@ -2728,11 +2728,11 @@
             <div class="modal-historico-body">
                 <div class="modal-historico-toolbar">
                     <div class="historico-filter-group">
-                        <label for="select-historico-conteudo"><i class="fa-solid fa-filter"></i> Conteúdo:</label>
+                        <label for="select-historico-conteudo"><i class="fa-solid fa-filter"></i> Disciplina:</label>
                         <select id="select-historico-conteudo" class="select-historico-conteudo">
                             <option value="">Todas as Disciplinas</option>
                             <option value="CodigoTransito">Código de Trânsito</option>
-                            <option value="PlacaTransito">Placas de Trânsito</option>
+                            <option value="PlacasTransito">Placas de Trânsito</option>
                             <option value="DirecaoDefensiva">Direção Defensiva</option>
                             <option value="PrimeirosSocorros">Primeiros Socorros</option>
                             <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
@@ -2740,20 +2740,20 @@
                     </div>
                     <div class="historico-search-group">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="input-busca-historico" placeholder="Buscar por PDF ou descrição...">
+                        <input type="text" id="input-busca-historico" placeholder="Buscar por arquivo ou módulo...">
                     </div>
-                    <button type="button" class="btn-refresh-historico" id="btn-refresh-historico" title="Atualizar histórico">
+                    <button type="button" class="btn-refresh-historico" id="btn-refresh-historico" title="Atualizar lista de arquivos">
                         <i class="fa-solid fa-arrows-rotate"></i> Atualizar
                     </button>
-                    <button type="button" class="btn-refresh-historico btn-danger-toolbar" id="btn-limpar-historico-pdf" title="Limpar histórico de alterações">
-                        <i class="fa-solid fa-trash-can"></i> Limpar Histórico
+                    <button type="button" class="btn-refresh-historico btn-danger-toolbar" id="btn-limpar-historico-pdf" title="Limpar todos os arquivos salvos do histórico">
+                        <i class="fa-solid fa-trash-can"></i> Limpar Tudo
                     </button>
                 </div>
 
                 <div class="historico-timeline" id="historico-timeline-list">
                     <div class="historico-loading">
                         <i class="fa-solid fa-spinner fa-spin"></i>
-                        <span>Carregando histórico de alterações...</span>
+                        <span>Carregando arquivos salvos...</span>
                     </div>
                 </div>
             </div>

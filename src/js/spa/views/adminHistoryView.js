@@ -31,8 +31,19 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
+function mapearNomeConteudo(id) {
+    if (!id) return 'Geral';
+    const norm = String(id).toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (norm.includes('codigo') || norm.includes('legislacao')) return 'Código de Trânsito';
+    if (norm.includes('placa') || norm.includes('sinalizacao')) return 'Placas de Trânsito';
+    if (norm.includes('direcao') || norm.includes('defensiva')) return 'Direção Defensiva';
+    if (norm.includes('socorro') || norm.includes('saude')) return 'Primeiros Socorros';
+    if (norm.includes('ambiente') || norm.includes('cidadania')) return 'Meio Ambiente';
+    return id;
+}
+
 // ============================================================================
-// 1. Histórico de Módulos e PDFs (Auditoria, Reversão e Exclusão)
+// 1. Arquivos Salvos (Restaurar ou Deletar Arquivos de Módulos e PDFs)
 // ============================================================================
 
 export async function abrirModalHistoricoPdf(conteudoId = null) {
@@ -63,19 +74,24 @@ export async function carregarERenderizarHistorico(conteudoId = null) {
     container.innerHTML = `
         <div class="historico-loading">
             <i class="fa-solid fa-spinner fa-spin"></i>
-            <span>Buscando histórico de alterações e versões de PDFs...</span>
+            <span>Buscando arquivos salvos...</span>
         </div>
     `;
 
     try {
         const historico = await obterHistoricoPdfAdmin(conteudoId);
-        listaHistoricoCache = historico || [];
+        // Filtra para manter somente registros que têm arquivo PDF ou dados restauráveis
+        listaHistoricoCache = (historico || []).filter(item => {
+            const hasPdf = Boolean(item.dados_novos?.pdf_nome || item.dados_anteriores?.pdf_nome);
+            const hasData = Boolean(item.dados_novos || item.dados_anteriores);
+            return hasPdf || hasData;
+        });
         renderizarListaHistorico(listaHistoricoCache);
     } catch (err) {
         container.innerHTML = `
             <div class="historico-empty">
                 <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
-                <span>Erro ao carregar histórico: ${escapeHtml(err.message || 'Falha na conexão')}</span>
+                <span>Erro ao carregar arquivos: ${escapeHtml(err.message || 'Falha na conexão')}</span>
             </div>
         `;
     }
@@ -88,12 +104,13 @@ function filtrarListaHistorico(termo = '') {
     }
     const clean = termo.toLowerCase().trim();
     const filtrados = listaHistoricoCache.filter(item => {
-        const desc = (item.descricao_acao || '').toLowerCase();
-        const modId = (item.modulo_id || '').toLowerCase();
-        const contId = (item.conteudo_id || '').toLowerCase();
         const pdfNovo = (item.dados_novos?.pdf_nome || '').toLowerCase();
         const pdfAnt = (item.dados_anteriores?.pdf_nome || '').toLowerCase();
-        return desc.includes(clean) || modId.includes(clean) || contId.includes(clean) || pdfNovo.includes(clean) || pdfAnt.includes(clean);
+        const titNovo = (item.dados_novos?.titulo || '').toLowerCase();
+        const titAnt = (item.dados_anteriores?.titulo || '').toLowerCase();
+        const contId = (item.conteudo_id || '').toLowerCase();
+        const contNome = mapearNomeConteudo(item.conteudo_id).toLowerCase();
+        return pdfNovo.includes(clean) || pdfAnt.includes(clean) || titNovo.includes(clean) || titAnt.includes(clean) || contId.includes(clean) || contNome.includes(clean);
     });
     renderizarListaHistorico(filtrados);
 }
@@ -105,9 +122,9 @@ function renderizarListaHistorico(lista) {
     if (!Array.isArray(lista) || lista.length === 0) {
         container.innerHTML = `
             <div class="historico-empty">
-                <i class="fa-solid fa-clock-rotate-left"></i>
-                <span>Nenhuma alteração registrada até o momento.</span>
-                <small style="color: #94a3b8;">As modificações, criações e substituições de PDFs feitas pelo administrador ficarão listadas aqui para consulta, reversão ou exclusão.</small>
+                <i class="fa-solid fa-folder-open"></i>
+                <span>Nenhum arquivo anterior encontrado.</span>
+                <small style="color: #94a3b8;">Os arquivos salvos e versões de PDFs enviados pelo administrador aparecerão aqui para restaurar ou deletar.</small>
             </div>
         `;
         return;
@@ -127,111 +144,47 @@ function renderizarListaHistorico(lista) {
             minute: '2-digit'
         });
 
-        let badgeClass = 'historico-badge-edicao';
-        let badgeIcon = 'fa-solid fa-pen';
-        let badgeText = 'Edição';
-
-        switch (item.tipo_acao) {
-            case 'CRIACAO':
-                badgeClass = 'historico-badge-criacao';
-                badgeIcon = 'fa-solid fa-plus-circle';
-                badgeText = 'Criação';
-                break;
-            case 'EDICAO_PDF':
-                badgeClass = 'historico-badge-edicao-pdf';
-                badgeIcon = 'fa-solid fa-file-pdf';
-                badgeText = 'Troca de PDF';
-                break;
-            case 'REMOCAO':
-                badgeClass = 'historico-badge-remocao';
-                badgeIcon = 'fa-solid fa-trash-can';
-                badgeText = 'Remoção';
-                break;
-            case 'RESTAURACAO':
-                badgeClass = 'historico-badge-criacao';
-                badgeIcon = 'fa-solid fa-rotate';
-                badgeText = 'Restauração';
-                break;
-            case 'REVERSAO':
-                badgeClass = 'historico-badge-reversao';
-                badgeIcon = 'fa-solid fa-clock-rotate-left';
-                badgeText = 'Reversão';
-                break;
-        }
-
-        const conteudoNome = item.conteudo_id || 'Conteúdo Geral';
-        const pdfAnt = item.dados_anteriores?.pdf_nome;
-        const pdfNovo = item.dados_novos?.pdf_nome;
-        const titAnt = item.dados_anteriores?.titulo;
-        const titNovo = item.dados_novos?.titulo;
-
-        let diffHtml = '';
-        if (pdfAnt || pdfNovo) {
-            diffHtml = `
-                <div class="historico-diff-box">
-                    <div class="historico-diff-row">
-                        <span class="historico-diff-label"><i class="fa-solid fa-file-pdf"></i> PDF:</span>
-                        ${pdfAnt ? `<span class="historico-diff-old"><i class="fa-solid fa-xmark"></i> ${escapeHtml(pdfAnt)}</span>` : '<span style="color: #94a3b8;">(sem PDF anterior)</span>'}
-                        ${(pdfAnt && pdfNovo && pdfAnt !== pdfNovo) ? '<i class="fa-solid fa-arrow-right" style="color: #94a3b8; font-size: 10px;"></i>' : ''}
-                        ${pdfNovo ? `<span class="historico-diff-new"><i class="fa-solid fa-check"></i> ${escapeHtml(pdfNovo)}</span>` : ''}
-                    </div>
-                    ${(titAnt && titNovo && titAnt !== titNovo) ? `
-                        <div class="historico-diff-row">
-                            <span class="historico-diff-label"><i class="fa-solid fa-heading"></i> Título:</span>
-                            <span class="historico-diff-old">${escapeHtml(titAnt)}</span>
-                            <i class="fa-solid fa-arrow-right" style="color: #94a3b8; font-size: 10px;"></i>
-                            <span class="historico-diff-new">${escapeHtml(titNovo)}</span>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        }
-
-        const adminAuthor = item.admin_id ? escapeHtml(item.admin_id) : 'Administrador';
+        const pdfNome = item.dados_novos?.pdf_nome || item.dados_anteriores?.pdf_nome || 'Material em PDF';
+        const moduloTitulo = item.dados_novos?.titulo || item.dados_anteriores?.titulo || (item.modulo_id ? `Módulo ${item.modulo_id}` : 'Módulo');
+        const conteudoNome = mapearNomeConteudo(item.conteudo_id);
 
         card.innerHTML = `
-            <div class="historico-card-header">
-                <div class="historico-header-left">
-                    <span class="historico-badge-acao ${badgeClass}">
-                        <i class="${badgeIcon}"></i> ${badgeText}
-                    </span>
-                    <span class="historico-materia-tag"><i class="fa-solid fa-book"></i> ${escapeHtml(conteudoNome)}</span>
+            <div class="historico-card-left">
+                <div class="historico-file-icon">
+                    <i class="fa-solid fa-file-pdf"></i>
                 </div>
-                <span class="historico-data"><i class="fa-regular fa-clock"></i> ${dataFormatada}</span>
+                <div class="historico-file-info">
+                    <span class="historico-file-name" title="${escapeHtml(pdfNome)}">${escapeHtml(pdfNome)}</span>
+                    <div class="historico-file-meta">
+                        <span class="meta-tag"><i class="fa-solid fa-book"></i> ${escapeHtml(conteudoNome)}</span>
+                        <span>${escapeHtml(moduloTitulo)}</span>
+                        <span>•</span>
+                        <span><i class="fa-regular fa-clock"></i> ${dataFormatada}</span>
+                    </div>
+                </div>
             </div>
 
-            <div class="historico-card-desc">
-                ${escapeHtml(item.descricao_acao || 'Alteração realizada')}
-            </div>
-
-            ${diffHtml}
-
-            <div class="historico-card-footer">
-                <span class="historico-admin-author">
-                    <i class="fa-solid fa-user-shield"></i> Por: <strong>${adminAuthor}</strong>
-                </span>
-                <div class="historico-footer-actions">
-                    <button type="button" class="btn-reverter-versao" data-historico-id="${item.id}" title="Reverter o módulo e PDF para esta versão">
-                        <i class="fa-solid fa-rotate-left"></i> Reverter
-                    </button>
-                    <button type="button" class="btn-del-item-historico" data-historico-id="${item.id}" title="Excluir este registro do histórico">
-                        <i class="fa-solid fa-trash-can"></i> Excluir
-                    </button>
-                </div>
+            <div class="historico-card-actions">
+                <button type="button" class="btn-restaurar-versao" data-historico-id="${item.id}" title="Restaurar este arquivo para o módulo">
+                    <i class="fa-solid fa-rotate-left"></i> Restaurar
+                </button>
+                <button type="button" class="btn-del-item-historico" data-historico-id="${item.id}" title="Deletar este arquivo do histórico">
+                    <i class="fa-solid fa-trash-can"></i> Deletar
+                </button>
             </div>
         `;
 
-        const btnReverter = card.querySelector('.btn-reverter-versao');
-        if (btnReverter) {
-            btnReverter.addEventListener('click', () => {
-                executarReversaoHistorico(item.id, item);
+        const btnRestaurar = card.querySelector('.btn-restaurar-versao');
+        if (btnRestaurar) {
+            btnRestaurar.addEventListener('click', () => {
+                executarRestauracaoArquivo(item.id, item);
             });
         }
 
         const btnDel = card.querySelector('.btn-del-item-historico');
         if (btnDel) {
             btnDel.addEventListener('click', () => {
-                executarExclusaoItemHistorico(item.id);
+                executarExclusaoItemHistorico(item.id, item, card);
             });
         }
 
@@ -239,48 +192,53 @@ function renderizarListaHistorico(lista) {
     });
 }
 
-async function executarReversaoHistorico(historicoId, item) {
-    const nomeAlvo = item.dados_novos?.titulo || item.dados_anteriores?.titulo || `Módulo #${item.modulo_id}`;
-    const confirmar = confirm(`Deseja realmente reverter as alterações e restaurar este estado do PDF/módulo "${nomeAlvo}"?`);
+async function executarRestauracaoArquivo(historicoId, item) {
+    const pdfNome = item.dados_novos?.pdf_nome || item.dados_anteriores?.pdf_nome || 'este arquivo';
+    const moduloNome = item.dados_novos?.titulo || item.dados_anteriores?.titulo || 'o módulo';
+    const confirmar = confirm(`Deseja restaurar o arquivo "${pdfNome}" para ${moduloNome}?`);
     if (!confirmar) return;
 
     try {
-        showToast('Revertendo alterações...', 'info', 'fa-solid fa-spinner fa-spin');
+        showToast('Restaurando arquivo...', 'info', 'fa-solid fa-spinner fa-spin');
         const res = await reverterHistoricoPdfAdmin(historicoId, 'versao');
-        showToast(res.message || 'Módulo e PDF revertidos com sucesso!', 'success', 'fa-solid fa-circle-check');
+        showToast(res.message || 'Arquivo restaurado com sucesso!', 'success', 'fa-solid fa-circle-check');
         fecharModalHistoricoPdf();
         window.dispatchEvent(new CustomEvent('aprovadrive:historico-revertido', { detail: { conteudoId: item.conteudo_id } }));
     } catch (err) {
-        showToast(err.message || 'Erro ao reverter alteração.', 'locked', 'fa-solid fa-triangle-exclamation');
+        showToast(err.message || 'Erro ao restaurar arquivo.', 'locked', 'fa-solid fa-triangle-exclamation');
     }
 }
 
-async function executarExclusaoItemHistorico(historicoId) {
-    const confirmar = confirm(`Deseja realmente excluir este registro #${historicoId} do histórico?`);
+async function executarExclusaoItemHistorico(historicoId, item, card) {
+    const pdfNome = item.dados_novos?.pdf_nome || item.dados_anteriores?.pdf_nome || 'este arquivo';
+    const confirmar = confirm(`Deseja realmente deletar "${pdfNome}" dos arquivos salvos?`);
     if (!confirmar) return;
 
     try {
         await excluirItemHistoricoPdfAdmin(historicoId);
-        showToast('Registro de histórico excluído com sucesso!', 'info', 'fa-solid fa-trash-can');
-        const selectHistConteudo = qs("#select-historico-conteudo");
-        await carregarERenderizarHistorico(selectHistConteudo?.value || null);
+        showToast('Arquivo deletado do histórico!', 'info', 'fa-solid fa-trash-can');
+        if (card) card.remove();
+        listaHistoricoCache = listaHistoricoCache.filter(h => h.id !== historicoId);
+        if (listaHistoricoCache.length === 0) {
+            renderizarListaHistorico([]);
+        }
     } catch (err) {
-        showToast(err.message || 'Erro ao excluir item do histórico.', 'locked', 'fa-solid fa-triangle-exclamation');
+        showToast(err.message || 'Erro ao deletar arquivo.', 'locked', 'fa-solid fa-triangle-exclamation');
     }
 }
 
 async function executarLimpezaHistorico(conteudoId = null) {
     const msg = conteudoId
-        ? `Deseja realmente limpar todo o histórico de alterações da disciplina "${conteudoId}"?`
-        : 'Deseja realmente limpar todo o histórico de alterações de PDFs de todas as disciplinas?';
+        ? `Deseja realmente limpar todos os arquivos salvos da disciplina "${mapearNomeConteudo(conteudoId)}"?`
+        : 'Deseja realmente limpar todos os arquivos salvos de todas as disciplinas?';
     if (!confirm(msg)) return;
 
     try {
         await limparHistoricoPdfAdmin(conteudoId);
-        showToast('Histórico de alterações limpo com sucesso!', 'info', 'fa-solid fa-trash-can');
+        showToast('Arquivos salvos removidos!', 'info', 'fa-solid fa-trash-can');
         await carregarERenderizarHistorico(conteudoId);
     } catch (err) {
-        showToast(err.message || 'Erro ao limpar histórico.', 'locked', 'fa-solid fa-triangle-exclamation');
+        showToast(err.message || 'Erro ao limpar arquivos.', 'locked', 'fa-solid fa-triangle-exclamation');
     }
 }
 

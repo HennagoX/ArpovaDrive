@@ -2458,167 +2458,89 @@ body.modal-modulo-open {
 .historico-card-item {
     background: #ffffff;
     border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 12px;
+    padding: 14px 16px;
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s, box-shadow 0.2s;
-    position: relative;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s ease;
 }
 
 .historico-card-item:hover {
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    border-color: #cbd5e1;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
-.historico-card-header {
+.historico-card-left {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
+    gap: 14px;
+    min-width: 0;
+    flex: 1;
 }
 
-.historico-header-left {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-}
-
-.historico-badge-acao {
-    padding: 4px 10px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.historico-badge-criacao {
-    background: rgba(16, 185, 129, 0.15);
-    color: #059669;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.historico-badge-edicao {
-    background: rgba(59, 130, 246, 0.15);
-    color: #2563eb;
-    border: 1px solid rgba(59, 130, 246, 0.3);
-}
-
-.historico-badge-edicao-pdf {
-    background: rgba(99, 102, 241, 0.15);
-    color: #4f46e5;
-    border: 1px solid rgba(99, 102, 241, 0.3);
-}
-
-.historico-badge-remocao {
-    background: rgba(239, 68, 68, 0.15);
-    color: #dc2626;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.historico-badge-reversao {
-    background: rgba(245, 158, 11, 0.15);
-    color: #d97706;
-    border: 1px solid rgba(245, 158, 11, 0.3);
-}
-
-.historico-materia-tag {
-    font-size: 12px;
-    font-weight: 600;
-    color: #64748b;
-    background: rgba(100, 116, 139, 0.1);
-    padding: 3px 8px;
-    border-radius: 6px;
-}
-
-.historico-data {
-    font-size: 12px;
-    color: #64748b;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.historico-card-desc {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1e293b;
-    line-height: 1.4;
-}
-
-.historico-diff-box {
-    background: #f8fafc;
-    border: 1px dashed #cbd5e1;
+.historico-file-icon {
+    width: 42px;
+    height: 42px;
     border-radius: 10px;
-    padding: 10px 12px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.historico-file-info {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    font-size: 12px;
+    gap: 4px;
+    min-width: 0;
 }
 
-.historico-diff-row {
+.historico-file-name {
+    font-size: 14px;
+    font-weight: 700;
+    color: #1e293b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.historico-file-meta {
     display: flex;
     align-items: center;
     gap: 8px;
-    flex-wrap: wrap;
-}
-
-.historico-diff-label {
-    font-weight: 600;
-    color: #64748b;
-    min-width: 80px;
-}
-
-.historico-diff-old {
-    color: #ef4444;
-    text-decoration: line-through;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.historico-diff-new {
-    color: #10b981;
-    font-weight: 600;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-}
-
-.historico-card-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 4px;
-    padding-top: 8px;
-    border-top: 1px solid #f1f5f9;
-}
-
-.historico-admin-author {
     font-size: 12px;
     color: #64748b;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+    flex-wrap: wrap;
 }
 
-.btn-reverter-versao {
-    background: #f8fafc;
-    border: 1px solid #cbd5e1;
+.historico-file-meta span.meta-tag {
+    background: rgba(100, 116, 139, 0.1);
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
     color: #475569;
-    padding: 6px 14px;
+}
+
+.historico-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-restaurar-versao {
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    color: #ffffff;
+    padding: 7px 16px;
     border-radius: 8px;
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 600;
     cursor: pointer;
     display: inline-flex;
@@ -2627,10 +2549,9 @@ body.modal-modulo-open {
     transition: all 0.2s ease;
 }
 
-.btn-reverter-versao:hover {
-    background: rgba(245, 158, 11, 0.15);
-    border-color: #f59e0b;
-    color: #b45309;
+.btn-restaurar-versao:hover {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
 }
 
 .historico-loading,
@@ -2667,38 +2588,33 @@ body.modal-modulo-open {
 [data-theme="dark"] .historico-card-item {
     background: rgba(26, 27, 38, 0.9) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
-    color: #ebebef !important;
 }
 
-[data-theme="dark"] .historico-card-desc {
+[data-theme="dark"] .historico-card-item:hover {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+[data-theme="dark"] .historico-file-name {
     color: #f8fafc !important;
 }
 
-[data-theme="dark"] .historico-diff-box {
-    background: rgba(15, 23, 42, 0.6) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
+[data-theme="dark"] .historico-file-meta {
+    color: #94a3b8 !important;
 }
 
-[data-theme="dark"] .historico-card-footer {
-    border-top-color: rgba(255, 255, 255, 0.08) !important;
+[data-theme="dark"] .historico-file-meta span.meta-tag {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #cbd5e1 !important;
 }
 
-[data-theme="dark"] .btn-reverter-versao {
-    background: rgba(255, 255, 255, 0.06) !important;
-    border-color: rgba(255, 255, 255, 0.15) !important;
-    color: #e2e8f0 !important;
+[data-theme="dark"] .btn-restaurar-versao {
+    background: #3b82f6 !important;
+    border-color: #3b82f6 !important;
+    color: #ffffff !important;
 }
 
-[data-theme="dark"] .btn-reverter-versao:hover {
-    background: rgba(245, 158, 11, 0.25) !important;
-    border-color: #f59e0b !important;
-    color: #fbbf24 !important;
-}
-
-.historico-footer-actions {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+[data-theme="dark"] .btn-restaurar-versao:hover {
+    background: #2563eb !important;
 }
 
 .btn-del-item-historico {
