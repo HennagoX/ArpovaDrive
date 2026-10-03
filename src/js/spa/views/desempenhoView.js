@@ -1,4 +1,4 @@
-import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
+import { qs, qsa, setText, setHTML, applyTiltAll } from '../../utils/dom.js';
 import { getCurrentUser } from '../../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento } from '../../services/gamificationService.js';
 import { fetchDesempenho, getLocalDesempenho } from '../../services/desempenhoService.js';
@@ -210,6 +210,8 @@ export async function renderDesempenho(forceRefresh = false) {
     } catch (err) {
         console.warn('[DesempenhoView] Erro ao sincronizar dados remotos:', err.message);
     }
+
+    applyTiltAll('.kpi-card');
 }
 
 function escapeHtml(str) {

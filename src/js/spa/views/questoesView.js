@@ -1,4 +1,4 @@
-import { qs, qsa, setText } from '../../utils/dom.js';
+import { qs, qsa, setText, applyTiltAll } from '../../utils/dom.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { getBateriasByMateriaId, criarQuestaoAdminAPI } from '../../services/questoesService.js';
@@ -400,4 +400,5 @@ export function renderQuestoes() {
     }
 
     atualizarProgressoQuestoes();
+    applyTiltAll('.questoes-subject-card');
 }

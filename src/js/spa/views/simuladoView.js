@@ -1,4 +1,4 @@
-import { qs, qsa, setText } from '../../utils/dom.js';
+import { qs, qsa, setText, applyTiltAll } from '../../utils/dom.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import {
     getSimuladoResultadosAPI,
@@ -475,4 +475,5 @@ export function renderSimulado(forceRefresh = false) {
 
     carregarSimuladosCustomizados(forceRefresh);
     atualizarProgressoSimulados();
+    applyTiltAll('.simulado-card');
 }

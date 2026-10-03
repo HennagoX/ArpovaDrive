@@ -1,4 +1,4 @@
-import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
+import { qs, qsa, setText, setHTML, applyTiltAll } from '../../utils/dom.js';
 import {
     getTarefasFixas,
     concluirTarefaFixa,
@@ -328,6 +328,8 @@ export async function renderTarefas(forceRefresh = false) {
             }
         }
     }
+
+    applyTiltAll('.tarefas-stat-card', { maxTilt: 8, scale: 1.02 });
 }
 
 function renderFilterTabs(conteudos) {

@@ -1,5 +1,5 @@
 
-import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
+import { qs, qsa, setText, setHTML, applyTiltAll } from '../../utils/dom.js';
 import { getCurrentUser, logout } from '../../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento, syncUserGamification, updateLevelUI } from '../../services/gamificationService.js';
 import { getTarefas, getUsuarioAtivoId } from '../../services/cronogramaService.js';
@@ -126,6 +126,9 @@ export async function renderDashboard() {
     } catch (err) {
         console.warn('[DashboardView] Não foi possível carregar missões da API:', err.message);
     }
+
+    // Tilt 3D elástico nos cards do dashboard
+    applyTiltAll('.cards .card');
 }
 
 function atualizarCardDesempenhoResumo(desempenho) {

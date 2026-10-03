@@ -1,5 +1,5 @@
 
-import { qs, qsa, setText } from '../../utils/dom.js';
+import { qs, qsa, setText, applyTiltAll } from '../../utils/dom.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { getModulosByConteudoId } from '../../services/conteudosService.js';
@@ -152,4 +152,5 @@ export function renderConteudos() {
     if (subtitleEl) setText(subtitleEl, 'Estude os principais assuntos para sua prova do DETRAN.');
 
     atualizarProgressoConteudos();
+    applyTiltAll('.ebook-card');
 }
