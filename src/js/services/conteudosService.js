@@ -720,25 +720,45 @@ try {
     }
 } catch {}
 
-export async function carregarModulosDinamicos(conteudoId = null) {
-    try {
-        const url = ENDPOINTS.MODULOS_CUSTOMIZADOS.LISTAR(conteudoId);
-        const response = await fetch(url, {
-            headers: { 'Accept': 'application/json' }
-        });
-        if (!response.ok) return dynamicModulosCache;
-        const data = await response.json();
-        if (data && Array.isArray(data.modulos)) {
-            dynamicModulosCache = {
-                modulos: data.modulos,
-                removidos: Array.isArray(data.removidos) ? data.removidos : []
-            };
-            setLocalItem('aprovadrive_dynamic_modulos_cache', dynamicModulosCache);
-        }
-    } catch (err) {
-        console.warn('[ConteudosService] Erro ao sincronizar módulos dinâmicos:', err.message);
+let lastDynamicModulosFetchTime = 0;
+const DYNAMIC_MODULOS_TTL_MS = 60000;
+let inFlightDynamicModulosRequest = null;
+
+export async function carregarModulosDinamicos(conteudoId = null, forceRefresh = false) {
+    const now = Date.now();
+    if (!forceRefresh && (dynamicModulosCache.modulos?.length > 0 || dynamicModulosCache.removidos?.length > 0) && (now - lastDynamicModulosFetchTime < DYNAMIC_MODULOS_TTL_MS)) {
+        return dynamicModulosCache;
     }
-    return dynamicModulosCache;
+
+    if (inFlightDynamicModulosRequest) {
+        return inFlightDynamicModulosRequest;
+    }
+
+    inFlightDynamicModulosRequest = (async () => {
+        try {
+            const url = ENDPOINTS.MODULOS_CUSTOMIZADOS.LISTAR(conteudoId);
+            const response = await fetch(url, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!response.ok) return dynamicModulosCache;
+            const data = await response.json();
+            if (data && Array.isArray(data.modulos)) {
+                dynamicModulosCache = {
+                    modulos: data.modulos,
+                    removidos: Array.isArray(data.removidos) ? data.removidos : []
+                };
+                lastDynamicModulosFetchTime = Date.now();
+                setLocalItem('aprovadrive_dynamic_modulos_cache', dynamicModulosCache);
+            }
+        } catch (err) {
+            console.warn('[ConteudosService] Erro ao sincronizar módulos dinâmicos:', err.message);
+        } finally {
+            inFlightDynamicModulosRequest = null;
+        }
+        return dynamicModulosCache;
+    })();
+
+    return inFlightDynamicModulosRequest;
 }
 
 export async function salvarModuloAdmin(dados) {
@@ -758,7 +778,7 @@ export async function salvarModuloAdmin(dados) {
         throw new Error(resData?.error || 'Erro ao salvar módulo/PDF.');
     }
 
-    await carregarModulosDinamicos();
+    await carregarModulosDinamicos(null, true);
     return resData;
 }
 
@@ -778,7 +798,7 @@ export async function removerModuloAdmin(moduloId, conteudoId = null) {
         throw new Error(resData?.error || 'Erro ao remover módulo.');
     }
 
-    await carregarModulosDinamicos();
+    await carregarModulosDinamicos(null, true);
     return resData;
 }
 
@@ -821,7 +841,7 @@ export async function reverterHistoricoPdfAdmin(historicoId, targetVersion = 've
         throw new Error(resData?.error || 'Erro ao reverter alteração.');
     }
 
-    await carregarModulosDinamicos();
+    await carregarModulosDinamicos(null, true);
     return resData;
 }
 

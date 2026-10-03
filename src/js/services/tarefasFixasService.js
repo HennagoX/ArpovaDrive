@@ -1,22 +1,35 @@
 import { ENDPOINTS } from '../constants/routes.js';
 import { getUsuarioAtivoId } from './cronogramaService.js';
 import { atualizarXpNoLocalStorage, addXp } from './gamificationService.js';
+import { invalidateLocalDesempenhoCache } from './desempenhoService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
 import { STORAGE_KEYS } from '../constants/storage.js';
 import { TIMING } from '../constants/timing.js';
 import { getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
 
 export const SESSION_TAREFAS_FIXAS_KEY = 'aprovadrive_tarefas_fixas_cache';
+const TAREFAS_FIXAS_CACHE_TTL_MS = 60000; // 60 segundos
+const memoryTarefasFixasCache = new Map();
+const inFlightTarefasFixasRequests = new Map();
 
 export async function getTarefasFixas(userId, forceRefresh = false) {
     const usuarioId = getUsuarioAtivoId(userId);
+    const now = Date.now();
 
     if (!forceRefresh) {
+        // 1. In-memory cache com TTL
+        const memCached = memoryTarefasFixasCache.get(usuarioId);
+        if (memCached && (now - memCached.timestamp < TAREFAS_FIXAS_CACHE_TTL_MS) && memCached.data?.conteudos) {
+            return memCached.data;
+        }
+
+        // 2. SessionStorage cache
         try {
             const cached = sessionStorage.getItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
             if (cached) {
                 const parsed = JSON.parse(cached);
                 if (parsed && parsed.conteudos) {
+                    memoryTarefasFixasCache.set(usuarioId, { data: parsed, timestamp: now });
                     return parsed;
                 }
             }
@@ -25,40 +38,53 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
         }
     }
 
+    // Deduplica requisições concorrentes em voo
+    if (inFlightTarefasFixasRequests.has(usuarioId)) {
+        return inFlightTarefasFixasRequests.get(usuarioId);
+    }
+
     const url = ENDPOINTS.TAREFAS_FIXAS.GET_TASKS(usuarioId);
 
-    try {
-        const response = await fetch(url, {
-            signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
-            headers: {
-                'Accept': 'application/json',
-                'X-User-Id': usuarioId
+    const fetchPromise = (async () => {
+        try {
+            const response = await fetch(url, {
+                signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-User-Id': usuarioId
+                }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => null);
+                throw new Error(getHttpErrorMessage(response.status, errData?.error, 'Erro ao carregar tarefas fixas.'));
             }
-        });
 
-        if (!response.ok) {
-            const errData = await response.json().catch(() => null);
-            throw new Error(getHttpErrorMessage(response.status, errData?.error, 'Erro ao carregar tarefas fixas.'));
-        }
-
-        const data = await response.json();
-        if (data && data.success && data.conteudos) {
-            try {
-                sessionStorage.setItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`, JSON.stringify(data));
-            } catch {
-                // Ignore storage limits
+            const data = await response.json();
+            if (data && data.success && data.conteudos) {
+                memoryTarefasFixasCache.set(usuarioId, { data, timestamp: Date.now() });
+                try {
+                    sessionStorage.setItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`, JSON.stringify(data));
+                } catch {
+                    // Ignore storage limits
+                }
+                return data;
             }
-            return data;
-        }
 
-        throw new Error('Formato de resposta inválido do servidor.');
-    } catch (err) {
-        console.warn('[TarefasFixasService] Falha na requisição ao backend:', err.message);
-        if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Formato de resposta inválido do servidor.')) {
-            throw err;
+            throw new Error('Formato de resposta inválido do servidor.');
+        } catch (err) {
+            console.warn('[TarefasFixasService] Falha na requisição ao backend:', err.message);
+            if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Formato de resposta inválido do servidor.')) {
+                throw err;
+            }
+            throw new Error(getNetworkErrorMessage(err));
+        } finally {
+            inFlightTarefasFixasRequests.delete(usuarioId);
         }
-        throw new Error(getNetworkErrorMessage(err));
-    }
+    })();
+
+    inFlightTarefasFixasRequests.set(usuarioId, fetchPromise);
+    return fetchPromise;
 }
 
 export async function concluirTarefaFixa(taskId, userId) {
@@ -89,7 +115,9 @@ export async function concluirTarefaFixa(taskId, userId) {
         throw new Error(getHttpErrorMessage(response.status, data.error, 'Não foi possível concluir esta tarefa.'));
     }
 
-    // Invalida cache local da sessão para forçar sincronização
+    // Invalida cache local da sessão e memória para forçar sincronização
+    memoryTarefasFixasCache.delete(usuarioId);
+    invalidateLocalDesempenhoCache(usuarioId);
     try {
         sessionStorage.removeItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
     } catch {
@@ -118,11 +146,17 @@ export async function concluirTarefaFixa(taskId, userId) {
 }
 
 export function limparCacheTarefasFixas(userId) {
-    try {
+    if (userId) {
         const usuarioId = getUsuarioAtivoId(userId);
-        sessionStorage.removeItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
-    } catch {
-        // Ignora
+        memoryTarefasFixasCache.delete(usuarioId);
+        try {
+            sessionStorage.removeItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
+        } catch {}
+    } else {
+        memoryTarefasFixasCache.clear();
+        try {
+            sessionStorage.clear();
+        } catch {}
     }
 }
 
@@ -146,6 +180,7 @@ export async function criarTarefaFixaAdmin(dados) {
         throw new Error(resData?.error || 'Erro ao criar tarefa fixa.');
     }
 
+    memoryTarefasFixasCache.clear();
     try {
         sessionStorage.clear();
     } catch {}
@@ -171,6 +206,7 @@ export async function removerTarefaFixaAdmin(taskId) {
         throw new Error(resData?.error || 'Erro ao remover tarefa fixa.');
     }
 
+    memoryTarefasFixasCache.clear();
     try {
         sessionStorage.clear();
     } catch {}

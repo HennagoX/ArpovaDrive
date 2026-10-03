@@ -10,6 +10,7 @@ import { showToast } from './modulosView.js';
 
 let initialized = false;
 let routerRef = null;
+let lastSimuladosRenderTime = 0;
 
 const MATERIA_THEMES = {
     Geral: {
@@ -206,14 +207,20 @@ export async function atualizarProgressoSimulados() {
     });
 }
 
-export async function carregarSimuladosCustomizados() {
+export async function carregarSimuladosCustomizados(forceRefresh = false) {
     const grid = qs('#simulado-grid');
     if (!grid) return;
 
-    qsa('.simulado-custom-card').forEach(el => el.remove());
+    const existingCustomCards = qsa('.simulado-custom-card');
+    const now = Date.now();
+    if (!forceRefresh && existingCustomCards.length > 0 && (now - lastSimuladosRenderTime < 45000)) {
+        return;
+    }
+
+    existingCustomCards.forEach(el => el.remove());
 
     try {
-        const customSimulados = await listarSimuladosCustomizadosAPI();
+        const customSimulados = await listarSimuladosCustomizadosAPI(forceRefresh);
         if (!Array.isArray(customSimulados) || customSimulados.length === 0) return;
 
         customSimulados.forEach(sim => {
@@ -323,6 +330,7 @@ export async function carregarSimuladosCustomizados() {
             grid.appendChild(card);
         });
 
+        lastSimuladosRenderTime = Date.now();
         filtrarSimulados();
         atualizarProgressoSimulados();
     } catch {}
@@ -443,7 +451,7 @@ export function initSimuladoView(router) {
                 await criarSimuladoAdminAPI(dados);
                 showToast('Simulado criado com sucesso!', 'success', 'fa-solid fa-circle-check');
                 fecharModalAdminSimulado();
-                await carregarSimuladosCustomizados();
+                await carregarSimuladosCustomizados(true);
             } catch (err) {
                 showToast(err.message || 'Erro ao criar simulado.', 'locked', 'fa-solid fa-triangle-exclamation');
             } finally {
@@ -454,7 +462,7 @@ export function initSimuladoView(router) {
     }
 }
 
-export function renderSimulado() {
+export function renderSimulado(forceRefresh = false) {
     usuarioGlobal.updateUI();
 
     const titleEl = qs('#inicio-saudacao');
@@ -468,6 +476,6 @@ export function renderSimulado() {
         btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
     }
 
-    carregarSimuladosCustomizados();
+    carregarSimuladosCustomizados(forceRefresh);
     atualizarProgressoSimulados();
 }

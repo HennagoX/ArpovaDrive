@@ -1,8 +1,17 @@
 import { MESSAGES } from '../constants/messages.js';
 import { ENDPOINTS } from '../constants/routes.js';
 import { getModuloUserId, getModuloAtual } from './moduloService.js';
-import { fetchDesempenho } from './desempenhoService.js';
+import { fetchDesempenho, invalidateLocalDesempenhoCache } from './desempenhoService.js';
+import { limparCacheTarefasFixas } from './tarefasFixasService.js';
 import { getMockDia, clearCachedTarefas } from './cronogramaService.js';
+
+const questoesConcluidasCache = new Map();
+const inFlightQuestoesConcluidas = new Map();
+const bateriaPerguntasCache = new Map();
+const inFlightPerguntasRequests = new Map();
+const simuladoResultadosCache = new Map();
+const inFlightSimuladoResultados = new Map();
+const QUESTOES_CACHE_TTL_MS = 60000;
 
 export const LOCKED_QUESTION_MESSAGE = MESSAGES.QUESTAO_BLOQUEADA || 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear esta bateria de questões!';
 export const MODULOS_INTERVALO_DESBLOQUEIO = 3;
@@ -444,23 +453,46 @@ export function checkBateriaLiberadaPorModulo(materiaId, moduloNumero) {
     return null;
 }
 
-export async function fetchQuestoesConcluidas(materia, userId) {
+export async function fetchQuestoesConcluidas(materia, userId, forceRefresh = false) {
     const activeUserId = getModuloUserId(userId);
-    try {
-        const url = ENDPOINTS.QUESTOES.CONCLUIDAS(activeUserId, materia);
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'X-User-Id': activeUserId
-            }
-        });
-        if (response.ok) {
-            return await response.json();
+    const cacheKey = `${activeUserId}_${materia}`;
+    const now = Date.now();
+
+    if (!forceRefresh) {
+        const cached = questoesConcluidasCache.get(cacheKey);
+        if (cached && (now - cached.timestamp < QUESTOES_CACHE_TTL_MS)) {
+            return cached.data;
         }
-    } catch (err) {
-        console.warn('[QuestoesService] Erro ao consultar questões concluídas:', err.message);
     }
-    return { success: false, acertos: null };
+
+    if (inFlightQuestoesConcluidas.has(cacheKey)) {
+        return inFlightQuestoesConcluidas.get(cacheKey);
+    }
+
+    const fetchPromise = (async () => {
+        try {
+            const url = ENDPOINTS.QUESTOES.CONCLUIDAS(activeUserId, materia);
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-User-Id': activeUserId
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                questoesConcluidasCache.set(cacheKey, { data, timestamp: Date.now() });
+                return data;
+            }
+        } catch (err) {
+            console.warn('[QuestoesService] Erro ao consultar questões concluídas:', err.message);
+        } finally {
+            inFlightQuestoesConcluidas.delete(cacheKey);
+        }
+        return { success: false, acertos: null };
+    })();
+
+    inFlightQuestoesConcluidas.set(cacheKey, fetchPromise);
+    return fetchPromise;
 }
 
 export async function checkAcertoQuestaoAPI(dadosResposta, userId) {
@@ -492,6 +524,13 @@ export async function concluirBateriaAPI(dadosConclusao, userId) {
     const activeUserId = getModuloUserId(userId);
     const mockDia = getMockDia();
     clearCachedTarefas(activeUserId);
+    invalidateLocalDesempenhoCache(activeUserId);
+    limparCacheTarefasFixas(activeUserId);
+    for (const k of questoesConcluidasCache.keys()) {
+        if (k.startsWith(`${activeUserId}_`)) {
+            questoesConcluidasCache.delete(k);
+        }
+    }
 
     try {
         const response = await fetch(ENDPOINTS.QUESTOES.CONCLUIR_BATERIA, {
@@ -511,6 +550,8 @@ export async function concluirBateriaAPI(dadosConclusao, userId) {
         });
         const data = await response.json();
         clearCachedTarefas(activeUserId);
+        invalidateLocalDesempenhoCache(activeUserId);
+        limparCacheTarefasFixas(activeUserId);
         fetchDesempenho(activeUserId, true).catch(() => {});
         return data;
     } catch (err) {
@@ -611,6 +652,9 @@ export async function concluirSimuladoAPI(dadosConclusao, userId) {
     const activeUserId = getModuloUserId(userId);
     const mockDia = getMockDia();
     clearCachedTarefas(activeUserId);
+    invalidateLocalDesempenhoCache(activeUserId);
+    limparCacheTarefasFixas(activeUserId);
+    simuladoResultadosCache.delete(activeUserId);
 
     try {
         const response = await fetch(ENDPOINTS.SIMULADO.CONCLUIR, {
@@ -631,12 +675,18 @@ export async function concluirSimuladoAPI(dadosConclusao, userId) {
         if (response.ok) {
             const resultData = await response.json();
             clearCachedTarefas(activeUserId);
+            invalidateLocalDesempenhoCache(activeUserId);
+            limparCacheTarefasFixas(activeUserId);
+            simuladoResultadosCache.delete(activeUserId);
             fetchDesempenho(activeUserId, true).catch(() => {});
             return resultData;
         }
     } catch {}
 
     clearCachedTarefas(activeUserId);
+    invalidateLocalDesempenhoCache(activeUserId);
+    limparCacheTarefasFixas(activeUserId);
+    simuladoResultadosCache.delete(activeUserId);
     const total = 30;
     const acertos = Math.max(0, Math.min(total, Number(dadosConclusao?.acertos) || 0));
     const porcentagem = Math.round((acertos / total) * 100);
@@ -659,22 +709,44 @@ export async function concluirSimuladoAPI(dadosConclusao, userId) {
     };
 }
 
-export async function getSimuladoResultadosAPI(userId) {
+export async function getSimuladoResultadosAPI(userId, forceRefresh = false) {
     const activeUserId = getModuloUserId(userId);
-    try {
-        const url = ENDPOINTS.SIMULADO.RESULTADOS(activeUserId);
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/json',
-                'X-User-Id': activeUserId
-            }
-        });
-        if (response.ok) {
-            return await response.json();
-        }
-    } catch {}
+    const now = Date.now();
 
-    return { sucesso: false, resultados: [] };
+    if (!forceRefresh) {
+        const cached = simuladoResultadosCache.get(activeUserId);
+        if (cached && (now - cached.timestamp < QUESTOES_CACHE_TTL_MS)) {
+            return cached.data;
+        }
+    }
+
+    if (inFlightSimuladoResultados.has(activeUserId)) {
+        return inFlightSimuladoResultados.get(activeUserId);
+    }
+
+    const fetchPromise = (async () => {
+        try {
+            const url = ENDPOINTS.SIMULADO.RESULTADOS(activeUserId);
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-User-Id': activeUserId
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                simuladoResultadosCache.set(activeUserId, { data, timestamp: Date.now() });
+                return data;
+            }
+        } catch {}
+        finally {
+            inFlightSimuladoResultados.delete(activeUserId);
+        }
+        return { sucesso: false, resultados: [] };
+    })();
+
+    inFlightSimuladoResultados.set(activeUserId, fetchPromise);
+    return fetchPromise;
 }
 
 export {
@@ -686,23 +758,45 @@ export {
     removerSimuladoAdminAPI
 } from './adminService.js';
 
-export async function getPerguntasBateriaAPI(materia, bateria) {
-    try {
-        const url = ENDPOINTS.QUESTOES.PERGUNTAS(materia, bateria);
-        const response = await fetch(url, {
-            headers: {
-                'Accept': 'application/json'
+export async function getPerguntasBateriaAPI(materia, bateria, forceRefresh = false) {
+    const cacheKey = `${materia}_${bateria}`;
+    if (!forceRefresh && bateriaPerguntasCache.has(cacheKey)) {
+        return bateriaPerguntasCache.get(cacheKey);
+    }
+
+    if (inFlightPerguntasRequests.has(cacheKey)) {
+        return inFlightPerguntasRequests.get(cacheKey);
+    }
+
+    const fetchPromise = (async () => {
+        try {
+            const url = ENDPOINTS.QUESTOES.PERGUNTAS(materia, bateria);
+            const response = await fetch(url, {
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            if (response.ok) {
+                const data = await response.json();
+                const list = data?.questoes || data?.perguntas;
+                if (Array.isArray(list) && list.length > 0) {
+                    bateriaPerguntasCache.set(cacheKey, list);
+                    return list;
+                }
             }
-        });
-        if (response.ok) {
-            const data = await response.json();
-            const list = data?.questoes || data?.perguntas;
-            if (Array.isArray(list) && list.length > 0) {
-                return list;
-            }
+        } catch {}
+        finally {
+            inFlightPerguntasRequests.delete(cacheKey);
         }
-    } catch {}
-    return getQuestoesByBateria(materia, bateria);
+        const local = getQuestoesByBateria(materia, bateria);
+        if (local && local.length > 0) {
+            bateriaPerguntasCache.set(cacheKey, local);
+        }
+        return local;
+    })();
+
+    inFlightPerguntasRequests.set(cacheKey, fetchPromise);
+    return fetchPromise;
 }
 
 export async function verificarAcessoBateriaAPI(materia, bateriaNumero, userId) {

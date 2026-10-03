@@ -2,6 +2,8 @@
 import { ENDPOINTS, API_URL } from '../constants/routes.js';
 import { getCurrentUser } from './authService.js';
 import { getUsuarioAtivoId, getMockDia, clearCachedTarefas } from './cronogramaService.js';
+import { invalidateLocalDesempenhoCache } from './desempenhoService.js';
+import { limparCacheTarefasFixas } from './tarefasFixasService.js';
 import { getLocalItem, setLocalItem } from '../utils/storage.js';
 import { TIMING } from '../constants/timing.js';
 import { getHttpErrorMessage } from '../constants/messages.js';
@@ -9,7 +11,7 @@ import { getHttpErrorMessage } from '../constants/messages.js';
 const STORAGE_PREFIX = 'aprovadrive_modulo_progresso_';
 const inFlightRequests = new Map();
 const lastFetchTimestamps = new Map();
-const CACHE_TTL_MS = 25000;
+const CACHE_TTL_MS = 60000;
 
 export const MAX_MODULO = 999;
 
@@ -168,6 +170,8 @@ export async function avancarModulo(contentId, userId, maxModulos = null) {
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
         clearCachedTarefas(activeUserId);
+        invalidateLocalDesempenhoCache(activeUserId);
+        limparCacheTarefasFixas(activeUserId);
 
         return {
             success: true,
@@ -265,6 +269,9 @@ export async function setPonteiroModulo(contentId, novoNumero, userId) {
         const moduloAtual = Math.max(1, Number(data.modulo_atual || num));
         setLocalItem(storageKey, moduloAtual);
         lastFetchTimestamps.set(storageKey, Date.now());
+        clearCachedTarefas(activeUserId);
+        invalidateLocalDesempenhoCache(activeUserId);
+        limparCacheTarefasFixas(activeUserId);
 
         return {
             success: true,
@@ -274,6 +281,9 @@ export async function setPonteiroModulo(contentId, novoNumero, userId) {
         };
     } catch (err) {
         console.warn('[ModuloService] Erro na requisição à API, aplicando no localStorage:', err.message);
+        clearCachedTarefas(activeUserId);
+        invalidateLocalDesempenhoCache(activeUserId);
+        limparCacheTarefasFixas(activeUserId);
         return {
             success: true,
             conteudo: contentId,

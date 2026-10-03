@@ -51,7 +51,7 @@ export async function renderDashboard() {
         atualizarCardDesempenhoResumo(localDesempenho);
     }
 
-    fetchDesempenho(user?.id_usuario, true)
+    fetchDesempenho(user?.id_usuario, false)
         .then(remoto => {
             if (remoto && remoto.resumo) {
                 atualizarCardDesempenhoResumo(remoto);

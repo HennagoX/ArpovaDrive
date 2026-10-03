@@ -81,6 +81,26 @@ export async function limparHistoricoPdfAdmin(conteudoId = null, moduloId = null
 // 2. Banco de Questões: Criação, Listagem e Remoção
 // ============================================================================
 
+const memoryAdminCache = new Map();
+const inFlightAdminRequests = new Map();
+const ADMIN_CACHE_TTL_MS = 60000;
+
+export function invalidarCacheQuestoesAdmin() {
+    for (const key of memoryAdminCache.keys()) {
+        if (key.startsWith('questoes_')) {
+            memoryAdminCache.delete(key);
+        }
+    }
+}
+
+export function invalidarCacheSimuladosAdmin() {
+    for (const key of memoryAdminCache.keys()) {
+        if (key.startsWith('simulados_')) {
+            memoryAdminCache.delete(key);
+        }
+    }
+}
+
 export async function criarQuestaoAdminAPI(dados) {
     const response = await fetch(ENDPOINTS.QUESTOES.ADMIN_CRIAR, {
         method: 'POST',
@@ -92,22 +112,46 @@ export async function criarQuestaoAdminAPI(dados) {
     if (!response.ok) {
         throw new Error(resData?.error || resData?.message || 'Erro ao criar questão.');
     }
+    invalidarCacheQuestoesAdmin();
     return resData;
 }
 
-export async function listarQuestoesCustomizadasAPI(materia = null) {
-    try {
-        const url = ENDPOINTS.QUESTOES.ADMIN_LISTAR(materia);
-        const response = await fetch(url, {
-            headers: getAdminHeaders()
-        });
+export async function listarQuestoesCustomizadasAPI(materia = null, forceRefresh = false) {
+    const cacheKey = `questoes_${materia || 'all'}`;
+    const now = Date.now();
 
-        if (!response.ok) return [];
-        const data = await response.json();
-        return Array.isArray(data?.questoes) ? data.questoes : [];
-    } catch {
-        return [];
+    if (!forceRefresh) {
+        const cached = memoryAdminCache.get(cacheKey);
+        if (cached && (now - cached.timestamp < ADMIN_CACHE_TTL_MS)) {
+            return cached.data;
+        }
     }
+
+    if (inFlightAdminRequests.has(cacheKey)) {
+        return inFlightAdminRequests.get(cacheKey);
+    }
+
+    const fetchPromise = (async () => {
+        try {
+            const url = ENDPOINTS.QUESTOES.ADMIN_LISTAR(materia);
+            const response = await fetch(url, {
+                headers: getAdminHeaders()
+            });
+
+            if (!response.ok) return [];
+            const data = await response.json();
+            const result = Array.isArray(data?.questoes) ? data.questoes : [];
+            memoryAdminCache.set(cacheKey, { data: result, timestamp: Date.now() });
+            return result;
+        } catch {
+            return [];
+        } finally {
+            inFlightAdminRequests.delete(cacheKey);
+        }
+    })();
+
+    inFlightAdminRequests.set(cacheKey, fetchPromise);
+    return fetchPromise;
 }
 
 export async function removerQuestaoAdminAPI(id) {
@@ -120,6 +164,7 @@ export async function removerQuestaoAdminAPI(id) {
     if (!response.ok) {
         throw new Error(resData?.error || resData?.message || 'Erro ao remover questão.');
     }
+    invalidarCacheQuestoesAdmin();
     return resData;
 }
 
@@ -138,20 +183,44 @@ export async function criarSimuladoAdminAPI(dados) {
     if (!response.ok) {
         throw new Error(resData?.error || resData?.message || 'Erro ao criar simulado.');
     }
+    invalidarCacheSimuladosAdmin();
     return resData;
 }
 
-export async function listarSimuladosCustomizadosAPI() {
-    try {
-        const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_LISTAR, {
-            headers: { 'Accept': 'application/json' }
-        });
-        if (!response.ok) return [];
-        const data = await response.json();
-        return Array.isArray(data?.simulados) ? data.simulados : [];
-    } catch {
-        return [];
+export async function listarSimuladosCustomizadosAPI(forceRefresh = false) {
+    const cacheKey = 'simulados_all';
+    const now = Date.now();
+
+    if (!forceRefresh) {
+        const cached = memoryAdminCache.get(cacheKey);
+        if (cached && (now - cached.timestamp < ADMIN_CACHE_TTL_MS)) {
+            return cached.data;
+        }
     }
+
+    if (inFlightAdminRequests.has(cacheKey)) {
+        return inFlightAdminRequests.get(cacheKey);
+    }
+
+    const fetchPromise = (async () => {
+        try {
+            const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_LISTAR, {
+                headers: { 'Accept': 'application/json' }
+            });
+            if (!response.ok) return [];
+            const data = await response.json();
+            const result = Array.isArray(data?.simulados) ? data.simulados : [];
+            memoryAdminCache.set(cacheKey, { data: result, timestamp: Date.now() });
+            return result;
+        } catch {
+            return [];
+        } finally {
+            inFlightAdminRequests.delete(cacheKey);
+        }
+    })();
+
+    inFlightAdminRequests.set(cacheKey, fetchPromise);
+    return fetchPromise;
 }
 
 export async function removerSimuladoAdminAPI(id) {
@@ -164,5 +233,6 @@ export async function removerSimuladoAdminAPI(id) {
     if (!response.ok) {
         throw new Error(resData?.error || resData?.message || 'Erro ao remover simulado.');
     }
+    invalidarCacheSimuladosAdmin();
     return resData;
 }

@@ -169,19 +169,31 @@ function aplicarDesempenhoNaTela(desempenho) {
     }
 }
 
-export async function renderDesempenho() {
-    // Renderização imediata com cache/local (sem piscar nem travar UI)
-    const local = getLocalDesempenho();
-    aplicarDesempenhoNaTela(local);
+let lastRenderedDesempenhoUser = null;
+let lastRenderedDesempenhoTime = 0;
 
-    // Consulta assíncrona na API com atualização suave
+export async function renderDesempenho(forceRefresh = false) {
     const user = getCurrentUser();
     const userId = user?.id_usuario || null;
 
+    // Se já foi renderizado recentemente para o mesmo usuário e não é forceRefresh, apenas atualiza UI
+    if (!forceRefresh && lastRenderedDesempenhoUser === userId && (Date.now() - lastRenderedDesempenhoTime < 30000)) {
+        usuarioGlobal.updateUI();
+        return;
+    }
+
+    // Renderização imediata com cache/local (sem piscar nem travar UI)
+    const local = getLocalDesempenho();
+    if (local) {
+        aplicarDesempenhoNaTela(local);
+    }
+
     try {
-        const remoto = await fetchDesempenho(userId, true);
+        const remoto = await fetchDesempenho(userId, forceRefresh);
         if (remoto && remoto.resumo) {
             aplicarDesempenhoNaTela(remoto);
+            lastRenderedDesempenhoUser = userId;
+            lastRenderedDesempenhoTime = Date.now();
         }
     } catch (err) {
         console.warn('[DesempenhoView] Erro ao sincronizar dados remotos:', err.message);

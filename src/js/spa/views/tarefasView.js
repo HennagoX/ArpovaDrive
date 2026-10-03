@@ -23,6 +23,8 @@ let toastTimeout = null;
 let currentPayload = null;
 let isCustomTitleEdited = false;
 let isCustomDescEdited = false;
+let lastTarefasRenderTime = 0;
+let lastTarefasRenderUserId = null;
 
 export function abrirModalTarefaFixa(defaultConteudoId = null, defaultModuloNum = null) {
     const modal = qs('#modal-admin-tarefa-fixa');
@@ -229,6 +231,7 @@ export function setActiveFilter(filterId) {
 
 export async function renderTarefas(forceRefresh = false) {
     usuarioGlobal.updateUI();
+    const activeUserId = usuarioGlobal.id_usuario || usuarioGlobal.id;
     const btnAdminAdd = qs('#btn-admin-add-tarefa-fixa');
     if (btnAdminAdd) {
         btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
@@ -250,7 +253,20 @@ export async function renderTarefas(forceRefresh = false) {
     const heroConcluidas = qs('#tarefas-stat-concluidas');
     const heroXpGanho = qs('#tarefas-stat-xp-ganho');
 
-    if (container) {
+    const now = Date.now();
+    const canSkipDomRebuild = !forceRefresh &&
+        currentPayload &&
+        lastTarefasRenderUserId === activeUserId &&
+        (now - lastTarefasRenderTime < 30000) &&
+        container &&
+        container.children.length > 0 &&
+        !container.querySelector('.fa-spinner');
+
+    if (canSkipDomRebuild) {
+        return;
+    }
+
+    if (container && (!container.children.length || forceRefresh)) {
         container.innerHTML = `
             <div style="text-align: center; padding: 40px; color: #64748b;">
                 <i class="fa-solid fa-spinner fa-spin" style="font-size: 32px; color: #0d47a1; margin-bottom: 12px;"></i>
@@ -262,6 +278,8 @@ export async function renderTarefas(forceRefresh = false) {
     try {
         const payload = await getTarefasFixas(null, forceRefresh);
         currentPayload = payload;
+        lastTarefasRenderTime = Date.now();
+        lastTarefasRenderUserId = activeUserId;
 
         if (!payload || !payload.conteudos) {
             throw new Error('Dados de tarefas não retornados.');

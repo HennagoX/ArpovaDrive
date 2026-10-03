@@ -694,19 +694,25 @@ export function abrirModulos(conteudoId) {
         if (activeConteudoId === conteudoId) {
             const modulosAtualizados = getModulosByConteudoId(conteudoId, moduloAtual);
             if (modulesListContainer) {
-                modulesListContainer.innerHTML = '';
-                modulosAtualizados.forEach((modulo) => {
-                    const card = createModuleCard(modulo, {
-                        onRead: (mod) => abrirLeituraPdf(conteudoId, mod),
-                        onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock'),
-                        onAdminEdit: (mod) => abrirModalAdminModulo(mod),
-                        onAdminDelete: (mod) => abrirModalAdminDelete(mod),
-                        onSetPointer: (mod) => alterarPonteiroModulo(mod.numero)
+                const existingCards = Array.from(modulesListContainer.children);
+                const isIdentical = existingCards.length === modulosAtualizados.length &&
+                    modulosAtualizados.every((m, idx) => Number(existingCards[idx]?.dataset?.moduleNumber) === Number(m.numero));
+
+                if (!isIdentical) {
+                    modulesListContainer.innerHTML = '';
+                    modulosAtualizados.forEach((modulo) => {
+                        const card = createModuleCard(modulo, {
+                            onRead: (mod) => abrirLeituraPdf(conteudoId, mod),
+                            onLockedClick: () => showToast(LOCKED_MODULE_MESSAGE, 'locked', 'fa-solid fa-lock'),
+                            onAdminEdit: (mod) => abrirModalAdminModulo(mod),
+                            onAdminDelete: (mod) => abrirModalAdminDelete(mod),
+                            onSetPointer: (mod) => alterarPonteiroModulo(mod.numero)
+                        });
+                        if (card) {
+                            modulesListContainer.appendChild(card);
+                        }
                     });
-                    if (card) {
-                        modulesListContainer.appendChild(card);
-                    }
-                });
+                }
                 atualizarCardsModuloUI(conteudoId, moduloAtual);
             }
 
