@@ -446,8 +446,37 @@
             .topo p {
                 font-size: 13px;
             }
+            .topo-direita {
+                gap: 8px !important;
+            }
             .perfil {
-                display: none;
+                display: inline-flex !important;
+                align-items: center;
+                gap: 6px;
+                padding: 4px 8px;
+                border-radius: 999px;
+                background: var(--bg-card);
+                border: 1px solid var(--border-divider, #e2e8f0);
+                text-decoration: none;
+                color: inherit;
+                flex-shrink: 0;
+                cursor: pointer;
+            }
+            .perfil-nome strong {
+                display: none !important;
+            }
+            .perfil-nome span {
+                display: inline-flex !important;
+                align-items: center;
+                gap: 3px;
+                color: #ef4444 !important;
+                font-weight: 700;
+                font-size: 12px;
+            }
+            .perfil .avatar {
+                width: 30px !important;
+                height: 30px !important;
+                font-size: 13px !important;
             }
             .cards {
                 grid-template-columns: 1fr;
@@ -912,7 +941,7 @@
                 <a href="/" class="perfil" title="Sair / Página Inicial">
                     <div class="perfil-nome">
                         <strong>Meu perfil</strong>
-                        <span>Sair</span>
+                        <span><i class="fa-solid fa-arrow-right-from-bracket"></i> Sair</span>
                     </div>
                     <div class="avatar">A</div>
                 </a>

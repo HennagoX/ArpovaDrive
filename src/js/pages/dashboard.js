@@ -1,7 +1,8 @@
 import { ready } from '../utils/dom.js';
 import { router } from '../spa/router.js';
 import { initTheme } from '../utils/themeManager.js';
-import { getCurrentUser } from '../services/authService.js';
+import { getCurrentUser, logout } from '../services/authService.js';
+import { ROUTES } from '../constants/routes.js';
 import { usuarioGlobal } from '../services/userService.js';
 import { getGamificationData, syncUserGamification, updateLevelUI } from '../services/gamificationService.js';
 import { initDashboardView, renderDashboard } from '../spa/views/dashboardView.js';
@@ -22,6 +23,15 @@ ready(() => {
     initTheme();
     usuarioGlobal.updateUI();
     usuarioGlobal.verificarAdminComServidor().catch(() => {});
+
+    document.addEventListener('click', (e) => {
+        const perfilBtn = e.target.closest('.perfil');
+        if (perfilBtn) {
+            e.preventDefault();
+            logout();
+            window.location.href = ROUTES.HOME;
+        }
+    });
 
     if (typeof window !== 'undefined') {
         window.abrirModalAdminQuestao = abrirModalAdminQuestao;
