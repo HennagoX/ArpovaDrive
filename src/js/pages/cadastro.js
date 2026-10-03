@@ -31,7 +31,6 @@ ready(() => {
     const indicadorEtapa1 = qs('#indicadorEtapa1');
     const indicadorEtapa2 = qs('#indicadorEtapa2');
     const inputDataNascimento = qs(SELECTORS.CADASTRO_DATA_NASCIMENTO);
-    const btnAbrirCalendario = qs('#btnAbrirCalendario');
     const feedbackIdade = qs('#feedbackIdade');
 
     // Configuração dos limites do calendário (18 anos mínimos e 110 anos máximos)
@@ -175,13 +174,6 @@ ready(() => {
         };
 
         on(inputDataNascimento, 'click', abrirSeletorCalendario);
-
-        if (btnAbrirCalendario) {
-            on(btnAbrirCalendario, 'click', (e) => {
-                e.preventDefault();
-                abrirSeletorCalendario();
-            });
-        }
     }
 
     // Configuração dos botões de alternar visualização de senha

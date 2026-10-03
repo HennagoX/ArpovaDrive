@@ -99,18 +99,10 @@
                 </div>
 
                 <div class="campo" id="campoData">
-                    <div class="campo-label-row">
-                        <label for="dataNascimento" class="campo-label">Data de nascimento</label>
-                        <span class="label-badge-info" title="Requisito legal do DETRAN para habilitação">
-                            <i class="fa-solid fa-id-card"></i> Mínimo 18 anos
-                        </span>
-                    </div>
-                    <div class="campo-input-wrapper campo-calendario-wrapper">
+                    <label for="dataNascimento" class="campo-label">Data de nascimento</label>
+                    <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-calendar-days"></i></span>
                         <input type="date" id="dataNascimento" class="input-data-nascimento" required autocomplete="bday" aria-describedby="feedbackIdade">
-                        <button type="button" class="btn-abrir-calendario" id="btnAbrirCalendario" title="Abrir calendário" aria-label="Abrir seletor de calendário">
-                            <i class="fa-regular fa-calendar-check"></i>
-                        </button>
                     </div>
                     <div id="feedbackIdade" class="campo-feedback" aria-live="polite"></div>
                 </div>
