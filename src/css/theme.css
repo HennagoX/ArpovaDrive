@@ -1570,6 +1570,13 @@ body[data-theme="dark"] {
   gap: 16px;
 }
 
+@media (max-width: 768px) {
+  .topo-direita {
+    gap: 6px !important;
+    flex-shrink: 0;
+  }
+}
+
 [data-theme="dark"] .aprovadrive-logo,
 [data-theme="dark"] .aprovadrive-logo-icon-svg {
   filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.55));

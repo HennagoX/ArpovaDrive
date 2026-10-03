@@ -658,6 +658,32 @@
         gap: 16px;
     }
 
+    .tarefa-left-col {
+        display: none;
+    }
+
+    .tarefa-reward-col {
+        align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        min-width: 0;
+        border-top: 1px solid #f1f5f9;
+        padding-top: 14px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .tarefa-action-container {
+        justify-content: flex-start;
+        width: auto;
+    }
+
+    .tarefas-hero-top {
+        flex-direction: column;
+    }
+}
+
 @media (max-width: 768px) {
     .tarefas-container {
         width: 100% !important;
@@ -703,31 +729,25 @@
         border-radius: 12px !important;
         width: 100% !important;
     }
-}
 
-    .tarefa-left-col {
-        display: none;
+    .tarefa-fixa-card {
+        grid-template-columns: 1fr !important;
+        padding: 14px 12px !important;
+        gap: 12px !important;
+        border-radius: 14px !important;
+        width: 100% !important;
     }
 
     .tarefa-reward-col {
-        align-items: center;
-        flex-direction: row;
-        justify-content: space-between;
-        width: 100%;
-        min-width: 0;
-        border-top: 1px solid #f1f5f9;
-        padding-top: 14px;
-        flex-wrap: wrap;
-        gap: 12px;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+        width: 100% !important;
     }
 
-    .tarefa-action-container {
-        justify-content: flex-start;
-        width: auto;
-    }
-
-    .tarefas-hero-top {
-        flex-direction: column;
+    .tarefa-reward-col .btn-tarefa {
+        width: 100% !important;
+        justify-content: center !important;
     }
 }
 

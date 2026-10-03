@@ -549,7 +549,7 @@ body {
     font-family: var(--font-main);
 }
 
-@media (max-width: 900px) {
+@media (min-width: 769px) and (max-width: 900px) {
     .navbar {
         width: var(--navbar-width-collapsed, 75px);
         padding: 20px 8px;
@@ -588,18 +588,23 @@ body {
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     .navbar {
         top: auto;
         bottom: 0;
+        left: 0;
+        right: 0;
         width: 100%;
         height: var(--navbar-height-mobile, 68px);
-        padding: 5px;
+        padding: 4px 6px;
         border-right: none;
         border-top: 1px solid var(--border-divider, #dddddd);
+        z-index: 1000;
+        box-sizing: border-box;
     }
 
     .navbar-logo,
+    .sidebar-theme-switch-container,
     .sidebar-night-widget,
     .nav-item-car {
         display: none !important;
@@ -608,27 +613,47 @@ body {
     .navbar-menu {
         flex-direction: row;
         justify-content: space-around;
+        align-items: center;
         height: 100%;
+        width: 100%;
+        gap: 2px;
+        padding: 0;
+        margin: 0;
     }
 
     .navbar-item {
         flex-direction: column;
-        gap: 3px;
-        padding: 7px;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        padding: 4px 2px;
         font-size: 10px;
+        flex: 1 1 0;
+        min-width: 0;
+        border-radius: 8px;
+        text-align: center;
     }
 
     .navbar-item span:not(.nav-item-car) {
         display: block;
+        font-size: 9.5px;
+        line-height: 1.1;
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .navbar-item i {
-        font-size: 18px;
+        font-size: 16px;
+        margin: 0 auto;
+        width: auto;
+        flex: 0 0 auto;
     }
 
     .navbar + .main,
     .navbar-page {
-        margin-left: 0;
+        margin-left: 0 !important;
     }
 
     .perfil {
@@ -663,6 +688,12 @@ body {
         height: 30px !important;
         font-size: 13px !important;
     }
+}
+
+body.no-sidebar .navbar,
+body.tutor-ia-active .navbar,
+body.leitura-pdf-active .navbar {
+    display: none !important;
 }
 
 .spa-view {
