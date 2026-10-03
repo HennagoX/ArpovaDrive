@@ -27,6 +27,12 @@ let currentRouter = null;
 let diaAtual = 1;
 const nomesDias = getNomesDias();
 
+let lastRenderedState = {
+    userId: null,
+    mockDia: null,
+    renderedAt: 0
+};
+
 export function initCronogramaView(router) {
     currentRouter = router;
     if (initialized) return;
@@ -35,6 +41,7 @@ export function initCronogramaView(router) {
     diaAtual = getDiaSemanaAtual();
 
     configurarAbas();
+    initBarraSimulacao();
 
     const btnRetry = qs('#btn-tentar-novamente');
     if (btnRetry) {
@@ -77,13 +84,12 @@ export async function renderCronograma(options = {}) {
             if (userSelectorBar) userSelectorBar.style.display = 'flex';
             if (simulationHud) simulationHud.style.display = 'flex';
 
-            configurarBarraSimulacao();
+            atualizarBarraSimulacaoUI();
             await configurarSeletorUsuarios();
         } else {
             if (adminBadge) adminBadge.style.display = 'none';
             if (userSelectorBar) userSelectorBar.style.display = 'none';
             if (simulationHud) simulationHud.style.display = 'none';
-            setMockDia('auto');
         }
     } catch {
     }
@@ -97,6 +103,7 @@ async function carregarCronograma(userId, forceRefresh = false) {
     const banner = qs('#task-atual-banner');
 
     const targetUser = userId || getUsuarioAtivoId();
+    const currentMock = getMockDia() || 'real';
 
     const cached = !forceRefresh ? getCachedTarefas(targetUser) : null;
     if (cached && cached.dias) {
@@ -104,10 +111,26 @@ async function carregarCronograma(userId, forceRefresh = false) {
         if (errorEl) errorEl.style.display = 'none';
 
         diaAtual = cached.diaSemanaAtual ?? diaAtual;
-        renderizarTarefasNasDivs(cached);
+
+        // Se o DOM já possui os cards renderizados deste mesmo usuário/dia, evita repintura desnecessária
+        const container1 = qs('#day-tasks-1');
+        const jaRenderizadoNoDom = lastRenderedState.userId === targetUser &&
+                                   lastRenderedState.mockDia === currentMock &&
+                                   container1 && container1.children.length > 0;
+
+        if (!jaRenderizadoNoDom) {
+            renderizarTarefasNasDivs(cached);
+        }
+
         consumirTaskAtual(cached.taskAtual, cached.diaConcluido);
         atualizarAbas(cached, diaAtual);
         ativarAba(diaAtual);
+
+        lastRenderedState = {
+            userId: targetUser,
+            mockDia: currentMock,
+            renderedAt: Date.now()
+        };
 
         if (cached.usuario) {
             const authId = usuarioGlobal.id_usuario || usuarioGlobal.id;
@@ -145,6 +168,12 @@ async function carregarCronograma(userId, forceRefresh = false) {
         consumirTaskAtual(payload.taskAtual, payload.diaConcluido);
         atualizarAbas(payload, diaAtual);
         ativarAba(diaAtual);
+
+        lastRenderedState = {
+            userId: targetUser,
+            mockDia: currentMock,
+            renderedAt: Date.now()
+        };
 
         if (payload.usuario) {
             const authId = usuarioGlobal.id_usuario || usuarioGlobal.id;
@@ -440,60 +469,19 @@ function atualizarHud(usuarioPayload) {
     }
 }
 
-async function configurarSeletorUsuarios() {
-    const selectEl = qs('#select-usuario-ativo');
-    const badgeEl = qs('#user-active-id-badge');
-    if (!selectEl) return;
+let seletorUsuariosConfigurado = false;
+let barraSimulacaoConfigurada = false;
 
-    try {
-        const usuarios = await getUsuariosCadastrados();
-        const currentUserId = getUsuarioAtivoId();
+function initBarraSimulacao() {
+    if (barraSimulacaoConfigurada) return;
+    barraSimulacaoConfigurada = true;
 
-        selectEl.innerHTML = '';
-        usuarios.forEach((u) => {
-            const opt = document.createElement('option');
-            opt.value = u.id_usuario;
-            opt.textContent = `${u.nome} (${u.email || u.exp + ' XP'})`;
-            if (u.id_usuario === currentUserId) {
-                opt.selected = true;
-            }
-            selectEl.appendChild(opt);
-        });
-
-        if (badgeEl) {
-            badgeEl.textContent = `ID: ${currentUserId.substring(0, 8)}...`;
-            badgeEl.title = currentUserId;
-        }
-
-        on(selectEl, 'change', async (e) => {
-            const novoId = e.target.value;
-            setUsuarioAtivoId(novoId);
-            if (badgeEl) {
-                badgeEl.textContent = `ID: ${novoId.substring(0, 8)}...`;
-                badgeEl.title = novoId;
-            }
-            await carregarCronograma(novoId, true);
-        });
-    } catch {
-    }
-}
-
-function configurarBarraSimulacao() {
-    const mockAtivo = getMockDia();
     qsa('.btn-sim').forEach((btn) => {
-        const simVal = btn.dataset.sim;
-        if ((!mockAtivo && simVal === 'auto') || (mockAtivo && mockAtivo === simVal)) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-
         on(btn, 'click', async () => {
             const targetSim = btn.dataset.sim;
             setMockDia(targetSim);
 
-            qsa('.btn-sim').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            atualizarBarraSimulacaoUI();
 
             try {
                 btn.disabled = true;
@@ -505,4 +493,64 @@ function configurarBarraSimulacao() {
             }
         });
     });
+}
+
+function atualizarBarraSimulacaoUI() {
+    const mockAtivo = getMockDia();
+    qsa('.btn-sim').forEach((btn) => {
+        const simVal = btn.dataset.sim;
+        if ((!mockAtivo && simVal === 'auto') || (mockAtivo && mockAtivo === simVal)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+async function configurarSeletorUsuarios() {
+    const selectEl = qs('#select-usuario-ativo');
+    const badgeEl = qs('#user-active-id-badge');
+    if (!selectEl) return;
+
+    const currentUserId = getUsuarioAtivoId();
+
+    if (badgeEl) {
+        badgeEl.textContent = `ID: ${currentUserId.substring(0, 8)}...`;
+        badgeEl.title = currentUserId;
+    }
+
+    if (!seletorUsuariosConfigurado) {
+        seletorUsuariosConfigurado = true;
+        on(selectEl, 'change', async (e) => {
+            const novoId = e.target.value;
+            setUsuarioAtivoId(novoId);
+            if (badgeEl) {
+                badgeEl.textContent = `ID: ${novoId.substring(0, 8)}...`;
+                badgeEl.title = novoId;
+            }
+            await carregarCronograma(novoId, true);
+        });
+    }
+
+    // Se já foi populado com as opções de usuários, apenas ajusta a seleção ativa
+    if (selectEl.options && selectEl.options.length > 1) {
+        selectEl.value = currentUserId;
+        return;
+    }
+
+    try {
+        const usuarios = await getUsuariosCadastrados();
+        selectEl.innerHTML = '';
+        usuarios.forEach((u) => {
+            const opt = document.createElement('option');
+            opt.value = u.id_usuario;
+            opt.textContent = `${u.nome} (${u.email || u.exp + ' XP'})`;
+            if (u.id_usuario === currentUserId) {
+                opt.selected = true;
+            }
+            selectEl.appendChild(opt);
+        });
+        selectEl.value = currentUserId;
+    } catch {
+    }
 }

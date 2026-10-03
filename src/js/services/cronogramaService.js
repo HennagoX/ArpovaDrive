@@ -135,16 +135,42 @@ export function setUsuarioAtivoId(userId) {
     }
 }
 
-export async function verificarPermissaoAdmin(userId = null) {
-    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
-    if (!authUser) return false;
+let memoryAdminStatus = null;
+let memoryUsuariosList = null;
+const memoryTaskCache = new Map();
+const inFlightTaskRequests = new Map();
 
-    if (authUser.is_admin || authUser.isAdmin) {
+export async function verificarPermissaoAdmin(userId = null) {
+    if (memoryAdminStatus !== null) {
+        return memoryAdminStatus;
+    }
+
+    const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
+    if (!authUser) {
+        memoryAdminStatus = false;
+        return false;
+    }
+
+    if (authUser.is_admin === true || authUser.isAdmin === true || authUser.role === 'admin' || authUser.tipo === 'admin') {
+        memoryAdminStatus = true;
         return true;
     }
 
     const authId = authUser.id_usuario || authUser.id || authUser.userId;
-    if (!authId) return false;
+    if (!authId) {
+        memoryAdminStatus = false;
+        return false;
+    }
+
+    const sessionKey = `aprovadrive_admin_check_${authId}`;
+    try {
+        const storedCheck = sessionStorage.getItem(sessionKey);
+        if (storedCheck !== null) {
+            const isAdm = storedCheck === 'true';
+            memoryAdminStatus = isAdm;
+            return isAdm;
+        }
+    } catch {}
 
     try {
         const response = await fetch(`${ENDPOINTS.TASK.ADMIN_CHECK}?id=${encodeURIComponent(authId)}`, {
@@ -154,21 +180,47 @@ export async function verificarPermissaoAdmin(userId = null) {
                 'X-Admin-Id': authId
             }
         });
-        if (!response.ok) return false;
+        if (!response.ok) {
+            memoryAdminStatus = false;
+            return false;
+        }
         const data = await response.json();
-        if (data && data.isAdmin) {
+        const isAdm = Boolean(data && data.isAdmin);
+        memoryAdminStatus = isAdm;
+        try {
+            sessionStorage.setItem(sessionKey, String(isAdm));
+        } catch {}
+        if (isAdm) {
             authUser.is_admin = true;
             authUser.isAdmin = true;
             setLocalItem(STORAGE_KEYS.AUTH_USER, authUser);
-            return true;
         }
-        return false;
+        return isAdm;
     } catch {
-        return Boolean(authUser.is_admin || authUser.isAdmin);
+        memoryAdminStatus = Boolean(authUser.is_admin || authUser.isAdmin);
+        return memoryAdminStatus;
     }
 }
 
-export async function getUsuariosCadastrados(adminId = null) {
+export async function getUsuariosCadastrados(adminId = null, forceRefresh = false) {
+    if (!forceRefresh && memoryUsuariosList && memoryUsuariosList.length > 0) {
+        return memoryUsuariosList;
+    }
+
+    const sessionKey = 'aprovadrive_admin_usuarios_list';
+    if (!forceRefresh) {
+        try {
+            const stored = sessionStorage.getItem(sessionKey);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    memoryUsuariosList = parsed;
+                    return parsed;
+                }
+            }
+        } catch {}
+    }
+
     const authUser = getLocalItem(STORAGE_KEYS.AUTH_USER, null);
     const requester = adminId || authUser?.id_usuario || authUser?.id || authUser?.userId;
     try {
@@ -183,10 +235,15 @@ export async function getUsuariosCadastrados(adminId = null) {
             throw new Error(`HTTP ${response.status}`);
         }
         const data = await response.json();
-        return data.usuarios || [];
+        const usuarios = data.usuarios || [];
+        memoryUsuariosList = usuarios;
+        try {
+            sessionStorage.setItem(sessionKey, JSON.stringify(usuarios));
+        } catch {}
+        return usuarios;
     } catch (err) {
         console.warn('Aviso ao buscar usuários cadastrados via API:', err.message);
-        return [];
+        return memoryUsuariosList || [];
     }
 }
 
@@ -213,12 +270,34 @@ export function getCachedTarefas(userId) {
     try {
         const usuarioId = getUsuarioAtivoId(userId);
         const mockDia = getMockDia() || 'real';
-        const key = `${SESSION_CRONOGRAMA_KEY}_${usuarioId}_${mockDia}`;
-        const raw = sessionStorage.getItem(key);
+        const key = `${usuarioId}_${mockDia}`;
+
+        // 1. Verificação ultrarrápida em memória (0 overhead de I/O)
+        if (memoryTaskCache.has(key)) {
+            const cached = memoryTaskCache.get(key);
+            if (cached && cached.dias) {
+                return cached;
+            }
+        }
+
+        // 2. Verificação no sessionStorage da aba
+        const storageKey = `${SESSION_CRONOGRAMA_KEY}_${key}`;
+        const raw = sessionStorage.getItem(storageKey);
         if (raw) {
             const parsed = JSON.parse(raw);
             if (parsed && parsed.dias) {
+                memoryTaskCache.set(key, parsed);
                 return parsed;
+            }
+        }
+
+        // 3. Fallback no localStorage caso a sessão esteja vazia
+        const local = getLocalItem(STORAGE_KEYS.CRONOGRAMA, null);
+        if (local && local.dias) {
+            const localUser = local.usuario?.id_usuario || local.usuario?.id;
+            if (!localUser || String(localUser).toLowerCase() === String(usuarioId).toLowerCase()) {
+                memoryTaskCache.set(key, local);
+                return local;
             }
         }
     } catch {
@@ -227,11 +306,16 @@ export function getCachedTarefas(userId) {
 }
 
 export function setCachedTarefas(userId, data) {
+    if (!data || !data.dias) return;
     try {
         const usuarioId = getUsuarioAtivoId(userId);
         const mockDia = getMockDia() || 'real';
-        const key = `${SESSION_CRONOGRAMA_KEY}_${usuarioId}_${mockDia}`;
-        sessionStorage.setItem(key, JSON.stringify(data));
+        const key = `${usuarioId}_${mockDia}`;
+        const storageKey = `${SESSION_CRONOGRAMA_KEY}_${key}`;
+
+        memoryTaskCache.set(key, data);
+        sessionStorage.setItem(storageKey, JSON.stringify(data));
+        setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
     } catch {
     }
 }
@@ -239,15 +323,20 @@ export function setCachedTarefas(userId, data) {
 export function clearCachedTarefas(userId) {
     try {
         if (userId) {
+            const usuarioId = getUsuarioAtivoId(userId);
             const mockDia = getMockDia() || 'real';
-            sessionStorage.removeItem(`${SESSION_CRONOGRAMA_KEY}_${userId}_${mockDia}`);
+            const key = `${usuarioId}_${mockDia}`;
+            memoryTaskCache.delete(key);
+            sessionStorage.removeItem(`${SESSION_CRONOGRAMA_KEY}_${key}`);
         } else {
+            memoryTaskCache.clear();
             Object.keys(sessionStorage).forEach(k => {
                 if (k.startsWith(SESSION_CRONOGRAMA_KEY)) {
                     sessionStorage.removeItem(k);
                 }
             });
         }
+        removeLocalItem(STORAGE_KEYS.CRONOGRAMA);
     } catch {
     }
 }
@@ -284,38 +373,50 @@ export async function getTarefas(userId, forceRefresh = false) {
     }
 
     const mockDia = getMockDia();
-    const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
-    const url = `${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`;
+    const flightKey = `${usuarioId}_${mockDia || 'real'}`;
+
+    if (inFlightTaskRequests.has(flightKey)) {
+        return inFlightTaskRequests.get(flightKey);
+    }
+
+    const taskPromise = (async () => {
+        const mockQuery = mockDia ? `&simularDia=${encodeURIComponent(mockDia)}` : '';
+        const url = `${ENDPOINTS.TASK.GET_TASKS}${encodeURIComponent(usuarioId)}${mockQuery}`;
 
         try {
-        const response = await fetch(url, {
-            signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
-            headers: {
-                ...getAuthHeaders(usuarioId),
-                ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+            const response = await fetch(url, {
+                signal: (typeof AbortSignal !== 'undefined' && typeof AbortSignal.timeout === 'function') ? AbortSignal.timeout(TIMING.REQUEST_TIMEOUT) : undefined,
+                headers: {
+                    ...getAuthHeaders(usuarioId),
+                    ...(mockDia ? { 'X-Mock-Day': mockDia } : {})
+                }
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok) {
+                const errorMsg = getHttpErrorMessage(response.status, data?.error, 'Erro ao carregar tarefas da semana.');
+                throw new Error(errorMsg);
             }
-        });
 
-        const data = await response.json().catch(() => null);
+            if (data && data.dias) {
+                setCachedTarefas(usuarioId, data);
+                return data;
+            }
 
-        if (!response.ok) {
-            const errorMsg = getHttpErrorMessage(response.status, data?.error, 'Erro ao carregar tarefas da semana.');
-            throw new Error(errorMsg);
+            throw new Error('Nenhuma missão encontrada para esta semana.');
+        } catch (err) {
+            if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Nenhuma missão encontrada para esta semana.')) {
+                throw err;
+            }
+            throw new Error(getNetworkErrorMessage(err));
+        } finally {
+            inFlightTaskRequests.delete(flightKey);
         }
+    })();
 
-        if (data && data.dias) {
-            setLocalItem(STORAGE_KEYS.CRONOGRAMA, data);
-            setCachedTarefas(usuarioId, data);
-            return data;
-        }
-
-        throw new Error('Nenhuma missão encontrada para esta semana.');
-    } catch (err) {
-        if (err?.message && (err.message.includes('(Erro HTTP') || err.message === 'Nenhuma missão encontrada para esta semana.')) {
-            throw err;
-        }
-        throw new Error(getNetworkErrorMessage(err));
-    }
+    inFlightTaskRequests.set(flightKey, taskPromise);
+    return taskPromise;
 }
 
 export async function iniciarTarefa(taskId, userId) {

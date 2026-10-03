@@ -60,7 +60,7 @@ export async function renderDashboard() {
         .catch(() => {});
 
     try {
-        const payload = await getTarefas(undefined, true);
+        const payload = await getTarefas(undefined, false);
         if (payload) {
             if (payload.usuario) {
                 syncUserGamification(payload.usuario);
