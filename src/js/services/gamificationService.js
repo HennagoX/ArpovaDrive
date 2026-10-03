@@ -263,7 +263,7 @@ export function updateLevelUI(infoOrUsuario) {
         barraSpan.style.width = `${pct}%`;
     }
 
-    const estatisticaXp = qs('.estatistica strong:last-child');
+    const estatisticaXp = qs('#resumo-total-xp') || qs('#card-desempenho-resumo .estatistica:last-child strong') || qs('.estatisticas .estatistica:last-child strong');
     if (estatisticaXp && info.totalExp !== undefined) {
         setText(estatisticaXp, `${info.totalExp.toLocaleString('pt-BR')} XP`);
     }

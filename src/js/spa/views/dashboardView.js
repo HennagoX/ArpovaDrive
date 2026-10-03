@@ -6,6 +6,7 @@ import { getTarefas } from '../../services/cronogramaService.js';
 import { fetchDesempenho, getLocalDesempenho } from '../../services/desempenhoService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { ROUTES } from '../../constants/routes.js';
+import { SELECTORS } from '../../constants/selectors.js';
 
 let initialized = false;
 
@@ -42,7 +43,7 @@ export async function renderDashboard() {
         setText('.sequencia h3', `${gamification.diasOfensiva} dias de sequência!`);
 
         const taxa = getTaxaAproveitamento();
-        setText('.circulo-interno strong', `${taxa}%`);
+        setText('#card-desempenho-resumo .circulo-interno strong', `${taxa}%`);
     }
 
     const localDesempenho = getLocalDesempenho();
@@ -128,13 +129,27 @@ function atualizarCardDesempenhoResumo(desempenho) {
         circulo.style.background = `conic-gradient(${cor} 0deg ${deg}deg, #e5e7eb ${deg}deg 360deg)`;
     }
 
-    const estatisticas = qsa('#card-desempenho-resumo .estatistica strong');
-    if (estatisticas && estatisticas.length >= 4) {
-        setText(estatisticas[0], String(desempenho.resumo.totalQuestoes ?? 0));
-        setText(estatisticas[1], String(desempenho.resumo.totalAcertos ?? 0));
-        setText(estatisticas[2], String(desempenho.resumo.totalSimulados ?? 0));
-        const xpVal = Number(desempenho.usuario?.exp ?? 0);
-        setText(estatisticas[3], `${xpVal.toLocaleString('pt-BR')} XP`);
+    const questoesEl = qs(SELECTORS.DASHBOARD_RESUMO_QUESTOES);
+    const acertosEl = qs(SELECTORS.DASHBOARD_RESUMO_ACERTOS);
+    const simuladosEl = qs(SELECTORS.DASHBOARD_RESUMO_SIMULADOS);
+    const xpEl = qs(SELECTORS.DASHBOARD_RESUMO_XP);
+
+    const gamification = getGamificationData() || {};
+    const xpVal = Number(desempenho.usuario?.exp ?? gamification.totalExp ?? 0);
+
+    if (questoesEl && acertosEl && simuladosEl && xpEl) {
+        setText(questoesEl, String(desempenho.resumo.totalQuestoes ?? 0));
+        setText(acertosEl, String(desempenho.resumo.totalAcertos ?? 0));
+        setText(simuladosEl, String(desempenho.resumo.totalSimulados ?? 0));
+        setText(xpEl, `${xpVal.toLocaleString('pt-BR')} XP`);
+    } else {
+        const estatisticas = qsa('#card-desempenho-resumo .estatistica strong');
+        if (estatisticas && estatisticas.length >= 4) {
+            setText(estatisticas[0], String(desempenho.resumo.totalQuestoes ?? 0));
+            setText(estatisticas[1], String(desempenho.resumo.totalAcertos ?? 0));
+            setText(estatisticas[2], String(desempenho.resumo.totalSimulados ?? 0));
+            setText(estatisticas[3], `${xpVal.toLocaleString('pt-BR')} XP`);
+        }
     }
 }
 

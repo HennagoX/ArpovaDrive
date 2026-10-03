@@ -51,5 +51,9 @@ export const SELECTORS = {
     DESEMPENHO_QUESTOES: '#totalQuestoes',
     DESEMPENHO_ACERTOS: '#totalAcertos',
     DESEMPENHO_ERROS: '#totalErros',
-    DESEMPENHO_SIMULADOS: '#totalSimulados'
+    DESEMPENHO_SIMULADOS: '#totalSimulados',
+    DASHBOARD_RESUMO_QUESTOES: '#resumo-total-questoes',
+    DASHBOARD_RESUMO_ACERTOS: '#resumo-total-acertos',
+    DASHBOARD_RESUMO_SIMULADOS: '#resumo-total-simulados',
+    DASHBOARD_RESUMO_XP: '#resumo-total-xp'
 };
