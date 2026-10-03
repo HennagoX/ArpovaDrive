@@ -1321,6 +1321,9 @@
                         <label for="select-admin-pointer"><i class="fa-solid fa-location-crosshairs"></i> Ponteiro:</label>
                         <select id="select-admin-pointer" class="select-admin-pointer" title="Alterar ponteiro de módulo do aluno"></select>
                     </div>
+                    <button type="button" class="btn-admin-add-modulo btn-admin-historico-pdf" id="btn-admin-historico-pdf" style="display: none;" title="Consultar histórico de criações e mudanças de PDFs e reverter">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Histórico de PDFs
+                    </button>
                     <button type="button" class="btn-admin-add-modulo" id="btn-admin-add-modulo" style="display: none;" title="Adicionar novo módulo e material em PDF">
                         <i class="fa-solid fa-file-circle-plus"></i> Adicionar Módulo / PDF
                     </button>
@@ -2686,6 +2689,54 @@
                 <button type="button" class="btn-admin-delete-confirm" id="btn-confirmar-delete-modulo">
                     <i class="fa-solid fa-trash-can"></i> Sim, Remover
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin: Histórico de Alterações e Reversão de PDFs -->
+    <div id="modal-admin-historico-pdf" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-historico-titulo">
+        <div class="modal-admin-card modal-historico-card">
+            <div class="modal-admin-header">
+                <div class="modal-admin-header-title">
+                    <div class="modal-admin-icon-circle historico-circle">
+                        <i class="fa-solid fa-clock-rotate-left"></i>
+                    </div>
+                    <div>
+                        <span class="modal-admin-badge-label">Auditoria & Versões</span>
+                        <h3 id="modal-admin-historico-titulo">Histórico de Alterações de PDFs</h3>
+                    </div>
+                </div>
+                <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-historico" aria-label="Fechar">&times;</button>
+            </div>
+
+            <div class="modal-historico-body">
+                <div class="modal-historico-toolbar">
+                    <div class="historico-filter-group">
+                        <label for="select-historico-conteudo"><i class="fa-solid fa-filter"></i> Conteúdo:</label>
+                        <select id="select-historico-conteudo" class="select-historico-conteudo">
+                            <option value="">Todas as Disciplinas</option>
+                            <option value="CodigoTransito">Código de Trânsito</option>
+                            <option value="PlacaTransito">Placas de Trânsito</option>
+                            <option value="DirecaoDefensiva">Direção Defensiva</option>
+                            <option value="PrimeirosSocorros">Primeiros Socorros</option>
+                            <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
+                        </select>
+                    </div>
+                    <div class="historico-search-group">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="input-busca-historico" placeholder="Buscar por PDF ou descrição...">
+                    </div>
+                    <button type="button" class="btn-refresh-historico" id="btn-refresh-historico" title="Atualizar histórico">
+                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar
+                    </button>
+                </div>
+
+                <div class="historico-timeline" id="historico-timeline-list">
+                    <div class="historico-loading">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Carregando histórico de alterações...</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

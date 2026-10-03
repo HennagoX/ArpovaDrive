@@ -2265,5 +2265,391 @@ body.modal-modulo-open {
     background: rgba(255, 255, 255, 0.08) !important;
 }
 
+/* ==========================================================================
+   ESTILOS DO HISTÓRICO DE PDFS E REVERSÃO (ADMIN)
+   ========================================================================== */
+
+.btn-admin-historico-pdf {
+    background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+    color: #ffffff !important;
+    border: none;
+    box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
+    margin-right: 8px;
+}
+
+.btn-admin-historico-pdf:hover {
+    background: linear-gradient(135deg, #4f46e5, #4338ca) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(99, 102, 241, 0.35);
+}
+
+.modal-historico-card {
+    max-width: 820px !important;
+    width: 95% !important;
+    max-height: 88vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.historico-circle {
+    background: rgba(99, 102, 241, 0.15) !important;
+    color: #6366f1 !important;
+}
+
+.modal-historico-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    min-height: 0;
+}
+
+.modal-historico-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: rgba(241, 245, 249, 0.8);
+    border-radius: 14px;
+    border: 1px solid rgba(226, 232, 240, 0.8);
+}
+
+.historico-filter-group,
+.historico-search-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.historico-filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.select-historico-conteudo {
+    padding: 7px 12px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 500;
+    color: #1e293b;
+    outline: none;
+    cursor: pointer;
+}
+
+.historico-search-group {
+    flex: 1;
+    min-width: 200px;
+    position: relative;
+}
+
+.historico-search-group i {
+    position: absolute;
+    left: 10px;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.historico-search-group input {
+    width: 100%;
+    padding: 7px 12px 7px 32px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 13px;
+    color: #1e293b;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.historico-search-group input:focus {
+    border-color: #6366f1;
+}
+
+.btn-refresh-historico {
+    padding: 7px 14px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e1;
+    background: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-refresh-historico:hover {
+    background: #f8fafc;
+    color: #1e293b;
+    border-color: #94a3b8;
+}
+
+.historico-timeline {
+    overflow-y: auto;
+    max-height: 52vh;
+    padding-right: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.historico-timeline::-webkit-scrollbar {
+    width: 6px;
+}
+
+.historico-timeline::-webkit-scrollbar-thumb {
+    background: rgba(148, 163, 184, 0.5);
+    border-radius: 999px;
+}
+
+.historico-card-item {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.historico-card-item:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.historico-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.historico-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.historico-badge-acao {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.historico-badge-criacao {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.historico-badge-edicao {
+    background: rgba(59, 130, 246, 0.15);
+    color: #2563eb;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+.historico-badge-edicao-pdf {
+    background: rgba(99, 102, 241, 0.15);
+    color: #4f46e5;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.historico-badge-remocao {
+    background: rgba(239, 68, 68, 0.15);
+    color: #dc2626;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.historico-badge-reversao {
+    background: rgba(245, 158, 11, 0.15);
+    color: #d97706;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.historico-materia-tag {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    background: rgba(100, 116, 139, 0.1);
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.historico-data {
+    font-size: 12px;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.historico-card-desc {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+}
+
+.historico-diff-box {
+    background: #f8fafc;
+    border: 1px dashed #cbd5e1;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.historico-diff-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.historico-diff-label {
+    font-weight: 600;
+    color: #64748b;
+    min-width: 80px;
+}
+
+.historico-diff-old {
+    color: #ef4444;
+    text-decoration: line-through;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.historico-diff-new {
+    color: #10b981;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.historico-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.historico-admin-author {
+    font-size: 12px;
+    color: #64748b;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-reverter-versao {
+    background: #f8fafc;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-reverter-versao:hover {
+    background: rgba(245, 158, 11, 0.15);
+    border-color: #f59e0b;
+    color: #b45309;
+}
+
+.historico-loading,
+.historico-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #64748b;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.historico-empty i {
+    font-size: 36px;
+    color: #cbd5e1;
+}
+
+/* Modo escuro para histórico */
+[data-theme="dark"] .modal-historico-toolbar {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="dark"] .select-historico-conteudo,
+[data-theme="dark"] .historico-search-group input,
+[data-theme="dark"] .btn-refresh-historico {
+    background: rgba(20, 21, 29, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.12) !important;
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .historico-card-item {
+    background: rgba(26, 27, 38, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ebebef !important;
+}
+
+[data-theme="dark"] .historico-card-desc {
+    color: #f8fafc !important;
+}
+
+[data-theme="dark"] .historico-diff-box {
+    background: rgba(15, 23, 42, 0.6) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="dark"] .historico-card-footer {
+    border-top-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="dark"] .btn-reverter-versao {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+    color: #e2e8f0 !important;
+}
+
+[data-theme="dark"] .btn-reverter-versao:hover {
+    background: rgba(245, 158, 11, 0.25) !important;
+    border-color: #f59e0b !important;
+    color: #fbbf24 !important;
+}
+
 
 

@@ -782,6 +782,49 @@ export async function removerModuloAdmin(moduloId, conteudoId = null) {
     return resData;
 }
 
+export async function obterHistoricoPdfAdmin(conteudoId = null, moduloId = null) {
+    const requesterId = usuarioGlobal.id_usuario || usuarioGlobal.email;
+    const url = ENDPOINTS.MODULOS_CUSTOMIZADOS.HISTORICO(conteudoId, moduloId);
+    const response = await fetch(url, {
+        headers: {
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        }
+    });
+
+    if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData?.error || 'Erro ao carregar histórico de PDFs.');
+    }
+
+    const data = await response.json();
+    return Array.isArray(data?.historico) ? data.historico : [];
+}
+
+export async function reverterHistoricoPdfAdmin(historicoId, targetVersion = 'versao') {
+    const requesterId = usuarioGlobal.id_usuario || usuarioGlobal.email;
+    const url = ENDPOINTS.MODULOS_CUSTOMIZADOS.REVERTER(historicoId);
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        },
+        body: JSON.stringify({ targetVersion })
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || 'Erro ao reverter alteração.');
+    }
+
+    await carregarModulosDinamicos();
+    return resData;
+}
+
 export function getModulosByConteudoId(id, moduloAtual = null) {
     const conteudo = getConteudoById(id);
     if (!conteudo || !Array.isArray(conteudo.modulos)) {

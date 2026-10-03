@@ -72,12 +72,18 @@ export const ENDPOINTS = {
     CONCLUIR_QUESTAO: `${API_URL}/questoes/concluirQuestao`,
     PERGUNTAS: (materia, bateria) => `${API_URL}/questoes/perguntas?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}`,
     CONCLUIR_BATERIA: `${API_URL}/questoes/concluirBateria`,
-    VERIFICAR_ACESSO: (materia, bateria, userId) => `${API_URL}/questoes/verificarAcesso?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`
+    VERIFICAR_ACESSO: (materia, bateria, userId) => `${API_URL}/questoes/verificarAcesso?materia=${encodeURIComponent(materia || 'MeioAmbiente')}&bateria=${encodeURIComponent(bateria || 1)}${userId ? `&userId=${encodeURIComponent(userId)}` : ''}`,
+    ADMIN_CRIAR: `${API_URL}/questoes/admin/criar`,
+    ADMIN_LISTAR: (materia) => `${API_URL}/questoes/customizadas${materia ? `?materia=${encodeURIComponent(materia)}` : ''}`,
+    ADMIN_REMOVER: (id) => `${API_URL}/questoes/admin/${encodeURIComponent(id)}`
   },
   SIMULADO: {
     GET_QUESTOES: (materia) => `${API_URL}/questoes/simulado?materia=${encodeURIComponent(materia || 'Geral')}`,
     CONCLUIR: `${API_URL}/questoes/simulado/concluir`,
-    RESULTADOS: (userId) => `${API_URL}/questoes/simulado/resultados?userId=${encodeURIComponent(userId || '')}`
+    RESULTADOS: (userId) => `${API_URL}/questoes/simulado/resultados?userId=${encodeURIComponent(userId || '')}`,
+    ADMIN_CRIAR: `${API_URL}/questoes/simulados-customizados/admin/criar`,
+    ADMIN_LISTAR: `${API_URL}/questoes/simulados-customizados`,
+    ADMIN_REMOVER: (id) => `${API_URL}/questoes/simulados-customizados/admin/${encodeURIComponent(id)}`
   },
   DESEMPENHO: {
     GET: (userId) => `${API_URL}/desempenho${userId ? `?userId=${encodeURIComponent(userId)}` : ''}`
@@ -88,7 +94,16 @@ export const ENDPOINTS = {
   MODULOS_CUSTOMIZADOS: {
     LISTAR: (conteudoId) => `${API_URL}/modulos-customizados${conteudoId ? `?conteudoId=${encodeURIComponent(conteudoId)}` : ''}`,
     SALVAR: `${API_URL}/modulos-customizados`,
-    REMOVER: (id, conteudoId) => `${API_URL}/modulos-customizados/${encodeURIComponent(id)}${conteudoId ? `?conteudoId=${encodeURIComponent(conteudoId)}` : ''}`
+    REMOVER: (id, conteudoId) => `${API_URL}/modulos-customizados/${encodeURIComponent(id)}${conteudoId ? `?conteudoId=${encodeURIComponent(conteudoId)}` : ''}`,
+    HISTORICO: (conteudoId, moduloId) => {
+      let u = `${API_URL}/modulos-customizados/historico`;
+      const p = [];
+      if (conteudoId) p.push(`conteudoId=${encodeURIComponent(conteudoId)}`);
+      if (moduloId) p.push(`moduloId=${encodeURIComponent(moduloId)}`);
+      if (p.length > 0) u += `?${p.join('&')}`;
+      return u;
+    },
+    REVERTER: (id) => `${API_URL}/modulos-customizados/historico/${encodeURIComponent(id)}/reverter`
   }
 };
 

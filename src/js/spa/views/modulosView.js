@@ -6,7 +6,9 @@ import {
     LOCKED_MODULE_MESSAGE,
     carregarModulosDinamicos,
     salvarModuloAdmin,
-    removerModuloAdmin
+    removerModuloAdmin,
+    obterHistoricoPdfAdmin,
+    reverterHistoricoPdfAdmin
 } from '../../services/conteudosService.js';
 import {
     getModuloAtual,
@@ -264,6 +266,47 @@ export function initModulosView(router) {
     if (btnAdminAdd) {
         btnAdminAdd.addEventListener("click", () => {
             abrirModalAdminModulo(null);
+        });
+    }
+
+    const btnAdminHistorico = qs("#btn-admin-historico-pdf");
+    if (btnAdminHistorico) {
+        btnAdminHistorico.addEventListener("click", () => {
+            abrirModalHistoricoPdf(activeConteudoId);
+        });
+    }
+
+    const btnFecharHistoricoModal = qs("#btn-fechar-modal-admin-historico");
+    if (btnFecharHistoricoModal) {
+        btnFecharHistoricoModal.addEventListener("click", fecharModalHistoricoPdf);
+    }
+
+    const modalHistoricoOverlay = qs("#modal-admin-historico-pdf");
+    if (modalHistoricoOverlay) {
+        modalHistoricoOverlay.addEventListener("click", (e) => {
+            if (e.target === modalHistoricoOverlay) fecharModalHistoricoPdf();
+        });
+    }
+
+    const selectHistConteudo = qs("#select-historico-conteudo");
+    if (selectHistConteudo) {
+        selectHistConteudo.addEventListener("change", () => {
+            carregarERenderizarHistorico(selectHistConteudo.value || null);
+        });
+    }
+
+    const btnRefreshHist = qs("#btn-refresh-historico");
+    if (btnRefreshHist) {
+        btnRefreshHist.addEventListener("click", () => {
+            const mat = selectHistConteudo?.value || activeConteudoId;
+            carregarERenderizarHistorico(mat || null);
+        });
+    }
+
+    const inputBuscaHist = qs("#input-busca-historico");
+    if (inputBuscaHist) {
+        inputBuscaHist.addEventListener("input", () => {
+            filtrarListaHistorico(inputBuscaHist.value);
         });
     }
 
@@ -562,6 +605,11 @@ export function abrirModulos(conteudoId) {
     const btnAdminAdd = qs("#btn-admin-add-modulo");
     if (btnAdminAdd) {
         btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
+
+    const btnAdminHistorico = qs("#btn-admin-historico-pdf");
+    if (btnAdminHistorico) {
+        btnAdminHistorico.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
     }
 
     if (typeof document !== 'undefined' && document.body) {
@@ -938,3 +986,221 @@ function escapeToast(str) {
     if (!str) return '';
     return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+// =========================================================================
+// Funções do Histórico de PDFs e Reversão (Admin)
+// =========================================================================
+
+let listaHistoricoCache = [];
+
+export async function abrirModalHistoricoPdf(conteudoId = null) {
+    const modal = qs('#modal-admin-historico-pdf');
+    if (!modal) return;
+
+    const selectHistConteudo = qs("#select-historico-conteudo");
+    if (selectHistConteudo) {
+        selectHistConteudo.value = conteudoId || '';
+    }
+
+    const inputBuscaHist = qs("#input-busca-historico");
+    if (inputBuscaHist) inputBuscaHist.value = '';
+
+    modal.style.display = 'flex';
+    await carregarERenderizarHistorico(conteudoId || null);
+}
+
+export function fecharModalHistoricoPdf() {
+    const modal = qs('#modal-admin-historico-pdf');
+    if (modal) modal.style.display = 'none';
+}
+
+export async function carregarERenderizarHistorico(conteudoId = null) {
+    const container = qs('#historico-timeline-list');
+    if (!container) return;
+
+    container.innerHTML = `
+        <div class="historico-loading">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            <span>Buscando histórico de alterações e versões de PDFs...</span>
+        </div>
+    `;
+
+    try {
+        const historico = await obterHistoricoPdfAdmin(conteudoId);
+        listaHistoricoCache = historico || [];
+        renderizarListaHistorico(listaHistoricoCache);
+    } catch (err) {
+        container.innerHTML = `
+            <div class="historico-empty">
+                <i class="fa-solid fa-triangle-exclamation" style="color: #ef4444;"></i>
+                <span>Erro ao carregar histórico: ${escapeToast(err.message || 'Falha na conexão')}</span>
+            </div>
+        `;
+    }
+}
+
+function filtrarListaHistorico(termo = '') {
+    if (!termo || !termo.trim()) {
+        renderizarListaHistorico(listaHistoricoCache);
+        return;
+    }
+    const clean = termo.toLowerCase().trim();
+    const filtrados = listaHistoricoCache.filter(item => {
+        const desc = (item.descricao_acao || '').toLowerCase();
+        const modId = (item.modulo_id || '').toLowerCase();
+        const contId = (item.conteudo_id || '').toLowerCase();
+        const pdfNovo = (item.dados_novos?.pdf_nome || '').toLowerCase();
+        const pdfAnt = (item.dados_anteriores?.pdf_nome || '').toLowerCase();
+        return desc.includes(clean) || modId.includes(clean) || contId.includes(clean) || pdfNovo.includes(clean) || pdfAnt.includes(clean);
+    });
+    renderizarListaHistorico(filtrados);
+}
+
+function renderizarListaHistorico(lista) {
+    const container = qs('#historico-timeline-list');
+    if (!container) return;
+
+    if (!Array.isArray(lista) || lista.length === 0) {
+        container.innerHTML = `
+            <div class="historico-empty">
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                <span>Nenhuma alteração registrada até o momento.</span>
+                <small style="color: #94a3b8;">As modificações, criações e substituições de PDFs feitas pelo administrador ficarão listadas aqui para consulta e reversão.</small>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = '';
+
+    lista.forEach((item) => {
+        const card = document.createElement('div');
+        card.className = 'historico-card-item';
+
+        const dataFormatada = new Date(item.criado_em).toLocaleString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
+        let badgeClass = 'historico-badge-edicao';
+        let badgeIcon = 'fa-solid fa-pen';
+        let badgeText = 'Edição';
+
+        switch (item.tipo_acao) {
+            case 'CRIACAO':
+                badgeClass = 'historico-badge-criacao';
+                badgeIcon = 'fa-solid fa-plus-circle';
+                badgeText = 'Criação';
+                break;
+            case 'EDICAO_PDF':
+                badgeClass = 'historico-badge-edicao-pdf';
+                badgeIcon = 'fa-solid fa-file-pdf';
+                badgeText = 'Troca de PDF';
+                break;
+            case 'REMOCAO':
+                badgeClass = 'historico-badge-remocao';
+                badgeIcon = 'fa-solid fa-trash-can';
+                badgeText = 'Remoção';
+                break;
+            case 'RESTAURACAO':
+                badgeClass = 'historico-badge-criacao';
+                badgeIcon = 'fa-solid fa-rotate';
+                badgeText = 'Restauração';
+                break;
+            case 'REVERSAO':
+                badgeClass = 'historico-badge-reversao';
+                badgeIcon = 'fa-solid fa-clock-rotate-left';
+                badgeText = 'Reversão';
+                break;
+        }
+
+        const conteudoNome = item.conteudo_id || 'Conteúdo Geral';
+        const pdfAnt = item.dados_anteriores?.pdf_nome;
+        const pdfNovo = item.dados_novos?.pdf_nome;
+        const titAnt = item.dados_anteriores?.titulo;
+        const titNovo = item.dados_novos?.titulo;
+
+        let diffHtml = '';
+        if (pdfAnt || pdfNovo) {
+            diffHtml = `
+                <div class="historico-diff-box">
+                    <div class="historico-diff-row">
+                        <span class="historico-diff-label"><i class="fa-solid fa-file-pdf"></i> PDF:</span>
+                        ${pdfAnt ? `<span class="historico-diff-old"><i class="fa-solid fa-xmark"></i> ${escapeToast(pdfAnt)}</span>` : '<span style="color: #94a3b8;">(sem PDF anterior)</span>'}
+                        ${(pdfAnt && pdfNovo && pdfAnt !== pdfNovo) ? '<i class="fa-solid fa-arrow-right" style="color: #94a3b8; font-size: 10px;"></i>' : ''}
+                        ${pdfNovo ? `<span class="historico-diff-new"><i class="fa-solid fa-check"></i> ${escapeToast(pdfNovo)}</span>` : ''}
+                    </div>
+                    ${(titAnt && titNovo && titAnt !== titNovo) ? `
+                        <div class="historico-diff-row">
+                            <span class="historico-diff-label"><i class="fa-solid fa-heading"></i> Título:</span>
+                            <span class="historico-diff-old">${escapeToast(titAnt)}</span>
+                            <i class="fa-solid fa-arrow-right" style="color: #94a3b8; font-size: 10px;"></i>
+                            <span class="historico-diff-new">${escapeToast(titNovo)}</span>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        const adminAuthor = item.admin_id ? escapeToast(item.admin_id) : 'Administrador';
+
+        card.innerHTML = `
+            <div class="historico-card-header">
+                <div class="historico-header-left">
+                    <span class="historico-badge-acao ${badgeClass}">
+                        <i class="${badgeIcon}"></i> ${badgeText}
+                    </span>
+                    <span class="historico-materia-tag"><i class="fa-solid fa-book"></i> ${escapeToast(conteudoNome)}</span>
+                </div>
+                <span class="historico-data"><i class="fa-regular fa-clock"></i> ${dataFormatada}</span>
+            </div>
+
+            <div class="historico-card-desc">
+                ${escapeToast(item.descricao_acao || 'Alteração realizada')}
+            </div>
+
+            ${diffHtml}
+
+            <div class="historico-card-footer">
+                <span class="historico-admin-author">
+                    <i class="fa-solid fa-user-shield"></i> Por: <strong>${adminAuthor}</strong>
+                </span>
+                <button type="button" class="btn-reverter-versao" data-historico-id="${item.id}" title="Reverter o módulo e PDF para esta versão">
+                    <i class="fa-solid fa-rotate-left"></i> Reverter para esta versão
+                </button>
+            </div>
+        `;
+
+        const btnReverter = card.querySelector('.btn-reverter-versao');
+        if (btnReverter) {
+            btnReverter.addEventListener('click', () => {
+                executarReversaoHistorico(item.id, item);
+            });
+        }
+
+        container.appendChild(card);
+    });
+}
+
+async function executarReversaoHistorico(historicoId, item) {
+    const nomeAlvo = item.dados_novos?.titulo || item.dados_anteriores?.titulo || `Módulo #${item.modulo_id}`;
+    const confirmar = confirm(`Deseja realmente reverter as alterações e restaurar este estado do PDF/módulo "${nomeAlvo}"?`);
+    if (!confirmar) return;
+
+    try {
+        showToast('Revertendo alterações...', 'info', 'fa-solid fa-spinner fa-spin');
+        const res = await reverterHistoricoPdfAdmin(historicoId, 'versao');
+        showToast(res.message || 'Módulo e PDF revertidos com sucesso!', 'success', 'fa-solid fa-circle-check');
+        fecharModalHistoricoPdf();
+
+        if (activeConteudoId) {
+            abrirModulos(activeConteudoId);
+        }
+    } catch (err) {
+        showToast(err.message || 'Erro ao reverter alteração.', 'locked', 'fa-solid fa-triangle-exclamation');
+    }
+}
+
