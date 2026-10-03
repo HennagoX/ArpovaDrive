@@ -427,59 +427,106 @@
             }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 768px) {
             .main {
-                margin-left: 0;
-                padding: 20px;
-                padding-bottom: 90px;
+                margin-left: 0 !important;
+                padding: 12px 10px !important;
+                padding-bottom: 84px !important;
+                width: 100% !important;
+                max-width: 100% !important;
+            }
+            .topo {
+                margin-bottom: 16px;
+                gap: 8px;
             }
             .topo h1 {
-                font-size: 25px;
+                font-size: 20px;
+                margin-bottom: 2px;
+            }
+            .topo p {
+                font-size: 13px;
             }
             .perfil {
                 display: none;
             }
             .cards {
                 grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
+                width: 100%;
+            }
+            .card {
+                padding: 16px 14px;
+                border-radius: 14px;
+                width: 100%;
             }
             .desempenho-area {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: stretch;
+                gap: 14px;
+                width: 100%;
+            }
+            .circulo {
+                margin: 0 auto;
+            }
+            .estatisticas {
+                width: 100%;
+                gap: 10px;
             }
             .progresso {
-                padding: 22px;
+                padding: 16px 14px;
+                border-radius: 14px;
+                gap: 14px;
+                margin-bottom: 16px;
+                width: 100%;
+            }
+            .inferior {
+                grid-template-columns: 1fr;
+                gap: 14px;
+                width: 100%;
+            }
+            .missao, .desempenho {
+                padding: 16px 14px;
+                border-radius: 14px;
+                width: 100%;
             }
             .nivel h2 {
-                font-size: 17px;
+                font-size: 16px;
             }
             .titulo {
-                font-size: 21px;
+                font-size: 19px;
             }
         }
 
         @media (max-width: 400px) {
             .main {
-                padding: 15px;
-                padding-bottom: 85px;
+                padding: 10px 8px !important;
+                padding-bottom: 80px !important;
             }
             .topo h1 {
-                font-size: 22px;
+                font-size: 18px;
+            }
+            .progresso {
+                padding: 14px 10px;
+            }
+            .card, .missao, .desempenho {
+                padding: 14px 10px;
             }
             .nivel {
                 align-items: flex-start;
             }
             .trofeu {
-                width: 55px;
-                height: 55px;
-                font-size: 23px;
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
             }
             .circulo {
-                width: 115px;
-                height: 115px;
+                width: 110px;
+                height: 110px;
             }
             .circulo-interno {
-                width: 88px;
-                height: 88px;
+                width: 84px;
+                height: 84px;
             }
         }
 

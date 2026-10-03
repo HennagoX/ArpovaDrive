@@ -689,15 +689,25 @@ body.cronograma-standalone {
   margin-right: 4px;
 }
 
-@media (max-width: 650px) {
-  body {
-    margin-left: 0;
-    padding: var(--space-md);
-    padding-bottom: 88px;
+@media (max-width: 768px) {
+  .schedule-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .hud-card {
-    padding: var(--space-md);
+    padding: 14px 12px !important;
+    border-radius: 14px !important;
+    margin-bottom: 12px !important;
+    width: 100% !important;
+  }
+
+  .schedule-card {
+    padding: 14px 12px !important;
+    border-radius: 14px !important;
+    width: 100% !important;
   }
 
   .schedule-item {

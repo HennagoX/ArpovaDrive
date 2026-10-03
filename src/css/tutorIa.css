@@ -863,30 +863,36 @@ body.tutor-ia-active #view-tutor-ia {
     }
 
     .tutor-ia-chat-body {
-        padding: 14px 12px;
-        gap: 14px;
+        padding: 12px 8px !important;
+        gap: 12px !important;
+        width: 100% !important;
     }
 
     .chat-msg {
-        max-width: 95% !important;
-        gap: 10px;
+        max-width: 100% !important;
+        width: 100% !important;
+        gap: 8px !important;
     }
 
     .chat-avatar {
-        width: 34px;
-        height: 34px;
-        font-size: 13px;
+        width: 32px !important;
+        height: 32px !important;
+        min-width: 32px !important;
+        font-size: 12px !important;
+        border-radius: 8px !important;
     }
 
     .chat-avatar .material-symbols-outlined {
-        font-size: 20px;
+        font-size: 18px !important;
     }
 
     .chat-bubble {
-        padding: 12px 14px;
-        font-size: 14px;
-        line-height: 1.5;
-        border-radius: 16px;
+        max-width: calc(100% - 40px) !important;
+        padding: 10px 12px !important;
+        font-size: 13.5px !important;
+        line-height: 1.45 !important;
+        border-radius: 14px !important;
+        word-break: break-word !important;
     }
 
     .chat-msg-bot .chat-bubble h3,
@@ -932,18 +938,21 @@ body.tutor-ia-active #view-tutor-ia {
     }
 
     .tutor-ia-footer {
-        padding: 10px 12px 14px;
-        gap: 6px;
+        padding: 6px 8px 10px !important;
+        gap: 4px !important;
+        width: 100% !important;
     }
 
     .tutor-ia-form {
-        padding: 4px 6px 4px 14px;
-        border-radius: 12px;
+        padding: 4px 6px 4px 10px !important;
+        border-radius: 12px !important;
+        width: 100% !important;
     }
 
     .tutor-ia-input {
-        font-size: 14px;
-        padding: 9px 0;
+        font-size: 14px !important;
+        padding: 8px 0 !important;
+        width: 100% !important;
     }
 
     .tutor-ia-send-btn {

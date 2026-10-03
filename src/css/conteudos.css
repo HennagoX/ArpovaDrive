@@ -416,14 +416,14 @@ body.no-sidebar .main {
 
 @media (max-width: 900px) {
     body.no-sidebar .main {
-        padding: 24px 20px !important;
+        padding: 16px 14px !important;
     }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 768px) {
     body.no-sidebar .main {
-        padding: 16px 14px !important;
-        padding-bottom: 40px !important;
+        padding: 12px 10px 40px !important;
+        width: 100% !important;
     }
 }
 
@@ -1018,8 +1018,9 @@ body.no-sidebar .main:has(#view-leitura-pdf:not([style*="display: none"])) {
     }
 
     .main {
-        margin-left: 70px;
-        padding: 20px;
+        margin-left: 0 !important;
+        padding: 12px 10px 84px !important;
+        width: 100% !important;
     }
 
     .ebooks {
