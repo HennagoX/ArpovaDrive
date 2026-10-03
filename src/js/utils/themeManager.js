@@ -11,7 +11,7 @@ export function getStoredTheme() {
     } catch (e) {
         console.warn('[ThemeManager] LocalStorage indisponível:', e);
     }
-    return THEME_DARK;
+    return THEME_DEFAULT;
 }
 
 export function applyTheme(theme) {

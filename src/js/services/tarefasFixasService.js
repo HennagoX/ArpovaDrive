@@ -144,6 +144,7 @@ export function limparCacheTarefasFixas(userId) {
     } else {
         memoryTarefasFixasCache.clear();
         try {
+           
             sessionStorage.clear();
         } catch {}
     }
