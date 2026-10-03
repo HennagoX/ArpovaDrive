@@ -3,6 +3,7 @@ import { usuarioGlobal } from '../../services/userService.js';
 import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { getBateriasByMateriaId, criarQuestaoAdminAPI } from '../../services/questoesService.js';
 import { showToast } from './modulosView.js';
+import { abrirModalHistoricoQuestoes } from './adminHistoryView.js';
 
 let initialized = false;
 
@@ -202,6 +203,13 @@ export function initQuestoesView(router) {
         });
     }
 
+    const btnAdminGerenciar = qs('#btn-admin-gerenciar-questoes');
+    if (btnAdminGerenciar) {
+        btnAdminGerenciar.addEventListener('click', () => {
+            abrirModalHistoricoQuestoes();
+        });
+    }
+
     const btnFechar = qs('#btn-fechar-modal-admin-questao');
     if (btnFechar) {
         btnFechar.addEventListener('click', () => {
@@ -305,6 +313,11 @@ export function renderQuestoes() {
     const btnAdminAdd = qs('#btn-admin-add-questao');
     if (btnAdminAdd) {
         btnAdminAdd.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
+
+    const btnAdminGerenciar = qs('#btn-admin-gerenciar-questoes');
+    if (btnAdminGerenciar) {
+        btnAdminGerenciar.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
     }
 
     atualizarProgressoQuestoes();

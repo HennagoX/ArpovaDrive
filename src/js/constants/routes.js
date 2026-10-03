@@ -103,7 +103,16 @@ export const ENDPOINTS = {
       if (p.length > 0) u += `?${p.join('&')}`;
       return u;
     },
-    REVERTER: (id) => `${API_URL}/modulos-customizados/historico/${encodeURIComponent(id)}/reverter`
+    REVERTER: (id) => `${API_URL}/modulos-customizados/historico/${encodeURIComponent(id)}/reverter`,
+    HISTORICO_REMOVER: (id) => `${API_URL}/modulos-customizados/historico/${encodeURIComponent(id)}`,
+    HISTORICO_LIMPAR: (conteudoId, moduloId) => {
+      let u = `${API_URL}/modulos-customizados/historico`;
+      const p = [];
+      if (conteudoId) p.push(`conteudoId=${encodeURIComponent(conteudoId)}`);
+      if (moduloId) p.push(`moduloId=${encodeURIComponent(moduloId)}`);
+      if (p.length > 0) u += `?${p.join('&')}`;
+      return u;
+    }
   }
 };
 

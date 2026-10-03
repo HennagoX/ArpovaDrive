@@ -825,6 +825,11 @@ export async function reverterHistoricoPdfAdmin(historicoId, targetVersion = 've
     return resData;
 }
 
+export {
+    excluirItemHistoricoPdfAdmin,
+    limparHistoricoPdfAdmin
+} from './adminService.js';
+
 export function getModulosByConteudoId(id, moduloAtual = null) {
     const conteudo = getConteudoById(id);
     if (!conteudo || !Array.isArray(conteudo.modulos)) {

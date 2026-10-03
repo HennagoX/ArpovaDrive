@@ -16,6 +16,7 @@ import { initSimuladoView, renderSimulado } from '../spa/views/simuladoView.js';
 import { initSimuladoResolucaoView, abrirSimuladoResolucao } from '../spa/views/simuladoResolucaoView.js';
 import { initTarefasView, renderTarefas } from '../spa/views/tarefasView.js';
 import { initTutorIaView } from '../spa/views/tutorIaView.js';
+import { initAdminHistoryView } from '../spa/views/adminHistoryView.js';
 
 ready(() => {
     initTheme();
@@ -189,6 +190,7 @@ ready(() => {
     initTarefasView(router);
     initDesempenhoView(router);
     initTutorIaView(router);
+    initAdminHistoryView(router);
 
     router.init();
 });

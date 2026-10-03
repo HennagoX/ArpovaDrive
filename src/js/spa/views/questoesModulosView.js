@@ -9,6 +9,7 @@ import { getModuloAtualCached, getModuloAtual } from '../../services/moduloServi
 import { createQuestionModuleCard } from '../../components/questionModuleCard.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { abrirModalAdminQuestao } from './questoesView.js';
+import { abrirModalHistoricoQuestoes } from './adminHistoryView.js';
 
 let initialized = false;
 let toastTimeout = null;
@@ -41,6 +42,13 @@ export function initQuestoesModulosView(router) {
             abrirModalAdminQuestao(activeMateriaId);
         });
     }
+
+    const btnAdminGerenciar = qs("#btn-admin-gerenciar-questoes-modulo");
+    if (btnAdminGerenciar) {
+        btnAdminGerenciar.addEventListener("click", () => {
+            abrirModalHistoricoQuestoes(activeMateriaId);
+        });
+    }
 }
 
 export function abrirQuestoesModulos(materiaId) {
@@ -51,6 +59,11 @@ export function abrirQuestoesModulos(materiaId) {
     const btnAdminAddModulo = qs("#btn-admin-add-questao-modulo");
     if (btnAdminAddModulo) {
         btnAdminAddModulo.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
+
+    const btnAdminGerenciar = qs("#btn-admin-gerenciar-questoes-modulo");
+    if (btnAdminGerenciar) {
+        btnAdminGerenciar.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
     }
 
     if (typeof document !== 'undefined' && document.body) {

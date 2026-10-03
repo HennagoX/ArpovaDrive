@@ -1816,6 +1816,9 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="search-questoes" placeholder="Buscar disciplina ou assunto de questões...">
                 </div>
+                <button type="button" class="btn-admin-add-modulo btn-admin-historico-questoes" id="btn-admin-gerenciar-questoes" style="display: none;" title="Ver histórico e gerenciar questões criadas">
+                    <i class="fa-solid fa-list-check"></i> Histórico de Questões
+                </button>
                 <button type="button" class="btn-admin-add-modulo btn-admin-add-questao" id="btn-admin-add-questao" style="display: none;" title="Criar nova questão para o banco">
                     <i class="fa-solid fa-circle-plus"></i> Criar Nova Questão
                 </button>
@@ -2451,6 +2454,9 @@
                 </div>
                 <div class="modulos-header-right-actions">
                     <span id="questoes-contador-badge" class="questoes-stat-pill">4 baterias</span>
+                    <button type="button" class="btn-admin-add-modulo btn-admin-historico-questoes" id="btn-admin-gerenciar-questoes-modulo" style="display: none;" title="Ver histórico de questões desta disciplina">
+                        <i class="fa-solid fa-list-check"></i> Histórico
+                    </button>
                     <button type="button" class="btn-admin-add-modulo btn-admin-add-questao" id="btn-admin-add-questao-modulo" style="display: none;" title="Criar nova questão nesta disciplina">
                         <i class="fa-solid fa-circle-plus"></i> Criar Questão
                     </button>
@@ -2739,12 +2745,63 @@
                     <button type="button" class="btn-refresh-historico" id="btn-refresh-historico" title="Atualizar histórico">
                         <i class="fa-solid fa-arrows-rotate"></i> Atualizar
                     </button>
+                    <button type="button" class="btn-refresh-historico btn-danger-toolbar" id="btn-limpar-historico-pdf" title="Limpar histórico de alterações">
+                        <i class="fa-solid fa-trash-can"></i> Limpar Histórico
+                    </button>
                 </div>
 
                 <div class="historico-timeline" id="historico-timeline-list">
                     <div class="historico-loading">
                         <i class="fa-solid fa-spinner fa-spin"></i>
                         <span>Carregando histórico de alterações...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin: Histórico e Gerenciamento de Questões Customizadas -->
+    <div id="modal-admin-historico-questoes" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-historico-questoes-titulo">
+        <div class="modal-admin-card modal-historico-card">
+            <div class="modal-admin-header">
+                <div class="modal-admin-header-title">
+                    <div class="modal-admin-icon-circle historico-circle">
+                        <i class="fa-solid fa-clipboard-question"></i>
+                    </div>
+                    <div>
+                        <span class="modal-admin-badge-label">Painel de Administrador</span>
+                        <h3 id="modal-admin-historico-questoes-titulo">Histórico de Questões Criadas</h3>
+                    </div>
+                </div>
+                <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-historico-questoes" aria-label="Fechar">&times;</button>
+            </div>
+
+            <div class="modal-historico-body">
+                <div class="modal-historico-toolbar">
+                    <div class="historico-filter-group">
+                        <label for="select-historico-questoes-materia"><i class="fa-solid fa-filter"></i> Disciplina:</label>
+                        <select id="select-historico-questoes-materia" class="select-historico-conteudo">
+                            <option value="">Todas as Disciplinas</option>
+                            <option value="CodigoTransito">Código de Trânsito</option>
+                            <option value="PlacasTransito">Placas e Sinalização</option>
+                            <option value="DirecaoDefensiva">Direção Defensiva</option>
+                            <option value="PrimeirosSocorros">Primeiros Socorros</option>
+                            <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
+                        </select>
+                    </div>
+                    <div class="historico-search-group">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="input-busca-historico-questoes" placeholder="Buscar no enunciado ou opções...">
+                    </div>
+                    <button type="button" class="btn-refresh-historico" id="btn-refresh-historico-questoes" title="Atualizar lista de questões">
+                        <i class="fa-solid fa-arrows-rotate"></i> Atualizar
+                    </button>
+                </div>
+
+                <div class="historico-timeline" id="lista-admin-historico-questoes">
+                    <div class="historico-loading">
+                        <i class="fa-solid fa-spinner fa-spin"></i>
+                        <span>Carregando histórico de questões...</span>
                     </div>
                 </div>
             </div>

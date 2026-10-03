@@ -2695,5 +2695,56 @@ body.modal-modulo-open {
     color: #fbbf24 !important;
 }
 
+.historico-footer-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-del-item-historico {
+    background: #f8fafc;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-del-item-historico:hover {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: #ef4444;
+    color: #dc2626;
+}
+
+.btn-danger-toolbar {
+    background: rgba(239, 68, 68, 0.08) !important;
+    border-color: rgba(239, 68, 68, 0.3) !important;
+    color: #ef4444 !important;
+}
+
+.btn-danger-toolbar:hover {
+    background: rgba(239, 68, 68, 0.18) !important;
+    border-color: #ef4444 !important;
+    color: #dc2626 !important;
+}
+
+[data-theme="dark"] .btn-del-item-historico {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(239, 68, 68, 0.35) !important;
+    color: #f87171 !important;
+}
+
+[data-theme="dark"] .btn-del-item-historico:hover {
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: #f87171 !important;
+    color: #fca5a5 !important;
+}
+
 
 
