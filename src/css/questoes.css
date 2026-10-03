@@ -2444,5 +2444,143 @@
     color: #fca5a5 !important;
 }
 
+/* Ações no card de bateria para admin */
+.btn-bateria-admin-add {
+    background: transparent;
+    color: #4f46e5;
+    border: 1px dashed #6366f1;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 7px 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.btn-bateria-admin-add:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-style: solid;
+    transform: translateY(-1px);
+}
+
+[data-theme="dark"] .btn-bateria-admin-add {
+    color: #818cf8 !important;
+    border-color: #6366f1 !important;
+}
+
+[data-theme="dark"] .btn-bateria-admin-add:hover {
+    background: rgba(99, 102, 241, 0.2) !important;
+}
+
+/* Ações no card de questão do histórico do admin */
+.admin-questao-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-admin-edit-questao-card {
+    background: transparent;
+    border: 1px solid rgba(99, 102, 241, 0.35);
+    color: #4f46e5;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-admin-edit-questao-card:hover {
+    background: rgba(99, 102, 241, 0.12);
+    border-color: #6366f1;
+    color: #4338ca;
+}
+
+[data-theme="dark"] .btn-admin-edit-questao-card {
+    background: rgba(255, 255, 255, 0.04) !important;
+    border-color: rgba(129, 140, 248, 0.35) !important;
+    color: #a5b4fc !important;
+}
+
+[data-theme="dark"] .btn-admin-edit-questao-card:hover {
+    background: rgba(99, 102, 241, 0.2) !important;
+    border-color: #818cf8 !important;
+    color: #c7d2fe !important;
+}
+
+/* Linha de alternativas interativas no modal de criação de questão */
+.admin-alternativa-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.admin-alternativa-row .alternativa-letra {
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: #f1f5f9;
+    color: #475569;
+    font-weight: 800;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    border: 1px solid #cbd5e1;
+    user-select: none;
+}
+
+.admin-alternativa-row .alternativa-letra:hover {
+    background: #e2e8f0;
+    transform: scale(1.05);
+}
+
+.admin-alternativa-row.selected {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.admin-alternativa-row.selected .alternativa-letra {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #059669;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
+}
+
+[data-theme="dark"] .admin-alternativa-row .alternativa-letra {
+    background: #1e202c;
+    color: #cbd5e1;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .admin-alternativa-row.selected {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.5);
+}
+
+[data-theme="dark"] .admin-alternativa-row.selected .alternativa-letra {
+    background: #10b981;
+    color: #ffffff;
+    border-color: #34d399;
+}
+
 
 

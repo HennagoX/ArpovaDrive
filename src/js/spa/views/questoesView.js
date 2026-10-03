@@ -6,11 +6,32 @@ import { showToast } from './modulosView.js';
 import { abrirModalHistoricoQuestoes } from './adminHistoryView.js';
 
 let initialized = false;
+let questaoEmEdicaoId = null;
 
-export function abrirModalAdminQuestao(materiaPreselecionada = null, bateriaPreselecionada = null) {
+function atualizarSelecaoAlternativa(letra) {
+    const corretaSelect = qs('#admin-questao-correta-input');
+    if (corretaSelect && corretaSelect.value !== letra) {
+        corretaSelect.value = letra;
+    }
+    const rows = qsa('.admin-alternativa-row');
+    rows.forEach(row => {
+        const span = row.querySelector('.alternativa-letra');
+        if (span && span.textContent.trim().toUpperCase() === letra) {
+            row.classList.add('selected');
+        } else {
+            row.classList.remove('selected');
+        }
+    });
+}
+
+export function abrirModalAdminQuestao(materiaPreselecionada = null, bateriaPreselecionada = null, questaoParaEditar = null) {
     const modal = qs('#modal-admin-questao');
     if (!modal) return;
 
+    questaoEmEdicaoId = questaoParaEditar ? (questaoParaEditar.id || null) : null;
+
+    const modalTitulo = qs('#modal-admin-questao-titulo');
+    const btnSalvar = qs('#btn-salvar-admin-questao');
     const materiaSelect = qs('#admin-questao-materia-input');
     const bateriaSelect = qs('#admin-questao-bateria-input');
     const enunciadoInput = qs('#admin-questao-enunciado-input');
@@ -22,35 +43,65 @@ export function abrirModalAdminQuestao(materiaPreselecionada = null, bateriaPres
     const simuladoCheck = qs('#admin-questao-simulado-check');
     const explicacaoInput = qs('#admin-questao-explicacao-input');
 
-    if (enunciadoInput) enunciadoInput.value = '';
-    if (opA) opA.value = '';
-    if (opB) opB.value = '';
-    if (opC) opC.value = '';
-    if (opD) opD.value = '';
-    if (corretaSelect) corretaSelect.value = 'A';
-    if (simuladoCheck) simuladoCheck.checked = true;
-    if (explicacaoInput) explicacaoInput.value = '';
+    if (modalTitulo) {
+        modalTitulo.textContent = questaoParaEditar ? 'Editar Questão' : 'Criar Nova Questão';
+    }
+    if (btnSalvar) {
+        btnSalvar.innerHTML = questaoParaEditar
+            ? '<i class="fa-solid fa-floppy-disk"></i> Atualizar Questão'
+            : '<i class="fa-solid fa-floppy-disk"></i> Salvar Questão';
+    }
 
+    if (questaoParaEditar) {
+        if (enunciadoInput) enunciadoInput.value = questaoParaEditar.texto || '';
+        const ops = Array.isArray(questaoParaEditar.opcoes)
+            ? questaoParaEditar.opcoes
+            : (typeof questaoParaEditar.opcoes === 'string' ? JSON.parse(questaoParaEditar.opcoes || '[]') : []);
+        if (opA) opA.value = ops[0] || '';
+        if (opB) opB.value = ops[1] || '';
+        if (opC) opC.value = ops[2] || '';
+        if (opD) opD.value = ops[3] || '';
+
+        const letraCorreta = questaoParaEditar.correta_letra || (typeof questaoParaEditar.correta === 'number' ? ['A', 'B', 'C', 'D'][questaoParaEditar.correta] : 'A');
+        if (corretaSelect) corretaSelect.value = letraCorreta;
+        atualizarSelecaoAlternativa(letraCorreta);
+
+        if (simuladoCheck) simuladoCheck.checked = questaoParaEditar.incluir_no_simulado !== false;
+        if (explicacaoInput) explicacaoInput.value = questaoParaEditar.explicacao || '';
+    } else {
+        if (enunciadoInput) enunciadoInput.value = '';
+        if (opA) opA.value = '';
+        if (opB) opB.value = '';
+        if (opC) opC.value = '';
+        if (opD) opD.value = '';
+        if (corretaSelect) corretaSelect.value = 'A';
+        atualizarSelecaoAlternativa('A');
+        if (simuladoCheck) simuladoCheck.checked = true;
+        if (explicacaoInput) explicacaoInput.value = '';
+    }
+
+    const materiaDesejada = questaoParaEditar?.materia || materiaPreselecionada;
     if (materiaSelect) {
-        if (materiaPreselecionada) {
-            const mNorm = String(materiaPreselecionada).toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (materiaDesejada) {
+            const mNorm = String(materiaDesejada).toLowerCase().replace(/[^a-z0-9]/g, '');
             if (mNorm.includes('codigo') || mNorm.includes('legislacao')) materiaSelect.value = 'CodigoTransito';
             else if (mNorm.includes('placa') || mNorm.includes('sinalizacao')) materiaSelect.value = 'PlacasTransito';
             else if (mNorm.includes('direcao') || mNorm.includes('defensiva') || mNorm.includes('ofensiva')) materiaSelect.value = 'DirecaoDefensiva';
             else if (mNorm.includes('socorro') || mNorm.includes('saude') || mNorm.includes('primeiro')) materiaSelect.value = 'PrimeirosSocorros';
             else if (mNorm.includes('ambiente') || mNorm.includes('cidadania')) materiaSelect.value = 'MeioAmbiente';
-            else materiaSelect.value = materiaPreselecionada;
+            else materiaSelect.value = materiaDesejada;
         } else {
             materiaSelect.value = 'CodigoTransito';
         }
     }
 
+    const bateriaDesejada = questaoParaEditar?.bateria_numero || questaoParaEditar?.bateria || bateriaPreselecionada;
     if (bateriaSelect) {
-        if (bateriaPreselecionada) {
+        if (bateriaDesejada) {
             let bNum = 1;
-            if (typeof bateriaPreselecionada === 'number') bNum = bateriaPreselecionada;
+            if (typeof bateriaDesejada === 'number') bNum = bateriaDesejada;
             else {
-                const match = String(bateriaPreselecionada).match(/\d+/);
+                const match = String(bateriaDesejada).match(/\d+/);
                 if (match) bNum = Number(match[0]);
             }
             bateriaSelect.value = String(Math.max(1, Math.min(4, bNum)));
@@ -66,6 +117,7 @@ export function abrirModalAdminQuestao(materiaPreselecionada = null, bateriaPres
 export function fecharModalAdminQuestao() {
     const modal = qs('#modal-admin-questao');
     if (modal) modal.style.display = 'none';
+    questaoEmEdicaoId = null;
 }
 
 export function atualizarProgressoQuestoes() {
@@ -237,6 +289,26 @@ export function initQuestoesView(router) {
         }
     });
 
+    const corretaSelect = qs('#admin-questao-correta-input');
+    if (corretaSelect) {
+        corretaSelect.addEventListener('change', () => {
+            atualizarSelecaoAlternativa(corretaSelect.value);
+        });
+    }
+
+    const altRows = qsa('.admin-alternativa-row');
+    altRows.forEach((row) => {
+        const letraSpan = row.querySelector('.alternativa-letra');
+        if (letraSpan) {
+            letraSpan.setAttribute('title', 'Clique para marcar como resposta correta');
+            letraSpan.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const letra = letraSpan.textContent.trim().toUpperCase();
+                atualizarSelecaoAlternativa(letra);
+            });
+        }
+    });
+
     const btnSalvar = qs('#btn-salvar-admin-questao');
     if (btnSalvar) {
         btnSalvar.addEventListener('click', async () => {
@@ -247,7 +319,7 @@ export function initQuestoesView(router) {
             const opB = qs('#admin-questao-op-b');
             const opC = qs('#admin-questao-op-c');
             const opD = qs('#admin-questao-op-d');
-            const corretaSelect = qs('#admin-questao-correta-input');
+            const corretaSelectEl = qs('#admin-questao-correta-input');
             const simuladoCheck = qs('#admin-questao-simulado-check');
             const explicacaoInput = qs('#admin-questao-explicacao-input');
 
@@ -268,10 +340,12 @@ export function initQuestoesView(router) {
                 return;
             }
 
-            const corretaLetra = corretaSelect?.value || 'A';
+            const corretaLetra = corretaSelectEl?.value || 'A';
             const corretaIdx = ['A', 'B', 'C', 'D'].indexOf(corretaLetra);
+            const isEdit = Boolean(questaoEmEdicaoId);
 
             const dados = {
+                ...(isEdit ? { id: questaoEmEdicaoId } : {}),
                 materia: materiaSelect?.value || 'CodigoTransito',
                 bateria: Number(bateriaSelect?.value || 1),
                 texto,
@@ -287,10 +361,18 @@ export function initQuestoesView(router) {
                 btnSalvar.disabled = true;
                 btnSalvar.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Salvando...';
 
-                await criarQuestaoAdminAPI(dados);
-                showToast('Questão cadastrada com sucesso no banco!', 'success', 'fa-solid fa-circle-check');
+                const resultado = await criarQuestaoAdminAPI(dados);
+                showToast(
+                    isEdit ? 'Questão atualizada com sucesso no banco!' : 'Questão cadastrada com sucesso no banco!',
+                    'success',
+                    'fa-solid fa-circle-check'
+                );
                 fecharModalAdminQuestao();
                 atualizarProgressoQuestoes();
+
+                document.dispatchEvent(new CustomEvent('questao-customizada-salva', {
+                    detail: { questao: resultado?.questao || dados, isEdit }
+                }));
             } catch (err) {
                 showToast(err.message || 'Erro ao salvar questão.', 'locked', 'fa-solid fa-triangle-exclamation');
             } finally {

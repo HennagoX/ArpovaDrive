@@ -44,6 +44,15 @@ export function createQuestionModuleCard(bateria, options = {}) {
         `;
     }
 
+    let adminButtonHtml = '';
+    if (options.isAdmin) {
+        adminButtonHtml = `
+            <button type="button" class="btn-bateria-admin-add" title="Adicionar questão a esta bateria">
+                <i class="fa-solid fa-circle-plus"></i> Adicionar Questão
+            </button>
+        `;
+    }
+
     const reqPillHtml = isLocked
         ? `<span class="bateria-req-badge locked"><i class="fa-solid fa-lock"></i> Requer ${modulosNecessarios} módulos</span>`
         : `<span class="bateria-req-badge available"><i class="fa-solid fa-circle-check"></i> Desbloqueada</span>`;
@@ -75,6 +84,7 @@ export function createQuestionModuleCard(bateria, options = {}) {
         <div class="bateria-action-area">
             ${statusBadgeHtml}
             ${actionButtonHtml}
+            ${adminButtonHtml}
         </div>
     `;
 
@@ -106,6 +116,17 @@ export function createQuestionModuleCard(bateria, options = {}) {
             startBtn.addEventListener('click', (event) => {
                 event.preventDefault();
                 options.onStart(bateria, startBtn);
+            });
+        }
+    }
+
+    if (options.isAdmin) {
+        const addBtn = card.querySelector('.btn-bateria-admin-add');
+        if (addBtn && typeof options.onAdminAddQuestion === 'function') {
+            addBtn.addEventListener('click', (event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                options.onAdminAddQuestion(bateria, addBtn);
             });
         }
     }

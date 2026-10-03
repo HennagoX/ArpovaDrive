@@ -147,6 +147,7 @@ export function abrirQuestoesModulos(materiaId) {
 
         baterias.forEach((bateria) => {
             const card = createQuestionModuleCard(bateria, {
+                isAdmin: usuarioGlobal.isAdmin,
                 onStart: (bat) => {
                     if (routerRef) {
                         routerRef.navigateTo('questoes-resolucao', {
@@ -162,6 +163,9 @@ export function abrirQuestoesModulos(materiaId) {
                         'locked',
                         'fa-solid fa-lock'
                     );
+                },
+                onAdminAddQuestion: (bat) => {
+                    abrirModalAdminQuestao(activeMateriaId, bat.numero);
                 }
             });
 

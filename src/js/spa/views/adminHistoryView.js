@@ -15,6 +15,7 @@ import {
     removerQuestaoAdminAPI
 } from '../../services/adminService.js';
 import { showToast } from './modulosView.js';
+import { abrirModalAdminQuestao } from './questoesView.js';
 
 let initialized = false;
 let routerRef = null;
@@ -389,11 +390,23 @@ function renderizarListaHistoricoQuestoes(lista) {
                 <span class="historico-admin-author">
                     <i class="fa-solid fa-user-shield"></i> Criado por: <strong>${escapeHtml(q.criado_por || 'admin')}</strong>
                 </span>
-                <button type="button" class="btn-admin-del-questao-card" data-id="${q.id}" title="Excluir esta questão permanentemente">
-                    <i class="fa-solid fa-trash-can"></i> Excluir Questão
-                </button>
+                <div class="admin-questao-card-actions">
+                    <button type="button" class="btn-admin-edit-questao-card" data-id="${q.id}" title="Editar esta questão">
+                        <i class="fa-solid fa-pen-to-square"></i> Editar
+                    </button>
+                    <button type="button" class="btn-admin-del-questao-card" data-id="${q.id}" title="Excluir esta questão permanentemente">
+                        <i class="fa-solid fa-trash-can"></i> Excluir Questão
+                    </button>
+                </div>
             </div>
         `;
+
+        const btnEdit = card.querySelector('.btn-admin-edit-questao-card');
+        if (btnEdit) {
+            btnEdit.addEventListener('click', () => {
+                abrirModalAdminQuestao(q.materia, q.bateria_numero, q);
+            });
+        }
 
         const btnDel = card.querySelector('.btn-admin-del-questao-card');
         if (btnDel) {
@@ -506,6 +519,11 @@ export function initAdminHistoryView(router) {
             if (e.target === modalQuestoes) fecharModalHistoricoQuestoes();
         });
     }
+
+    document.addEventListener('questao-customizada-salva', () => {
+        const selectMateria = qs("#select-historico-questoes-materia");
+        carregarERenderizarHistoricoQuestoes(selectMateria?.value || null);
+    });
 
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {

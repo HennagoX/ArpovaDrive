@@ -266,6 +266,7 @@ async function tratarResposta(indexEscolhido) {
         respostaApi = await checkAcertoQuestaoAPI({
             materia: activeMateriaId,
             bateria: activeBateriaNumero,
+            id: q.id,
             num: q.numero,
             resposta: isCorretoLocal ? q.originalCorretaLetra : 'ERRADA',
             textoResposta: textoEscolhido
