@@ -13,7 +13,9 @@ import {
     getUsuarioAtivoId,
     setUsuarioAtivoId,
     getUsuariosCadastrados,
-    verificarPermissaoAdmin
+    verificarPermissaoAdmin,
+    regenerarCronogramaComIA,
+    clearCachedTarefas
 } from '../../services/cronogramaService.js';
 import { addXp, getGamificationData, syncUserGamification } from '../../services/gamificationService.js';
 import { usuarioGlobal } from '../../services/userService.js';
@@ -509,6 +511,7 @@ function atualizarBarraSimulacaoUI() {
 async function configurarSeletorUsuarios() {
     const selectEl = qs('#select-usuario-ativo');
     const badgeEl = qs('#user-active-id-badge');
+    const btnResetIa = qs('#btn-admin-reset-cronograma');
     if (!selectEl) return;
 
     const currentUserId = getUsuarioAtivoId();
@@ -529,6 +532,38 @@ async function configurarSeletorUsuarios() {
             }
             await carregarCronograma(novoId, true);
         });
+
+        if (btnResetIa) {
+            on(btnResetIa, 'click', async () => {
+                const targetUserId = selectEl.value || getUsuarioAtivoId();
+                const selectedOpt = selectEl.options && selectEl.selectedIndex >= 0 ? selectEl.options[selectEl.selectedIndex] : null;
+                const nomeAluno = selectedOpt ? selectedOpt.textContent.trim() : 'o aluno selecionado';
+
+                const confirmacao = window.confirm(
+                    `Deseja realmente resetar o cronograma semanal de:\n${nomeAluno}\n\nO Tutor IA analisará o histórico de acertos e erros desse aluno para gerar dinamicamente 18 novas missões personalizadas para a semana!`
+                );
+                if (!confirmacao) return;
+
+                const originalHtml = btnResetIa.innerHTML;
+                btnResetIa.disabled = true;
+                btnResetIa.classList.add('is-loading');
+                btnResetIa.innerHTML = `<span class="material-symbols-outlined icone-inline" style="animation: spinCronograma 1s linear infinite;">sync</span> <span>Gerando com IA...</span>`;
+
+                try {
+                    const result = await regenerarCronogramaComIA(targetUserId);
+                    clearCachedTarefas(targetUserId);
+                    await carregarCronograma(targetUserId, true);
+                    showToast(result?.message || 'Cronograma semanal gerado com sucesso pela IA!', 'sucesso', 'fa-solid fa-wand-magic-sparkles');
+                } catch (err) {
+                    console.error('[Admin] Erro ao regenerar cronograma com IA:', err);
+                    showToast(err.message || 'Erro ao gerar missões com IA.', 'locked', 'fa-solid fa-triangle-exclamation');
+                } finally {
+                    btnResetIa.disabled = false;
+                    btnResetIa.classList.remove('is-loading');
+                    btnResetIa.innerHTML = originalHtml;
+                }
+            });
+        }
     }
 
     if (selectEl.options && selectEl.options.length > 1) {

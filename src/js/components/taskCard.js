@@ -59,6 +59,11 @@ export function createTaskCard(task, options = {}) {
         metaReqHtml = `<span class="task-req-pill"><i class="fa-solid fa-rotate-left"></i> Reforço (40%+)</span>`;
     }
 
+    const isIa = Boolean(task.sugerida_por_ia || task.parametros_validacao?.sugerida_por_ia);
+    const iaTagHtml = isIa
+        ? `<span class="task-badge-ia" title="Missão personalizada sugerida pelo Tutor IA com base no desempenho"><i class="fa-solid fa-wand-magic-sparkles"></i> Sugerida por IA</span>`
+        : '';
+
     let hintHtml = '';
     if (isDone) {
         hintHtml = `<div class="task-validation-hint hint-sucesso"><i class="fa-solid fa-circle-check"></i> Missão concluída e XP resgatado!</div>`;
@@ -114,6 +119,7 @@ export function createTaskCard(task, options = {}) {
         <div class="task-content ${isCurrent || isInProgress ? 'active' : ''}">
             <div class="task-tags-row">
                 <span class="task-tag ${tagClass}">${escapeHtml(tagLabel)}</span>
+                ${iaTagHtml}
                 ${metaReqHtml}
             </div>
             <div class="task-title">${escapeHtml(task.titulo || 'Tarefa sem título')}</div>
