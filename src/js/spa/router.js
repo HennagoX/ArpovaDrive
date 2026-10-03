@@ -7,8 +7,15 @@ class SpaRouter {
         this.currentRoute = null;
         this.currentParams = {};
         this.navItems = [];
+        this.routeListeners = [];
 
         this.handlePopState = this.handlePopState.bind(this);
+    }
+
+    onRouteChange(callback) {
+        if (typeof callback === 'function') {
+            this.routeListeners.push(callback);
+        }
     }
 
     register(name, config) {
@@ -98,6 +105,14 @@ class SpaRouter {
         if (typeof route.onEnter === 'function') {
             route.onEnter(params);
         }
+
+        this.routeListeners.forEach((fn) => {
+            try {
+                fn(routeName, params);
+            } catch (err) {
+                console.error('[SpaRouter] Erro no listener de rota:', err);
+            }
+        });
 
         window.scrollTo(0, 0);
     }

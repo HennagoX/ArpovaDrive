@@ -975,6 +975,23 @@
             </div>
         </header>
 
+        <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
+            <div class="user-selector-label">
+                <span class="spy-badge-icon"><span class="material-symbols-outlined icone-inline">visibility</span></span>
+                <strong>Painel Admin — Espiar Aluno:</strong>
+            </div>
+            <div class="user-selector-controls">
+                <select id="select-usuario-ativo" class="select-user-dropdown" title="Selecione um aluno para espiar">
+                    <option value="">Carregando lista de alunos...</option>
+                </select>
+                <span id="user-active-id-badge" class="user-id-badge">ID: ...</span>
+                <button type="button" class="btn-admin-reset-cronograma" id="btn-admin-reset-cronograma" title="Resetar e gerar novo cronograma com IA para o aluno selecionado">
+                    <span class="material-symbols-outlined icone-inline">auto_awesome</span>
+                    <span>Resetar & Gerar com IA</span>
+                </button>
+            </div>
+        </div>
+
         <section id="view-inicio" class="spa-view">
             <section class="progresso">
                 <div class="nivel">
@@ -1476,23 +1493,6 @@
                     </div>
                 </div>
             </header>
-
-            <div class="user-selector-bar" id="user-selector-bar" style="display: none;">
-                <div class="user-selector-label">
-                    <span class="material-symbols-outlined icone-inline" style="font-size: 1.15rem;">admin_panel_settings</span>
-                    <strong>Painel Admin - Selecionar Aluno:</strong>
-                </div>
-                <div class="user-selector-controls">
-                    <select id="select-usuario-ativo" class="select-user-dropdown" title="Selecione um usuário">
-                        <option value="0b0c0d89-2cea-48ad-9988-928337357643">Henrique (Henrique@gmail.com)</option>
-                    </select>
-                    <span id="user-active-id-badge" class="user-id-badge">ID: 0b0c0d89...</span>
-                    <button type="button" class="btn-admin-reset-cronograma" id="btn-admin-reset-cronograma" title="Resetar e gerar novo cronograma com IA para o aluno selecionado">
-                        <span class="material-symbols-outlined icone-inline">auto_awesome</span>
-                        <span>Resetar & Gerar com IA</span>
-                    </button>
-                </div>
-            </div>
 
             <div class="simulation-hud" id="simulation-hud" style="display: none;">
                 <div class="sim-label">

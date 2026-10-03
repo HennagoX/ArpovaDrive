@@ -2,6 +2,7 @@ import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
 import { getCurrentUser } from '../../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento } from '../../services/gamificationService.js';
 import { fetchDesempenho, getLocalDesempenho } from '../../services/desempenhoService.js';
+import { getUsuarioAtivoId } from '../../services/cronogramaService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { SELECTORS } from '../../constants/selectors.js';
 
@@ -51,7 +52,8 @@ function aplicarDesempenhoNaTela(desempenho) {
     const tituloSaudacao = qs('#inicio-saudacao');
     const subtitulo = qs('#inicio-subtitulo');
 
-    const nomeAluno = usuarioGlobal.nome || desempenho.usuario?.nome || 'Aluno';
+    const isAdm = Boolean(usuarioGlobal.isAdmin || usuarioGlobal.is_admin);
+    const nomeAluno = (isAdm && desempenho.usuario?.nome) ? desempenho.usuario.nome : (usuarioGlobal.nome || desempenho.usuario?.nome || 'Aluno');
 
     if (tituloSaudacao) {
         setText(tituloSaudacao, `Desempenho de ${nomeAluno}`);
@@ -191,8 +193,7 @@ function aplicarDesempenhoNaTela(desempenho) {
 }
 
 export async function renderDesempenho(forceRefresh = false) {
-    const user = getCurrentUser();
-    const userId = user?.id_usuario || null;
+    const activeUserId = getUsuarioAtivoId();
 
     usuarioGlobal.updateUI();
 
@@ -202,7 +203,7 @@ export async function renderDesempenho(forceRefresh = false) {
     }
 
     try {
-        const remoto = await fetchDesempenho(userId, forceRefresh);
+        const remoto = await fetchDesempenho(activeUserId, forceRefresh);
         if (remoto && remoto.resumo) {
             aplicarDesempenhoNaTela(remoto);
         }

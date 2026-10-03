@@ -78,19 +78,14 @@ export async function renderCronograma(options = {}) {
     try {
         const isAdmin = await verificarPermissaoAdmin();
         const adminBadge = qs('#admin-indicator-badge');
-        const userSelectorBar = qs('#user-selector-bar');
         const simulationHud = qs('#simulation-hud');
 
         if (isAdmin) {
             if (adminBadge) adminBadge.style.display = 'inline-flex';
-            if (userSelectorBar) userSelectorBar.style.display = 'flex';
             if (simulationHud) simulationHud.style.display = 'flex';
-
             atualizarBarraSimulacaoUI();
-            await configurarSeletorUsuarios();
         } else {
             if (adminBadge) adminBadge.style.display = 'none';
-            if (userSelectorBar) userSelectorBar.style.display = 'none';
             if (simulationHud) simulationHud.style.display = 'none';
         }
     } catch {
@@ -99,7 +94,7 @@ export async function renderCronograma(options = {}) {
     await carregarCronograma(activeUserId, options.forceRefresh || false);
 }
 
-async function carregarCronograma(userId, forceRefresh = false) {
+export async function carregarCronograma(userId, forceRefresh = false) {
     const loadingEl = qs('#cronograma-loading');
     const errorEl = qs('#cronograma-error');
     const banner = qs('#task-atual-banner');
@@ -470,7 +465,6 @@ function atualizarHud(usuarioPayload) {
     }
 }
 
-let seletorUsuariosConfigurado = false;
 let barraSimulacaoConfigurada = false;
 
 function initBarraSimulacao() {
@@ -506,84 +500,4 @@ function atualizarBarraSimulacaoUI() {
             btn.classList.remove('active');
         }
     });
-}
-
-async function configurarSeletorUsuarios() {
-    const selectEl = qs('#select-usuario-ativo');
-    const badgeEl = qs('#user-active-id-badge');
-    const btnResetIa = qs('#btn-admin-reset-cronograma');
-    if (!selectEl) return;
-
-    const currentUserId = getUsuarioAtivoId();
-
-    if (badgeEl) {
-        badgeEl.textContent = `ID: ${currentUserId.substring(0, 8)}...`;
-        badgeEl.title = currentUserId;
-    }
-
-    if (!seletorUsuariosConfigurado) {
-        seletorUsuariosConfigurado = true;
-        on(selectEl, 'change', async (e) => {
-            const novoId = e.target.value;
-            setUsuarioAtivoId(novoId);
-            if (badgeEl) {
-                badgeEl.textContent = `ID: ${novoId.substring(0, 8)}...`;
-                badgeEl.title = novoId;
-            }
-            await carregarCronograma(novoId, true);
-        });
-
-        if (btnResetIa) {
-            on(btnResetIa, 'click', async () => {
-                const targetUserId = selectEl.value || getUsuarioAtivoId();
-                const selectedOpt = selectEl.options && selectEl.selectedIndex >= 0 ? selectEl.options[selectEl.selectedIndex] : null;
-                const nomeAluno = selectedOpt ? selectedOpt.textContent.trim() : 'o aluno selecionado';
-
-                const confirmacao = window.confirm(
-                    `Deseja realmente resetar o cronograma semanal de:\n${nomeAluno}\n\nO Tutor IA analisará o histórico de acertos e erros desse aluno para gerar dinamicamente 18 novas missões personalizadas para a semana!`
-                );
-                if (!confirmacao) return;
-
-                const originalHtml = btnResetIa.innerHTML;
-                btnResetIa.disabled = true;
-                btnResetIa.classList.add('is-loading');
-                btnResetIa.innerHTML = `<span class="material-symbols-outlined icone-inline" style="animation: spinCronograma 1s linear infinite;">sync</span> <span>Gerando com IA...</span>`;
-
-                try {
-                    const result = await regenerarCronogramaComIA(targetUserId);
-                    clearCachedTarefas(targetUserId);
-                    await carregarCronograma(targetUserId, true);
-                    showToast(result?.message || 'Cronograma semanal gerado com sucesso pela IA!', 'sucesso', 'fa-solid fa-wand-magic-sparkles');
-                } catch (err) {
-                    console.error('[Admin] Erro ao regenerar cronograma com IA:', err);
-                    showToast(err.message || 'Erro ao gerar missões com IA.', 'locked', 'fa-solid fa-triangle-exclamation');
-                } finally {
-                    btnResetIa.disabled = false;
-                    btnResetIa.classList.remove('is-loading');
-                    btnResetIa.innerHTML = originalHtml;
-                }
-            });
-        }
-    }
-
-    if (selectEl.options && selectEl.options.length > 1) {
-        selectEl.value = currentUserId;
-        return;
-    }
-
-    try {
-        const usuarios = await getUsuariosCadastrados();
-        selectEl.innerHTML = '';
-        usuarios.forEach((u) => {
-            const opt = document.createElement('option');
-            opt.value = u.id_usuario;
-            opt.textContent = `${u.nome} (${u.email || u.exp + ' XP'})`;
-            if (u.id_usuario === currentUserId) {
-                opt.selected = true;
-            }
-            selectEl.appendChild(opt);
-        });
-        selectEl.value = currentUserId;
-    } catch {
-    }
 }

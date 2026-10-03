@@ -2,7 +2,7 @@
 import { qs, qsa, setText, setHTML } from '../../utils/dom.js';
 import { getCurrentUser, logout } from '../../services/authService.js';
 import { getGamificationData, getTaxaAproveitamento, syncUserGamification, updateLevelUI } from '../../services/gamificationService.js';
-import { getTarefas } from '../../services/cronogramaService.js';
+import { getTarefas, getUsuarioAtivoId } from '../../services/cronogramaService.js';
 import { fetchDesempenho, getLocalDesempenho } from '../../services/desempenhoService.js';
 import { usuarioGlobal } from '../../services/userService.js';
 import { ROUTES } from '../../constants/routes.js';
@@ -17,8 +17,8 @@ export function initDashboardView(router) {
     window.addEventListener('aprovadrive:desempenho-invalidado', () => {
         const viewInicio = qs('#view-inicio');
         if (viewInicio && viewInicio.style.display !== 'none') {
-            const user = getCurrentUser();
-            fetchDesempenho(user?.id_usuario, true).then(remoto => {
+            const activeId = getUsuarioAtivoId();
+            fetchDesempenho(activeId, true).then(remoto => {
                 if (remoto && remoto.resumo) {
                     atualizarCardDesempenhoResumo(remoto);
                 }
@@ -63,7 +63,7 @@ export async function renderDashboard() {
         atualizarCardDesempenhoResumo(localDesempenho);
     }
 
-    fetchDesempenho(user?.id_usuario, false)
+    fetchDesempenho(getUsuarioAtivoId(), false)
         .then(remoto => {
             if (remoto && remoto.resumo) {
                 atualizarCardDesempenhoResumo(remoto);

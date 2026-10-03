@@ -734,6 +734,9 @@ body.cronograma-standalone {
   }
 
   .user-selector-bar {
+    position: sticky !important;
+    top: 8px !important;
+    z-index: 95 !important;
     flex-direction: column !important;
     align-items: stretch !important;
     gap: 10px !important;
@@ -795,8 +798,13 @@ body.cronograma-standalone {
 }
 
 .user-selector-bar {
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
+  position: sticky;
+  top: 12px;
+  z-index: 95;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1.5px solid var(--border-card);
   border-radius: var(--radius-md);
   padding: 10px 16px;
   margin-bottom: var(--space-md);
@@ -805,15 +813,32 @@ body.cronograma-standalone {
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.06);
+  transition: all 0.2s ease;
 }
 
 .user-selector-label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.9rem;
+  gap: 8px;
+  font-size: 0.92rem;
   color: var(--text-dark);
+}
+
+.spy-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  background: #ede9fe;
+  color: #7c3aed;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.spy-badge-icon .material-symbols-outlined {
+  font-size: 1.15rem;
 }
 
 .user-selector-controls {
@@ -1140,6 +1165,20 @@ body.cronograma-standalone {
   box-shadow: 0 0 22px rgba(139, 92, 246, 0.55) !important;
 }
 
+[data-theme="dark"] .user-selector-bar {
+  background: rgba(20, 21, 29, 0.88) !important;
+  backdrop-filter: blur(16px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(180%) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-body) !important;
+}
+
+[data-theme="dark"] .spy-badge-icon {
+  background: rgba(124, 58, 237, 0.25) !important;
+  color: #c084fc !important;
+}
+
 [data-theme="dark"] .task-badge-ia {
   background: rgba(168, 85, 247, 0.15) !important;
   color: #c084fc !important;
@@ -1149,4 +1188,5 @@ body.cronograma-standalone {
 [data-theme="dark"] .task-badge-ia i {
   color: #d8b4fe !important;
 }
+
 
