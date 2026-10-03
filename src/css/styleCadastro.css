@@ -45,7 +45,6 @@ body {
   transform: scale(1.03);
 }
 
-/* Caminhos do logo no Modo Claro (Padrão) */
 .aprovadrive-path-green {
   fill: url(#aprovadrive-grad-green-light);
   transition: fill 0.3s ease, filter 0.3s ease;
@@ -385,7 +384,6 @@ h1 {
   }
 }
 
-/* Dark Mode para Campos de Formulário de Autenticação */
 [data-theme="dark"] .campo input,
 [data-theme="dark"] .campo select {
   background: #14151d !important;

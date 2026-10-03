@@ -19,9 +19,6 @@ function getGamification() {
 
 const updateListeners = new Set();
 
-/**
- * Objeto global de usuário com acesso dinâmico às informações básicas e sincronização de UI.
- */
 export const usuarioGlobal = {
     get id() {
         const u = getRawUser();
@@ -112,9 +109,6 @@ export const usuarioGlobal = {
         return this.isAdmin;
     },
 
-    /**
-     * Retorna uma cópia plana com todos os dados básicos do usuário.
-     */
     get() {
         return {
             id: this.id,
@@ -136,9 +130,6 @@ export const usuarioGlobal = {
         };
     },
 
-    /**
-     * Sincroniza dados parciais no perfil armazenado e atualiza a interface.
-     */
     sync(partialData = {}) {
         if (!partialData || typeof partialData !== 'object') return this.get();
         const current = getRawUser() || {};
@@ -151,7 +142,6 @@ export const usuarioGlobal = {
         }
 
         const merged = { ...current, ...partialData };
-        // Preserva o status de administrador
         if (current.is_admin || current.isAdmin) {
             merged.is_admin = true;
             merged.isAdmin = true;
@@ -163,9 +153,6 @@ export const usuarioGlobal = {
         return this.get();
     },
 
-    /**
-     * Atualiza automaticamente os elementos visuais de perfil e avatar na página.
-     */
     updateUI(container = document) {
         if (typeof document === 'undefined') return;
 
@@ -182,7 +169,6 @@ export const usuarioGlobal = {
                 }
             }
 
-            // Atualiza o nome exibido em 'Meu perfil' (ou qualquer .perfil-nome strong)
             const perfilNomes = container.querySelectorAll
                 ? container.querySelectorAll('.perfil-nome strong')
                 : document.querySelectorAll('.perfil-nome strong');
@@ -193,7 +179,6 @@ export const usuarioGlobal = {
                 }
             });
 
-            // Gerencia badge de Administrador no topo
             const perfis = container.querySelectorAll
                 ? container.querySelectorAll('.perfil-nome')
                 : document.querySelectorAll('.perfil-nome');
@@ -213,7 +198,6 @@ export const usuarioGlobal = {
                 }
             });
 
-            // Atualiza a letra do avatar (.avatar)
             const avatares = container.querySelectorAll
                 ? container.querySelectorAll('.perfil .avatar, .topo .avatar')
                 : document.querySelectorAll('.perfil .avatar, .topo .avatar');
@@ -229,7 +213,6 @@ export const usuarioGlobal = {
                 }
             });
 
-            // Atualiza botões e controles administrativos por toda a aplicação
             const adminSelectors = [
                 '#btn-admin-add-questao',
                 '#btn-admin-gerenciar-questoes',
@@ -253,9 +236,6 @@ export const usuarioGlobal = {
         }
     },
 
-    /**
-     * Confirma com o servidor se o usuário possui cargo de Administrador e sincroniza a sessão.
-     */
     async verificarAdminComServidor() {
         const u = getRawUser();
         const id = u?.id_usuario || u?.id || u?.userId;
@@ -282,9 +262,6 @@ export const usuarioGlobal = {
         return this.isAdmin;
     },
 
-    /**
-     * Registra callback para atualizações do perfil do usuário.
-     */
     onUpdate(fn) {
         if (typeof fn === 'function') {
             updateListeners.add(fn);
@@ -305,7 +282,6 @@ export const usuarioGlobal = {
     }
 };
 
-// Aliases para conveniência
 export const currentUser = usuarioGlobal;
 export const userGlobal = usuarioGlobal;
 export function getUserProfile() {
@@ -315,12 +291,10 @@ export function updateUserProfileUI(container) {
     return usuarioGlobal.updateUI(container);
 }
 
-// Expõe globalmente no objeto window para acessibilidade total
 if (typeof window !== 'undefined') {
     window.usuarioGlobal = usuarioGlobal;
     window.currentUser = usuarioGlobal;
 
-    // Sincronização inicial automática na carga da página
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', () => {
             usuarioGlobal.updateUI();

@@ -62,7 +62,6 @@ export function initTarefasView(router) {
     if (initialized) return;
     initialized = true;
 
-    // Listener para delegação de clique em abas de filtro
     const filterContainer = qs('#tarefas-filtros');
     if (filterContainer) {
         filterContainer.addEventListener('click', (e) => {
@@ -86,7 +85,6 @@ export function initTarefasView(router) {
         });
     }
 
-    // Handlers para Modal Admin de Tarefa Fixa
     const btnAddFixa = qs('#btn-admin-add-tarefa-fixa');
     if (btnAddFixa) {
         btnAddFixa.onclick = (e) => {
@@ -208,7 +206,6 @@ export function initTarefasView(router) {
 export function setActiveFilter(filterId) {
     activeFilter = filterId;
 
-    // Atualiza visual dos botões de filtro
     const buttons = qsa('.tarefas-filter-btn');
     buttons.forEach(btn => {
         if (btn.dataset.filter === filterId) {
@@ -218,7 +215,6 @@ export function setActiveFilter(filterId) {
         }
     });
 
-    // Filtra seções visíveis
     const sections = qsa('.tarefas-conteudo-section');
     sections.forEach(sec => {
         if (filterId === 'todos' || sec.dataset.conteudoId === filterId) {
@@ -285,7 +281,6 @@ export async function renderTarefas(forceRefresh = false) {
             throw new Error('Dados de tarefas não retornados.');
         }
 
-        // Atualiza estatísticas do Hero
         const resumo = payload.resumo || {};
         if (heroTotalTasks) setText(heroTotalTasks, String(resumo.totalTasks || 0));
         if (heroConcluidas) setText(heroConcluidas, `${resumo.concluidas || 0} / ${resumo.totalTasks || 0}`);
@@ -293,16 +288,13 @@ export async function renderTarefas(forceRefresh = false) {
         if (heroProgressPct) setText(heroProgressPct, `${resumo.porcentagemConcluida || 0}%`);
         if (heroProgressFill) heroProgressFill.style.width = `${resumo.porcentagemConcluida || 0}%`;
 
-        // Sincroniza barra de XP e nível do topo da tela inicial
         if (payload.usuario) {
             usuarioGlobal.sync(payload.usuario);
             syncUserGamification(payload.usuario);
         }
 
-        // Atualiza os contadores das abas de filtro
         renderFilterTabs(payload.conteudos);
 
-        // Renderiza cada seção de conteúdo
         if (container) {
             container.innerHTML = '';
             const conteudosList = Object.values(payload.conteudos);
@@ -476,7 +468,6 @@ async function handleClaimTask(task, buttonEl) {
     try {
         const result = await concluirTarefaFixa(task.id);
 
-        // Confirmação com dados exatos retornados pelo backend
         atualizarXpNoLocalStorage({
             xpGanho: result.xpGanho || xpAmount,
             expTotal: result.expTotal,
@@ -499,7 +490,6 @@ async function handleClaimTask(task, buttonEl) {
             );
         }
 
-        // Recarrega lista e atualiza números em tempo real
         await renderTarefas(true);
     } catch (err) {
         showToast(err.message, 'error', 'fa-solid fa-triangle-exclamation');

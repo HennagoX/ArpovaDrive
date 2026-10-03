@@ -292,7 +292,6 @@ body.tutor-ia-active #view-tutor-ia {
     box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04), 0 0 14px rgba(8, 126, 157, 0.07);
 }
 
-/* AI Message Formatted Elements */
 .chat-msg-bot .chat-bubble .bot-msg-content {
     display: block;
 }
@@ -316,7 +315,6 @@ body.tutor-ia-active #view-tutor-ia {
     margin-bottom: 0;
 }
 
-/* Bold / Strong emphasis */
 .chat-msg-bot .chat-bubble strong,
 .chat-msg-bot .chat-bubble b {
     font-weight: 700;
@@ -324,14 +322,12 @@ body.tutor-ia-active #view-tutor-ia {
     letter-spacing: -0.01em;
 }
 
-/* Italic */
 .chat-msg-bot .chat-bubble em,
 .chat-msg-bot .chat-bubble i {
     font-style: italic;
     color: #334155;
 }
 
-/* Headings */
 .chat-msg-bot .chat-bubble h3,
 .chat-msg-bot .chat-bubble .bot-h3 {
     font-size: 16px;
@@ -359,7 +355,6 @@ body.tutor-ia-active #view-tutor-ia {
     margin-top: 0;
 }
 
-/* Lists */
 .chat-msg-bot .chat-bubble ul,
 .chat-msg-bot .chat-bubble ol,
 .chat-msg-bot .chat-bubble .bot-list {
@@ -406,7 +401,6 @@ body.tutor-ia-active #view-tutor-ia {
     font-weight: 700;
 }
 
-/* List Lead-in / Group Titles */
 .chat-msg-bot .chat-bubble .bot-list-lead {
     font-weight: 700;
     color: var(--primary-blue, #0752a0);
@@ -418,7 +412,6 @@ body.tutor-ia-active #view-tutor-ia {
     margin-top: 2px !important;
 }
 
-/* Duration / Time Tag */
 .chat-msg-bot .chat-bubble .bot-time-pill {
     display: inline-flex;
     align-items: center;
@@ -441,7 +434,6 @@ body.tutor-ia-active #view-tutor-ia {
     color: var(--gradient-mid, #087e9d);
 }
 
-/* Blockquotes / Dicas / Callouts */
 .chat-msg-bot .chat-bubble blockquote,
 .chat-msg-bot .chat-bubble .bot-blockquote {
     background: linear-gradient(135deg, rgba(8, 126, 157, 0.08) 0%, rgba(8, 167, 131, 0.05) 100%);
@@ -459,7 +451,6 @@ body.tutor-ia-active #view-tutor-ia {
     line-height: 1.55;
 }
 
-/* Inline Code / CTB citations */
 .chat-msg-bot .chat-bubble code,
 .chat-msg-bot .chat-bubble .bot-inline-code {
     background: rgba(8, 126, 157, 0.09);
@@ -472,7 +463,6 @@ body.tutor-ia-active #view-tutor-ia {
     font-weight: 600;
 }
 
-/* Code block */
 .chat-msg-bot .chat-bubble pre,
 .chat-msg-bot .chat-bubble .bot-code-block {
     background: #0f172a;
@@ -495,7 +485,6 @@ body.tutor-ia-active #view-tutor-ia {
     font-size: inherit;
 }
 
-/* Dividers */
 .chat-msg-bot .chat-bubble hr,
 .chat-msg-bot .chat-bubble .bot-divider {
     border: 0;
@@ -503,7 +492,6 @@ body.tutor-ia-active #view-tutor-ia {
     margin: 12px 0;
 }
 
-/* Links */
 .chat-msg-bot .chat-bubble a,
 .chat-msg-bot .chat-bubble .bot-link {
     color: var(--primary-blue, #0752a0);
@@ -518,7 +506,6 @@ body.tutor-ia-active #view-tutor-ia {
     color: var(--gradient-mid, #087e9d);
 }
 
-/* Tables */
 .chat-msg-bot .chat-bubble .bot-table-wrapper {
     width: 100%;
     overflow-x: auto;
@@ -971,9 +958,6 @@ body.tutor-ia-active #view-tutor-ia {
     }
 }
 
-/* =========================================================
-   TUTOR IA NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
-   ========================================================= */
 [data-theme="dark"] .tutor-ia-card {
     background: rgba(20, 21, 29, 0.74) !important;
     backdrop-filter: blur(20px) saturate(180%);
@@ -1128,4 +1112,3 @@ body.tutor-ia-active #view-tutor-ia {
 [data-theme="dark"] .tutor-ia-input::placeholder {
     color: #64748b !important;
 }
-

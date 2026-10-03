@@ -245,9 +245,6 @@ export function initQuestoesView(router) {
         });
     });
 
-    // =========================================================================
-    // Admin: Eventos de Criação de Questões
-    // =========================================================================
     const btnAdminAdd = qs('#btn-admin-add-questao');
     if (btnAdminAdd) {
         btnAdminAdd.addEventListener('click', () => {

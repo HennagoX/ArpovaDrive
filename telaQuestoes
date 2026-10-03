@@ -1,6 +1,5 @@
    <section id="view-conteudos" class="spa-view" style="display: none;">
 
-            <!-- SWelcome -->
              <div class="card-borda-giratoria">
             <section class="welcome">
                 <div>
@@ -36,7 +35,6 @@
                 <span id="contador">5 conteúdos</span>
             </div>
 
-            <!-- SEbooks -->
             <section class="ebooks" id="ebooks">
 
                 <article class="ebook" data-category="legislacao" data-id="CodigoTransito">

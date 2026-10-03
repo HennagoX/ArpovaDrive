@@ -272,7 +272,6 @@ export function getCachedTarefas(userId) {
         const mockDia = getMockDia() || 'real';
         const key = `${usuarioId}_${mockDia}`;
 
-        // 1. Verificação ultrarrápida em memória (0 overhead de I/O)
         if (memoryTaskCache.has(key)) {
             const cached = memoryTaskCache.get(key);
             if (cached && cached.dias) {
@@ -280,7 +279,6 @@ export function getCachedTarefas(userId) {
             }
         }
 
-        // 2. Verificação no sessionStorage da aba
         const storageKey = `${SESSION_CRONOGRAMA_KEY}_${key}`;
         const raw = sessionStorage.getItem(storageKey);
         if (raw) {
@@ -291,7 +289,6 @@ export function getCachedTarefas(userId) {
             }
         }
 
-        // 3. Fallback no localStorage caso a sessão esteja vazia
         const local = getLocalItem(STORAGE_KEYS.CRONOGRAMA, null);
         if (local && local.dias) {
             const localUser = local.usuario?.id_usuario || local.usuario?.id;

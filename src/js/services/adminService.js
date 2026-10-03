@@ -1,9 +1,3 @@
-/**
- * AprovaDrive - Admin Service
- * Centraliza e organiza todos os serviços administrativos para módulos, PDFs,
- * histórico de alterações, reversão, banco de questões e simulados.
- */
-
 import { ENDPOINTS } from '../constants/routes.js';
 import { getModuloUserId } from './moduloService.js';
 
@@ -16,10 +10,6 @@ function getAdminHeaders(extraHeaders = {}) {
         ...extraHeaders
     };
 }
-
-// ============================================================================
-// 1. Módulos & PDFs: Histórico, Reversão e Exclusão
-// ============================================================================
 
 export async function obterHistoricoPdfAdmin(conteudoId = null, moduloId = null) {
     try {
@@ -76,10 +66,6 @@ export async function limparHistoricoPdfAdmin(conteudoId = null, moduloId = null
     }
     return resData;
 }
-
-// ============================================================================
-// 2. Banco de Questões: Criação, Listagem e Remoção
-// ============================================================================
 
 const memoryAdminCache = new Map();
 const inFlightAdminRequests = new Map();
@@ -167,10 +153,6 @@ export async function removerQuestaoAdminAPI(id) {
     invalidarCacheQuestoesAdmin();
     return resData;
 }
-
-// ============================================================================
-// 3. Simulados Customizados: Criação, Listagem e Remoção
-// ============================================================================
 
 export async function criarSimuladoAdminAPI(dados) {
     const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_CRIAR, {

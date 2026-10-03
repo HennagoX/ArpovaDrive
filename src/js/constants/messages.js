@@ -1,29 +1,24 @@
 export const MESSAGES = {
-    // Validações de Formulário
     CAMPOS_OBRIGATORIOS: 'Por favor, preencha todos os campos.',
     SENHAS_DIVERGENTES: 'As senhas não coincidem.',
     SENHA_CURTA: 'A senha deve ter no mínimo 6 caracteres.',
 
-    // Autenticação e Ações
     LOGIN_SUCESSO: 'Entrando...',
     CADASTRO_SUCESSO: 'Cadastro realizado com sucesso! Redirecionando...',
     ESQUECI_SENHA_INFO: 'Página de recuperação de senha.',
     GOOGLE_INFO: 'Aqui será integrada a entrada com Google.',
     LOGIN_ERRADO: 'E-mail ou senha incorretos.',
 
-    // Módulos e Conteúdos
     MODULO_BLOQUEADO: 'Conclua o módulo anterior para desbloquear este módulo!',
     MODULO_EM_BREVE: 'Módulo em desenvolvimento. A leitura estará disponível em breve!',
     QUESTAO_BLOQUEADA: 'Conclua ao menos 3 módulos de estudo desta matéria para desbloquear este módulo de questões!',
     QUESTAO_EM_BREVE: 'Módulo de questões selecionado. A tela interativa de resolução de questões será conectada em breve!',
 
-    // Erros de Conexão e Rede
     CONEXAO_FALHA: 'Não foi possível se conectar com o servidor. Verifique sua conexão e tente novamente.',
     CONEXAO_TIMEOUT: 'O servidor demorou muito para responder (tempo limite esgotado). Tente novamente em instantes.',
     CONEXAO_OFFLINE: 'Você está sem conexão com a internet. Verifique sua rede e tente novamente.',
     ERRO_INESPERADO: 'Ocorreu um erro inesperado ao se comunicar com o servidor. Tente novamente mais tarde.',
 
-    // Mensagens de Erros HTTP Personalizadas e Amigáveis (incluindo o código de erro HTTP)
     HTTP_400: 'Dados inválidos ou incompletos na requisição. (Erro HTTP 400)',
     HTTP_401: 'Acesso não autorizado. Credenciais incorretas ou sessão expirada. (Erro HTTP 401)',
     HTTP_403: 'Acesso negado. Você não tem permissão para acessar este recurso. (Erro HTTP 403)',
@@ -85,13 +80,6 @@ const TECHNICAL_ERROR_PATTERNS = [
     '<!doctype html>'
 ];
 
-/**
- * Verifica se a mensagem retornada pelo servidor é técnica/padrão
- * (que deve ser substituída por uma mensagem personalizada mais amigável).
- * 
- * @param {string} msg
- * @returns {boolean}
- */
 export function isTechnicalMessage(msg) {
     if (!msg || typeof msg !== 'string') return true;
     const lower = msg.toLowerCase().trim();
@@ -99,22 +87,11 @@ export function isTechnicalMessage(msg) {
     return TECHNICAL_ERROR_PATTERNS.some(pattern => lower.includes(pattern));
 }
 
-/**
- * Retorna mensagem amigável para status HTTP, substituindo erros técnicos ou genéricos do servidor
- * por mensagens personalizadas e garantindo a indicação do código HTTP.
- * 
- * @param {number|string} status Código de status HTTP (ex: 400, 401, 404, 500)
- * @param {string} [serverError] Mensagem original vinda do servidor
- * @param {string} [customFallback] Fallback personalizado
- * @returns {string} Mensagem amigável com indicação do código HTTP
- */
 export function getHttpErrorMessage(status, serverError = '', customFallback = '') {
     const statusCode = Number(status);
 
-    // Se o backend enviou uma mensagem amigável específica (não técnica)
     if (serverError && !isTechnicalMessage(serverError)) {
         const cleanMsg = serverError.trim();
-        // Se a mensagem já possui indicação do código HTTP
         if (/http\s*\d+/i.test(cleanMsg) || (statusCode && cleanMsg.includes(String(statusCode)))) {
             return cleanMsg;
         }
@@ -122,12 +99,10 @@ export function getHttpErrorMessage(status, serverError = '', customFallback = '
         return statusCode ? `${formattedMsg} (Erro HTTP ${statusCode})` : formattedMsg;
     }
 
-    // Se existe uma mensagem personalizada no catálogo para este código HTTP
     if (statusCode && HTTP_ERROR_MESSAGES[statusCode]) {
         return HTTP_ERROR_MESSAGES[statusCode];
     }
 
-    // Se houver um fallback amigável fornecido
     if (customFallback && !isTechnicalMessage(customFallback)) {
         const cleanFallback = customFallback.trim();
         if (/http\s*\d+/i.test(cleanFallback) || (statusCode && cleanFallback.includes(String(statusCode)))) {
@@ -137,7 +112,6 @@ export function getHttpErrorMessage(status, serverError = '', customFallback = '
         return statusCode ? `${formattedFallback} (Erro HTTP ${statusCode})` : formattedFallback;
     }
 
-    // Categorias genéricas HTTP com código
     if (statusCode >= 400 && statusCode < 500) {
         return `Não foi possível processar a requisição. (Erro HTTP ${statusCode})`;
     }
@@ -148,19 +122,12 @@ export function getHttpErrorMessage(status, serverError = '', customFallback = '
     return statusCode ? `Falha na comunicação com o servidor. (Erro HTTP ${statusCode})` : MESSAGES.CONEXAO_FALHA;
 }
 
-/**
- * Retorna uma mensagem amigável para falhas de rede, conexão e timeouts de requisição.
- * 
- * @param {Error|any} error Objeto de erro capturado no catch
- * @returns {string} Mensagem amigável de erro de conexão
- */
 export function getNetworkErrorMessage(error) {
     if (!error) return MESSAGES.CONEXAO_FALHA;
 
     const errorName = error.name || '';
     const errorMsg = String(error.message || '').toLowerCase();
 
-    // Timeout de requisição
     if (
         errorName === 'TimeoutError' ||
         errorName === 'AbortError' ||
@@ -171,7 +138,6 @@ export function getNetworkErrorMessage(error) {
         return MESSAGES.CONEXAO_TIMEOUT;
     }
 
-    // Sem conexão de rede no dispositivo
     if (typeof navigator !== 'undefined' && navigator && navigator.onLine === false) {
         return MESSAGES.CONEXAO_OFFLINE;
     }

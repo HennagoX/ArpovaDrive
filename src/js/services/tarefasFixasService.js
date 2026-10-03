@@ -8,7 +8,7 @@ import { TIMING } from '../constants/timing.js';
 import { getHttpErrorMessage, getNetworkErrorMessage } from '../constants/messages.js';
 
 export const SESSION_TAREFAS_FIXAS_KEY = 'aprovadrive_tarefas_fixas_cache';
-const TAREFAS_FIXAS_CACHE_TTL_MS = 60000; // 60 segundos
+const TAREFAS_FIXAS_CACHE_TTL_MS = 60000;
 const memoryTarefasFixasCache = new Map();
 const inFlightTarefasFixasRequests = new Map();
 
@@ -17,13 +17,11 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
     const now = Date.now();
 
     if (!forceRefresh) {
-        // 1. In-memory cache com TTL
         const memCached = memoryTarefasFixasCache.get(usuarioId);
         if (memCached && (now - memCached.timestamp < TAREFAS_FIXAS_CACHE_TTL_MS) && memCached.data?.conteudos) {
             return memCached.data;
         }
 
-        // 2. SessionStorage cache
         try {
             const cached = sessionStorage.getItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
             if (cached) {
@@ -33,12 +31,9 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
                     return parsed;
                 }
             }
-        } catch {
-            // Ignora erro de cache
-        }
+        } catch {}
     }
 
-    // Deduplica requisições concorrentes em voo
     if (inFlightTarefasFixasRequests.has(usuarioId)) {
         return inFlightTarefasFixasRequests.get(usuarioId);
     }
@@ -65,9 +60,7 @@ export async function getTarefasFixas(userId, forceRefresh = false) {
                 memoryTarefasFixasCache.set(usuarioId, { data, timestamp: Date.now() });
                 try {
                     sessionStorage.setItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`, JSON.stringify(data));
-                } catch {
-                    // Ignore storage limits
-                }
+                } catch {}
                 return data;
             }
 
@@ -115,16 +108,12 @@ export async function concluirTarefaFixa(taskId, userId) {
         throw new Error(getHttpErrorMessage(response.status, data.error, 'Não foi possível concluir esta tarefa.'));
     }
 
-    // Invalida cache local da sessão e memória para forçar sincronização
     memoryTarefasFixasCache.delete(usuarioId);
     invalidateLocalDesempenhoCache(usuarioId);
     try {
         sessionStorage.removeItem(`${SESSION_TAREFAS_FIXAS_KEY}_${usuarioId}`);
-    } catch {
-        // Ignora
-    }
+    } catch {}
 
-    // Atualiza imediatamente o localStorage com o XP e LV incrementados
     const xpGanho = Number(data.xpGanho || 0);
     const expTotal = data.expTotal !== undefined ? Number(data.expTotal) : null;
     const lv = data.lv !== undefined ? Number(data.lv) : null;

@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
 
-/* =========================================================
-   TEMA PADRÃO (DEFAULT LIGHT MODE)
-   ========================================================= */
 :root {
   --primary-blue: #0752a0;
   --primary-blue-hover: #064583;
@@ -56,12 +53,9 @@
   --shadow-card-strong: 0 12px 30px rgba(0, 0, 0, 0.15);
 }
 
-/* =========================================================
-   TEMA VITE DARK (ESTILO HTTPS://VITE.DEV/)
-   ========================================================= */
 :root[data-theme="dark"],
 body[data-theme="dark"] {
-  /* Paleta Dark Blue & Medium Blue com Gradientes Fluidos */
+  
   --blue-deep: #050d1a;
   --blue-dark: #0a1b38;
   --blue-medium: #0752a0;
@@ -69,7 +63,7 @@ body[data-theme="dark"] {
   --blue-cyan: #38bdf8;
   --blue-soft: rgba(56, 189, 248, 0.16);
 
-  /* Primary Blue restaurado ao tema original de azul escuro e médio */
+  
   --primary-blue: #0752a0;
   --primary-blue-hover: #0284c7;
   --primary-blue-soft: rgba(56, 189, 248, 0.16);
@@ -77,10 +71,10 @@ body[data-theme="dark"] {
   --gradient-mid: #0752a0;
   --gradient-end: #0284c7;
 
-  /* Textura de Granulado PNG de Alta Performance */
+  
   --bg-grain: url("data:image/png;base64,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");
 
-  /* Brand Accents Adaptados para Dark Mode */
+  
   --brand-green: #10b981;
   --brand-green-hover: #059669;
   --brand-green-soft: rgba(16, 185, 129, 0.16);
@@ -88,34 +82,31 @@ body[data-theme="dark"] {
   --brand-yellow-hover: #f59e0b;
   --google-blue: #38bdf8;
 
-  /* Superfícies Dark Glass com Efeito Vidro Escuro (Glassmorphism) */
-  --bg-page: #0c0e15;                          /* Fundo preto profundo */
-  --bg-card: rgba(20, 21, 29, 0.74);           /* Preto estilizado meio vidro */
-  --bg-card-hover: rgba(28, 30, 42, 0.85);     /* Vidro elevado no hover */
-  --bg-light: rgba(255, 255, 255, 0.04);       /* Superfície interna sutil */
-  --bg-subtle: #141418;                        /* Sidebar / fundo rebaixado */
+  
+  --bg-page: #0c0e15;                          
+  --bg-card: rgba(20, 21, 29, 0.74);           
+  --bg-card-hover: rgba(28, 30, 42, 0.85);     
+  --bg-light: rgba(255, 255, 255, 0.04);       
+  --bg-subtle: #141418;                        
 
-  /* Tipografia com Alto Contraste */
+  
   --text-dark: #f8fafc;
   --text-body: #ebebef;
   --text-muted: #94a3b8;
   --text-muted-soft: #8e8e93;
   --text-nav: #a1a1aa;
 
-  /* Bordas e Brilhos Especulares de Vidro */
+  
   --border-input: rgba(255, 255, 255, 0.12);
   --border-divider: rgba(255, 255, 255, 0.08);
   --border-divider-soft: rgba(255, 255, 255, 0.05);
   --border-card: rgba(255, 255, 255, 0.09);
 
-  /* Sombras e Reflexos Glassmorphism com Halo Azul */
+  
   --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
   --shadow-card-strong: 0 14px 40px 0 rgba(0, 0, 0, 0.65), 0 0 20px rgba(7, 82, 160, 0.25), inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
 }
 
-/* =========================================================
-   ESTILOS DE ELEMENTOS NO MODO DARK
-   ========================================================= */
 [data-theme="dark"] body {
   background-color: #0c0e15;
   background-image:
@@ -126,7 +117,6 @@ body[data-theme="dark"] {
   color: var(--text-body);
 }
 
-/* Títulos e Textos Principais */
 [data-theme="dark"] body h1,
 [data-theme="dark"] .titulo,
 [data-theme="dark"]  body h2,
@@ -149,9 +139,6 @@ body[data-theme="dark"] {
   color: var(--text-dark);
 }
 
-/* =========================================================
-   CARDS: PRETO ESTILIZADO MEIO VIDRO (DARK GLASSMORPHISM)
-   ========================================================= */
 [data-theme="dark"] .card,
 [data-theme="dark"] .missao,
 [data-theme="dark"] .desempenho,
@@ -221,7 +208,6 @@ body[data-theme="dark"] {
   transform: translateY(-4px);
 }
 
-/* Divs e grids estruturais que não precisam de borda no modo dark */
 [data-theme="dark"] .metricas-grid {
   background: rgba(20, 21, 29, 0.74) !important;
   backdrop-filter: blur(16px) saturate(180%);
@@ -240,9 +226,6 @@ body[data-theme="dark"] {
   box-shadow: none !important;
 }
 
-/* =========================================================
-   CARDS DE RESPOSTA (A, B, C, D) PADRONIZADOS EM PRETO (DARK GLASS)
-   ========================================================= */
 [data-theme="dark"] .resolucao-opcao-btn,
 [data-theme="dark"] .simulado-opcao-item {
   background: rgba(20, 21, 29, 0.78) !important;
@@ -266,7 +249,6 @@ body[data-theme="dark"] {
   text-shadow: none !important;
 }
 
-/* Chip com a letra da opção (A, B, C, D) em tom preto/grafite padronizado */
 [data-theme="dark"] .resolucao-letra-chip,
 [data-theme="dark"] .simulado-letra-circle {
   background: rgba(255, 255, 255, 0.06) !important;
@@ -278,7 +260,6 @@ body[data-theme="dark"] {
   transition: all 0.2s ease !important;
 }
 
-/* Hover nos cards de resposta padronizados - preto suavemente elevado e borda iluminada */
 [data-theme="dark"] .resolucao-opcao-btn:hover:not(:disabled),
 [data-theme="dark"] .simulado-opcao-item:hover {
   background: rgba(30, 32, 45, 0.9) !important;
@@ -295,7 +276,6 @@ body[data-theme="dark"] {
   color: #ffffff !important;
 }
 
-/* Opção selecionada no Simulado */
 [data-theme="dark"] .simulado-opcao-item.selecionada {
   background: rgba(30, 34, 48, 0.95) !important;
   border-color: rgba(255, 255, 255, 0.35) !important;
@@ -318,7 +298,6 @@ body[data-theme="dark"] {
   border-color: rgba(255, 255, 255, 0.4) !important;
 }
 
-/* Estados de acerto e erro (Correta / Errada) na resolução */
 [data-theme="dark"] .resolucao-opcao-btn.correta {
   background: rgba(16, 185, 129, 0.18) !important;
   background-image: none !important;
@@ -367,9 +346,6 @@ body[data-theme="dark"] {
   transform: none !important;
 }
 
-/* =========================================================
-   ANIMAÇÃO DE GRADIENTE DINÂMICO DE TONS DE AZUL
-   ========================================================= */
 @keyframes dynamicBlueGradient {
   0% {
     background-position: 0 0, 0% 50%;
@@ -382,9 +358,6 @@ body[data-theme="dark"] {
   }
 }
 
-/* =========================================================
-   PROPRIEDADE E ANIMAÇÃO DA BORDA GIRATÓRIA (@property)
-   ========================================================= */
 @property --angulo-borda {
   syntax: '<angle>';
   initial-value: 0deg;
@@ -400,10 +373,6 @@ body[data-theme="dark"] {
   }
 }
 
-/* =========================================================
-   BANNERS (PROGRESSO, BOAS-VINDAS, TUTOR IA, HERO, CTA):
-   GRADIENTE DINÂMICO DE TONS DE AZUL + TEXTURA GRANULADA
-   ========================================================= */
 [data-theme="dark"] .progresso,
 [data-theme="dark"] .ia-card-inicio,
 [data-theme="dark"] .ia-card,
@@ -440,10 +409,6 @@ body[data-theme="dark"] {
   color: #ffffff !important;
 }
 
-/* =========================================================
-   BORDA GIRATÓRIA EM GRADIENTE DE TONS DE AZUL (MODO DARK)
-   Gira suavemente nos banners principais sem alterar tamanho ou layout
-   ========================================================= */
 [data-theme="dark"] .progresso::before,
 [data-theme="dark"] .ia-card-inicio::before,
 [data-theme="dark"] .ia-card::before,
@@ -510,7 +475,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
 }
 
-/* Tipografia e detalhes internos dos banners */
 [data-theme="dark"] .ia-card-inicio h2,
 [data-theme="dark"] .ia-card-inicio p,
 [data-theme="dark"] .ia-card h2,
@@ -555,7 +519,6 @@ body[data-theme="dark"] {
   color: #ffffff !important;
 }
 
-/* Ícones dos Cards do Dashboard no Modo Dark */
 [data-theme="dark"] .icone-card.verde-card { background: rgba(16, 185, 129, 0.18) !important; color: #34d399 !important; }
 [data-theme="dark"] .icone-card.azul-card { background: rgba(59, 130, 246, 0.18) !important; color: #60a5fa !important; }
 [data-theme="dark"] .icone-card.amarelo-card { background: rgba(245, 158, 11, 0.18) !important; color: #fbbf24 !important; }
@@ -563,7 +526,6 @@ body[data-theme="dark"] {
 [data-theme="dark"] .icone-card.vermelho-card { background: rgba(239, 68, 68, 0.18) !important; color: #f87171 !important; }
 [data-theme="dark"] .icone-card.laranja-card { background: rgba(239, 68, 68, 0.18) !important; color: #ef7410 !important; }
 
-/* Sub-Cards e Blocos Internos em Modo Vidro Fumê Escuro (Sem borda extra em divs que não precisam) */
 [data-theme="dark"] .gabarito-item-card,
 [data-theme="dark"] .simulado-state-card,
 [data-theme="dark"] .tarefas-state-card,
@@ -593,7 +555,6 @@ body[data-theme="dark"] {
   color: #ebebef !important;
 }
 
-/* Tarefas e Itens Interativos: Vidro Fumê Translúcido sem Borda Extra */
 [data-theme="dark"] .tarefa {
   background: rgba(255, 255, 255, 0.035) !important;
   backdrop-filter: blur(8px);
@@ -625,7 +586,6 @@ body[data-theme="dark"] {
   color: #79ddff;
 }
 
-/* Círculo do Gráfico de Desempenho */
 [data-theme="dark"] .circulo-interno {
   background: #14151c !important;
   color: #ffffff;
@@ -635,7 +595,6 @@ body[data-theme="dark"] {
   background: conic-gradient(#10b981 0deg 248deg, rgba(255, 255, 255, 0.1) 248deg 360deg);
 }
 
-/* Card de Sequência (Ofensiva) */
 [data-theme="dark"] .sequencia {
   background: rgba(245, 158, 11, 0.08) !important;
   backdrop-filter: blur(10px);
@@ -648,14 +607,6 @@ body[data-theme="dark"] {
   color: #fbbf24;
 }
 
-/* =========================================================
-   BOTÕES SÓLIDOS COM GRADIENTE E EFEITO GRANULAR (MODO DARK)
-   - Mantém os botões sólidos (sem blur ou transparência de vidro)
-   - Aplica gradientes ricos para diferenciar dos botões flat do tema padrão
-   - Aplica a textura granular dos banners (var(--bg-grain))
-   ========================================================= */
-
-/* Base para botões no tema escuro: sólidos, transições suaves, sem blur e com overflow estritamente contido */
 [data-theme="dark"] button:not(.vite-theme-switch):not(.btn-pilula-questao):not(.resolucao-opcao-btn):not(.simulado-opcao-item),
 [data-theme="dark"] .btn,
 [data-theme="dark"] [class*="btn-"]:not(.btn-pilula-questao):not(span):not(i):not(div):not(p),
@@ -684,7 +635,6 @@ body[data-theme="dark"] {
               filter 0.2s ease !important;
 }
 
-/* 1. Botões Primários / Azuis (Sólido + Gradiente Azul + Granular) */
 [data-theme="dark"] button:not(.vite-theme-switch):not(.filter):not(.btn-sim):not(.tarefas-filter-btn):not(.btn-pilula-questao):not(.btn-voltar):not(.btn-voltar-modulos):not(.btn-voltar-resolucao):not(.btn-voltar-tutor):not(.btn-sair):not(.btn-admin-cancel):not(.btn-modal-continuar):not(.btn-resolucao-secundario):not(.btn-resultado-secundario):not(.btn-resultado-tarefas):not(.btn-pdf-external):not(.btn-pdf-expand):not(.btn-pdf-admin-edit):not(.btn-module-admin-btn):not(.sugestao-chip):not(.admin-tab-btn):not(.verde-card):not(.amarelo-card):not(.roxo-card):not(.vermelho-card):not(.btn-iniciar-simulado):not(.btn-reivindicar):not(.btn-action):not(.btn-admin-delete-confirm):not(.btn-tarefa-admin-delete):not(.btn-modal-questoes):not(.btn-estudar):not(.btn-secundario):not(.btn-outline):not(.btn-retry):not(.btn-ler):not(.btn-bateria-start):not(.btn-avancar-modulo-topo):not(.btn-modal-avancar):not(.btn-resolucao-primario):not(.btn-resultado-primario):not(.btn-bloqueado):not(.btn-bateria-locked):not(.btn-tarefa):not(.resolucao-opcao-btn):not(.simulado-opcao-item):not(:disabled),
 [data-theme="dark"] .btn-primary,
 [data-theme="dark"] .btn-principal,
@@ -730,7 +680,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 2. Botões Verdes / Ação / Estudar / Concluir / Reivindicar (Sólido + Gradiente Verde + Granular) */
 [data-theme="dark"] .btn-reivindicar,
 [data-theme="dark"] .btn-estudar,
 [data-theme="dark"] .btn-action.btn-estudar,
@@ -760,7 +709,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 3. Botões Âmbar / Laranja (Simulados e Direção Defensiva - Sólido + Gradiente Âmbar + Granular) */
 [data-theme="dark"] .btn-action.btn-simulado,
 [data-theme="dark"] .btn-iniciar-simulado[data-id="Geral"],
 [data-theme="dark"] .btn-iniciar-simulado[data-id="DirecaoOfensiva"],
@@ -786,7 +734,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 4. Botões Roxos / Violeta (Meio Ambiente & Cidadania - Sólido + Gradiente Roxo + Granular) */
 [data-theme="dark"] .btn-praticar-questoes.roxo-card,
 [data-theme="dark"] .btn-praticar-questoes[data-id="MeioAmbiente"],
 [data-theme="dark"] .btn-iniciar-simulado.roxo-card,
@@ -808,7 +755,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 5. Botões Vermelhos / Perigo / Primeiros Socorros (Sólido + Gradiente Vermelho + Granular) */
 [data-theme="dark"] .btn-admin-delete-confirm,
 [data-theme="dark"] .btn-tarefa-admin-delete,
 [data-theme="dark"] .btn-module-admin-btn.btn-admin-delete,
@@ -838,13 +784,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 5.1. Botões Temáticos dos Módulos e Tarefas (Dark Mode)
-   Aplica as cores temáticas (Verde, Azul, Amarelo, Roxo, Vermelho)
-   nas subtelas de módulos (#view-modulos, #view-questoes-modulos,
-   #view-leitura-pdf, #view-questoes-resolucao, #modal-avancar-modulo)
-   e nas tarefas de cada módulo/conteúdo (.tarefas-conteudo-section). */
-
-/* Fallback padrão (Verde) caso esteja fora de container com tema */
 [data-theme="dark"] .btn-ler,
 [data-theme="dark"] .module-action-area .btn-ler,
 [data-theme="dark"] .btn-bloqueado,
@@ -886,7 +825,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 5.1.1 Verde (Legislação de Trânsito) */
 [data-theme="dark"] .modulos-theme-green .btn-ler,
 [data-theme="dark"] .modulos-theme-green .module-action-area .btn-ler,
 [data-theme="dark"] .modulos-theme-green .btn-bloqueado,
@@ -962,7 +900,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(52, 211, 153, 0.5) !important;
 }
 
-/* 5.1.2 Azul (Mecânica Básica) */
 [data-theme="dark"] .modulos-theme-blue .btn-ler,
 [data-theme="dark"] .modulos-theme-blue .module-action-area .btn-ler,
 [data-theme="dark"] .modulos-theme-blue .btn-bloqueado,
@@ -1038,7 +975,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(56, 189, 248, 0.5) !important;
 }
 
-/* 5.1.3 Amarelo / Âmbar (Direção Defensiva) & Laranja (Simulado) */
 [data-theme="dark"] .modulos-theme-yellow .btn-ler,
 [data-theme="dark"] .modulos-theme-yellow .module-action-area .btn-ler,
 [data-theme="dark"] .modulos-theme-yellow .btn-bloqueado,
@@ -1164,7 +1100,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(251, 191, 36, 0.5) !important;
 }
 
-/* 5.1.4 Roxo / Violeta (Meio Ambiente & Cidadania) */
 [data-theme="dark"] .modulos-theme-purple .btn-ler,
 [data-theme="dark"] .modulos-theme-purple .module-action-area .btn-ler,
 [data-theme="dark"] .modulos-theme-purple .btn-bloqueado,
@@ -1240,7 +1175,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(167, 139, 250, 0.5) !important;
 }
 
-/* 5.1.5 Vermelho (Primeiros Socorros) */
 [data-theme="dark"] .modulos-theme-red .btn-ler,
 [data-theme="dark"] .modulos-theme-red .module-action-area .btn-ler,
 [data-theme="dark"] .modulos-theme-red .btn-bloqueado,
@@ -1316,7 +1250,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 10px rgba(248, 113, 113, 0.5) !important;
 }
 
-/* 6. Botões Secundários / Voltar / Cancelar / Outline (Sólidos Escuros + Gradiente Grafite + Granular) */
 [data-theme="dark"] .btn-voltar,
 [data-theme="dark"] .btn-voltar-modulos,
 [data-theme="dark"] .btn-voltar-resolucao,
@@ -1364,7 +1297,6 @@ body[data-theme="dark"] {
   transform: translateY(-2px);
 }
 
-/* 7. Filtros, Abas e Sugestões (Pills - Sólidos com Gradiente Discreto e Granular) */
 [data-theme="dark"] .filter,
 [data-theme="dark"] .tarefas-filter-btn,
 [data-theme="dark"] .btn-sim,
@@ -1405,7 +1337,6 @@ body[data-theme="dark"] {
   width: auto !important;
 }
 
-/* 8. Botões Desabilitados ou Bloqueados */
 [data-theme="dark"] button:disabled:not(.btn-resolucao-primario):not(.resolucao-opcao-btn):not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
 [data-theme="dark"] .btn:disabled:not(.btn-resolucao-primario):not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
 [data-theme="dark"] .btn-bloqueado:not([class*="modulos-theme-"] *):not([class*="modulos-theme-"]),
@@ -1420,7 +1351,6 @@ body[data-theme="dark"] {
   opacity: 0.65 !important;
 }
 
-/* Badges e Ícones dos Cards com Brilho Neon Translúcido (exclusivo para chips/ícones, não botões) */
 [data-theme="dark"] .verde-card:not(button):not([class*="btn-"]) {
   background: rgba(16, 185, 129, 0.16) !important;
   color: #34d399 !important;
@@ -1451,7 +1381,6 @@ body[data-theme="dark"] {
   box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
 }
 
-/* Inputs, Textareas e Modais no Dark Glass - Alto contraste e visibilidade */
 [data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
 [data-theme="dark"] textarea,
 [data-theme="dark"] select {
@@ -1501,9 +1430,6 @@ body[data-theme="dark"] {
   caret-color: #38bdf8 !important;
 }
 
-/* =========================================================
-   COMPONENTE DO SWITCH DE TEMA VITE (ESTILO VITE.DEV)
-   ========================================================= */
 .vite-theme-switch {
   display: inline-flex;
   align-items: center;
@@ -1576,7 +1502,6 @@ body[data-theme="dark"] {
   transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-/* Ícone de Sol (Modo Claro/Padrão) */
 .icon-sun {
   opacity: 1;
   transform: scale(1);
@@ -1589,7 +1514,6 @@ body[data-theme="dark"] {
   color: #41d1ff;
 }
 
-/* Ícone de Lua (Modo Vite Dark) */
 [data-theme="dark"] .icon-sun {
   opacity: 0;
   transform: scale(0.5);
@@ -1613,7 +1537,6 @@ body[data-theme="dark"] {
   color: #a1a1aa;
 }
 
-/* Container do switch na Sidebar */
 .sidebar-theme-switch-container {
   padding: 0 2px 14px 2px;
   margin-bottom: 8px;
@@ -1641,16 +1564,12 @@ body[data-theme="dark"] {
   background: #202028;
 }
 
-/* Grupo de Ações no Topo */
 .topo-direita {
   display: flex;
   align-items: center;
   gap: 16px;
 }
 
-/* =========================================================
-   LOGO APROVADRIVE TEMATIZADO (MODO DARK / CYBER NEON THEME)
-   ========================================================= */
 [data-theme="dark"] .aprovadrive-logo,
 [data-theme="dark"] .aprovadrive-logo-icon-svg {
   filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.55));
@@ -1681,4 +1600,3 @@ body[data-theme="dark"] {
   transform: scale(1.03) translateY(-1px);
   filter: drop-shadow(0 6px 24px rgba(0, 0, 0, 0.7)) drop-shadow(0 0 16px rgba(56, 189, 248, 0.35));
 }
-

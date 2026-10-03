@@ -1,14 +1,7 @@
-/* ==========================================================================
-   AprovaDrive - Tarefas Fixas por Conteúdo (Estilos SPA)
-   ========================================================================== */
-
 .tarefas-container {
     padding-bottom: 60px;
 }
 
-/* --------------------------------------------------------------------------
-   Hero / Banner de Progresso Geral
-   -------------------------------------------------------------------------- */
 .tarefas-hero {
     background: linear-gradient(135deg, #0d47a1 0%, #1565c0 50%, #00897b 100%);
     border-radius: 24px;
@@ -126,9 +119,6 @@
     transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* --------------------------------------------------------------------------
-   Filtros / Abas por Conteúdo
-   -------------------------------------------------------------------------- */
 .tarefas-filters-container {
     display: flex;
     align-items: center;
@@ -219,9 +209,6 @@
     font-weight: 700;
 }
 
-/* --------------------------------------------------------------------------
-   Seção / Bloco de Conteúdo
-   -------------------------------------------------------------------------- */
 .tarefas-conteudo-section {
     background: var(--bg-card, #ffffff);
     border: 1px solid #e8ebf0;
@@ -307,18 +294,12 @@
     border-radius: 10px;
 }
 
-/* --------------------------------------------------------------------------
-   Grid de Cards de Tarefas
-   -------------------------------------------------------------------------- */
 .tarefas-cards-list {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-/* --------------------------------------------------------------------------
-   Card Individual de Tarefa Fixa
-   -------------------------------------------------------------------------- */
 .tarefa-fixa-card {
     display: grid;
     grid-template-columns: auto 1fr max-content;
@@ -513,9 +494,6 @@
     flex-wrap: nowrap;
 }
 
-/* --------------------------------------------------------------------------
-   Botões de Ação
-   -------------------------------------------------------------------------- */
 .btn-tarefa {
     display: inline-flex;
     align-items: center;
@@ -623,9 +601,6 @@
     flex-wrap: nowrap;
 }
 
-/* --------------------------------------------------------------------------
-   Estilos Diferenciados: DESAFIO DE QUESTÕES (A cada 3 módulos)
-   -------------------------------------------------------------------------- */
 .tarefa-fixa-card.tarefa-tipo-questao {
     background: linear-gradient(135deg, #ffffff 0%, #fffdfa 100%);
     border: 2px solid #fed7aa;
@@ -642,9 +617,6 @@
     color: #ea580c;
 }
 
-/* --------------------------------------------------------------------------
-   Estados dos Cards
-   -------------------------------------------------------------------------- */
 .tarefa-fixa-card.done {
     background: #f8fafc;
     border-color: #e2e8f0;
@@ -680,9 +652,6 @@
     40%, 80% { transform: translateX(6px); }
 }
 
-/* --------------------------------------------------------------------------
-   Responsividade
-   -------------------------------------------------------------------------- */
 @media (max-width: 1024px) {
     .tarefa-fixa-card {
         grid-template-columns: 1fr;
@@ -715,9 +684,6 @@
     }
 }
 
-/* --------------------------------------------------------------------------
-   Debounce e Cooldown de Botões com API
-   -------------------------------------------------------------------------- */
 button:disabled.is-cooldown,
 button.is-cooldown,
 .btn-cooldown,
@@ -730,9 +696,6 @@ button.is-cooldown,
     transition: opacity 0.2s ease, filter 0.2s ease;
 }
 
-/* --------------------------------------------------------------------------
-   Recursos de Administrador em Tarefas Fixas
-   -------------------------------------------------------------------------- */
 .btn-admin-add-tarefa-fixa {
     display: inline-flex;
     align-items: center;
@@ -796,9 +759,6 @@ button.is-cooldown,
     transform: translateY(-1px);
 }
 
-/* =========================================================
-   TAREFAS NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
-   ========================================================= */
 [data-theme="dark"] .tarefas-stat-card,
 [data-theme="dark"] .tarefas-conteudo-section,
 [data-theme="dark"] .tarefa-fixa-card {
@@ -953,7 +913,6 @@ button.is-cooldown,
     border-top-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-/* Cores temáticas para tarefas de cada módulo/conteúdo (Light Mode) */
 .tarefas-conteudo-section.modulos-theme-green {
     --theme-color: #16a34a;
     --theme-color-hover: #15803d;
@@ -1006,6 +965,3 @@ button.is-cooldown,
     color: var(--theme-color, #94a3b8);
     border: 1px solid var(--theme-color-border, #e2e8f0);
 }
-
-
-

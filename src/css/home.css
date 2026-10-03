@@ -48,7 +48,6 @@ body {
   transform: scale(1.03);
 }
 
-/* Caminhos do logo no Modo Claro (Padrão) */
 .aprovadrive-path-green {
   fill: url(#aprovadrive-grad-green-light);
   transition: fill 0.3s ease, filter 0.3s ease;
@@ -451,9 +450,6 @@ body {
   }
 }
 
-/* =========================================================
-   HOME NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
-   ========================================================= */
 [data-theme="dark"] .metricas-grid {
   background: rgba(20, 21, 29, 0.74) !important;
   backdrop-filter: blur(16px) saturate(180%);
@@ -514,5 +510,3 @@ body {
   border: none !important;
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(24, 100, 215, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18) !important;
 }
-
-

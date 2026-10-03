@@ -8,7 +8,7 @@ import { getModuloUserId } from './moduloService.js';
 let cachedDesempenho = null;
 const memoryDesempenhoCache = new Map();
 const inFlightDesempenho = new Map();
-const DESEMPENHO_CACHE_TTL_MS = 15 * 1000; // 15 segundos
+const DESEMPENHO_CACHE_TTL_MS = 15 * 1000;
 
 export function invalidateLocalDesempenhoCache(userId = null) {
   memoryDesempenhoCache.clear();

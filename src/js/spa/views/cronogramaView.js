@@ -112,7 +112,6 @@ async function carregarCronograma(userId, forceRefresh = false) {
 
         diaAtual = cached.diaSemanaAtual ?? diaAtual;
 
-        // Se o DOM já possui os cards renderizados deste mesmo usuário/dia, evita repintura desnecessária
         const container1 = qs('#day-tasks-1');
         const jaRenderizadoNoDom = lastRenderedState.userId === targetUser &&
                                    lastRenderedState.mockDia === currentMock &&
@@ -532,7 +531,6 @@ async function configurarSeletorUsuarios() {
         });
     }
 
-    // Se já foi populado com as opções de usuários, apenas ajusta a seleção ativa
     if (selectEl.options && selectEl.options.length > 1) {
         selectEl.value = currentUserId;
         return;

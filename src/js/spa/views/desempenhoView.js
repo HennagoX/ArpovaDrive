@@ -64,7 +64,6 @@ function aplicarDesempenhoNaTela(desempenho) {
     const { resumo, materias, ultimosSimulados, diagnosticoIa } = desempenho;
     const taxa = Number(resumo.taxaAproveitamento ?? 0);
 
-    // 1. Atualizar KPIs do Topo
     const taxaEl = qs(SELECTORS.DESEMPENHO_APROVEITAMENTO);
     if (taxaEl) {
         setText(taxaEl, `${taxa}%`);
@@ -90,7 +89,6 @@ function aplicarDesempenhoNaTela(desempenho) {
         setText(totalSimuladosEl, String(resumo.totalSimulados ?? 0));
     }
 
-    // 2. Atualizar Círculo de Destaque
     const circuloEl = qs(SELECTORS.DESEMPENHO_CIRCULO);
     const circuloTaxaEl = qs('#circuloTaxa');
     const circuloStatusEl = qs('#circuloStatusLabel');
@@ -115,7 +113,6 @@ function aplicarDesempenhoNaTela(desempenho) {
         setText(circuloDescEl, resumo.statusDescricao || 'Acompanhe seu desempenho para conquistar sua CNH de primeira!');
     }
 
-    // 3. Atualizar Lista de Matérias
     const materiasContainer = qs('#view-desempenho .materias-lista');
     if (materiasContainer && Array.isArray(materias) && materias.length > 0) {
         materiasContainer.innerHTML = materias.map(m => {
@@ -139,13 +136,11 @@ function aplicarDesempenhoNaTela(desempenho) {
         }).join('');
     }
 
-    // 4. Atualizar Diagnóstico do Tutor IA
     const diagnosticoEl = qs('#view-desempenho .ia-card p');
     if (diagnosticoEl && diagnosticoIa) {
         setText(diagnosticoEl, diagnosticoIa);
     }
 
-    // 5. Atualizar Lista de Últimos Simulados
     const simuladosContainer = qs('#view-desempenho .simulados-lista');
     if (simuladosContainer) {
         if (Array.isArray(ultimosSimulados) && ultimosSimulados.length > 0) {
@@ -182,13 +177,11 @@ export async function renderDesempenho(forceRefresh = false) {
 
     usuarioGlobal.updateUI();
 
-    // 1. Renderização imediata com cache/local (sem piscar nem travar UI)
     const local = getLocalDesempenho();
     if (local) {
         aplicarDesempenhoNaTela(local);
     }
 
-    // 2. Busca dados mais recentes no servidor e atualiza a tela
     try {
         const remoto = await fetchDesempenho(userId, forceRefresh);
         if (remoto && remoto.resumo) {

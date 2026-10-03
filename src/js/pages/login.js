@@ -217,7 +217,6 @@ ready(() => {
                 return;
             }
 
-            // ETAPA 1: Validar resposta de segurança
             if (!respostaValidada) {
                 if (mensagemEsqueci) {
                     mensagemEsqueci.style.display = 'block';
@@ -252,7 +251,6 @@ ready(() => {
                 return;
             }
 
-            // ETAPA 2: Redefinir senha
             const novaSenhaValor = novaSenha?.value;
             const confirmarSenhaValor = confirmarNovaSenha?.value;
 

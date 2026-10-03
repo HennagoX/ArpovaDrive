@@ -343,7 +343,6 @@ async function renderResultadoFinal() {
         }
     } catch {}
 
-    // Invalida cache de tarefas fixas e do cronograma para refletir o aproveitamento imediatamente
     try {
         limparCacheTarefasFixas();
         clearCachedTarefas();

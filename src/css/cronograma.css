@@ -1,4 +1,3 @@
-
 * {
   margin: 0;
   padding: 0;
@@ -907,9 +906,6 @@ body.cronograma-standalone {
   transform: none !important;
 }
 
-/* =========================================================
-   CRONOGRAMA NO MODO VITE DARK (PRETO ESTILIZADO MEIO VIDRO)
-   ========================================================= */
 [data-theme="dark"] .hud-card,
 [data-theme="dark"] .simulation-hud,
 [data-theme="dark"] .day-tab,
@@ -976,7 +972,6 @@ body.cronograma-standalone {
   border: none !important;
   color: #ebebef !important;
 }
-
 
 [data-theme="dark"] .schedule-item.claimable {
   border: 1.5px solid #10b981 !important;
@@ -1050,5 +1045,3 @@ body.cronograma-standalone {
   border-color: rgba(255, 255, 255, 0.12) !important;
   color: #f8fafc !important;
 }
-
-

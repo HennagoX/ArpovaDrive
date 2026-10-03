@@ -503,10 +503,8 @@
 </head>
 <body>
     <aside class="navbar">
-        <!-- SVG Definitions compartilhadas para iluminação e efeitos noturnos -->
         <svg width="0" height="0" class="svg-defs-container" style="position: absolute; width: 0; height: 0; pointer-events: none;" aria-hidden="true" focusable="false">
             <defs>
-                <!-- Mini car: feixe dourado xenon do farol com fade ciano -->
                 <linearGradient id="navCarBeam" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#fef08a" stop-opacity="0.95" />
                     <stop offset="30%" stop-color="#fef08a" stop-opacity="0.5" />
@@ -514,14 +512,12 @@
                     <stop offset="100%" stop-color="#38bdf8" stop-opacity="0" />
                 </linearGradient>
 
-                <!-- Mini car: rastro neon vermelho da lanterna traseira -->
                 <linearGradient id="navCarTrail" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stop-color="#ef4444" stop-opacity="0" />
                     <stop offset="50%" stop-color="#ef4444" stop-opacity="0.45" />
                     <stop offset="100%" stop-color="#ef4444" stop-opacity="1" />
                 </linearGradient>
 
-                <!-- Mini car: lataria esportiva azul meia-noite metálico -->
                 <linearGradient id="navCarBody" x1="0%" y1="0%" x2="100%" y2="50%">
                     <stop offset="0%" stop-color="#0e2338" />
                     <stop offset="45%" stop-color="#1e3a5f" />
@@ -533,7 +529,6 @@
 
         <div class="navbar-logo">
             <a href="#/dashboard" class="navbar-logo-link" aria-label="AprovaDrive">
-                <!-- SVG Logo Full (Desktop) -->
                 <svg class="aprovadrive-logo aprovadrive-logo-full" xmlns="http://www.w3.org/2000/svg" viewBox="180 20 2020 400" role="img" aria-label="AprovaDrive">
                     <defs>
                         <linearGradient id="aprovadrive-grad-green-light" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -574,7 +569,6 @@
                     </g>
                 </svg>
 
-                <!-- SVG Logo Compact (Sidebar Recolhida) -->
                 <svg class="aprovadrive-logo aprovadrive-logo-compact" xmlns="http://www.w3.org/2000/svg" viewBox="185 15 375 365" role="img" aria-label="AprovaDrive">
                     <g class="aprovadrive-logo-icon">
                         <use href="#aprovadrive-path-green-def" class="aprovadrive-path-green" />
@@ -584,7 +578,6 @@
             </a>
         </div>
 
-        <!-- Switch de Tema na Sidebar (Vite Dark / Modo Padrão) -->
         <div class="sidebar-theme-switch-container">
             <button class="vite-theme-switch sidebar-theme-switch" id="sidebar-theme-toggle" type="button" role="switch" aria-label="Alternar tema" title="Alternar entre Vite Dark e Modo Padrão">
                 <span class="vite-switch-track">
@@ -738,7 +731,6 @@
             </a>
         </nav>
 
-        <!-- Widget Inferior da Rodovia Noturna -->
         <div class="sidebar-night-widget">
             <div class="night-card" title="Modo Pista Noturna AprovaDrive">
                 <div class="night-canvas-wrapper">
@@ -777,83 +769,63 @@
                             </linearGradient>
                         </defs>
 
-                        <!-- Céu Noturno -->
                         <rect width="210" height="95" fill="url(#skyGrad)" />
 
-                        <!-- Lua crescente e brilho -->
                         <circle cx="178" cy="22" r="14" fill="url(#moonGlow)" />
                         <circle cx="178" cy="22" r="6" fill="#f8fafc" />
                         <circle cx="180" cy="20" r="5.2" fill="#0a192f" />
 
-                        <!-- Estrelas cintilantes -->
                         <circle cx="28" cy="14" r="1" fill="#ffffff" class="star-twinkle-1" />
                         <circle cx="58" cy="22" r="0.8" fill="#93c5fd" class="star-twinkle-2" />
                         <circle cx="95" cy="12" r="1.1" fill="#ffffff" class="star-twinkle-3" />
                         <circle cx="132" cy="18" r="0.75" fill="#e0f2fe" class="star-twinkle-1" />
                         <circle cx="156" cy="10" r="0.9" fill="#ffffff" class="star-twinkle-2" />
 
-                        <!-- Silhueta montanhas / horizonte rodoviário -->
                         <path d="M0,52 Q45,43 90,48 T170,44 Q190,47 210,50 L210,55 L0,55 Z" fill="#071220" opacity="0.9" />
 
-                        <!-- Poste de iluminação rodoviária distante -->
                         <path d="M24,52 L24,36 Q24,33 28,33 L32,33" stroke="#475569" stroke-width="1" fill="none" />
                         <circle cx="32" cy="33.5" r="1.2" fill="#fef08a" filter="drop-shadow(0 0 3px #fef08a)" />
                         <polygon points="32,34 26,52 38,52" fill="#fef08a" opacity="0.08" />
 
-                        <!-- Pista Asfalto em Perspectiva -->
                         <polygon points="0,53 210,53 210,95 0,95" fill="url(#roadGrad)" />
 
-                        <!-- Linha de acostamento superior ciano sutil -->
                         <line x1="0" y1="53.5" x2="210" y2="53.5" stroke="#38bdf8" stroke-width="0.8" opacity="0.4" />
 
-                        <!-- Faixa amarela seccionada com animação contínua de movimento -->
                         <g class="highway-dashes-anim">
                             <line x1="-44" y1="74" x2="254" y2="74" stroke="#f59e0b" stroke-width="2.4" stroke-dasharray="16 12" stroke-linecap="round" filter="drop-shadow(0 0 4px rgba(245, 158, 11, 0.75))" />
                         </g>
 
-                        <!-- Feixe do Farol projetado no asfalto -->
                         <polygon class="headlight-beam" points="138,68 210,56 210,88" fill="url(#sceneBeam)" />
 
-                        <!-- Rastro de Luz Vermelha Traseira (Speed blur noturno) -->
                         <line x1="25" y1="67.5" x2="72" y2="67.5" stroke="url(#redStreakGrad)" stroke-width="2.5" stroke-linecap="round" filter="drop-shadow(0 0 5px rgba(239, 68, 68, 0.8))" />
                         <line x1="15" y1="71" x2="68" y2="71" stroke="url(#redStreakGrad)" stroke-width="1.8" stroke-linecap="round" filter="drop-shadow(0 0 4px rgba(239, 68, 68, 0.6))" />
 
-                        <!-- Carro Esportivo Noturno -->
                         <g class="night-sports-car">
-                            <!-- Sombra debaixo do carro -->
                             <ellipse cx="104" cy="76" rx="38" ry="3.5" fill="#000000" opacity="0.75" />
 
-                            <!-- Carroceria -->
                             <path d="M68,70 C68,66 73,64 78,64 L86,64 L95,57.5 C97,56 100,55.5 103,55.5 L118,55.5 C122,55.5 125,57 128,61 L136,63 C140,64 142,66 142,69.5 C142,72 139,73 135,73 L126,73 C125,69.5 122,67.5 118,67.5 C114,67.5 111,69.5 110,73 L90,73 C89,69.5 86,67.5 82,67.5 C78,67.5 75,69.5 74,73 L69,73 C68,73 68,71.5 68,70 Z" fill="url(#sportsCarBody)" stroke="#38bdf8" stroke-width="0.9" />
 
-                            <!-- Aerofólio Traseiro Esportivo -->
                             <path d="M65,65.5 L70,65.5 L70,67 L65,67 Z" fill="#38bdf8" opacity="0.8" />
                             <path d="M67,67 L67,70" stroke="#38bdf8" stroke-width="1" />
 
-                            <!-- Vidros fumê com reflexo azul neon -->
                             <path d="M96,58.5 C97.5,57.2 99.5,56.8 102.5,56.8 L116.5,56.8 C119.5,56.8 122,58.2 124.5,61.5 L95.5,61.5 Z" fill="#38bdf8" fill-opacity="0.5" stroke="rgba(255,255,255,0.3)" stroke-width="0.5" />
                             <line x1="110" y1="56.8" x2="110" y2="61.5" stroke="#0f1f33" stroke-width="1" />
 
-                            <!-- Roda Traseira -->
                             <circle cx="82" cy="73" r="5" fill="#030712" stroke="#38bdf8" stroke-width="1.2" />
                             <circle cx="82" cy="73" r="2.8" fill="#1e293b" />
                             <circle cx="82" cy="73" r="1.2" fill="#94a3b8" />
                             <path d="M83.5,70.5 A 3 3 0 0 1 84.5,73" stroke="#ef4444" stroke-width="1.2" fill="none" />
 
-                            <!-- Roda Dianteira -->
                             <circle cx="118" cy="73" r="5" fill="#030712" stroke="#38bdf8" stroke-width="1.2" />
                             <circle cx="118" cy="73" r="2.8" fill="#1e293b" />
                             <circle cx="118" cy="73" r="1.2" fill="#94a3b8" />
                             <path d="M119.5,70.5 A 3 3 0 0 1 120.5,73" stroke="#ef4444" stroke-width="1.2" fill="none" />
 
-                            <!-- Farol dianteiro de LED xenon -->
                             <circle cx="140.5" cy="67.5" r="2.2" fill="#fef08a" filter="drop-shadow(0 0 6px #fef08a)" />
 
-                            <!-- Lanterna traseira neon rubi -->
                             <rect x="68" y="67" width="2.5" height="3" rx="1" fill="#ef4444" filter="drop-shadow(0 0 6px #ef4444)" />
                         </g>
 
-                        <!-- Olhos de gato / tachões refletivos na borda inferior do asfalto -->
                         <circle cx="45" cy="89" r="1.5" fill="#f59e0b" filter="drop-shadow(0 0 3px #f59e0b)" />
                         <circle cx="105" cy="89" r="1.5" fill="#f59e0b" filter="drop-shadow(0 0 3px #f59e0b)" />
                         <circle cx="165" cy="89" r="1.5" fill="#f59e0b" filter="drop-shadow(0 0 3px #f59e0b)" />
@@ -875,7 +847,6 @@
             </div>
 
             <div class="topo-direita">
-                <!-- Switch de Tema Estilo Vite no Cabeçalho -->
                 <button class="vite-theme-switch" id="header-theme-toggle" type="button" role="switch" aria-label="Alternar tema" title="Alternar entre Vite Dark e Modo Padrão">
                     <span class="vite-switch-track">
                         <span class="vite-switch-thumb">
@@ -901,9 +872,7 @@
             </div>
         </header>
 
-        <!-- SInicio -->
         <section id="view-inicio" class="spa-view">
-            <!-- SProgresso -->
             <section class="progresso">
                 <div class="nivel">
                     <div class="trofeu">
@@ -928,7 +897,6 @@
 
             <h2 class="titulo">O que você quer estudar?</h2>
 
-            <!-- SCards -->
             <section class="cards">
                 <a href="#conteudos" class="card" id="card-conteudos" data-nav="conteudos">
                     <div class="icone-card verde-card">
@@ -983,7 +951,6 @@
                 </a>
             </div>
 
-            <!-- SInferior -->
             <section class="inferior">
                 <div class="missao">
                     <div class="titulo-card">
@@ -1060,10 +1027,8 @@
 
         </section>
 
-        <!-- SConteudos -->
         <section id="view-conteudos" class="spa-view" style="display: none;">
 
-            <!-- SWelcome -->
              <div class="card-borda-giratoria">
             <section class="welcome">
                 <div>
@@ -1099,7 +1064,6 @@
                 <span id="contador">5 conteúdos</span>
             </div>
 
-            <!-- SEbooks -->
             <section class="ebooks" id="ebooks">
 
                 <article class="ebook" data-category="legislacao" data-id="CodigoTransito">
@@ -1261,7 +1225,6 @@
 
         </section>
 
-        <!-- SModulos -->
         <section id="view-modulos" class="spa-view modulos-theme-green" style="display: none;">
 
             <div class="modulos-nav-topo">
@@ -1335,7 +1298,6 @@
 
         </section>
 
-        <!-- SLeituraPdf -->
         <section id="view-leitura-pdf" class="spa-view modulos-theme-green" style="display: none;">
 
             <div class="leitura-nav-topo">
@@ -1390,7 +1352,6 @@
 
         </section>
 
-        <!-- SCronograma -->
         <section id="view-cronograma" class="spa-view container" style="display: none;">
             <div class="nav-topo">
                 <a href="#inicio" class="btn-voltar" id="btn-voltar-painel-cronograma" data-nav="inicio">
@@ -1483,7 +1444,6 @@
                 <span id="tempo-estimado-dia">Tempo total estimado: 1h 15m</span>
             </div>
 
-            <!-- SScheduleList -->
             <section class="schedule-list" id="schedule-days-container">
                 <div id="cronograma-loading" class="cronograma-state-card loading-state">
                     <div class="loading-spinner"></div>
@@ -1513,7 +1473,6 @@
             </section>
         </section>
 
-        <!-- STarefas -->
         <section id="view-tarefas" class="spa-view container" style="display: none;">
             <div class="tarefas-container">
                 <div class="tarefas-hero">
@@ -1564,12 +1523,10 @@
                 </div>
 
                 <div id="tarefas-conteudos-wrapper">
-                    <!-- Seções de cada conteúdo renderizadas dinamicamente pelo tarefasView.js -->
                 </div>
             </div>
         </section>
 
-        <!-- SDesempenho -->
         <section id="view-desempenho" class="spa-view" style="display: none;">
             <div class="kpi-grid">
                 <div class="kpi-card">
@@ -1624,7 +1581,6 @@
             </div>
 
             <div class="conteudo-grid">
-                <!-- SPainelCard -->
                 <section class="painel-card">
                     <h2 class="secao-titulo">
                         <span class="material-symbols-outlined">pie_chart</span>
@@ -1794,7 +1750,6 @@
             </div>
         </section>
 
-        <!-- SQuestoes -->
         <section id="view-questoes" class="spa-view" style="display: none;">
 
             <div class="welcome-questoes">
@@ -1833,7 +1788,6 @@
                 <button class="filter filter-questoes" data-category="ambiente">Meio Ambiente</button>
             </div>
 
-            <!-- SQuestoesGrid -->
             <section class="questoes-grid" id="questoes-grid">
 
                 <article class="questoes-card questoes-subject-card" data-category="legislacao" data-id="CodigoTransito">
@@ -2045,7 +1999,6 @@
 
         </section>
 
-        <!-- SSimulado -->
         <section id="view-simulado" class="spa-view" style="display: none;">
 
             <div class="welcome-questoes">
@@ -2082,7 +2035,6 @@
                 <button class="filter filter-simulado" data-category="ambiente">Meio Ambiente</button>
             </div>
 
-            <!-- SSimuladoGrid -->
             <section class="questoes-grid" id="simulado-grid">
 
                 <article class="questoes-card simulado-card" data-category="geral" data-id="Geral">
@@ -2335,7 +2287,6 @@
 
         </section>
 
-        <!-- SSimuladoResolucao -->
         <section id="view-simulado-resolucao" class="spa-view modulos-theme-orange" style="display: none;">
             <div class="resolucao-nav-topo">
                 <button type="button" class="btn-voltar-resolucao" id="btn-voltar-hub-simulado">
@@ -2391,7 +2342,6 @@
             <div id="simulado-resolucao-conteudo"></div>
         </section>
 
-        <!-- SQuestoesModulos -->
         <section id="view-questoes-modulos" class="spa-view modulos-theme-green" style="display: none;">
 
             <div class="modulos-nav-topo">
@@ -2468,7 +2418,6 @@
 
         </section>
 
-        <!-- SQuestoesResolucao -->
         <section id="view-questoes-resolucao" class="spa-view modulos-theme-green" style="display: none;">
             <div class="resolucao-nav-topo">
                 <button type="button" class="btn-voltar-resolucao" id="btn-voltar-baterias-questoes">
@@ -2515,7 +2464,6 @@
         <div id="toast-container" class="toast-container" aria-live="polite"></div>
     </main>
 
-    <!-- STutorIa -->
     <section id="view-tutor-ia" class="spa-view" style="display: none;">
         <div class="tutor-ia-wrapper">
             <div class="tutor-ia-nav-topo">
@@ -2616,7 +2564,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Adicionar ou Editar Módulo / PDF -->
     <div id="modal-admin-modulo" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-modulo-titulo">
         <div class="modal-admin-card">
             <div class="modal-admin-header">
@@ -2689,7 +2636,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Confirmar Remoção de Módulo / PDF -->
     <div id="modal-admin-delete" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-delete-titulo">
         <div class="modal-admin-card modal-delete-card">
             <div class="modal-admin-icon-circle delete-circle">
@@ -2709,7 +2655,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Histórico de Alterações e Reversão de PDFs -->
     <div id="modal-admin-historico-pdf" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-historico-titulo">
         <div class="modal-admin-card modal-historico-card">
             <div class="modal-admin-header">
@@ -2760,7 +2705,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Histórico e Gerenciamento de Questões Customizadas -->
     <div id="modal-admin-historico-questoes" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-historico-questoes-titulo">
         <div class="modal-admin-card modal-historico-card">
             <div class="modal-admin-header">
@@ -2808,7 +2752,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Criar Nova Tarefa Fixa por Módulo -->
     <div id="modal-admin-tarefa-fixa" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-tarefa-fixa-titulo">
         <div class="modal-admin-card">
             <div class="modal-admin-header">
@@ -2877,7 +2820,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Criar Nova Questão -->
     <div id="modal-admin-questao" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-questao-titulo">
         <div class="modal-admin-card modal-questao-card">
             <div class="modal-admin-header">
@@ -2974,7 +2916,6 @@
         </div>
     </div>
 
-    <!-- Modal Admin: Criar Novo Simulado -->
     <div id="modal-admin-simulado" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-simulado-titulo">
         <div class="modal-admin-card modal-simulado-card">
             <div class="modal-admin-header">

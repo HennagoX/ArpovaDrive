@@ -1,4 +1,3 @@
-
 #view-questoes-modulos,
 #view-questoes-modulos.modulos-theme-green,
 #view-questoes-resolucao,
@@ -1630,10 +1629,6 @@
     transform: translateY(-1px);
 }
 
-
-/* =========================================================
-   GABARITO DE REVISÃO DO SIMULADO (ESTILOS BASE)
-   ========================================================= */
 .gabarito-item-card {
     background: var(--bg-card, #ffffff);
     border: 1px solid #e2e8f0;
@@ -1749,9 +1744,6 @@
     background: var(--bg-card, #ffffff);
 }
 
-/* =========================================================
-   QUESTÕES NO MODO DARK (PRETO ESTILIZADO MEIO VIDRO)
-   ========================================================= */
 [data-theme="dark"] .welcome-questoes {
     background-image:
       var(--bg-grain),
@@ -1966,10 +1958,6 @@
     color: #ffffff !important;
     border-color: rgba(65, 209, 255, 0.4) !important;
 }
-
-/* ==========================================================================
-   ESTILOS DE CRIAÇÃO DE QUESTÕES E SIMULADOS (ADMIN)
-   ========================================================================== */
 
 .btn-admin-add-questao {
     background: linear-gradient(135deg, #10b981, #059669) !important;
@@ -2197,7 +2185,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #f1f5f9 !important;
 }
 
-/* Modais de Administração de Questões e Simulados */
 [data-theme="dark"] #modal-admin-questao input:not([type="checkbox"]),
 [data-theme="dark"] #modal-admin-questao textarea,
 [data-theme="dark"] #modal-admin-questao select,
@@ -2250,10 +2237,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #94a3b8 !important;
     -webkit-text-fill-color: #94a3b8 !important;
 }
-
-/* ==========================================================================
-   PAINEL E HISTÓRICO DE QUESTÕES CUSTOMIZADAS (ADMIN)
-   ========================================================================== */
 
 .btn-admin-historico-questoes {
     background: linear-gradient(135deg, #8b5cf6, #7c3aed) !important;
@@ -2410,7 +2393,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #dc2626;
 }
 
-/* Modo escuro para o histórico de questões */
 [data-theme="dark"] .admin-questao-card-item {
     background: rgba(26, 27, 38, 0.9) !important;
     border-color: rgba(255, 255, 255, 0.1) !important;
@@ -2455,7 +2437,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #fca5a5 !important;
 }
 
-/* Ações no card de bateria para admin */
 .btn-bateria-admin-add {
     background: transparent;
     color: #4f46e5;
@@ -2489,7 +2470,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     background: rgba(99, 102, 241, 0.2) !important;
 }
 
-/* Ações no card de questão do histórico do admin */
 .admin-questao-card-actions {
     display: flex;
     align-items: center;
@@ -2529,7 +2509,6 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #c7d2fe !important;
 }
 
-/* Linha de alternativas interativas no modal de criação de questão */
 .admin-alternativa-row {
     display: flex;
     align-items: center;
@@ -2592,6 +2571,3 @@ body.usuario-is-admin .btn-admin-historico-questoes {
     color: #ffffff;
     border-color: #34d399;
 }
-
-
-

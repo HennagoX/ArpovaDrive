@@ -1,8 +1,3 @@
-/**
- * AprovaDrive - Theme Manager (Vite Dark / Default Light Mode)
- * Inspired by Vite.dev theme switcher
- */
-
 const THEME_STORAGE_KEY = 'aprovadrive_theme';
 export const THEME_DARK = 'dark';
 export const THEME_DEFAULT = 'default';
@@ -16,7 +11,6 @@ export function getStoredTheme() {
     } catch (e) {
         console.warn('[ThemeManager] LocalStorage indisponível:', e);
     }
-    // Padrão atual: Vite Dark Mode
     return THEME_DARK;
 }
 
@@ -31,11 +25,8 @@ export function applyTheme(theme) {
 
     try {
         localStorage.setItem(THEME_STORAGE_KEY, targetTheme);
-    } catch (e) {
-        // Ignora erro em modo privado estrito
-    }
+    } catch (e) {}
 
-    // Atualiza estado visual de todos os switches presentes na interface
     const switches = document.querySelectorAll('.vite-theme-switch');
     switches.forEach((btn) => {
         btn.setAttribute('aria-checked', isDark ? 'true' : 'false');
@@ -47,7 +38,6 @@ export function applyTheme(theme) {
         }
     });
 
-    // Dispara evento global para outros componentes se necessário
     window.dispatchEvent(new CustomEvent('aprovadrive:theme-change', { detail: { theme: targetTheme, isDark } }));
 }
 
@@ -62,7 +52,6 @@ export function initTheme() {
     const currentTheme = getStoredTheme();
     applyTheme(currentTheme);
 
-    // Event delegation para qualquer botão switch com a classe .vite-theme-switch
     document.addEventListener('click', (e) => {
         const switchBtn = e.target.closest('.vite-theme-switch');
         if (switchBtn) {

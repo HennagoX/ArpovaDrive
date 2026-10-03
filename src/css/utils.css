@@ -67,7 +67,6 @@
     transition: transform 0.25s ease, filter 0.3s ease;
 }
 
-/* Caminhos do logo no Modo Claro (Padrão) */
 .aprovadrive-path-green {
     fill: url(#aprovadrive-grad-green-light);
     transition: fill 0.3s ease, filter 0.3s ease;
@@ -96,9 +95,6 @@
     flex: 1 0 auto;
 }
 
-/* =========================================================
-   ITENS DA SIDEBAR (MODO PADRÃO & MODO VITE DARK)
-   ========================================================= */
 .navbar-item {
     position: relative;
     overflow: hidden;
@@ -139,9 +135,6 @@
     transition: color 0.25s ease;
 }
 
-/* ---------------------------------------------------------
-   1. MODO PADRÃO (DEFAULT LIGHT MODE) - Exatamente como antes!
-   --------------------------------------------------------- */
 :root:not([data-theme="dark"]) .navbar,
 [data-theme="default"] .navbar {
     background: var(--bg-card, #ffffff);
@@ -190,7 +183,6 @@
     transform: none;
 }
 
-/* No modo padrão, oculta todos os adornos de pista noturna */
 :root:not([data-theme="dark"]) .navbar-item::before,
 [data-theme="default"] .navbar-item::before,
 :root:not([data-theme="dark"]) .navbar-item::after,
@@ -202,9 +194,6 @@
     display: none !important;
 }
 
-/* ---------------------------------------------------------
-   2. MODO DARK - Efeitos de Pista Noturna com Azul Escuro & Médio Granulado
-   --------------------------------------------------------- */
 [data-theme="dark"] .navbar {
     background: #161618;
     border-right: 1px solid #2e2e32;
@@ -219,7 +208,6 @@
     color: #a1a1aa;
 }
 
-/* Faixa de Sinalização Luminosa na Borda Esquerda */
 [data-theme="dark"] .navbar-item::before {
     content: '';
     position: absolute;
@@ -236,7 +224,6 @@
     z-index: 2;
 }
 
-/* Linha de Asfalto com Faixa Seccionada no Rodapé do Item */
 [data-theme="dark"] .navbar-item::after {
     content: '';
     position: absolute;
@@ -253,7 +240,6 @@
     z-index: 1;
 }
 
-/* Hover no Modo Dark: Pista Noturna & Gradiente Azul Escuro/Médio */
 [data-theme="dark"] .navbar-item:hover {
     background:
       radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.25) 0%, rgba(7, 82, 160, 0.2) 45%, transparent 70%),
@@ -280,7 +266,6 @@
     transform: scaleX(1);
 }
 
-/* Active no Modo Dark: Item Selecionado */
 [data-theme="dark"] .navbar-item.active {
     background:
       radial-gradient(ellipse 90% 70% at 50% 120%, rgba(56, 189, 248, 0.35) 0%, rgba(7, 82, 160, 0.25) 45%, transparent 70%),
@@ -311,7 +296,6 @@
     background: repeating-linear-gradient(90deg, rgba(245, 158, 11, 0.95) 0, rgba(245, 158, 11, 0.95) 8px, transparent 8px, transparent 15px);
 }
 
-/* Carro de Noite nos Itens da Sidebar */
 .nav-item-car {
     margin-left: auto;
     display: inline-flex;
@@ -368,9 +352,6 @@
     }
 }
 
-/* =========================================================
-   WIDGET DA SIDEBAR: CARRO DE NOITE NA RODOVIA
-   ========================================================= */
 .sidebar-night-widget {
     margin-top: auto;
     padding-top: 14px;
@@ -412,7 +393,6 @@
     max-height: 110px;
 }
 
-/* Animação contínua da faixa amarela da rodovia (sensação de movimento noturno) */
 @keyframes highwayMove {
     0% {
         transform: translateX(0);
@@ -426,7 +406,6 @@
     animation: highwayMove 1s linear infinite;
 }
 
-/* Animações das estrelas */
 @keyframes starTwinkle {
     0%, 100% { opacity: 0.4; }
     50% { opacity: 1; }
@@ -436,7 +415,6 @@
 .star-twinkle-2 { animation: starTwinkle 3.2s ease-in-out infinite 0.7s; }
 .star-twinkle-3 { animation: starTwinkle 2.8s ease-in-out infinite 1.4s; }
 
-/* Animação do feixe do farol na cena noturna */
 @keyframes headlightSceneGlow {
     0%, 100% {
         opacity: 0.85;
@@ -451,7 +429,6 @@
     animation: headlightSceneGlow 3s ease-in-out infinite;
 }
 
-/* Informações do Rodapé do Card Noturno */
 .night-card-meta {
     margin-top: 8px;
     display: flex;

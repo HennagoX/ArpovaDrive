@@ -277,10 +277,6 @@ export function initModulosView(router) {
         });
     }
 
-    // =========================================================================
-    // Admin: Eventos dos Modais de Gerenciamento de Módulos e PDFs
-    // =========================================================================
-
     const btnAdminAdd = qs("#btn-admin-add-modulo");
     if (btnAdminAdd) {
         btnAdminAdd.addEventListener("click", () => {
@@ -689,7 +685,6 @@ export function abrirModulos(conteudoId) {
         atualizarCardsModuloUI(conteudoId, moduloAtual);
     }
 
-    // Sincroniza módulos dinâmicos da API em segundo plano
     carregarModulosDinamicos(conteudoId).then(() => {
         if (activeConteudoId === conteudoId) {
             const modulosAtualizados = getModulosByConteudoId(conteudoId, moduloAtual);
@@ -760,7 +755,6 @@ export function abrirLeituraPdf(conteudoId, moduloOrNumero) {
     if (!modulo) return;
     activeModulo = modulo;
 
-    // Registra leitura para cumprimento de tarefas do cronograma no mesmo dia
     const activeUserId = getModuloUserId();
     registrarLeituraModulo(conteudoId, modulo.numero, activeUserId).catch(() => {});
 

@@ -232,7 +232,7 @@ export function formatBotText(raw) {
 
     const htmlBlocks = [];
     let currentParagraph = [];
-    let currentList = null; // { type: 'ul' | 'ol', items: [], start?: number, isLetter?: boolean }
+    let currentList = null;
     let currentQuote = [];
     let currentTable = [];
     let inCodeBlock = false;
@@ -302,7 +302,6 @@ export function formatBotText(raw) {
         const line = lines[i];
         const trimmed = line.trim();
 
-        // Code block (```)
         if (trimmed.startsWith('```')) {
             if (inCodeBlock) {
                 const codeContent = codeBlockLines.join('\n');
@@ -322,13 +321,11 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Empty line
         if (!trimmed) {
             flushAll();
             continue;
         }
 
-        // Table row
         if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
             flushParagraph();
             flushList();
@@ -339,14 +336,12 @@ export function formatBotText(raw) {
             flushTable();
         }
 
-        // Horizontal divider (---, ***, ___)
         if (/^(\*{3,}|-{3,}|_{3,})$/.test(trimmed)) {
             flushAll();
             htmlBlocks.push('<hr class="bot-divider" />');
             continue;
         }
 
-        // Headings (#, ##, ###, ####)
         const headingMatch = trimmed.match(/^(#{1,6})\s+(.*)$/);
         if (headingMatch) {
             flushAll();
@@ -357,7 +352,6 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Blockquotes (> or &gt;)
         const quoteMatch = trimmed.match(/^(&gt;|>)\s?(.*)$/);
         if (quoteMatch) {
             flushParagraph();
@@ -368,7 +362,6 @@ export function formatBotText(raw) {
             flushQuote();
         }
 
-        // List lead-in title (ends with ":" and is followed by a list item)
         let nextNonEmpty = '';
         for (let j = i + 1; j < lines.length; j++) {
             if (lines[j].trim()) {
@@ -384,7 +377,6 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Unordered list (- item, * item, • item, etc.)
         const ulMatch = parseUnorderedLine(line);
         if (ulMatch) {
             flushParagraph();
@@ -397,7 +389,6 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Ordered list (1. item, 2. item, 1) item, etc.)
         const olMatch = parseOrderedLine(line);
         if (olMatch) {
             flushParagraph();
@@ -410,7 +401,6 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Lettered list (A) item, B) item)
         const letterMatch = parseLetteredLine(line);
         if (letterMatch) {
             flushParagraph();
@@ -423,7 +413,6 @@ export function formatBotText(raw) {
             continue;
         }
 
-        // Indented continuation of list item
         if (currentList && (/^\s{2,}/.test(line) || /^\t/.test(line))) {
             if (currentList.items.length > 0) {
                 currentList.items[currentList.items.length - 1] += ' ' + trimmed;
@@ -431,7 +420,6 @@ export function formatBotText(raw) {
             }
         }
 
-        // Regular paragraph line
         flushList();
         flushQuote();
         currentParagraph.push(trimmed);
@@ -520,7 +508,6 @@ function formatKeyValueLine(line) {
 function formatInline(text) {
     if (!text) return '';
 
-    // Protect inline code snippets
     const codeTokens = [];
     let formatted = text.replace(/`([^`]+)`/g, (_match, code) => {
         const id = `___CODE_TOKEN_${codeTokens.length}___`;
@@ -528,31 +515,25 @@ function formatInline(text) {
         return id;
     });
 
-    // Markdown Links: [text](https://...)
     formatted = formatted.replace(
         /\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g,
         '<a href="$2" target="_blank" rel="noopener noreferrer" class="bot-link">$1</a>'
     );
 
-    // Bold + Italic: ***text*** or ___text___
     formatted = formatted.replace(/\*\*\*([^*]+)\*\*\*/g, '<strong><em>$1</em></strong>');
     formatted = formatted.replace(/___([^_]+)___/g, '<strong><em>$1</em></strong>');
 
-    // Bold: **text** or __text__
     formatted = formatted.replace(/\*\*([^*\n]+?)\*\*/g, '<strong>$1</strong>');
     formatted = formatted.replace(/__([^_]+?)__/g, '<strong>$1</strong>');
 
-    // Italic: *text* (word boundaries)
     formatted = formatted.replace(/(^|[^\w*])\*([^\s*](?:[^*\n]*?[^\s*])?)\*(?=[^\w*]|$)/g, '$1<em>$2</em>');
     formatted = formatted.replace(/(^|[^\w_])_([^\s_](?:[^_\n]*?[^\s_])?)_(?=[^\w_]|$)/g, '$1<em>$2</em>');
 
-    // Time durations in parentheses: e.g. (5 min), (12 min)
     formatted = formatted.replace(
         /\((\d+[\s\u00a0\u202f]*(?:min(?:utos)?|h(?:oras)?|s(?:egundos)?))\)/gi,
         '<span class="bot-time-pill"><i class="fa-regular fa-clock"></i> $1</span>'
     );
 
-    // Restore inline code tokens
     codeTokens.forEach((token, index) => {
         formatted = formatted.replace(`___CODE_TOKEN_${index}___`, token);
     });

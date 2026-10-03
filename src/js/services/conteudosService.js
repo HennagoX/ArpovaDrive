@@ -709,7 +709,6 @@ let dynamicModulosCache = {
     removidos: []
 };
 
-// Carrega cache local persistido de módulos customizados
 try {
     const cached = getLocalItem('aprovadrive_dynamic_modulos_cache', null);
     if (cached && typeof cached === 'object') {
@@ -859,7 +858,6 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
     const folder = conteudo.pdfFolder || (id === 'PlacaTransito' ? 'modulo2' : (id === 'PrimeirosSocorros' ? 'modulo4' : (id === 'MeioAmbiente' ? 'modulo5' : 'modulo1')));
     const removidosSet = new Set(dynamicModulosCache.removidos || []);
 
-    // 1. Filtra os módulos padrão não removidos e aplica overrides se houver
     const modulosBase = conteudo.modulos
         .filter(m => !removidosSet.has(m.id))
         .map((modulo, index) => {
@@ -875,7 +873,6 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
             return modulo;
         });
 
-    // 2. Anexa os módulos adicionais customizados criados pelo administrador
     const modulosCustomizados = (dynamicModulosCache.modulos || [])
         .filter(dm => dm.conteudo_id === id && !conteudo.modulos.some(bm => bm.id === dm.id))
         .map(dm => {
@@ -894,7 +891,6 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
 
     const todosModulos = [...modulosBase, ...modulosCustomizados];
 
-    // Reordena sequencialmente e renumera caso tenham sido adicionados ou removidos
     todosModulos.sort((a, b) => Number(a.numero || 0) - Number(b.numero || 0));
 
     const total = todosModulos.length;
@@ -906,7 +902,6 @@ export function getModulosByConteudoId(id, moduloAtual = null) {
         let status = 'available';
         let bloqueado = false;
 
-        // Se o usuário for administrador, ele tem visão e acesso a todos os módulos liberados
         if (usuarioGlobal.isAdmin) {
             status = 'available';
             bloqueado = false;

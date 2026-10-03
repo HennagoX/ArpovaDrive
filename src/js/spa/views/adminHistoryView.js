@@ -1,10 +1,3 @@
-/**
- * AprovaDrive - Admin History View
- * Gerencia os painéis e modais de histórico do Administrador:
- * 1. Histórico de alterações e versões de PDFs / Módulos (com reversão e exclusão)
- * 2. Histórico e gerenciamento de questões customizadas criadas pelo admin
- */
-
 import { qs, qsa, setText } from '../../utils/dom.js';
 import {
     obterHistoricoPdfAdmin,
@@ -43,10 +36,6 @@ function mapearNomeConteudo(id) {
     return id;
 }
 
-// ============================================================================
-// 1. Arquivos Salvos (Restaurar ou Deletar Arquivos de Módulos e PDFs)
-// ============================================================================
-
 export async function abrirModalHistoricoPdf(conteudoId = null) {
     const modal = qs('#modal-admin-historico-pdf');
     if (!modal) return;
@@ -81,7 +70,6 @@ export async function carregarERenderizarHistorico(conteudoId = null) {
 
     try {
         const historico = await obterHistoricoPdfAdmin(conteudoId);
-        // Filtra para manter somente registros que têm arquivo PDF ou dados restauráveis
         listaHistoricoCache = (historico || []).filter(item => {
             const hasPdf = Boolean(item.dados_novos?.pdf_nome || item.dados_anteriores?.pdf_nome);
             const hasData = Boolean(item.dados_novos || item.dados_anteriores);
@@ -242,10 +230,6 @@ async function executarLimpezaHistorico(conteudoId = null) {
         showToast(err.message || 'Erro ao limpar arquivos.', 'locked', 'fa-solid fa-triangle-exclamation');
     }
 }
-
-// ============================================================================
-// 2. Histórico e Gerenciamento de Questões Customizadas
-// ============================================================================
 
 export async function abrirModalHistoricoQuestoes(materiaId = null) {
     const modal = qs('#modal-admin-historico-questoes');
@@ -436,16 +420,11 @@ function renderizarListaHistoricoQuestoes(lista) {
     });
 }
 
-// ============================================================================
-// Inicialização de Eventos
-// ============================================================================
-
 export function initAdminHistoryView(router) {
     routerRef = router;
     if (initialized) return;
     initialized = true;
 
-    // --- Histórico de PDFs ---
     const selectHistConteudo = qs("#select-historico-conteudo");
     if (selectHistConteudo) {
         selectHistConteudo.addEventListener("change", () => {
@@ -486,7 +465,6 @@ export function initAdminHistoryView(router) {
         });
     }
 
-    // --- Histórico de Questões ---
     const selectMateriaQuestoes = qs("#select-historico-questoes-materia");
     if (selectMateriaQuestoes) {
         selectMateriaQuestoes.addEventListener("change", () => {

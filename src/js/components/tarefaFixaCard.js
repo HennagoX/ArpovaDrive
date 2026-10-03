@@ -184,7 +184,6 @@ export function createTarefaFixaCard(task, options = {}) {
         </div>
     `;
 
-    // Event Listeners
     const btnDelete = card.querySelector('.btn-tarefa-admin-delete');
     if (btnDelete && typeof options.onDelete === 'function') {
         btnDelete.addEventListener('click', (e) => {

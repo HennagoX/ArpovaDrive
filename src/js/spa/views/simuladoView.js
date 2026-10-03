@@ -380,9 +380,6 @@ export function initSimuladoView(router) {
         });
     });
 
-    // =========================================================================
-    // Admin: Eventos de Criação e Gerenciamento de Simulados
-    // =========================================================================
     const btnAdminAdd = qs('#btn-admin-add-simulado');
     if (btnAdminAdd) {
         btnAdminAdd.addEventListener('click', () => {
