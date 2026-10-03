@@ -113,9 +113,15 @@ function aplicarDesempenhoNaTela(desempenho) {
         setText(circuloDescEl, resumo.statusDescricao || 'Acompanhe seu desempenho para conquistar sua CNH de primeira!');
     }
 
+    const materiasValidas = (Array.isArray(materias) ? materias : []).filter(m => {
+        const id = String(m?.id || '').toLowerCase();
+        const nome = String(m?.nome || '').toLowerCase();
+        return !id.includes('mecanic') && !nome.includes('mecânic');
+    });
+
     const materiasContainer = qs('#view-desempenho .materias-lista');
-    if (materiasContainer && Array.isArray(materias) && materias.length > 0) {
-        materiasContainer.innerHTML = materias.map(m => {
+    if (materiasContainer && materiasValidas.length > 0) {
+        materiasContainer.innerHTML = materiasValidas.map(m => {
             const pct = Math.max(0, Math.min(100, Number(m.porcentagem || 0)));
             return `
                 <div class="materia-linha">
@@ -138,7 +144,20 @@ function aplicarDesempenhoNaTela(desempenho) {
 
     const diagnosticoEl = qs('#view-desempenho .ia-card p');
     if (diagnosticoEl && diagnosticoIa) {
-        setText(diagnosticoEl, diagnosticoIa);
+        let textoDiag = diagnosticoIa;
+        if (/mec[a|â]nic/i.test(textoDiag)) {
+            textoDiag = textoDiag
+                .replace(/e\s+<strong>Mecânica Básica<\/strong>\s*\([^)]*\)/gi, '')
+                .replace(/<strong>Mecânica Básica<\/strong>\s*\([^)]*\)\s*e\s*/gi, '')
+                .replace(/Mecânica Básica\s*\([^)]*\)\s*e\s*/gi, '')
+                .replace(/e\s+Mecânica Básica\s*\([^)]*\)/gi, '')
+                .replace(/Mecânica Básica/gi, 'Legislação de Trânsito');
+        }
+        if (textoDiag.includes('<') && textoDiag.includes('>')) {
+            setHTML(diagnosticoEl, textoDiag);
+        } else {
+            setText(diagnosticoEl, textoDiag);
+        }
     }
 
     const simuladosContainer = qs('#view-desempenho .simulados-lista');

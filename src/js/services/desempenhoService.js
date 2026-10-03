@@ -49,23 +49,59 @@ export const MATERIAS_DESEMPENHO_CONFIG = [
     nome: 'Primeiros Socorros',
     icone: 'fa-solid fa-kit-medical',
     cor: 'red'
-  },
-  {
-    id: 'MecanicaBasica',
-    nome: 'Mecânica Básica',
-    icone: 'fa-solid fa-gears',
-    cor: 'cyan'
   }
 ];
 
+export function sanitizarDesempenho(desempenho) {
+  if (!desempenho) return desempenho;
+
+  if (Array.isArray(desempenho.materias)) {
+    desempenho.materias = desempenho.materias.filter(m => {
+      const id = String(m?.id || '').toLowerCase();
+      const nome = String(m?.nome || '').toLowerCase();
+      return !id.includes('mecanic') && !nome.includes('mecânic');
+    });
+  }
+
+  if (Array.isArray(desempenho.pontosFortes)) {
+    desempenho.pontosFortes = desempenho.pontosFortes.filter(p => {
+      const str = String(p || '').toLowerCase();
+      return !str.includes('mecânic') && !str.includes('mecanic');
+    });
+  }
+
+  if (Array.isArray(desempenho.pontosFracos)) {
+    desempenho.pontosFracos = desempenho.pontosFracos.filter(p => {
+      const str = String(p || '').toLowerCase();
+      return !str.includes('mecânic') && !str.includes('mecanic');
+    });
+  }
+
+  if (typeof desempenho.diagnosticoIa === 'string' && /mec[a|â]nic/i.test(desempenho.diagnosticoIa)) {
+    desempenho.diagnosticoIa = 'Recomendamos priorizar os estudos de Legislação de Trânsito e Direção Defensiva no seu cronograma, pois são as matérias mais cobradas no exame oficial do DETRAN.';
+  }
+
+  return desempenho;
+}
+
+try {
+  const initStored = getLocalItem(STORAGE_KEYS.DESEMPENHO, null);
+  if (initStored) {
+    const cleaned = sanitizarDesempenho(initStored);
+    setLocalItem(STORAGE_KEYS.DESEMPENHO, cleaned);
+  }
+} catch (_) {}
+
 export function getLocalDesempenho() {
-  if (cachedDesempenho) return cachedDesempenho;
+  if (cachedDesempenho) return sanitizarDesempenho(cachedDesempenho);
   const stored = getLocalItem(STORAGE_KEYS.DESEMPENHO, null);
   if (stored && stored.resumo) {
-    cachedDesempenho = stored;
-    return stored;
+    const sanitizado = sanitizarDesempenho(stored);
+    cachedDesempenho = sanitizado;
+    setLocalItem(STORAGE_KEYS.DESEMPENHO, sanitizado);
+    return sanitizado;
   }
-  return gerarDesempenhoFallbackLocal();
+  return sanitizarDesempenho(gerarDesempenhoFallbackLocal());
 }
 
 export function gerarDesempenhoFallbackLocal() {
@@ -195,8 +231,9 @@ export async function fetchDesempenho(userId = null, forceRefresh = false) {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        if (data && data.resumo) {
+        const rawData = await response.json();
+        if (rawData && rawData.resumo) {
+          const data = sanitizarDesempenho(rawData);
           cachedDesempenho = data;
           memoryDesempenhoCache.set(activeUserId, { data, timestamp: Date.now() });
           setLocalItem(STORAGE_KEYS.DESEMPENHO, data);
@@ -222,6 +259,7 @@ export async function fetchDesempenho(userId = null, forceRefresh = false) {
 
 export default {
   MATERIAS_DESEMPENHO_CONFIG,
+  sanitizarDesempenho,
   getLocalDesempenho,
   gerarDesempenhoFallbackLocal,
   sincronizarGamificationComDesempenho,
