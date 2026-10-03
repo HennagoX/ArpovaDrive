@@ -8,10 +8,12 @@ import {
 import { getModuloAtualCached, getModuloAtual } from '../../services/moduloService.js';
 import { createQuestionModuleCard } from '../../components/questionModuleCard.js';
 import { usuarioGlobal } from '../../services/userService.js';
+import { abrirModalAdminQuestao } from './questoesView.js';
 
 let initialized = false;
 let toastTimeout = null;
 let routerRef = null;
+let activeMateriaId = null;
 
 export function initQuestoesModulosView(router) {
     routerRef = router;
@@ -32,11 +34,24 @@ export function initQuestoesModulosView(router) {
             router.navigateTo("questoes");
         });
     }
+
+    const btnAdminAddModulo = qs("#btn-admin-add-questao-modulo");
+    if (btnAdminAddModulo) {
+        btnAdminAddModulo.addEventListener("click", () => {
+            abrirModalAdminQuestao(activeMateriaId);
+        });
+    }
 }
 
 export function abrirQuestoesModulos(materiaId) {
     if (!materiaId) return;
+    activeMateriaId = materiaId;
     usuarioGlobal.updateUI();
+
+    const btnAdminAddModulo = qs("#btn-admin-add-questao-modulo");
+    if (btnAdminAddModulo) {
+        btnAdminAddModulo.style.display = usuarioGlobal.isAdmin ? 'inline-flex' : 'none';
+    }
 
     if (typeof document !== 'undefined' && document.body) {
         document.body.classList.add('no-sidebar');

@@ -659,6 +659,136 @@ export async function getSimuladoResultadosAPI(userId) {
     return { sucesso: false, resultados: [] };
 }
 
+export async function criarQuestaoAdminAPI(dados) {
+    const requesterId = getModuloUserId();
+    const response = await fetch(ENDPOINTS.QUESTOES.ADMIN_CRIAR, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        },
+        body: JSON.stringify(dados)
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || resData?.message || 'Erro ao criar questão.');
+    }
+    return resData;
+}
+
+export async function listarQuestoesCustomizadasAPI(materia = null) {
+    const requesterId = getModuloUserId();
+    try {
+        const url = ENDPOINTS.QUESTOES.ADMIN_LISTAR(materia);
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json',
+                'X-User-Id': requesterId,
+                'X-Admin-Id': requesterId
+            }
+        });
+
+        if (!response.ok) return [];
+        const data = await response.json();
+        return Array.isArray(data?.questoes) ? data.questoes : [];
+    } catch {
+        return [];
+    }
+}
+
+export async function removerQuestaoAdminAPI(id) {
+    const requesterId = getModuloUserId();
+    const response = await fetch(ENDPOINTS.QUESTOES.ADMIN_REMOVER(id), {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        }
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || resData?.message || 'Erro ao remover questão.');
+    }
+    return resData;
+}
+
+export async function criarSimuladoAdminAPI(dados) {
+    const requesterId = getModuloUserId();
+    const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_CRIAR, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        },
+        body: JSON.stringify(dados)
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || resData?.message || 'Erro ao criar simulado.');
+    }
+    return resData;
+}
+
+export async function listarSimuladosCustomizadosAPI() {
+    try {
+        const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_LISTAR, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (!response.ok) return [];
+        const data = await response.json();
+        return Array.isArray(data?.simulados) ? data.simulados : [];
+    } catch {
+        return [];
+    }
+}
+
+export async function removerSimuladoAdminAPI(id) {
+    const requesterId = getModuloUserId();
+    const response = await fetch(ENDPOINTS.SIMULADO.ADMIN_REMOVER(id), {
+        method: 'DELETE',
+        headers: {
+            'Accept': 'application/json',
+            'X-User-Id': requesterId,
+            'X-Admin-Id': requesterId
+        }
+    });
+
+    const resData = await response.json();
+    if (!response.ok) {
+        throw new Error(resData?.error || resData?.message || 'Erro ao remover simulado.');
+    }
+    return resData;
+}
+
+export async function getPerguntasBateriaAPI(materia, bateria) {
+    try {
+        const url = ENDPOINTS.QUESTOES.PERGUNTAS(materia, bateria);
+        const response = await fetch(url, {
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        if (response.ok) {
+            const data = await response.json();
+            const list = data?.questoes || data?.perguntas;
+            if (Array.isArray(list) && list.length > 0) {
+                return list;
+            }
+        }
+    } catch {}
+    return getQuestoesByBateria(materia, bateria);
+}
+
 export async function verificarAcessoBateriaAPI(materia, bateriaNumero, userId) {
     const activeUserId = getModuloUserId(userId);
     try {

@@ -3,6 +3,7 @@ import {
     getMateriaQuestoesById,
     getBateriasByMateriaId,
     getQuestoesByBateria,
+    getPerguntasBateriaAPI,
     checkAcertoQuestaoAPI,
     concluirBateriaAPI,
     verificarAcessoBateriaAPI,
@@ -62,7 +63,7 @@ export function initQuestoesResolucaoView(router) {
     }
 }
 
-export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
+export async function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
     usuarioGlobal.updateUI();
     activeMateriaId = materiaId || 'MeioAmbiente';
 
@@ -97,7 +98,13 @@ export function abrirQuestoesResolucao(materiaId, bateriaIdOrNumero) {
         viewQuestoesResolucao.classList.add(`modulos-theme-${temaCor}`);
     }
 
-    const listaOriginal = getQuestoesByBateria(activeMateriaId, activeBateriaNumero);
+    let listaOriginal = [];
+    try {
+        listaOriginal = await getPerguntasBateriaAPI(activeMateriaId, activeBateriaNumero);
+    } catch {}
+    if (!Array.isArray(listaOriginal) || listaOriginal.length === 0) {
+        listaOriginal = getQuestoesByBateria(activeMateriaId, activeBateriaNumero);
+    }
     perguntas = listaOriginal.map(q => {
         const indices = [0, 1, 2, 3];
         for (let i = indices.length - 1; i > 0; i--) {

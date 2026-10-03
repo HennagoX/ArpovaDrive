@@ -1816,8 +1816,10 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="search-questoes" placeholder="Buscar disciplina ou assunto de questões...">
                 </div>
-
-                            </div>
+                <button type="button" class="btn-admin-add-modulo btn-admin-add-questao" id="btn-admin-add-questao" style="display: none;" title="Criar nova questão para o banco">
+                    <i class="fa-solid fa-circle-plus"></i> Criar Nova Questão
+                </button>
+            </div>
 
             <div class="categories">
                 <button class="filter filter-questoes active" data-category="todos">Todos</button>
@@ -2062,6 +2064,9 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" id="search-simulado" placeholder="Buscar simulado por disciplina...">
                 </div>
+                <button type="button" class="btn-admin-add-modulo btn-admin-add-simulado" id="btn-admin-add-simulado" style="display: none;" title="Criar novo simulado para os alunos">
+                    <i class="fa-solid fa-plus-circle"></i> Criar Simulado
+                </button>
             </div>
 
             <div class="categories">
@@ -2444,7 +2449,12 @@
                     <h3>Baterias de Questões</h3>
                     <p>Resolva as baterias de questões liberadas ao fim de cada 3 módulos estudados.</p>
                 </div>
-                <span id="questoes-contador-badge" class="questoes-stat-pill">4 baterias</span>
+                <div class="modulos-header-right-actions">
+                    <span id="questoes-contador-badge" class="questoes-stat-pill">4 baterias</span>
+                    <button type="button" class="btn-admin-add-modulo btn-admin-add-questao" id="btn-admin-add-questao-modulo" style="display: none;" title="Criar nova questão nesta disciplina">
+                        <i class="fa-solid fa-circle-plus"></i> Criar Questão
+                    </button>
+                </div>
             </div>
 
             <div class="baterias-list" id="questoes-modules-list">
@@ -2804,6 +2814,166 @@
                     <button type="button" class="btn-admin-cancel" id="btn-cancelar-admin-tarefa-fixa">Cancelar</button>
                     <button type="button" class="btn-admin-save" id="btn-salvar-admin-tarefa-fixa">
                         <i class="fa-solid fa-plus-circle"></i> Criar Tarefa Fixa
+                    </button>
+                </div>
+            </div>
+    <!-- Modal Admin: Criar Nova Questão -->
+    <div id="modal-admin-questao" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-questao-titulo">
+        <div class="modal-admin-card modal-questao-card">
+            <div class="modal-admin-header">
+                <div class="modal-admin-header-title">
+                    <div class="modal-admin-icon-circle questao-circle">
+                        <i class="fa-solid fa-circle-question"></i>
+                    </div>
+                    <div>
+                        <span class="modal-admin-badge-label">Painel de Administrador</span>
+                        <h3 id="modal-admin-questao-titulo">Criar Nova Questão</h3>
+                    </div>
+                </div>
+                <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-questao" aria-label="Fechar">&times;</button>
+            </div>
+
+            <div id="form-admin-questao" class="modal-admin-form">
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="admin-questao-materia-input">Disciplina / Conteúdo <span class="req-star">*</span></label>
+                        <select id="admin-questao-materia-input" required>
+                            <option value="CodigoTransito">Código de Trânsito</option>
+                            <option value="PlacasTransito">Placas e Sinalização</option>
+                            <option value="DirecaoDefensiva">Direção Defensiva</option>
+                            <option value="PrimeirosSocorros">Primeiros Socorros</option>
+                            <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="admin-questao-bateria-input">Bateria Vinculada <span class="req-star">*</span></label>
+                        <select id="admin-questao-bateria-input" required>
+                            <option value="1">Bateria 01 (Módulos 1 a 3)</option>
+                            <option value="2">Bateria 02 (Módulos 4 a 6)</option>
+                            <option value="3">Bateria 03 (Módulos 7 a 9)</option>
+                            <option value="4">Bateria 04 (Simulado Final)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="admin-questao-enunciado-input">Enunciado da Questão <span class="req-star">*</span></label>
+                    <textarea id="admin-questao-enunciado-input" rows="3" required placeholder="Digite a pergunta ou situação-problema apresentada ao aluno..."></textarea>
+                </div>
+
+                <div class="admin-alternativas-group">
+                    <label class="admin-alternativas-title"><i class="fa-solid fa-list-ol"></i> Alternativas de Resposta <span class="req-star">*</span></label>
+                    <div class="admin-alternativa-row">
+                        <span class="alternativa-letra">A</span>
+                        <input type="text" id="admin-questao-op-a" required placeholder="Texto da alternativa A">
+                    </div>
+                    <div class="admin-alternativa-row">
+                        <span class="alternativa-letra">B</span>
+                        <input type="text" id="admin-questao-op-b" required placeholder="Texto da alternativa B">
+                    </div>
+                    <div class="admin-alternativa-row">
+                        <span class="alternativa-letra">C</span>
+                        <input type="text" id="admin-questao-op-c" required placeholder="Texto da alternativa C">
+                    </div>
+                    <div class="admin-alternativa-row">
+                        <span class="alternativa-letra">D</span>
+                        <input type="text" id="admin-questao-op-d" required placeholder="Texto da alternativa D">
+                    </div>
+                </div>
+
+                <div class="admin-form-row" style="margin-top: 12px;">
+                    <div class="admin-form-group">
+                        <label for="admin-questao-correta-input">Alternativa Correta <span class="req-star">*</span></label>
+                        <select id="admin-questao-correta-input" required>
+                            <option value="A">Alternativa A</option>
+                            <option value="B">Alternativa B</option>
+                            <option value="C">Alternativa C</option>
+                            <option value="D">Alternativa D</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group checkbox-admin-group">
+                        <label class="checkbox-label-admin">
+                            <input type="checkbox" id="admin-questao-simulado-check" checked>
+                            Incluir nos Simulados Oficiais
+                        </label>
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="admin-questao-explicacao-input">Explicação / Justificativa Pedagógica</label>
+                    <textarea id="admin-questao-explicacao-input" rows="2" placeholder="Explicação exibida para o aluno após a resposta com base no CTB..."></textarea>
+                </div>
+
+                <div class="modal-admin-actions">
+                    <button type="button" class="btn-admin-cancel" id="btn-cancelar-admin-questao">Cancelar</button>
+                    <button type="button" class="btn-admin-save" id="btn-salvar-admin-questao">
+                        <i class="fa-solid fa-floppy-disk"></i> Salvar Questão
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Admin: Criar Novo Simulado -->
+    <div id="modal-admin-simulado" class="modal-admin-overlay" style="display: none;" role="dialog" aria-modal="true" aria-labelledby="modal-admin-simulado-titulo">
+        <div class="modal-admin-card modal-simulado-card">
+            <div class="modal-admin-header">
+                <div class="modal-admin-header-title">
+                    <div class="modal-admin-icon-circle simulado-circle">
+                        <i class="fa-solid fa-clipboard-check"></i>
+                    </div>
+                    <div>
+                        <span class="modal-admin-badge-label">Painel de Administrador</span>
+                        <h3 id="modal-admin-simulado-titulo">Criar Novo Simulado</h3>
+                    </div>
+                </div>
+                <button type="button" class="modal-admin-close" id="btn-fechar-modal-admin-simulado" aria-label="Fechar">&times;</button>
+            </div>
+
+            <div id="form-admin-simulado" class="modal-admin-form">
+                <div class="admin-form-group">
+                    <label for="admin-simulado-titulo-input">Título do Simulado <span class="req-star">*</span></label>
+                    <input type="text" id="admin-simulado-titulo-input" required placeholder="Ex: Simulado Especial DETRAN - Direção e Normas">
+                </div>
+
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="admin-simulado-materia-input">Disciplina / Abrangência <span class="req-star">*</span></label>
+                        <select id="admin-simulado-materia-input" required>
+                            <option value="Geral">Geral (Todas as Disciplinas)</option>
+                            <option value="CodigoTransito">Legislação de Trânsito</option>
+                            <option value="PlacasTransito">Placas e Sinalização</option>
+                            <option value="DirecaoDefensiva">Direção Defensiva</option>
+                            <option value="PrimeirosSocorros">Primeiros Socorros</option>
+                            <option value="MeioAmbiente">Meio Ambiente e Cidadania</option>
+                        </select>
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="admin-simulado-tempo-input">Tempo Limite (minutos)</label>
+                        <input type="number" id="admin-simulado-tempo-input" min="5" max="180" value="40">
+                    </div>
+                </div>
+
+                <div class="admin-form-group">
+                    <label for="admin-simulado-desc-input">Descrição / Orientações do Simulado</label>
+                    <textarea id="admin-simulado-desc-input" rows="2" placeholder="Orientações e regras para os alunos realizarem a prova..."></textarea>
+                </div>
+
+                <div class="admin-form-row">
+                    <div class="admin-form-group">
+                        <label for="admin-simulado-total-input">Qtd. de Questões</label>
+                        <input type="number" id="admin-simulado-total-input" min="10" max="60" value="30">
+                    </div>
+                    <div class="admin-form-group">
+                        <label for="admin-simulado-meta-input">Meta de Acertos p/ Aprovação</label>
+                        <input type="number" id="admin-simulado-meta-input" min="5" max="60" value="20">
+                    </div>
+                </div>
+
+                <div class="modal-admin-actions">
+                    <button type="button" class="btn-admin-cancel" id="btn-cancelar-admin-simulado">Cancelar</button>
+                    <button type="button" class="btn-admin-save" id="btn-salvar-admin-simulado">
+                        <i class="fa-solid fa-floppy-disk"></i> Criar Simulado
                     </button>
                 </div>
             </div>
