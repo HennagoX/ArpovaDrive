@@ -14,23 +14,7 @@
     <div class="card">
         <!-- Alternador de Tema -->
         <!-- Indicador de Etapas -->
-        <div class="etapas-cadastro" aria-label="Progresso do cadastro">
-            <div class="etapa-item ativa" id="indicadorEtapa1">
-                <span class="etapa-numero"><i class="fa-solid fa-user"></i></span>
-                <div class="etapa-textos">
-                    <span class="etapa-passo">Passo 1</span>
-                    <span class="etapa-nome">Dados Pessoais</span>
-                </div>
-            </div>
-            <div class="etapa-linha"></div>
-            <div class="etapa-item" id="indicadorEtapa2">
-                <span class="etapa-numero"><i class="fa-solid fa-shield-halved"></i></span>
-                <div class="etapa-textos">
-                    <span class="etapa-passo">Passo 2</span>
-                    <span class="etapa-nome">Segurança</span>
-                </div>
-            </div>
-        </div>
+      
 
         <section id="secaoCadastro" class="auth-section">
             <div class="logo">
@@ -44,7 +28,6 @@
 
             <form id="formCadastro" novalidate>
                 <div class="campo">
-                    <label for="nome" class="campo-label">Nome completo</label>
                     <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-user"></i></span>
                         <input type="text" id="nome" placeholder="Digite seu nome completo" required autocomplete="name">
@@ -52,7 +35,6 @@
                 </div>
 
                 <div class="campo">
-                    <label for="email" class="campo-label">E-mail</label>
                     <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-envelope"></i></span>
                         <input type="email" id="email" placeholder="seuemail@exemplo.com" required autocomplete="email">
@@ -60,7 +42,6 @@
                 </div>
 
                 <div class="campo">
-                    <label for="senhaCadastro" class="campo-label">Senha</label>
                     <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-lock"></i></span>
                         <input type="password" id="senhaCadastro" placeholder="Mínimo 6 caracteres" required autocomplete="new-password">
@@ -71,7 +52,6 @@
                 </div>
 
                 <div class="campo">
-                    <label for="confirmarSenha" class="campo-label">Confirmar senha</label>
                     <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-lock"></i></span>
                         <input type="password" id="confirmarSenha" placeholder="Repita a senha digitada" required autocomplete="new-password">
@@ -82,7 +62,6 @@
                 </div>
 
                 <div class="campo" id="campoData">
-                    <label for="dataNascimento" class="campo-label">Data de nascimento</label>
                     <div class="campo-input-wrapper">
                         <span class="icone"><i class="fa-solid fa-calendar-days"></i></span>
                         <input type="date" id="dataNascimento" class="input-data-nascimento" required autocomplete="bday" aria-describedby="feedbackIdade">
