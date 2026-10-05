@@ -31,7 +31,6 @@ export function applyTilt(el, opts = {}) {
 
         const moving = Math.abs(velX) > 0.005 || Math.abs(velY) > 0.005;
         if (moving || hovering) {
-            console.log("Request");
             rafId = requestAnimationFrame(loop);
         } else {
             el.style.transform = '';
