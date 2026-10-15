@@ -160,7 +160,7 @@ function atualizarPlacarTopo() {
     if (progressoFill) progressoFill.style.width = `${pct}%`;
 }
 
-function renderQuestaoAtual() {
+function renderQuestaoAtual(disabled) {
     const container = qs('#resolucao-conteudo-ativo');
     if (!container) return;
 
@@ -188,6 +188,7 @@ function renderQuestaoAtual() {
                 ${q.opcoes.map((opcao, i) => {
                     let btnClass = 'resolucao-opcao-btn';
                     let iconHtml = '<i class="fa-solid fa-circle-check resolucao-opcao-icon"></i>';
+                    
 
                     if (isRespondida) {
                         if (i === q.correta) {
@@ -200,7 +201,7 @@ function renderQuestaoAtual() {
                     }
 
                     return `
-                        <button type="button" class="${btnClass}" data-opcao-index="${i}" ${isRespondida ? 'disabled' : ''}>
+                        <button type="button" class="${btnClass}" data-opcao-index="${i}" ${disabled ? 'disabled' : "" }>
                             <span class="resolucao-letra-chip">${LETRAS[i]}</span>
                             <span class="resolucao-opcao-corpo">${escapeHtml(opcao)}</span>
                             ${iconHtml}
@@ -262,6 +263,9 @@ async function tratarResposta(indexEscolhido) {
     const textoEscolhido = q.opcoes[indexEscolhido];
 
     let respostaApi = null;
+    
+    renderQuestaoAtual(true)
+    
     try {
         respostaApi = await checkAcertoQuestaoAPI({
             materia: activeMateriaId,
@@ -295,7 +299,7 @@ async function tratarResposta(indexEscolhido) {
     };
 
     atualizarPlacarTopo();
-    renderQuestaoAtual();
+    renderQuestaoAtual(true);
 }
 
 function renderFeedbackHtml(correto, corretaLetra, explicacao) {
